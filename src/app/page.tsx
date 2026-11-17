@@ -27,8 +27,192 @@ import {
   Mail,
   Send,
   Building,
-  AlertTriangle
+  AlertTriangle,
+  X,
+  Share2,
+  Clock,
+  Phone,
+  Eye,
+  Volume2,
+  VolumeX,
+  Info
 } from "lucide-react";
+
+interface NewsItem {
+  id: string;
+  title: string;
+  category: string;
+  date: string;
+  imageUrl: string;
+  summary: string;
+  fullStory: string;
+  author: string;
+}
+
+interface EventItem {
+  id: string;
+  title: string;
+  category: string;
+  dateMonth: string;
+  dateDay: string;
+  fullDate: string;
+  location: string;
+  imageUrl: string;
+  description: string;
+  time: string;
+  organizer: string;
+}
+
+interface GalleryItem {
+  id: string;
+  title: string;
+  district: string;
+  imageUrl: string;
+  description: string;
+}
+
+const NEWS_DATA: NewsItem[] = [
+  {
+    id: "ksrtc",
+    title: "കേരളത്തിൽ പുതിയ ബസ് സർവീസുകൾക്ക് തുടക്കമായി",
+    category: "കേരളം",
+    date: "17 നവംബർ 2026",
+    imageUrl: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=900&auto=format&fit=crop&q=80",
+    summary: "സംസ്ഥാനത്ത് കൂടുതൽ പ്രദേശങ്ങളിലേക്ക് പുതിയ ബസ് സർവീസുകൾ ആരംഭിച്ചു. ഗ്രാമീണ റൂട്ടുകളിൽ കൂടുതൽ യാത്രാസൗകര്യം ലഭ്യമാക്കുകയാണ് ലക്ഷ്യം.",
+    fullStory: "സംസ്ഥാനത്ത് കൂടുതൽ ഗ്രാമീണ, നഗര പ്രദേശങ്ങളിലേക്ക് പുതിയ ഇലക്ട്രിക്, ഫാസ്റ്റ് പാസഞ്ചർ ബസ് സർവീസുകൾ ആരംഭിച്ചു. ഗ്രാമീണ റൂട്ടുകളിൽ വിദ്യാർത്ഥികൾക്കും ജീവനക്കാർക്കും കൂടുതൽ യാത്രാസൗകര്യം ലഭ്യമാക്കുകയാണ് ഇതിന്റെ പ്രധാന ലക്ഷ്യം.\n\nആദ്യ ഘട്ടത്തിൽ 100 പുതിയ പരിസ്ഥിതി സൗഹൃദ ബസുകളാണ് വിവിധ ഡിപ്പോകളിലേക്ക് കൈമാറിയത്. പൊതുഗതാഗത സൗകര്യം കൂടുതൽ ജനകീയമാക്കാനും യാത്രാ നിരക്കുകളിൽ ഇളവ് വരുത്താനും നവീകരിച്ച ലൈവ് ട്രാക്കിംഗ് സംവിധാനവും ലഭ്യമാക്കിയിട്ടുണ്ട്.",
+    author: "നമ്മുടെ നാട് വാർത്താ വിഭാഗം",
+  },
+  {
+    id: "tvm",
+    title: "തിരുവനന്തപുരത്ത് പുതിയ വികസന പദ്ധതി",
+    category: "വികസനം",
+    date: "16 നവംബർ 2026",
+    imageUrl: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?w=600&auto=format&fit=crop&q=80",
+    summary: "തലസ്ഥാന നഗരിയിൽ സമഗ്ര അടിസ്ഥാന സൗകര്യ വികസനത്തിന് തുടക്കമായി.",
+    fullStory: "തലസ്ഥാന നഗരിയിൽ സ്മാർട്ട് സിറ്റി മിഷന്റെ ഭാഗമായി പുതിയ നടപ്പാതകൾ, സോളാർ തെരുവ് വിളക്കുകൾ, ശാസ്ത്രീയ ഡ്രെയിനേജ് നവീകരണം എന്നിവയ്ക്കുള്ള സമഗ്ര വികസന പദ്ധതി ഉദ്ഘാടനം ചെയ്തു. നഗരസഭാ പരിധിയിലെ പ്രധാന ജംഗ്ഷനുകളിൽ ട്രാഫിക് നിയന്ത്രണത്തിനായി അത്യാധുനിക എഐ അധിഷ്ഠിത ക്യാമറ സംവിധാനവും ഏർപ്പെടുത്തും.",
+    author: "പ്രാദേശിക റിപ്പോർട്ടർ, തിരുവനന്തപുരം",
+  },
+  {
+    id: "results",
+    title: "+2 ഫലങ്ങൾ പ്രസിദ്ധീകരിച്ചു",
+    category: "വിദ്യാഭ്യാസം",
+    date: "15 നവംബർ 2026",
+    imageUrl: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&auto=format&fit=crop&q=80",
+    summary: "ഹയർ സെക്കൻഡറി പരീക്ഷാ ഫലങ്ങൾ ഔദ്യോഗിക വെബ്സൈറ്റിൽ ലഭ്യമാണ്.",
+    fullStory: "സംസ്ഥാന ഹയർ സെക്കൻഡറി പരീക്ഷാ ഫലങ്ങൾ ഔദ്യോഗിക പോർട്ടലിൽ പ്രസിദ്ധീകരിച്ചു. 82.95 ശതമാനം വിദ്യാർത്ഥികൾ ഉന്നത വിദ്യാഭ്യാസത്തിന് യോഗ്യത നേടി. വിജയശതമാനത്തിൽ മലപ്പുറം ജില്ലയാണ് മുന്നിൽ. സ്കൂൾ തിരിച്ചുള്ള ഫലങ്ങളും സേ പരീക്ഷാ തീയതികളും വിദ്യാഭ്യാസ വകുപ്പ് പോർട്ടലിൽ ലഭ്യമാണ്.",
+    author: "വിദ്യാഭ്യാസ വിഭാഗം",
+  },
+  {
+    id: "weather",
+    title: "കേരളത്തിൽ മഴ മുന്നറിയിപ്പ്",
+    category: "കാലാവസ്ഥ",
+    date: "14 നവംബർ 2026",
+    imageUrl: "https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?w=600&auto=format&fit=crop&q=80",
+    summary: "തുലാവർഷത്തിന്റെ ഭാഗമായി മധ്യ, തെക്കൻ ജില്ലകളിൽ ഒറ്റപ്പെട്ട ശക്തമായ മഴയ്ക്ക് സാധ്യത.",
+    fullStory: "വടക്കുകിഴക്കൻ മൺസൂണിന്റെ ഭാഗമായി കേരളത്തിലെ മധ്യ, തെക്കൻ ജില്ലകളിൽ അടുത്ത മൂന്ന് ദിവസങ്ങളിൽ ഒറ്റപ്പെട്ട ശക്തമായ മഴയ്ക്ക് സാധ്യതയെന്ന് കാലാവസ്ഥാ നിരീക്ഷണ കേന്ദ്രം. ഇടുക്കി, കോട്ടയം, പത്തനംതിട്ട ജില്ലകളിൽ യെല്ലോ അലർട്ട് പ്രഖ്യാപിച്ചിട്ടുണ്ട്. തീരദേശവാസികളും മലയോര നിവാസികളും ജാഗ്രത പാലിക്കാൻ നിർദ്ദേശം.",
+    author: "കാലാവസ്ഥാ നിരീക്ഷണം",
+  },
+];
+
+const EVENTS_DATA: EventItem[] = [
+  {
+    id: "keralotsavam",
+    title: "കേരളോത്സവം 2026",
+    category: "സാംസ്കാരികം",
+    dateMonth: "Nov",
+    dateDay: "20",
+    fullDate: "നവംബർ 20, 2026 • 05:00 PM",
+    location: "മറൈൻ ഡ്രൈവ് ഗ്രൗണ്ട്, കൊച്ചി",
+    imageUrl: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=600&auto=format&fit=crop&q=80",
+    description: "സാംസ്കാരിക സമ്മേളനവും തനതു നാടൻ കലകളുടെ അരങ്ങേറ്റവും. കേരളത്തിലെ 14 ജില്ലകളിൽ നിന്നുള്ള കലാകാരന്മാരുടെ ചെണ്ടമേളം, തെയ്യം, കഥകളി പ്രദർശനം എന്നിവ നടക്കും.",
+    time: "വൈകുന്നേരം 5:00 മുതൽ രാത്രി 10:00 വരെ",
+    organizer: "കൊച്ചി സാംസ്കാരിക കൂട്ടായ്മ",
+  },
+  {
+    id: "ai_seminar",
+    title: "AI & വിദ്യാഭ്യാസം സെമിനാർ",
+    category: "വിദ്യാഭ്യാസം",
+    dateMonth: "Nov",
+    dateDay: "25",
+    fullDate: "നവംബർ 25, 2026 • 10:00 AM",
+    location: "സെനറ്റ് ഹാൾ, തിരുവനന്തപുരം",
+    imageUrl: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&auto=format&fit=crop&q=80",
+    description: "നിർമ്മിത ബുദ്ധി എങ്ങനെ വിദ്യാർത്ഥികളുടെയും അധ്യാപകരുടെയും പഠന രീതിയെ പരിവർത്തനം ചെയ്യുന്നു എന്നതിനെക്കുറിച്ചുള്ള വിദഗ്ദ്ധ ചർച്ചയും വർക്ക്ഷോപ്പും.",
+    time: "രാവിലെ 10:00 മുതൽ ഉച്ചക്ക് 1:30 വരെ",
+    organizer: "കേരള ഇന്നൊവേഷൻ കൗൺസിൽ",
+  },
+  {
+    id: "sangeethotsavam",
+    title: "കേരള സംഗീതോത്സവം",
+    category: "കല & സംഗീതം",
+    dateMonth: "Nov",
+    dateDay: "28",
+    fullDate: "നവംബർ 28, 2026 • 06:00 PM",
+    location: "ടാഗോർ സെന്റിനറി ഹാൾ, കോഴിക്കോട്",
+    imageUrl: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=600&auto=format&fit=crop&q=80",
+    description: "ശാസ്‌ത്രീയ സംഗീതവും ഗസലുകളും കേരളീയ നാടൻ പാട്ടുകളും കോർത്തിണക്കിയ ഗംഭീര സംഗീത സന്ധ്യ. പ്രമുഖ പിന്നണി ഗായകർ പങ്കെടുക്കുന്നു.",
+    time: "വൈകുന്നേരം 6:00 മുതൽ",
+    organizer: "കോഴിക്കോട് സംഗീത സഭ",
+  },
+  {
+    id: "sports_meet",
+    title: "ജില്ലാതല കായികമേള",
+    category: "കായികം",
+    dateMonth: "Dec",
+    dateDay: "02",
+    fullDate: "ഡിസംബർ 02, 2026 • 08:30 AM",
+    location: "കോട്ടപ്പടി സ്റ്റേഡിയം, മലപ്പുറം",
+    imageUrl: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=600&auto=format&fit=crop&q=80",
+    description: "ഫുട്ബോൾ, അത്‌ലറ്റിക്സ് എന്നിവ ഉൾപ്പെടുന്ന പ്രാദേശിക കായിക പ്രതിഭകളുടെ വാർഷിക ജില്ലാ മത്സരങ്ങൾ. 2000-ലധികം കായികതാരങ്ങൾ പങ്കെടുക്കുന്നു.",
+    time: "രാവിലെ 8:30 മുതൽ വൈകുന്നേരം 6:00 വരെ",
+    organizer: "ജില്ലാ സ്പോർട്സ് കൗൺസിൽ",
+  },
+];
+
+const GALLERY_DATA: GalleryItem[] = [
+  {
+    id: "kovalam",
+    title: "കോവളം & വർക്കല തീരങ്ങൾ",
+    district: "തിരുവനന്തപുരം",
+    imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&auto=format&fit=crop&q=85",
+    description: "അറബിക്കടലിന്റെ ശാന്തതയും സ്വർണ്ണ മണൽത്തരികളും നിറഞ്ഞ കേരളത്തിന്റെ വിഖ്യാത തീരദേശ സൗന്ദര്യം.",
+  },
+  {
+    id: "backwaters",
+    title: "ആലപ്പുഴ കായലോളങ്ങൾ",
+    district: "ആലപ്പുഴ",
+    imageUrl: "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?w=1200&auto=format&fit=crop&q=85",
+    description: "കെട്ടുവള്ളങ്ങളും പച്ചപ്പ് നിറഞ്ഞ തുരുത്തുകളും ഇടകലർന്ന കിഴക്കിന്റെ വെനീസ്.",
+  },
+  {
+    id: "heritage",
+    title: "പൈതൃക വാസ്തുവിദ്യ",
+    district: "മധ്യകേരളം",
+    imageUrl: "https://images.unsplash.com/photo-1548625361-195fe578cb26?w=1200&auto=format&fit=crop&q=85",
+    description: "കേരളത്തിന്റെ പരമ്പരാഗത തച്ചുശാസ്ത്രവും പൈതൃക ശൈലിയും ഒത്തുചേരുന്ന ചരിത്ര സ്മാരകം.",
+  },
+  {
+    id: "munnar",
+    title: "മൂന്നാർ മലനിരകൾ",
+    district: "ഇടുക്കി",
+    imageUrl: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?w=1200&auto=format&fit=crop&q=85",
+    description: "കോടമഞ്ഞും പച്ചപ്പട്ടു വിരിച്ച തേയിലത്തോട്ടങ്ങളും സംഗമിക്കുന്ന ദൈവത്തിന്റെ സ്വന്തം നാട്ടിലെ മലയോര സുന്ദരി.",
+  },
+  {
+    id: "sunrise",
+    title: "കായൽക്കരയിലെ പ്രഭാതം",
+    district: "കുമരകം / കോട്ടയം",
+    imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1200&auto=format&fit=crop&q=85",
+    description: "വേമ്പനാട്ടു കായൽപ്പരപ്പിൽ ഉദിച്ചുയരുന്ന പുലർകാല സൂര്യകിരണങ്ങളും നാടൻ വള്ളങ്ങളും.",
+  },
+  {
+    id: "kathakali",
+    title: "കഥകളി — തനതു കലാരൂപം",
+    district: "തൃശ്ശൂർ",
+    imageUrl: "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1200&auto=format&fit=crop&q=85",
+    description: "ഭാവസാന്ദ്രമായ മുദ്രകളും വർണ്ണാഭമായ വേഷവിധാനങ്ങളും ചേർന്ന കേരളത്തിന്റെ ശാസ്ത്രീയ ദൃശ്യവിസ്മയം.",
+  },
+];
 
 export default function HomePage() {
   const { t, language } = useLanguage();
@@ -39,8 +223,15 @@ export default function HomePage() {
   const [newsletterSuccess, setNewsletterSuccess] = useState(false);
   const [showDistrictModal, setShowDistrictModal] = useState(false);
 
+  // Interactive Modals State
+  const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
+  const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
+  const [selectedPhoto, setSelectedPhoto] = useState<GalleryItem | null>(null);
+  const [showVideoModal, setShowVideoModal] = useState(false);
+  const [isVideoMuted, setIsVideoMuted] = useState(true);
+  const [eventRsvpSuccess, setEventRsvpSuccess] = useState(false);
+
   const realEvents = store.getEvents(currentCommunity?.id);
-  const realAnnouncements = store.getAnnouncements(currentCommunity?.id);
   const realBusinesses = store.getBusinesses(currentCommunity?.id);
   const realPlaces = store.getPlaces(currentCommunity?.id);
   const realIssues = store.getIssueReports(currentCommunity?.id);
@@ -59,6 +250,13 @@ export default function HomePage() {
         setNewsletterSuccess(false);
       }, 3000);
     }
+  };
+
+  const handleRsvp = () => {
+    setEventRsvpSuccess(true);
+    setTimeout(() => {
+      setEventRsvpSuccess(false);
+    }, 2500);
   };
 
   return (
@@ -115,12 +313,21 @@ export default function HomePage() {
 
                 <button
                   type="button"
-                  onClick={() => handleOpenAi("കേരളത്തിലെ പ്രധാന വിവരങ്ങളും വിശേഷങ്ങളും എന്തൊക്കെയാണ്?")}
-                  className="px-5 py-3 rounded-full bg-white/80 hover:bg-white text-[#1B4D36] border border-[#DDD5C5] font-bold text-xs sm:text-sm transition-all duration-200 active:scale-95 shadow-sm flex items-center gap-2 backdrop-blur-xs"
+                  onClick={() => setShowVideoModal(true)}
+                  className="px-5 py-3 rounded-full bg-white/85 hover:bg-white text-[#1B4D36] border border-[#DDD5C5] font-bold text-xs sm:text-sm transition-all duration-200 active:scale-95 shadow-sm flex items-center gap-2 backdrop-blur-xs"
                 >
                   <div className="w-5 h-5 rounded-full bg-[#1B4D36] text-white flex items-center justify-center">
                     <Play className="w-2.5 h-2.5 fill-current ml-0.5" />
                   </div>
+                  <span>വീഡിയോ കാണുക</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleOpenAi("കേരളത്തിലെ പ്രധാന വിവരങ്ങളും വിശേഷങ്ങളും എന്തൊക്കെയാണ്?")}
+                  className="px-5 py-3 rounded-full bg-[#EDE6D8] hover:bg-[#E2DAC8] text-[#1B4D36] border border-[#DDD5C5] font-bold text-xs sm:text-sm transition-all duration-200 active:scale-95 shadow-sm flex items-center gap-2"
+                >
+                  <Sparkles className="w-4 h-4 text-[#B87A1E]" />
                   <span>നാട് AI സഹായി</span>
                 </button>
               </div>
@@ -156,7 +363,7 @@ export default function HomePage() {
               
               {/* 1. ക്ഷേത്രങ്ങൾ / പൈതൃകം */}
               <Link
-                href="/discover?tab=places"
+                href="/discover?tab=places&category=Historic%20Landmark"
                 className="flex flex-col items-center justify-center text-center p-2 rounded-xl hover:bg-white/60 transition group"
               >
                 <div className="w-9 h-9 rounded-full bg-[#E8E1D2] group-hover:bg-[#1B4D36] group-hover:text-white text-[#1B4D36] flex items-center justify-center mb-1.5 transition">
@@ -169,7 +376,7 @@ export default function HomePage() {
 
               {/* 2. ടൂറിസം */}
               <Link
-                href="/discover?tab=places"
+                href="/discover?tab=places&category=Scenic%20Views"
                 className="flex flex-col items-center justify-center text-center p-2 rounded-xl hover:bg-white/60 transition group"
               >
                 <div className="w-9 h-9 rounded-full bg-[#E8E1D2] group-hover:bg-[#1B4D36] group-hover:text-white text-[#1B4D36] flex items-center justify-center mb-1.5 transition">
@@ -182,7 +389,7 @@ export default function HomePage() {
 
               {/* 3. വിദ്യാഭ്യാസം */}
               <Link
-                href="/discover?tab=events"
+                href="/discover?tab=events&category=Workshops%20%26%20Education"
                 className="flex flex-col items-center justify-center text-center p-2 rounded-xl hover:bg-white/60 transition group"
               >
                 <div className="w-9 h-9 rounded-full bg-[#E8E1D2] group-hover:bg-[#1B4D36] group-hover:text-white text-[#1B4D36] flex items-center justify-center mb-1.5 transition">
@@ -223,7 +430,7 @@ export default function HomePage() {
               <button
                 type="button"
                 onClick={() => setShowDistrictModal(true)}
-                className="flex flex-col items-center justify-center text-center p-2 rounded-xl hover:bg-white/60 transition group"
+                className="flex flex-col items-center justify-center text-center p-2 rounded-xl hover:bg-white/60 transition group cursor-pointer"
               >
                 <div className="w-9 h-9 rounded-full bg-[#E8E1D2] group-hover:bg-[#1B4D36] group-hover:text-white text-[#1B4D36] flex items-center justify-center mb-1.5 transition">
                   <MapPin className="w-4 h-4" />
@@ -261,86 +468,70 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             
             {/* Left Big Card: KSRTC Kerala Bus Story */}
-            <div className="lg:col-span-5 bg-white rounded-3xl border border-[#EAE4D7] shadow-card overflow-hidden hover:border-[#1B4D36]/40 transition group flex flex-col justify-between">
+            <div 
+              onClick={() => setSelectedNews(NEWS_DATA[0])}
+              className="lg:col-span-5 bg-white rounded-3xl border border-[#EAE4D7] shadow-card overflow-hidden hover:border-[#1B4D36]/60 transition group flex flex-col justify-between cursor-pointer"
+            >
               <div>
                 <div className="h-56 sm:h-64 overflow-hidden relative">
                   <img
-                    src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=900&auto=format&fit=crop&q=80"
+                    src={NEWS_DATA[0].imageUrl}
                     alt="Kerala Public Transport"
                     className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                   />
-                  <span className="absolute top-3 left-3 bg-[#1B4D36] text-white text-[11px] font-bold px-3 py-1 rounded-full">
-                    കേരളം
+                  <span className="absolute top-3 left-3 bg-[#1B4D36] text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-sm">
+                    {NEWS_DATA[0].category}
                   </span>
                 </div>
                 <div className="p-5 sm:p-6">
                   <h3 className="font-bold font-malayalam-serif text-lg text-[#1A2420] group-hover:text-[#1B4D36] transition leading-snug mb-2">
-                    കേരളത്തിൽ പുതിയ ബസ് സർവീസുകൾക്ക് തുടക്കമായി
+                    {NEWS_DATA[0].title}
                   </h3>
                   <p className="text-xs text-[#5C6A64] leading-relaxed line-clamp-2">
-                    സംസ്ഥാനത്ത് കൂടുതൽ പ്രദേശങ്ങളിലേക്ക് പുതിയ ബസ് സർവീസുകൾ ആരംഭിച്ചു. ഗ്രാമീണ റൂട്ടുകളിൽ കൂടുതൽ യാത്രാസൗകര്യം ലഭ്യമാക്കുകയാണ് ലക്ഷ്യം.
+                    {NEWS_DATA[0].summary}
                   </p>
                 </div>
               </div>
-              <div className="px-5 sm:px-6 pb-5 text-[11px] text-[#7A8880] flex items-center gap-1.5 border-t border-[#F3EFE6] pt-3">
-                <Calendar className="w-3.5 h-3.5 text-[#1B4D36]" />
-                <span>17 നവംബർ 2026</span>
+              <div className="px-5 sm:px-6 pb-5 text-[11px] text-[#7A8880] flex items-center justify-between border-t border-[#F3EFE6] pt-3">
+                <div className="flex items-center gap-1.5">
+                  <Calendar className="w-3.5 h-3.5 text-[#1B4D36]" />
+                  <span>{NEWS_DATA[0].date}</span>
+                </div>
+                <span className="text-[#1B4D36] font-bold group-hover:underline flex items-center gap-1 text-[11px]">
+                  മുഴുവൻ വായിക്കാം <ArrowRight className="w-3 h-3" />
+                </span>
               </div>
             </div>
 
             {/* Middle Column: 3 Horizontal News Items */}
             <div className="lg:col-span-4 flex flex-col gap-3.5">
               
-              {/* Item 1 */}
-              <div className="bg-white rounded-2xl border border-[#EAE4D7] shadow-xs p-3.5 flex gap-3 hover:border-[#1B4D36]/40 transition">
-                <img
-                  src="https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?w=400&auto=format&fit=crop&q=80"
-                  alt="Thiruvananthapuram Project"
-                  className="w-20 h-20 rounded-xl object-cover flex-shrink-0"
-                />
-                <div className="flex flex-col justify-between">
-                  <h4 className="font-bold text-xs sm:text-sm text-[#1A2420] leading-snug hover:text-[#1B4D36] transition">
-                    തിരുവനന്തപുരത്ത് പുതിയ വികസന പദ്ധതി
-                  </h4>
-                  <span className="text-[10px] text-[#7A8880] flex items-center gap-1 mt-1">
-                    <Calendar className="w-3 h-3 text-[#1B4D36]" /> 16 നവംബർ 2026
-                  </span>
+              {NEWS_DATA.slice(1).map((news) => (
+                <div 
+                  key={news.id}
+                  onClick={() => setSelectedNews(news)}
+                  className="bg-white rounded-2xl border border-[#EAE4D7] shadow-xs p-3.5 flex gap-3 hover:border-[#1B4D36]/60 transition cursor-pointer group"
+                >
+                  <img
+                    src={news.imageUrl}
+                    alt={news.title}
+                    className="w-20 h-20 rounded-xl object-cover flex-shrink-0 group-hover:scale-105 transition"
+                  />
+                  <div className="flex flex-col justify-between flex-1">
+                    <h4 className="font-bold text-xs sm:text-sm text-[#1A2420] leading-snug group-hover:text-[#1B4D36] transition line-clamp-2">
+                      {news.title}
+                    </h4>
+                    <div className="flex items-center justify-between text-[10px] text-[#7A8880] mt-1">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-3 h-3 text-[#1B4D36]" /> {news.date}
+                      </span>
+                      <span className="text-[#1B4D36] font-semibold opacity-0 group-hover:opacity-100 transition">
+                        വിശദാംശങ്ങൾ
+                      </span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-
-              {/* Item 2 */}
-              <div className="bg-white rounded-2xl border border-[#EAE4D7] shadow-xs p-3.5 flex gap-3 hover:border-[#1B4D36]/40 transition">
-                <img
-                  src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=400&auto=format&fit=crop&q=80"
-                  alt="Education Results"
-                  className="w-20 h-20 rounded-xl object-cover flex-shrink-0"
-                />
-                <div className="flex flex-col justify-between">
-                  <h4 className="font-bold text-xs sm:text-sm text-[#1A2420] leading-snug hover:text-[#1B4D36] transition">
-                    +2 ഫലങ്ങൾ പ്രസിദ്ധീകരിച്ചു
-                  </h4>
-                  <span className="text-[10px] text-[#7A8880] flex items-center gap-1 mt-1">
-                    <Calendar className="w-3 h-3 text-[#1B4D36]" /> 15 നവംബർ 2026
-                  </span>
-                </div>
-              </div>
-
-              {/* Item 3 */}
-              <div className="bg-white rounded-2xl border border-[#EAE4D7] shadow-xs p-3.5 flex gap-3 hover:border-[#1B4D36]/40 transition">
-                <img
-                  src="https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?w=400&auto=format&fit=crop&q=80"
-                  alt="Kerala Weather Alert"
-                  className="w-20 h-20 rounded-xl object-cover flex-shrink-0"
-                />
-                <div className="flex flex-col justify-between">
-                  <h4 className="font-bold text-xs sm:text-sm text-[#1A2420] leading-snug hover:text-[#1B4D36] transition">
-                    കേരളത്തിൽ മഴ മുന്നറിയിപ്പ്
-                  </h4>
-                  <span className="text-[10px] text-[#7A8880] flex items-center gap-1 mt-1">
-                    <Calendar className="w-3 h-3 text-[#1B4D36]" /> 14 നവംബർ 2026
-                  </span>
-                </div>
-              </div>
+              ))}
 
             </div>
 
@@ -359,16 +550,19 @@ export default function HomePage() {
                 <span className="font-malayalam-script text-2xl sm:text-3xl font-bold leading-tight block mt-1 text-amber-200">
                   എന്നും....
                 </span>
+                <p className="text-xs text-white/80 mt-3 leading-relaxed">
+                  കേരളത്തിന്റെ തനിമയും പാരമ്പര്യവും ഒരുമിച്ച് അനുഭവിക്കൂ.
+                </p>
               </div>
 
-              <div className="relative z-10 pt-20">
+              <div className="relative z-10 pt-12">
                 <button
                   type="button"
-                  onClick={() => handleOpenAi("കേരളത്തിലെ തനത് സാംസ്കാരിക സൗന്ദര്യം കാണിച്ചു തരൂ")}
-                  className="flex items-center gap-2.5 text-xs text-white hover:text-amber-200 transition font-medium"
+                  onClick={() => setShowVideoModal(true)}
+                  className="flex items-center gap-2.5 text-xs text-white hover:text-amber-200 transition font-medium w-full py-2.5 px-3 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-xs"
                 >
-                  <div className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-xs flex items-center justify-center">
-                    <Play className="w-3 h-3 fill-current ml-0.5" />
+                  <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">
+                    <Play className="w-3 h-3 fill-current ml-0.5 text-amber-200" />
                   </div>
                   <span>നമ്മുടെ നാടിന്റെ സൗന്ദര്യം കാണുക</span>
                 </button>
@@ -386,11 +580,11 @@ export default function HomePage() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               
               {/* Left Photo: Traditional Kerala Architecture */}
-              <div className="lg:col-span-4 rounded-2xl overflow-hidden shadow-xs h-64 sm:h-72">
+              <div className="lg:col-span-4 rounded-2xl overflow-hidden shadow-xs h-64 sm:h-72 group">
                 <img
                   src="https://images.unsplash.com/photo-1609137144822-54d9c79e6074?w=800&auto=format&fit=crop&q=80"
                   alt="Kerala Palace & Heritage Architecture"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                 />
               </div>
 
@@ -490,101 +684,45 @@ export default function HomePage() {
             {/* 4 Event Cards */}
             <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
               
-              {/* Event 1: Keralotsavam */}
-              <div className="bg-white rounded-2xl border border-[#EAE4D7] shadow-card overflow-hidden hover:border-[#1B4D36]/40 transition group">
-                <div className="h-32 overflow-hidden relative">
-                  <img
-                    src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=600&auto=format&fit=crop&q=80"
-                    alt="Keralotsavam 2026"
-                    className="w-full h-full object-cover group-hover:scale-105 transition"
-                  />
-                  <div className="absolute top-2 left-2 bg-white/95 rounded-lg px-2 py-1 text-center shadow-xs">
-                    <span className="text-[9px] uppercase font-bold text-[#7A8680] block leading-none">Nov</span>
-                    <span className="text-sm font-bold text-[#1B4D36] block leading-none mt-0.5">20</span>
+              {EVENTS_DATA.map((event) => (
+                <div 
+                  key={event.id}
+                  onClick={() => setSelectedEvent(event)}
+                  className="bg-white rounded-2xl border border-[#EAE4D7] shadow-card overflow-hidden hover:border-[#1B4D36]/60 transition group cursor-pointer"
+                >
+                  <div className="h-32 overflow-hidden relative">
+                    <img
+                      src={event.imageUrl}
+                      alt={event.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition"
+                    />
+                    <div className="absolute top-2 left-2 bg-white/95 rounded-lg px-2.5 py-1 text-center shadow-xs">
+                      <span className="text-[9px] uppercase font-bold text-[#7A8680] block leading-none">{event.dateMonth}</span>
+                      <span className="text-sm font-bold text-[#1B4D36] block leading-none mt-0.5">{event.dateDay}</span>
+                    </div>
+                    <span className="absolute top-2 right-2 bg-black/60 backdrop-blur-xs text-white text-[10px] px-2 py-0.5 rounded-full font-medium">
+                      {event.category}
+                    </span>
+                  </div>
+                  <div className="p-4 flex items-center justify-between">
+                    <div>
+                      <h4 className="font-bold text-sm text-[#1A2420] group-hover:text-[#1B4D36] transition line-clamp-1">
+                        {event.title}
+                      </h4>
+                      <div className="flex items-center gap-1 text-[11px] text-[#7A8680] mt-1">
+                        <MapPin className="w-3 h-3 text-[#1B4D36]" />
+                        <span className="truncate">{event.location}</span>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      className="px-2.5 py-1 rounded-lg bg-[#FAF7F0] hover:bg-[#1B4D36] hover:text-white text-[#1B4D36] text-[11px] font-bold border border-[#E1D9C8] transition flex-shrink-0 ml-2"
+                    >
+                      വിശദാംശങ്ങൾ
+                    </button>
                   </div>
                 </div>
-                <div className="p-4">
-                  <h4 className="font-bold text-sm text-[#1A2420] group-hover:text-[#1B4D36] transition">
-                    കേരളോത്സവം 2026
-                  </h4>
-                  <div className="flex items-center gap-1 text-[11px] text-[#7A8680] mt-1.5">
-                    <MapPin className="w-3 h-3 text-[#1B4D36]" />
-                    <span>കൊച്ചി</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Event 2: AI & Education Seminar */}
-              <div className="bg-white rounded-2xl border border-[#EAE4D7] shadow-card overflow-hidden hover:border-[#1B4D36]/40 transition group">
-                <div className="h-32 overflow-hidden relative">
-                  <img
-                    src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&auto=format&fit=crop&q=80"
-                    alt="AI & Education Seminar"
-                    className="w-full h-full object-cover group-hover:scale-105 transition"
-                  />
-                  <div className="absolute top-2 left-2 bg-white/95 rounded-lg px-2 py-1 text-center shadow-xs">
-                    <span className="text-[9px] uppercase font-bold text-[#7A8680] block leading-none">Nov</span>
-                    <span className="text-sm font-bold text-[#1B4D36] block leading-none mt-0.5">25</span>
-                  </div>
-                </div>
-                <div className="p-4">
-                  <h4 className="font-bold text-sm text-[#1A2420] group-hover:text-[#1B4D36] transition">
-                    AI & വിദ്യാഭ്യാസം സെമിനാർ
-                  </h4>
-                  <div className="flex items-center gap-1 text-[11px] text-[#7A8680] mt-1.5">
-                    <MapPin className="w-3 h-3 text-[#1B4D36]" />
-                    <span>തിരുവനന്തപുരം</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Event 3: Kerala Sangeethotsavam */}
-              <div className="bg-white rounded-2xl border border-[#EAE4D7] shadow-card overflow-hidden hover:border-[#1B4D36]/40 transition group">
-                <div className="h-32 overflow-hidden relative">
-                  <img
-                    src="https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=600&auto=format&fit=crop&q=80"
-                    alt="Kerala Music Festival"
-                    className="w-full h-full object-cover group-hover:scale-105 transition"
-                  />
-                  <div className="absolute top-2 left-2 bg-white/95 rounded-lg px-2 py-1 text-center shadow-xs">
-                    <span className="text-[9px] uppercase font-bold text-[#7A8680] block leading-none">Nov</span>
-                    <span className="text-sm font-bold text-[#1B4D36] block leading-none mt-0.5">28</span>
-                  </div>
-                </div>
-                <div className="p-4">
-                  <h4 className="font-bold text-sm text-[#1A2420] group-hover:text-[#1B4D36] transition">
-                    കേരള സംഗീതോത്സവം
-                  </h4>
-                  <div className="flex items-center gap-1 text-[11px] text-[#7A8680] mt-1.5">
-                    <MapPin className="w-3 h-3 text-[#1B4D36]" />
-                    <span>കോഴിക്കോട്</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Event 4: District Sports Meet */}
-              <div className="bg-white rounded-2xl border border-[#EAE4D7] shadow-card overflow-hidden hover:border-[#1B4D36]/40 transition group">
-                <div className="h-32 overflow-hidden relative">
-                  <img
-                    src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=600&auto=format&fit=crop&q=80"
-                    alt="District Sports Meet"
-                    className="w-full h-full object-cover group-hover:scale-105 transition"
-                  />
-                  <div className="absolute top-2 left-2 bg-white/95 rounded-lg px-2 py-1 text-center shadow-xs">
-                    <span className="text-[9px] uppercase font-bold text-[#7A8680] block leading-none">Dec</span>
-                    <span className="text-sm font-bold text-[#1B4D36] block leading-none mt-0.5">02</span>
-                  </div>
-                </div>
-                <div className="p-4">
-                  <h4 className="font-bold text-sm text-[#1A2420] group-hover:text-[#1B4D36] transition">
-                    ജില്ലാതല കായികമേള
-                  </h4>
-                  <div className="flex items-center gap-1 text-[11px] text-[#7A8680] mt-1.5">
-                    <MapPin className="w-3 h-3 text-[#1B4D36]" />
-                    <span>മലപ്പുറം</span>
-                  </div>
-                </div>
-              </div>
+              ))}
 
             </div>
 
@@ -603,8 +741,9 @@ export default function HomePage() {
               </div>
 
               {newsletterSuccess ? (
-                <div className="mt-6 p-3 rounded-xl bg-white/20 text-xs font-semibold text-center text-amber-200">
-                  നന്ദി! നിങ്ങളുടെ ഇമെയിൽ വിലാസം രജിസ്റ്റർ ചെയ്തു.
+                <div className="mt-6 p-3 rounded-xl bg-white/20 text-xs font-semibold text-center text-amber-200 flex items-center justify-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>നന്ദി! നിങ്ങളുടെ ഇമെയിൽ വിലാസം രജിസ്റ്റർ ചെയ്തു.</span>
                 </div>
               ) : (
                 <form onSubmit={handleNewsletterSubmit} className="mt-6 flex items-center relative">
@@ -652,65 +791,72 @@ export default function HomePage() {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
             
-            {/* Photo 1: Kovalam / Varkala Beach */}
-            <div className="h-44 sm:h-52 rounded-2xl overflow-hidden shadow-xs border border-[#EAE4D7] relative group">
-              <img
-                src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&auto=format&fit=crop&q=80"
-                alt="Kerala Coastline & Beach"
-                className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-              />
-            </div>
-
-            {/* Photo 2: Coconut Groves & River */}
-            <div className="h-44 sm:h-52 rounded-2xl overflow-hidden shadow-xs border border-[#EAE4D7] relative group">
-              <img
-                src="https://images.unsplash.com/photo-1593693397690-362cb9666fc2?w=500&auto=format&fit=crop&q=80"
-                alt="Kerala Coconut Groves"
-                className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-              />
-            </div>
-
-            {/* Photo 3: Kerala Historic Church / Basilica */}
-            <div className="h-44 sm:h-52 rounded-2xl overflow-hidden shadow-xs border border-[#EAE4D7] relative group">
-              <img
-                src="https://images.unsplash.com/photo-1548625361-195fe578cb26?w=500&auto=format&fit=crop&q=80"
-                alt="Kerala Heritage Church"
-                className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-              />
-            </div>
-
-            {/* Photo 4: Munnar Tea Gardens & Mountains */}
-            <div className="h-44 sm:h-52 rounded-2xl overflow-hidden shadow-xs border border-[#EAE4D7] relative group">
-              <img
-                src="https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?w=500&auto=format&fit=crop&q=80"
-                alt="Munnar Tea Hills"
-                className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-              />
-            </div>
-
-            {/* Photo 5: Backwaters Footbridge at Sunset */}
-            <div className="h-44 sm:h-52 rounded-2xl overflow-hidden shadow-xs border border-[#EAE4D7] relative group">
-              <img
-                src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=500&auto=format&fit=crop&q=80"
-                alt="Backwaters Sunrise Bridge"
-                className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-              />
-            </div>
-
-            {/* Photo 6: Kathakali Traditional Performer */}
-            <div className="h-44 sm:h-52 rounded-2xl overflow-hidden shadow-xs border border-[#EAE4D7] relative group">
-              <img
-                src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=500&auto=format&fit=crop&q=80"
-                alt="Traditional Kathakali"
-                className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
-              />
-            </div>
+            {GALLERY_DATA.map((photo) => (
+              <div 
+                key={photo.id}
+                onClick={() => setSelectedPhoto(photo)}
+                className="h-44 sm:h-52 rounded-2xl overflow-hidden shadow-xs border border-[#EAE4D7] relative group cursor-pointer"
+              >
+                <img
+                  src={photo.imageUrl}
+                  alt={photo.title}
+                  className="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition p-2.5 flex flex-col justify-end text-white">
+                  <span className="text-[11px] font-bold leading-tight">{photo.title}</span>
+                  <span className="text-[9px] text-amber-200">{photo.district}</span>
+                </div>
+              </div>
+            ))}
 
           </div>
         </section>
 
         {/* ========================================================================= */}
-        {/* 7. COMMUNITY CTA BANNER (Exact Match to Reference Image) */}
+        {/* 7. INTERACTIVE LOCALITY MAP SECTION (Live Community Discovery) */}
+        {/* ========================================================================= */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+          <div className="bg-white rounded-3xl border border-[#EAE4D7] p-6 sm:p-8 shadow-card">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+              <div>
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-6 rounded-full bg-[#1B4D36]" />
+                  <h2 className="text-xl sm:text-2xl font-bold font-malayalam-serif text-[#1A2420]">
+                    നമ്മുടെ പ്രദേശത്തിന്റെ ഭൂപടം
+                  </h2>
+                </div>
+                <p className="text-xs text-[#5C6A64] mt-1">
+                  പരിപാടികൾ, പ്രാദേശിക സ്ഥാപനങ്ങൾ, പൈതൃക കേന്ദ്രങ്ങൾ, പൊതു പരാതികൾ എന്നിവ ഭൂപടത്തിൽ കാണൂ.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Link
+                  href="/discover"
+                  className="px-4 py-2 rounded-xl bg-[#FAF7F0] hover:bg-[#F3EFE6] border border-[#E1D9C8] text-xs font-bold text-[#1B4D36] flex items-center gap-1.5 transition"
+                >
+                  <span>വിപുലമായ ഭൂപടം</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="h-80 sm:h-96 w-full rounded-2xl overflow-hidden border border-[#EAE4D7] shadow-inner relative">
+              <CommunityMap
+                centerLat={currentCommunity?.latitude || 10.0159}
+                centerLng={currentCommunity?.longitude || 76.3419}
+                events={realEvents}
+                businesses={realBusinesses}
+                places={realPlaces}
+                issues={realIssues}
+                className="w-full h-full"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 8. COMMUNITY CTA BANNER (Exact Match to Reference Image) */}
         {/* ========================================================================= */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
           <div className="bg-[#1B4D36] text-white rounded-3xl p-6 sm:p-10 shadow-elevated relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6 border border-[#276449]">
@@ -752,6 +898,257 @@ export default function HomePage() {
 
       </main>
 
+      {/* ========================================================================= */}
+      {/* INTERACTIVE MODALS */}
+      {/* ========================================================================= */}
+
+      {/* 1. NEWS ARTICLE DETAIL MODAL */}
+      {selectedNews && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
+          <div className="bg-[#FAF7F0] rounded-3xl border border-[#E7DFD0] max-w-xl w-full shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+            <div className="relative h-56 w-full flex-shrink-0 bg-neutral-900">
+              <img
+                src={selectedNews.imageUrl}
+                alt={selectedNews.title}
+                className="w-full h-full object-cover"
+              />
+              <button
+                onClick={() => setSelectedNews(null)}
+                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition"
+              >
+                <X className="w-4 h-4" />
+              </button>
+              <span className="absolute bottom-4 left-4 bg-[#1B4D36] text-white text-xs font-bold px-3 py-1 rounded-full">
+                {selectedNews.category}
+              </span>
+            </div>
+
+            <div className="p-6 overflow-y-auto flex-1">
+              <div className="flex items-center gap-2 text-xs text-[#7A8880] mb-2">
+                <Calendar className="w-3.5 h-3.5 text-[#1B4D36]" />
+                <span>{selectedNews.date}</span>
+                <span>•</span>
+                <span>{selectedNews.author}</span>
+              </div>
+
+              <h2 className="text-xl sm:text-2xl font-bold font-malayalam-serif text-[#1B4D36] mb-4 leading-snug">
+                {selectedNews.title}
+              </h2>
+
+              <p className="text-sm text-[#3E4D45] leading-relaxed whitespace-pre-line font-malayalam-body">
+                {selectedNews.fullStory}
+              </p>
+
+              <div className="mt-6 pt-4 border-t border-[#E5DFD1] flex items-center justify-between">
+                <span className="text-xs text-[#7A8880]">നമ്മുടെ നാട് വാർത്താ ശൃംഖല</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (navigator.share) {
+                      navigator.share({ title: selectedNews.title, text: selectedNews.summary, url: window.location.href });
+                    }
+                  }}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-[#E1D9C8] text-xs font-bold text-[#1B4D36] hover:bg-[#F3EFE6] transition"
+                >
+                  <Share2 className="w-3.5 h-3.5" />
+                  <span>പങ്കുവെക്കുക</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 2. EVENT DETAIL MODAL */}
+      {selectedEvent && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
+          <div className="bg-[#FAF7F0] rounded-3xl border border-[#E7DFD0] max-w-lg w-full shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+            <div className="relative h-48 w-full flex-shrink-0 bg-neutral-900">
+              <img
+                src={selectedEvent.imageUrl}
+                alt={selectedEvent.title}
+                className="w-full h-full object-cover"
+              />
+              <button
+                onClick={() => {
+                  setSelectedEvent(null);
+                  setEventRsvpSuccess(false);
+                }}
+                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/60 hover:bg-black text-white flex items-center justify-center transition"
+              >
+                <X className="w-4 h-4" />
+              </button>
+              <div className="absolute top-4 left-4 bg-white/95 rounded-xl px-3 py-1 text-center shadow-md">
+                <span className="text-[10px] uppercase font-bold text-[#7A8680] block">{selectedEvent.dateMonth}</span>
+                <span className="text-base font-bold text-[#1B4D36] block">{selectedEvent.dateDay}</span>
+              </div>
+            </div>
+
+            <div className="p-6 overflow-y-auto flex-1">
+              <span className="text-[11px] font-bold text-[#B87A1E] uppercase tracking-wider bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200">
+                {selectedEvent.category}
+              </span>
+
+              <h2 className="text-xl font-bold font-malayalam-serif text-[#1B4D36] mt-2 mb-3">
+                {selectedEvent.title}
+              </h2>
+
+              <div className="space-y-2 text-xs text-[#5C6A64] mb-4 bg-white rounded-xl p-3 border border-[#EAE4D7]">
+                <div className="flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-[#1B4D36]" />
+                  <span className="font-semibold text-[#1A2420]">{selectedEvent.fullDate}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-[#1B4D36]" />
+                  <span>{selectedEvent.time}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-[#1B4D36]" />
+                  <span>{selectedEvent.location}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Users className="w-4 h-4 text-[#1B4D36]" />
+                  <span>സംഘാടനം: {selectedEvent.organizer}</span>
+                </div>
+              </div>
+
+              <p className="text-xs sm:text-sm text-[#3E4D45] leading-relaxed mb-6 font-malayalam-body">
+                {selectedEvent.description}
+              </p>
+
+              {eventRsvpSuccess ? (
+                <div className="p-3 rounded-xl bg-[#1B4D36] text-white text-xs font-semibold text-center flex items-center justify-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-amber-300" />
+                  <span>നിങ്ങളുടെ പങ്കാളിത്തം ഉറപ്പാക്കി! അറിയിപ്പുകൾ ലഭിക്കും.</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={handleRsvp}
+                    className="flex-1 py-3 rounded-xl bg-[#1B4D36] hover:bg-[#133A28] text-white text-xs font-bold transition shadow-md active:scale-95"
+                  >
+                    പങ്കെടുക്കാം (RSVP)
+                  </button>
+                  <Link
+                    href={`/discover?tab=events`}
+                    className="px-4 py-3 rounded-xl bg-white hover:bg-[#EFE9DD] border border-[#DDD5C5] text-xs font-bold text-[#1B4D36] transition"
+                  >
+                    കൂടുതൽ പരിപാടികൾ
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 3. PHOTO LIGHTBOX MODAL */}
+      {selectedPhoto && (
+        <div 
+          onClick={() => setSelectedPhoto(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in"
+        >
+          <div 
+            onClick={(e) => e.stopPropagation()}
+            className="max-w-3xl w-full bg-[#18241E] text-white rounded-3xl overflow-hidden shadow-2xl border border-white/10"
+          >
+            <div className="relative max-h-[70vh] bg-black flex items-center justify-center">
+              <img
+                src={selectedPhoto.imageUrl}
+                alt={selectedPhoto.title}
+                className="max-h-[70vh] w-auto max-w-full object-contain"
+              />
+              <button
+                onClick={() => setSelectedPhoto(null)}
+                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/70 hover:bg-black text-white flex items-center justify-center transition"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <span className="text-xs font-semibold text-amber-300 flex items-center gap-1 mb-1">
+                  <MapPin className="w-3.5 h-3.5" /> {selectedPhoto.district}
+                </span>
+                <h3 className="text-lg font-bold font-malayalam-serif">
+                  {selectedPhoto.title}
+                </h3>
+                <p className="text-xs text-white/70 mt-1 max-w-xl">
+                  {selectedPhoto.description}
+                </p>
+              </div>
+              <Link
+                href="/discover?tab=places"
+                className="px-4 py-2 rounded-xl bg-white/20 hover:bg-white/30 text-xs font-bold text-white transition self-start sm:self-center"
+              >
+                കൂടുതൽ സ്ഥലങ്ങൾ
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 4. KERALA SCENIC VIDEO SHOWCASE MODAL */}
+      {showVideoModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in">
+          <div className="bg-[#121A15] text-white rounded-3xl border border-white/15 max-w-3xl w-full shadow-2xl overflow-hidden flex flex-col">
+            <div className="p-4 flex items-center justify-between border-b border-white/10">
+              <div className="flex items-center gap-2">
+                <Play className="w-4 h-4 text-amber-300 fill-current" />
+                <h3 className="font-bold font-malayalam-serif text-sm sm:text-base">
+                  നമ്മുടെ നാടിന്റെ സൗന്ദര്യം — കേരളം
+                </h3>
+              </div>
+              <button
+                onClick={() => setShowVideoModal(false)}
+                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Video Player Display */}
+            <div className="relative aspect-video w-full bg-black overflow-hidden flex items-center justify-center">
+              <video
+                src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+                autoPlay
+                loop
+                muted={isVideoMuted}
+                playsInline
+                className="w-full h-full object-cover"
+              />
+              
+              {/* Controls Overlay */}
+              <div className="absolute bottom-4 right-4 flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsVideoMuted(!isVideoMuted)}
+                  className="px-3 py-1.5 rounded-full bg-black/60 hover:bg-black/80 backdrop-blur-xs text-white text-xs font-semibold flex items-center gap-1.5 transition"
+                >
+                  {isVideoMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+                  <span>{isVideoMuted ? "ശബ്ദം തുറക്കൂ" : "ശബ്ദം നിർത്തൂ"}</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="p-4 sm:p-5 bg-[#17221C] text-xs text-white/80 flex items-center justify-between">
+              <span>ദൈവത്തിന്റെ സ്വന്തം നാട് • പച്ചപ്പും കായലോളങ്ങളും നിറഞ്ഞ പ്രകൃതിഭംഗി</span>
+              <button
+                onClick={() => {
+                  setShowVideoModal(false);
+                  handleOpenAi("കേരളത്തിലെ പ്രധാന വിനോദസഞ്ചാര കേന്ദ്രങ്ങൾ നിർദ്ദേശിക്കാമോ?");
+                }}
+                className="text-amber-300 hover:underline font-semibold flex items-center gap-1 text-xs"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>AI-യോട് കൂടുതൽ ചോദിക്കാം</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Floating Naadu AI Button */}
       <button
         onClick={() => handleOpenAi()}
@@ -765,6 +1162,7 @@ export default function HomePage() {
       <NaaduAiModal
         isOpen={isAiModalOpen}
         onClose={() => setIsAiModalOpen(false)}
+        initialQuery={aiInitialQuery}
       />
 
       {/* Districts Selector Modal */}

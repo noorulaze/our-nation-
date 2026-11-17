@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Footer } from "@/components/layout/Footer";
+import { KeralaLogo } from "@/components/layout/KeralaLogo";
 import { useLanguage } from "@/lib/i18n/context";
 import { useAuth } from "@/lib/auth/context";
 import { Lock, Mail, ArrowRight, ShieldCheck } from "lucide-react";
@@ -31,58 +32,56 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-[#FAF7F0] text-[#1A2420]">
       <Navbar />
 
-      <main className="flex-1 flex items-center justify-center p-4">
-        <div className="w-full max-w-md bg-surface rounded-2xl border border-border p-8 shadow-lg">
-          <div className="text-center mb-6">
-            <div className="w-10 h-10 rounded-xl bg-brand-700 text-white flex items-center justify-center font-bold text-lg mx-auto mb-2">
-              <span>നാ</span>
-            </div>
-            <h1 className="text-2xl font-bold text-foreground">
+      <main className="flex-1 flex items-center justify-center p-4 py-12">
+        <div className="w-full max-w-md bg-white rounded-3xl border border-[#EAE4D7] p-8 sm:p-10 shadow-card">
+          <div className="text-center mb-8 flex flex-col items-center">
+            <KeralaLogo />
+            <h1 className="text-2xl font-bold font-malayalam-serif text-[#1B4D36] mt-4">
               {t("navLogin")}
             </h1>
-            <p className="text-xs text-muted-foreground mt-1">
-              Welcome back to your local community square
+            <p className="text-xs text-[#5C6A64] mt-1 font-malayalam-body">
+              നമ്മുടെ നാട് ഡിജിറ്റൽ സമൂഹത്തിലേക്ക് സ്വാഗതം
             </p>
           </div>
 
           {errorMsg && (
-            <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700">
+            <div className="mb-4 p-3 rounded-2xl bg-red-50 border border-red-200 text-xs text-red-700">
               {errorMsg}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-foreground mb-1">
-                Email Address / Username
+              <label className="block text-xs font-bold text-[#1A2420] mb-1">
+                ഇമെയിൽ / യൂസർനെയിം
               </label>
               <div className="relative">
-                <Mail className="w-4 h-4 absolute left-3 top-3 text-muted-foreground" />
+                <Mail className="w-4 h-4 absolute left-3.5 top-3.5 text-[#7A8880]" />
                 <input
                   type="text"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 text-sm rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  className="w-full pl-10 pr-4 py-2.5 text-xs sm:text-sm rounded-xl border border-[#DDD5C5] bg-[#FAF7F0] text-[#1A2420] focus:outline-none focus:ring-2 focus:ring-[#1B4D36]"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-foreground mb-1">
-                Password
+              <label className="block text-xs font-bold text-[#1A2420] mb-1">
+                പാസ്‌വേഡ്
               </label>
               <div className="relative">
-                <Lock className="w-4 h-4 absolute left-3 top-3 text-muted-foreground" />
+                <Lock className="w-4 h-4 absolute left-3.5 top-3.5 text-[#7A8880]" />
                 <input
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 text-sm rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  className="w-full pl-10 pr-4 py-2.5 text-xs sm:text-sm rounded-xl border border-[#DDD5C5] bg-[#FAF7F0] text-[#1A2420] focus:outline-none focus:ring-2 focus:ring-[#1B4D36]"
                 />
               </div>
             </div>
@@ -90,15 +89,16 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-2.5 rounded-xl bg-brand-700 hover:bg-brand-800 disabled:opacity-50 text-white font-semibold text-sm transition active:scale-95 shadow-sm mt-2"
+              className="w-full py-3 rounded-xl bg-[#1B4D36] hover:bg-[#133A28] disabled:opacity-50 text-white font-bold text-xs sm:text-sm transition active:scale-95 shadow-md mt-2 flex items-center justify-center gap-2"
             >
-              {isLoading ? t("loading") : t("navLogin")}
+              <span>{isLoading ? t("loading") : t("navLogin")}</span>
+              <ArrowRight className="w-4 h-4" />
             </button>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-border text-center text-xs text-muted-foreground">
+          <div className="mt-6 pt-6 border-t border-[#F3EFE6] text-center text-xs text-[#5C6A64]">
             Don&apos;t have an account yet?{" "}
-            <Link href="/register" className="font-semibold text-brand-700 hover:underline">
+            <Link href="/register" className="font-bold text-[#1B4D36] hover:underline">
               {t("navRegister")}
             </Link>
           </div>

@@ -6,9 +6,10 @@ import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Footer } from "@/components/layout/Footer";
+import { KeralaLogo } from "@/components/layout/KeralaLogo";
 import { useLanguage } from "@/lib/i18n/context";
 import { useAuth } from "@/lib/auth/context";
-import { Lock, Mail, User, ShieldCheck } from "lucide-react";
+import { Lock, Mail, User, ShieldCheck, ArrowRight } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -40,61 +41,59 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-[#FAF7F0] text-[#1A2420]">
       <Navbar />
 
-      <main className="flex-1 flex items-center justify-center p-4">
-        <div className="w-full max-w-md bg-surface rounded-2xl border border-border p-8 shadow-lg">
-          <div className="text-center mb-6">
-            <div className="w-10 h-10 rounded-xl bg-brand-700 text-white flex items-center justify-center font-bold text-lg mx-auto mb-2">
-              <span>നാ</span>
-            </div>
-            <h1 className="text-2xl font-bold text-foreground">
+      <main className="flex-1 flex items-center justify-center p-4 py-12">
+        <div className="w-full max-w-md bg-white rounded-3xl border border-[#EAE4D7] p-8 sm:p-10 shadow-card">
+          <div className="text-center mb-8 flex flex-col items-center">
+            <KeralaLogo />
+            <h1 className="text-2xl font-bold font-malayalam-serif text-[#1B4D36] mt-4">
               {t("navRegister")}
             </h1>
-            <p className="text-xs text-muted-foreground mt-1">
-              Join your neighborhood&apos;s verified digital network
+            <p className="text-xs text-[#5C6A64] mt-1 font-malayalam-body">
+              നമ്മുടെ നാടിന്റെ ഭാഗമാകൂ — ഇപ്പോൾ തന്നെ ചേരൂ
             </p>
           </div>
 
           {errorMsg && (
-            <div className="mb-4 p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700">
+            <div className="mb-4 p-3 rounded-2xl bg-red-50 border border-red-200 text-xs text-red-700">
               {errorMsg}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-3.5">
             <div>
-              <label className="block text-xs font-semibold text-foreground mb-1">
-                Full Display Name
+              <label className="block text-xs font-bold text-[#1A2420] mb-1">
+                പൂർണ്ണ നാമം (Full Display Name)
               </label>
               <input
                 type="text"
                 required
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
-                placeholder="e.g. Rohith Varma"
-                className="w-full px-3 py-2 text-sm rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
+                placeholder="ഉദാ: രോഹിത് വർമ്മ"
+                className="w-full px-4 py-2.5 text-xs sm:text-sm rounded-xl border border-[#DDD5C5] bg-[#FAF7F0] text-[#1A2420] focus:outline-none focus:ring-2 focus:ring-[#1B4D36]"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-foreground mb-1">
-                Unique Username
+              <label className="block text-xs font-bold text-[#1A2420] mb-1">
+                യൂസർനെയിം (Unique Username)
               </label>
               <input
                 type="text"
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/\s+/g, "_"))}
-                placeholder="e.g. rohith_v"
-                className="w-full px-3 py-2 text-sm rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
+                placeholder="rohith_v"
+                className="w-full px-4 py-2.5 text-xs sm:text-sm rounded-xl border border-[#DDD5C5] bg-[#FAF7F0] text-[#1A2420] focus:outline-none focus:ring-2 focus:ring-[#1B4D36]"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-foreground mb-1">
-                Email Address
+              <label className="block text-xs font-bold text-[#1A2420] mb-1">
+                ഇമെയിൽ വിലാസം
               </label>
               <input
                 type="email"
@@ -102,13 +101,13 @@ export default function RegisterPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@example.com"
-                className="w-full px-3 py-2 text-sm rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="w-full px-4 py-2.5 text-xs sm:text-sm rounded-xl border border-[#DDD5C5] bg-[#FAF7F0] text-[#1A2420] focus:outline-none focus:ring-2 focus:ring-[#1B4D36]"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-foreground mb-1">
-                Password
+              <label className="block text-xs font-bold text-[#1A2420] mb-1">
+                പാസ്‌വേഡ് (Password)
               </label>
               <input
                 type="password"
@@ -116,18 +115,18 @@ export default function RegisterPage() {
                 minLength={6}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-2 text-sm rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-brand-500"
+                className="w-full px-4 py-2.5 text-xs sm:text-sm rounded-xl border border-[#DDD5C5] bg-[#FAF7F0] text-[#1A2420] focus:outline-none focus:ring-2 focus:ring-[#1B4D36]"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-foreground mb-1">
-                Preferred Interface Language
+              <label className="block text-xs font-bold text-[#1A2420] mb-1">
+                മുൻഗണനാ ഭാഷ
               </label>
               <select
                 value={preferredLanguage}
                 onChange={(e) => setPreferredLanguage(e.target.value as any)}
-                className="w-full px-3 py-2 text-xs rounded-xl border border-border bg-background text-foreground"
+                className="w-full px-3 py-2 text-xs rounded-xl border border-[#DDD5C5] bg-[#FAF7F0] text-[#1A2420]"
               >
                 <option value="ml">മലയാളം (Malayalam)</option>
                 <option value="en">English</option>
@@ -137,15 +136,16 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-2.5 rounded-xl bg-brand-700 hover:bg-brand-800 disabled:opacity-50 text-white font-semibold text-sm transition active:scale-95 shadow-sm mt-3"
+              className="w-full py-3 rounded-xl bg-[#1B4D36] hover:bg-[#133A28] disabled:opacity-50 text-white font-bold text-xs sm:text-sm transition active:scale-95 shadow-md mt-3 flex items-center justify-center gap-2"
             >
-              {isLoading ? t("loading") : t("navRegister")}
+              <span>{isLoading ? t("loading") : t("navRegister")}</span>
+              <ArrowRight className="w-4 h-4" />
             </button>
           </form>
 
-          <div className="mt-6 pt-6 border-t border-border text-center text-xs text-muted-foreground">
+          <div className="mt-6 pt-6 border-t border-[#F3EFE6] text-center text-xs text-[#5C6A64]">
             Already registered?{" "}
-            <Link href="/login" className="font-semibold text-brand-700 hover:underline">
+            <Link href="/login" className="font-bold text-[#1B4D36] hover:underline">
               {t("navLogin")}
             </Link>
           </div>

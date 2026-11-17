@@ -24,8 +24,8 @@ import {
   UserPlus, 
   UserMinus,
   AlertCircle,
-  MoreVertical,
-  X
+  X,
+  ExternalLink
 } from "lucide-react";
 
 export default function CommunityPage() {
@@ -43,6 +43,8 @@ export default function CommunityPage() {
   const [reportModalPost, setReportModalPost] = useState<Post | null>(null);
   const [reportReason, setReportReason] = useState("");
   const [reportSuccess, setReportSuccess] = useState(false);
+  const [likedPosts, setLikedPosts] = useState<Record<string, boolean>>({});
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
 
   const announcements = store.getAnnouncements(currentCommunity?.id);
 
@@ -71,18 +73,35 @@ export default function CommunityPage() {
     }
   };
 
+  const handleToggleLike = (postId: string) => {
+    const isCurrentlyLiked = likedPosts[postId] || false;
+    setLikedPosts({
+      ...likedPosts,
+      [postId]: !isCurrentlyLiked,
+    });
+    setPosts(
+      posts.map((p) => {
+        if (p.id === postId) {
+          return {
+            ...p,
+            likes_count: isCurrentlyLiked ? Math.max(0, p.likes_count - 1) : p.likes_count + 1,
+          };
+        }
+        return p;
+      })
+    );
+  };
+
   const handleAddComment = (postId: string) => {
     if (!commentInput.trim() || !user) return;
 
     store.createComment(postId, user.id, commentInput.trim());
     setCommentInput("");
-    // refresh post counts
     setPosts(store.getPosts(currentCommunity?.id));
   };
 
   const handleReportPost = () => {
     if (!reportModalPost || !reportReason.trim() || !user) return;
-    // record in store
     store.addAuditLog(user.id, "REPORT_CONTENT", "post", reportModalPost.id, { reason: reportReason });
     setReportSuccess(true);
     setTimeout(() => {
@@ -93,36 +112,36 @@ export default function CommunityPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-[#FAF7F0] text-[#1A2420]">
       <Navbar />
 
       <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-8">
         
         {/* Community Header Banner */}
-        <div className="bg-surface rounded-2xl border border-border p-6 mb-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="bg-white rounded-3xl border border-[#EAE4D7] p-6 mb-6 shadow-card flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-brand-700 uppercase tracking-wider bg-brand-50 px-2.5 py-0.5 rounded-full border border-brand-200">
+              <span className="text-[11px] font-bold text-[#1B4D36] uppercase tracking-wider bg-[#E0F1E7] px-2.5 py-0.5 rounded-full border border-[#BDE3CE]">
                 {currentCommunity?.type || "Locality"}
               </span>
-              <span className="text-xs text-muted-foreground">
-                {currentCommunity?.district} • Kerala
+              <span className="text-xs text-[#5C6A64]">
+                {currentCommunity?.district || "Ernakulam"} • Kerala
               </span>
             </div>
-            <h1 className="text-2xl font-bold text-foreground">
+            <h1 className="text-2xl font-bold font-malayalam-serif text-[#1B4D36]">
               {currentCommunity ? (language === "ml" ? currentCommunity.name_ml : currentCommunity.name) : "Kerala Community"}
             </h1>
-            <p className="text-xs text-muted-foreground max-w-xl">
+            <p className="text-xs text-[#5C6A64] max-w-xl font-malayalam-body">
               {currentCommunity?.description || "A verified local public square for all residents."}
             </p>
           </div>
 
           <button
             onClick={() => setIsJoined(!isJoined)}
-            className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 self-start sm:self-center ${
+            className={`px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition active:scale-95 self-start sm:self-center shadow-xs ${
               isJoined
-                ? "bg-muted text-muted-foreground hover:bg-red-50 hover:text-red-700 border border-border"
-                : "bg-brand-700 hover:bg-brand-800 text-white shadow-sm"
+                ? "bg-[#F3EFE6] text-[#5C6A64] hover:bg-red-50 hover:text-red-700 border border-[#DDD5C5]"
+                : "bg-[#1B4D36] hover:bg-[#133A28] text-white shadow-sm"
             }`}
           >
             {isJoined ? (
@@ -143,17 +162,19 @@ export default function CommunityPage() {
         {announcements.length > 0 && (
           <div className="mb-6 space-y-3">
             {announcements.map((ann) => (
-              <div key={ann.id} className="bg-brand-50/80 border border-brand-200 rounded-2xl p-4 shadow-xs">
+              <div key={ann.id} className="bg-[#FAF4E6] border border-[#E8DCBF] rounded-2xl p-4 sm:p-5 shadow-xs">
                 <div className="flex items-center gap-2 mb-1.5">
-                  <Pin className="w-4 h-4 text-brand-700" />
-                  <span className="text-[11px] font-bold text-brand-800 uppercase tracking-wider">
+                  <div className="w-6 h-6 rounded-full bg-[#B87A1E] text-white flex items-center justify-center">
+                    <Pin className="w-3 h-3" />
+                  </div>
+                  <span className="text-[11px] font-bold text-[#8C5B0F] uppercase tracking-wider">
                     {t("officialBadge")} • {ann.publisher_organization}
                   </span>
                 </div>
-                <h3 className="font-bold text-sm text-brand-950 mb-1">
+                <h3 className="font-bold font-malayalam-serif text-sm sm:text-base text-[#1A2420] mb-1">
                   {ann.title}
                 </h3>
-                <p className="text-xs text-brand-900/90 leading-relaxed">
+                <p className="text-xs text-[#4A5750] leading-relaxed font-malayalam-body">
                   {ann.content}
                 </p>
               </div>
@@ -162,45 +183,59 @@ export default function CommunityPage() {
         )}
 
         {/* Create Post Card */}
-        <div className="bg-surface rounded-2xl border border-border p-5 mb-8 shadow-sm">
+        <div className="bg-white rounded-3xl border border-[#EAE4D7] p-5 sm:p-6 mb-8 shadow-card">
           <form onSubmit={handleCreatePost}>
             <div className="flex items-start gap-3">
-              <div className="w-9 h-9 rounded-full bg-brand-100 text-brand-700 font-bold flex items-center justify-center text-sm flex-shrink-0">
+              <div className="w-10 h-10 rounded-full bg-[#E5DDD0] text-[#1B4D36] font-bold flex items-center justify-center text-sm flex-shrink-0">
                 {user?.display_name ? user.display_name.charAt(0) : "U"}
               </div>
               <div className="flex-1">
                 <textarea
                   value={newPostContent}
                   onChange={(e) => setNewPostContent(e.target.value)}
-                  placeholder={t("postPlaceholder")}
+                  placeholder={language === "ml" ? "നിങ്ങളുടെ പ്രദേശത്തെ വിശേഷങ്ങളും വാർത്തകളും പങ്കുവെക്കൂ..." : t("postPlaceholder")}
                   rows={3}
-                  className="w-full text-sm rounded-xl border border-border bg-background p-3 focus:outline-none focus:ring-2 focus:ring-brand-500 text-foreground resize-none"
+                  className="w-full text-xs sm:text-sm rounded-2xl border border-[#DDD5C5] bg-[#FAF7F0] p-3.5 focus:outline-none focus:ring-2 focus:ring-[#1B4D36] text-[#1A2420] resize-none font-malayalam-body"
                 />
 
                 {showImageInput && (
-                  <input
-                    type="url"
-                    value={newPostImage}
-                    onChange={(e) => setNewPostImage(e.target.value)}
-                    placeholder="Paste image URL (https://...)"
-                    className="w-full mt-2 px-3 py-2 text-xs rounded-lg border border-border bg-background focus:outline-none focus:ring-1 focus:ring-brand-500 text-foreground"
-                  />
+                  <div className="mt-2 space-y-2">
+                    <input
+                      type="url"
+                      value={newPostImage}
+                      onChange={(e) => setNewPostImage(e.target.value)}
+                      placeholder="ചിത്രത്തിന്റെ URL നൽകുക (https://...)"
+                      className="w-full px-3 py-2 text-xs rounded-xl border border-[#DDD5C5] bg-white focus:outline-none focus:ring-1 focus:ring-[#1B4D36] text-[#1A2420]"
+                    />
+                    {newPostImage.trim() && (
+                      <div className="h-32 w-full rounded-xl overflow-hidden border border-[#EAE4D7] relative">
+                        <img src={newPostImage} alt="Preview" className="w-full h-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => setNewPostImage("")}
+                          className="absolute top-2 right-2 p-1 rounded-full bg-black/60 text-white text-xs"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 )}
 
-                <div className="flex items-center justify-between mt-3 pt-3 border-t border-border">
+                <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#F3EFE6]">
                   <button
                     type="button"
                     onClick={() => setShowImageInput(!showImageInput)}
-                    className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground font-medium p-1 rounded"
+                    className="flex items-center gap-1.5 text-xs text-[#5C6A64] hover:text-[#1B4D36] font-semibold p-1 rounded transition"
                   >
-                    <ImageIcon className="w-4 h-4 text-brand-700" />
-                    <span>{showImageInput ? "Remove Image" : "Add Image"}</span>
+                    <ImageIcon className="w-4 h-4 text-[#1B4D36]" />
+                    <span>{showImageInput ? "ചിത്രം മാറ്റുക" : "ചിത്രം ചേർക്കുക"}</span>
                   </button>
 
                   <button
                     type="submit"
                     disabled={!newPostContent.trim()}
-                    className="px-5 py-2 rounded-xl bg-brand-700 hover:bg-brand-800 disabled:opacity-50 text-white font-semibold text-xs transition active:scale-95 shadow-sm"
+                    className="px-5 py-2.5 rounded-xl bg-[#1B4D36] hover:bg-[#133A28] disabled:opacity-40 text-white font-bold text-xs transition active:scale-95 shadow-xs"
                   >
                     {t("publish")}
                   </button>
@@ -213,31 +248,34 @@ export default function CommunityPage() {
         {/* Feed Posts */}
         <div className="space-y-6">
           {posts.length === 0 ? (
-            <div className="text-center py-12 text-muted-foreground text-sm">
-              {t("noResults")}
+            <div className="text-center py-16 bg-white rounded-3xl border border-[#EAE4D7] p-8">
+              <Sparkles className="w-10 h-10 text-[#B87A1E] mx-auto mb-3 opacity-60" />
+              <h3 className="font-bold text-base text-[#1A2420]">{t("noResults")}</h3>
+              <p className="text-xs text-[#7A8880] mt-1">ആദ്യ പോസ്റ്റ് നിങ്ങൾ തന്നെ തുടങ്ങൂ!</p>
             </div>
           ) : (
             posts.map((post) => {
               const comments = store.getComments(post.id);
               const isOwner = user?.id === post.author_id || role === "admin" || role === "moderator";
+              const isLiked = likedPosts[post.id] || false;
 
               return (
                 <article
                   key={post.id}
-                  className="bg-surface rounded-2xl border border-border p-6 shadow-sm hover:border-brand-300 transition"
+                  className="bg-white rounded-3xl border border-[#EAE4D7] p-5 sm:p-6 shadow-card hover:border-[#1B4D36]/40 transition"
                 >
                   {/* Post Header */}
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-brand-50 border border-brand-200 text-brand-700 font-bold flex items-center justify-center text-sm">
+                      <div className="w-10 h-10 rounded-full bg-[#E5DDD0] border border-[#DDD5C5] text-[#1B4D36] font-bold flex items-center justify-center text-sm">
                         {post.author?.display_name ? post.author.display_name.charAt(0) : "U"}
                       </div>
                       <div>
-                        <div className="font-bold text-sm text-foreground">
+                        <div className="font-bold text-sm text-[#1A2420]">
                           {post.author?.display_name || "Community Member"}
                         </div>
-                        <div className="text-[11px] text-muted-foreground">
-                          {new Date(post.created_at).toLocaleDateString()} • {post.community?.name || currentCommunity?.name}
+                        <div className="text-[11px] text-[#7A8880]">
+                          {new Date(post.created_at).toLocaleDateString("ml-IN", { month: "short", day: "numeric" })} • {post.community?.name || currentCommunity?.name || "Kerala"}
                         </div>
                       </div>
                     </div>
@@ -246,7 +284,7 @@ export default function CommunityPage() {
                       {isOwner && (
                         <button
                           onClick={() => handleDeletePost(post.id)}
-                          className="p-1.5 rounded-lg text-muted-foreground hover:text-red-600 hover:bg-red-50 transition"
+                          className="p-1.5 rounded-lg text-[#7A8880] hover:text-red-600 hover:bg-red-50 transition"
                           title="Delete post"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -254,7 +292,7 @@ export default function CommunityPage() {
                       )}
                       <button
                         onClick={() => setReportModalPost(post)}
-                        className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition"
+                        className="p-1.5 rounded-lg text-[#7A8880] hover:text-[#1A2420] hover:bg-[#F3EFE6] transition"
                         title={t("reportContent")}
                       >
                         <Flag className="w-4 h-4" />
@@ -263,25 +301,38 @@ export default function CommunityPage() {
                   </div>
 
                   {/* Content */}
-                  <p className="text-sm text-foreground leading-relaxed whitespace-pre-line mb-4">
+                  <p className="text-xs sm:text-sm text-[#2A3730] leading-relaxed whitespace-pre-line mb-4 font-malayalam-body">
                     {post.content}
                   </p>
 
                   {/* Image attachment */}
                   {post.media_urls && post.media_urls.length > 0 && (
-                    <div className="rounded-xl overflow-hidden mb-4 border border-border max-h-96 bg-muted">
+                    <div 
+                      onClick={() => setLightboxImage(post.media_urls[0])}
+                      className="rounded-2xl overflow-hidden mb-4 border border-[#EAE4D7] max-h-96 bg-[#E5DDD0] cursor-pointer group relative"
+                    >
                       <img
                         src={post.media_urls[0]}
                         alt="Post attachment"
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover group-hover:scale-102 transition duration-300"
                       />
+                      <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                        <span className="px-3 py-1 rounded-full bg-black/60 text-white text-xs font-semibold backdrop-blur-xs">
+                          വലുതായി കാണുക
+                        </span>
+                      </div>
                     </div>
                   )}
 
                   {/* Actions */}
-                  <div className="flex items-center gap-6 pt-3 border-t border-border text-xs text-muted-foreground">
-                    <button className="flex items-center gap-1.5 hover:text-red-600 transition">
-                      <Heart className="w-4 h-4" />
+                  <div className="flex items-center gap-6 pt-3 border-t border-[#F3EFE6] text-xs text-[#5C6A64]">
+                    <button 
+                      onClick={() => handleToggleLike(post.id)}
+                      className={`flex items-center gap-1.5 transition active:scale-90 font-semibold ${
+                        isLiked ? "text-red-600" : "hover:text-red-600"
+                      }`}
+                    >
+                      <Heart className={`w-4 h-4 ${isLiked ? "fill-red-600 text-red-600" : ""}`} />
                       <span>{post.likes_count}</span>
                     </button>
 
@@ -289,25 +340,43 @@ export default function CommunityPage() {
                       onClick={() =>
                         setActiveCommentPostId(activeCommentPostId === post.id ? null : post.id)
                       }
-                      className="flex items-center gap-1.5 hover:text-brand-700 transition"
+                      className="flex items-center gap-1.5 hover:text-[#1B4D36] transition font-semibold"
                     >
                       <MessageSquare className="w-4 h-4" />
-                      <span>{post.comments_count || comments.length}</span>
+                      <span>{post.comments_count || comments.length} അഭിപ്രായങ്ങൾ</span>
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        if (navigator.share) {
+                          navigator.share({ text: post.content, url: window.location.href });
+                        }
+                      }}
+                      className="flex items-center gap-1.5 hover:text-[#1B4D36] transition ml-auto"
+                    >
+                      <Share2 className="w-3.5 h-3.5" />
+                      <span>പങ്കുവെക്കുക</span>
                     </button>
                   </div>
 
                   {/* Comments Section */}
                   {activeCommentPostId === post.id && (
-                    <div className="mt-4 pt-4 border-t border-border/70 space-y-3">
+                    <div className="mt-4 pt-4 border-t border-[#EAE4D7] space-y-3">
                       <div className="space-y-2">
-                        {comments.map((comment) => (
-                          <div key={comment.id} className="p-3 rounded-xl bg-muted/50 text-xs">
-                            <span className="font-bold text-foreground mr-1.5">
-                              {comment.author?.display_name || "Neighbor"}:
-                            </span>
-                            <span className="text-foreground/90">{comment.content}</span>
+                        {comments.length === 0 ? (
+                          <div className="text-xs text-[#7A8880] py-1 text-center">
+                            ഇതുവരെ അഭിപ്രായങ്ങൾ ഒന്നുമില്ല. ആദ്യത്തെ കമന്റ് ചെയ്യൂ!
                           </div>
-                        ))}
+                        ) : (
+                          comments.map((comment) => (
+                            <div key={comment.id} className="p-3 rounded-xl bg-[#FAF7F0] border border-[#EAE4D7] text-xs">
+                              <span className="font-bold text-[#1B4D36] mr-1.5">
+                                {comment.author?.display_name || "Neighbor"}:
+                              </span>
+                              <span className="text-[#2A3730]">{comment.content}</span>
+                            </div>
+                          ))
+                        )}
                       </div>
 
                       {/* Add comment input */}
@@ -317,12 +386,12 @@ export default function CommunityPage() {
                           value={commentInput}
                           onChange={(e) => setCommentInput(e.target.value)}
                           placeholder={t("writeComment")}
-                          className="flex-1 px-3 py-2 text-xs rounded-xl border border-border bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-brand-500"
+                          className="flex-1 px-3 py-2 text-xs rounded-xl border border-[#DDD5C5] bg-[#FAF7F0] text-[#1A2420] focus:outline-none focus:ring-1 focus:ring-[#1B4D36]"
                         />
                         <button
                           onClick={() => handleAddComment(post.id)}
                           disabled={!commentInput.trim()}
-                          className="px-3.5 py-2 rounded-xl bg-brand-700 hover:bg-brand-800 disabled:opacity-50 text-white text-xs font-semibold"
+                          className="px-4 py-2 rounded-xl bg-[#1B4D36] hover:bg-[#133A28] disabled:opacity-50 text-white text-xs font-bold transition active:scale-95 shadow-xs"
                         >
                           {t("postComment")}
                         </button>
@@ -339,59 +408,65 @@ export default function CommunityPage() {
 
       {/* Moderation / Report Modal */}
       {reportModalPost && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-md bg-surface rounded-2xl border border-border p-6 shadow-xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
+          <div className="w-full max-w-md bg-[#FAF7F0] rounded-3xl border border-[#E7DFD0] p-6 shadow-2xl">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-bold text-base text-foreground flex items-center gap-2">
+              <h3 className="font-bold font-malayalam-serif text-base text-[#1A2420] flex items-center gap-2">
                 <Flag className="w-4 h-4 text-red-600" />
                 <span>{t("reportContent")}</span>
               </h3>
               <button
                 onClick={() => setReportModalPost(null)}
-                className="p-1 rounded-lg text-muted-foreground hover:text-foreground"
+                className="w-7 h-7 rounded-full bg-white hover:bg-[#EAE4D7] text-[#5C6A64] flex items-center justify-center"
               >
-                <X className="w-4 h-4" />
+                ✕
               </button>
             </div>
 
             {reportSuccess ? (
-              <div className="text-center py-6 text-sm font-semibold text-emerald-700">
-                Thank you. Our community moderation team has received your report.
+              <div className="p-4 rounded-xl bg-[#1B4D36] text-white text-xs font-semibold text-center flex items-center justify-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-amber-300" />
+                <span>പരാതി സമർപ്പിച്ചു. മോഡറേഷൻ ടീം പരിശോധിക്കും.</span>
               </div>
             ) : (
-              <div>
-                <p className="text-xs text-muted-foreground mb-3">
-                  Please let us know why this post violates community guidelines:
+              <div className="space-y-4">
+                <p className="text-xs text-[#5C6A64]">
+                  ഈ ഉള്ളടക്കം റിപ്പോർട്ട് ചെയ്യാനുള്ള കാരണം വ്യക്തമാക്കുക:
                 </p>
-                <select
+                <textarea
+                  rows={3}
                   value={reportReason}
                   onChange={(e) => setReportReason(e.target.value)}
-                  className="w-full mb-4 px-3 py-2 text-xs rounded-xl border border-border bg-background text-foreground"
+                  placeholder="തെറ്റായ വിവരങ്ങൾ, സ്പാം, അനുചിതമായ ഭാഷ..."
+                  className="w-full text-xs p-3 rounded-xl border border-[#DDD5C5] bg-white text-[#1A2420] focus:outline-none focus:ring-1 focus:ring-[#1B4D36] resize-none"
+                />
+                <button
+                  onClick={handleReportPost}
+                  disabled={!reportReason.trim()}
+                  className="w-full py-2.5 rounded-xl bg-red-600 hover:bg-red-700 disabled:opacity-50 text-white font-bold text-xs transition"
                 >
-                  <option value="">Select a reason...</option>
-                  <option value="spam">Spam or misleading information</option>
-                  <option value="harassment">Harassment or abusive language</option>
-                  <option value="privacy">Unauthorized personal information</option>
-                  <option value="inappropriate">Inappropriate or offensive content</option>
-                </select>
-
-                <div className="flex justify-end gap-2">
-                  <button
-                    onClick={() => setReportModalPost(null)}
-                    className="px-4 py-2 rounded-xl text-xs font-medium text-muted-foreground hover:bg-muted"
-                  >
-                    {t("cancel")}
-                  </button>
-                  <button
-                    onClick={handleReportPost}
-                    disabled={!reportReason}
-                    className="px-4 py-2 rounded-xl text-xs font-semibold bg-red-600 hover:bg-red-700 text-white disabled:opacity-50"
-                  >
-                    Submit Report
-                  </button>
-                </div>
+                  സമർപ്പിക്കുക
+                </button>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Lightbox Modal */}
+      {lightboxImage && (
+        <div 
+          onClick={() => setLightboxImage(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in cursor-pointer"
+        >
+          <div className="relative max-w-3xl max-h-[85vh]">
+            <img src={lightboxImage} alt="Full attachment" className="max-w-full max-h-[85vh] rounded-2xl shadow-2xl object-contain" />
+            <button
+              onClick={() => setLightboxImage(null)}
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/70 text-white flex items-center justify-center"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </div>
         </div>
       )}

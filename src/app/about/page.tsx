@@ -76,6 +76,21 @@ export default function AboutPage() {
         {/* SECTION 1: KERALA... NAMMUDE NAADU (Text + Traditional Architecture Photo) */}
         {/* ========================================================================= */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+          {/* Golden Quote Box matching Screen 2 in Mobile Demo */}
+          <div className="mb-6 sm:mb-8 p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-[#FFF8E7] border border-[#ECD9A8] shadow-xs relative overflow-hidden">
+            <div className="flex items-start gap-3">
+              <span className="text-3xl sm:text-4xl text-[#B87A1E] font-serif leading-none select-none">“</span>
+              <div>
+                <p className="text-base sm:text-lg font-bold font-malayalam-script text-[#8C5B0F] leading-snug">
+                  നാടിന്റെ നന്മക്കായി... നമ്മളൊന്നിച്ചു...
+                </p>
+                <p className="text-xs text-[#6E593A] mt-1 font-malayalam-body">
+                  കേരളത്തിന്റെ പാരമ്പര്യവും ഒരുമയും കാത്തുസൂക്ഷിക്കാൻ ഓരോ മലയാളിക്കുമുള്ള ഡിജിറ്റൽ കൂട്ടായ്മ.
+                </p>
+              </div>
+            </div>
+          </div>
+
           <div className="bg-white rounded-3xl border border-[#EAE4D7] shadow-card p-6 sm:p-10">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               

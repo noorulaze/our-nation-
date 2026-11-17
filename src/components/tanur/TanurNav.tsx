@@ -38,7 +38,7 @@ export function TanurNav() {
   const pathname = usePathname();
 
   return (
-    <div className="sticky top-16 z-30 bg-[#FAF7F0]/95 backdrop-blur-md border-b border-[#EDE6D8] shadow-sm">
+    <div className="sticky top-16 sm:top-20 z-30 bg-[#FAF7F0]/95 backdrop-blur-md border-b border-[#EDE6D8] shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-4 py-2.5">
           {/* Badge */}

@@ -249,43 +249,43 @@ export default function GalleryPage() {
         </section>
 
         {/* ========================================================================= */}
-        {/* PHOTO GRID GALLERY (Row 3, Col 1 in reference image) */}
+        {/* PHOTO GRID GALLERY (Row 3, Col 1 in reference image — 2-Col Mobile Grid) */}
         {/* ========================================================================= */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
             {filteredPhotos.map((photo) => {
               const isLiked = likedPhotoIds.includes(photo.id);
               return (
                 <div
                   key={photo.id}
                   onClick={() => setActivePhoto(photo)}
-                  className="bg-white rounded-3xl border border-[#EAE4D7] shadow-card overflow-hidden hover:border-[#1B4D36]/60 transition cursor-pointer group flex flex-col justify-between"
+                  className="bg-white rounded-2xl sm:rounded-3xl border border-[#EAE4D7] shadow-card overflow-hidden hover:border-[#1B4D36]/60 transition cursor-pointer group flex flex-col justify-between"
                 >
-                  <div className="h-64 overflow-hidden relative bg-[#E5DDD0]">
+                  <div className="h-36 sm:h-64 overflow-hidden relative bg-[#E5DDD0]">
                     <img
                       src={photo.imageUrl}
                       alt={photo.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition p-4 flex items-end justify-between text-white">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition p-2.5 sm:p-4 flex items-end justify-between text-white">
                       <div>
-                        <span className="text-[10px] text-amber-200 font-bold block">{photo.district}</span>
-                        <span className="text-sm font-bold">{photo.title}</span>
+                        <span className="text-[9px] sm:text-[10px] text-amber-200 font-bold block">{photo.district}</span>
+                        <span className="text-xs sm:text-sm font-bold truncate max-w-[120px] sm:max-w-none">{photo.title}</span>
                       </div>
-                      <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center">
-                        <Maximize2 className="w-4 h-4 text-white" />
+                      <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white/20 backdrop-blur-xs flex items-center justify-center">
+                        <Maximize2 className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                       </div>
                     </div>
                   </div>
 
-                  <div className="p-4 flex items-center justify-between">
-                    <div>
-                      <h3 className="font-bold font-malayalam-serif text-sm text-[#1A2420] group-hover:text-[#1B4D36] transition">
+                  <div className="p-2.5 sm:p-4 flex items-center justify-between">
+                    <div className="min-w-0 pr-1">
+                      <h3 className="font-bold font-malayalam-serif text-xs sm:text-sm text-[#1A2420] group-hover:text-[#1B4D36] transition truncate">
                         {photo.title}
                       </h3>
-                      <div className="flex items-center gap-1 text-[11px] text-[#7A8880] mt-0.5">
-                        <MapPin className="w-3 h-3 text-[#1B4D36]" />
-                        <span>{photo.district}</span>
+                      <div className="flex items-center gap-1 text-[10px] sm:text-[11px] text-[#7A8880] mt-0.5">
+                        <MapPin className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#1B4D36] shrink-0" />
+                        <span className="truncate">{photo.district}</span>
                       </div>
                     </div>
 
@@ -295,11 +295,11 @@ export default function GalleryPage() {
                         e.stopPropagation();
                         toggleLike(photo.id);
                       }}
-                      className={`p-2 rounded-full transition active:scale-90 ${
+                      className={`p-1.5 sm:p-2 rounded-full transition active:scale-90 shrink-0 ${
                         isLiked ? "text-red-600 bg-red-50" : "text-[#7A8880] hover:text-red-600 hover:bg-[#FAF7F0]"
                       }`}
                     >
-                      <Heart className={`w-4 h-4 ${isLiked ? "fill-red-600" : ""}`} />
+                      <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isLiked ? "fill-red-600" : ""}`} />
                     </button>
                   </div>
                 </div>

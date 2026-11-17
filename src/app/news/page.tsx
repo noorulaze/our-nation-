@@ -134,49 +134,64 @@ export default function NewsPage() {
                   <p className="text-xs text-[#7A8880] mt-1">മറ്റു വാക്കുകൾ ഉപയോഗിച്ച് തിരയുക.</p>
                 </div>
               ) : (
-                filteredNews.map((news) => (
-                  <div
-                    key={news.id}
-                    onClick={() => setActiveArticleModal(news)}
-                    className="bg-white rounded-3xl border border-[#EAE4D7] p-4 sm:p-5 shadow-card hover:border-[#1B4D36]/60 transition flex flex-col sm:flex-row gap-4 cursor-pointer group"
-                  >
-                    {/* Thumbnail Image */}
-                    <div className="sm:w-44 h-36 sm:h-28 rounded-2xl overflow-hidden flex-shrink-0 bg-[#E5DDD0]">
-                      <img
-                        src={news.imageUrl}
-                        alt={news.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                      />
-                    </div>
+                <>
+                  {filteredNews.map((news) => (
+                    <div
+                      key={news.id}
+                      onClick={() => setActiveArticleModal(news)}
+                      className="bg-white rounded-2xl sm:rounded-3xl border border-[#EAE4D7] p-3 sm:p-5 shadow-card hover:border-[#1B4D36]/60 transition flex flex-row gap-3 sm:gap-4 cursor-pointer group"
+                    >
+                      {/* Thumbnail Image (Side-by-side on mobile matching Screen 3) */}
+                      <div className="w-24 h-24 sm:w-44 sm:h-28 rounded-xl sm:rounded-2xl overflow-hidden flex-shrink-0 bg-[#E5DDD0]">
+                        <img
+                          src={news.imageUrl}
+                          alt={news.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                        />
+                      </div>
 
-                    {/* Content */}
-                    <div className="flex-1 flex flex-col justify-between">
-                      <div>
-                        <div className="flex items-center gap-2 mb-1.5">
-                          <span className="text-[10px] font-bold text-[#1B4D36] bg-[#E0F1E7] px-2 py-0.5 rounded-full border border-[#BDE3CE]">
-                            {news.category}
-                          </span>
-                          <span className="text-[11px] text-[#7A8880] flex items-center gap-1">
-                            <Calendar className="w-3 h-3 text-[#1B4D36]" /> {news.date}
+                      {/* Content */}
+                      <div className="flex-1 min-w-0 flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-[9px] sm:text-[10px] font-bold text-[#1B4D36] bg-[#E0F1E7] px-2 py-0.5 rounded-full border border-[#BDE3CE]">
+                              {news.category}
+                            </span>
+                            <span className="text-[10px] sm:text-[11px] text-[#7A8880] flex items-center gap-1">
+                              <Calendar className="w-3 h-3 text-[#1B4D36]" /> {news.date}
+                            </span>
+                          </div>
+                          <h3 className="font-bold font-malayalam-serif text-xs sm:text-base lg:text-lg text-[#1A2420] group-hover:text-[#1B4D36] transition leading-snug line-clamp-2">
+                            {news.title}
+                          </h3>
+                          <p className="hidden sm:block text-xs text-[#5C6A64] mt-1 line-clamp-2 leading-relaxed font-malayalam-body">
+                            {news.summary}
+                          </p>
+                        </div>
+
+                        <div className="pt-1.5 flex items-center justify-between text-[11px] sm:text-xs font-bold text-[#1B4D36]">
+                          <span className="text-[10px] sm:text-[11px] text-[#7A8880] font-normal truncate max-w-[120px] sm:max-w-none">{news.source}</span>
+                          <span className="group-hover:underline flex items-center gap-1 shrink-0">
+                            <span className="hidden sm:inline">പൂർണ്ണമായി വായിക്കുക</span>
+                            <ArrowRight className="w-3.5 h-3.5" />
                           </span>
                         </div>
-                        <h3 className="font-bold font-malayalam-serif text-base sm:text-lg text-[#1A2420] group-hover:text-[#1B4D36] transition leading-snug">
-                          {news.title}
-                        </h3>
-                        <p className="text-xs text-[#5C6A64] mt-1.5 line-clamp-2 leading-relaxed font-malayalam-body">
-                          {news.summary}
-                        </p>
-                      </div>
-
-                      <div className="pt-2 flex items-center justify-between text-xs font-bold text-[#1B4D36]">
-                        <span className="text-[11px] text-[#7A8880] font-normal">{news.source}</span>
-                        <span className="group-hover:underline flex items-center gap-1">
-                          പൂർണ്ണമായി വായിക്കുക <ArrowRight className="w-3 h-3" />
-                        </span>
                       </div>
                     </div>
+                  ))}
+
+                  {/* View More News Button matching Screen 3 */}
+                  <div className="pt-2 text-center">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedCategory("എല്ലാം")}
+                      className="w-full sm:w-auto px-6 py-3 rounded-full bg-[#1B4D36] hover:bg-[#133A28] text-white text-xs sm:text-sm font-bold transition shadow-xs flex items-center justify-center gap-2 mx-auto active:scale-95"
+                    >
+                      <span>കൂടുതൽ വാർത്തകൾ കാണുക</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
                   </div>
-                ))
+                </>
               )}
 
             </div>

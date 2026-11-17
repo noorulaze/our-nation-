@@ -281,34 +281,34 @@ export default function HomePage() {
                 backgroundImage: `url('https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=1800&auto=format&fit=crop&q=85')`,
               }}
             >
-              {/* Subtle Sunset & Warm Cream Vignette for readability */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#FAF7F0]/95 via-[#FAF7F0]/70 to-black/30 sm:to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent sm:hidden" />
+              {/* Subtle Sunset & Warm Cream Vignette for readability (Dark overlay on mobile for clear white text) */}
+              <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/55 to-transparent sm:from-[#FAF7F0]/95 sm:via-[#FAF7F0]/70 sm:to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent sm:hidden" />
             </div>
 
             {/* Left Content */}
             <div className="relative z-10 p-6 sm:p-12 lg:p-16 max-w-2xl">
               
               {/* Big Malayalam Headline */}
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold font-malayalam-serif text-[#1B4D36] tracking-tight leading-none mb-3">
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold font-malayalam-serif text-white sm:text-[#1B4D36] tracking-tight leading-none mb-3 drop-shadow-md sm:drop-shadow-none">
                 നമ്മുടെ നാട്
               </h1>
 
               {/* Tagline in Golden Script */}
-              <p className="text-lg sm:text-2xl font-bold font-malayalam-script text-[#B87A1E] mb-3">
+              <p className="text-lg sm:text-2xl font-bold font-malayalam-script text-amber-300 sm:text-[#B87A1E] mb-3 drop-shadow-sm sm:drop-shadow-none">
                 നമ്മുടെ നാട്... നമ്മുടെ അഭിമാനം...
               </p>
 
               {/* Short Description */}
-              <p className="text-xs sm:text-sm text-[#4A5750] leading-relaxed max-w-md font-malayalam-body mb-8">
+              <p className="text-xs sm:text-sm text-stone-200 sm:text-[#4A5750] leading-relaxed max-w-md font-malayalam-body mb-8 drop-shadow-sm sm:drop-shadow-none">
                 കേരളത്തിന്റെ മനോഹാരിതയും, സംസ്കാരവും, വിവരങ്ങളും ഒറ്റ വേദിയിൽ.
               </p>
 
               {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-4">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4">
                 <Link
                   href="/about"
-                  className="px-6 py-3 rounded-full bg-[#1B4D36] hover:bg-[#133A28] text-white font-bold text-xs sm:text-sm transition-all duration-200 active:scale-95 shadow-md flex items-center gap-2 group"
+                  className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#1B4D36] hover:bg-[#133A28] text-white font-bold text-xs sm:text-sm transition-all duration-200 active:scale-95 shadow-md flex items-center gap-2 group"
                 >
                   <span>കൂടുതൽ അറിയാം</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition" />
@@ -317,7 +317,7 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() => setShowVideoModal(true)}
-                  className="px-5 py-3 rounded-full bg-white/85 hover:bg-white text-[#1B4D36] border border-[#DDD5C5] font-bold text-xs sm:text-sm transition-all duration-200 active:scale-95 shadow-sm flex items-center gap-2 backdrop-blur-xs"
+                  className="px-4 sm:px-5 py-2.5 sm:py-3 rounded-full bg-white/90 hover:bg-white text-[#1B4D36] border border-[#DDD5C5] font-bold text-xs sm:text-sm transition-all duration-200 active:scale-95 shadow-sm flex items-center gap-2 backdrop-blur-xs"
                 >
                   <div className="w-5 h-5 rounded-full bg-[#1B4D36] text-white flex items-center justify-center">
                     <Play className="w-2.5 h-2.5 fill-current ml-0.5" />
@@ -328,10 +328,10 @@ export default function HomePage() {
                 <button
                   type="button"
                   onClick={() => handleOpenAi("കേരളത്തിലെ പ്രധാന വിവരങ്ങളും വിശേഷങ്ങളും എന്തൊക്കെയാണ്?")}
-                  className="px-5 py-3 rounded-full bg-[#EDE6D8] hover:bg-[#E2DAC8] text-[#1B4D36] border border-[#DDD5C5] font-bold text-xs sm:text-sm transition-all duration-200 active:scale-95 shadow-sm flex items-center gap-2"
+                  className="px-4 sm:px-5 py-2.5 sm:py-3 rounded-full bg-[#EDE6D8] hover:bg-[#E2DAC8] text-[#1B4D36] border border-[#DDD5C5] font-bold text-xs sm:text-sm transition-all duration-200 active:scale-95 shadow-sm flex items-center gap-2"
                 >
                   <Sparkles className="w-4 h-4 text-[#B87A1E]" />
-                  <span>നാട് AI സഹായി</span>
+                  <span>നാട് AI</span>
                 </button>
               </div>
 
@@ -358,87 +358,87 @@ export default function HomePage() {
         </section>
 
         {/* ========================================================================= */}
-        {/* 2. QUICK NAVIGATION CATEGORY BAR (Exact Match to IMAGE 2 Panel 1) */}
+        {/* 2. QUICK NAVIGATION CATEGORY BAR (Matching Screen 1 2x3 Mobile Cards) */}
         {/* ========================================================================= */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-          <div className="bg-[#F3EFE6] rounded-2xl border border-[#E5DFD1] shadow-card p-3 sm:p-4">
-            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-4 divide-y sm:divide-y-0 sm:divide-x divide-[#E1D9C8]">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 sm:mb-12">
+          <div className="bg-transparent sm:bg-[#F3EFE6] sm:rounded-2xl sm:border sm:border-[#E5DFD1] sm:shadow-card p-0 sm:p-4">
+            <div className="grid grid-cols-3 sm:grid-cols-6 gap-2.5 sm:gap-4 sm:divide-x sm:divide-[#E1D9C8]">
               
-              {/* 1. കേരളം */}
+              {/* 1. പൈതൃകം */}
               <Link
                 href="/about"
-                className="flex flex-col items-center justify-center text-center p-2 rounded-xl hover:bg-white/60 transition group"
+                className="flex flex-col items-center justify-center text-center p-3 sm:p-2 rounded-2xl sm:rounded-xl bg-white sm:bg-transparent border border-[#EAE4D7] sm:border-0 shadow-xs sm:shadow-none hover:bg-white/80 transition active:scale-95 group"
               >
-                <div className="w-9 h-9 rounded-full bg-[#E8E1D2] group-hover:bg-[#1B4D36] group-hover:text-white text-[#1B4D36] flex items-center justify-center mb-1.5 transition">
-                  <Landmark className="w-4 h-4" />
+                <div className="w-10 h-10 sm:w-9 sm:h-9 rounded-full bg-[#E8E1D2] group-hover:bg-[#1B4D36] group-hover:text-white text-[#1B4D36] flex items-center justify-center mb-1.5 transition">
+                  <Landmark className="w-4 h-4 sm:w-4 sm:h-4" />
                 </div>
-                <span className="text-[11px] font-bold text-[#2A3730] group-hover:text-[#1B4D36] transition">
-                  കേരളം
+                <span className="text-xs sm:text-[11px] font-bold text-[#2A3730] group-hover:text-[#1B4D36] transition font-malayalam-heading">
+                  പൈതൃകം
                 </span>
               </Link>
 
-              {/* 2. സംസ്കാരം */}
+              {/* 2. ടൂറിസം */}
               <Link
-                href="/culture"
-                className="flex flex-col items-center justify-center text-center p-2 rounded-xl hover:bg-white/60 transition group"
+                href="/gallery"
+                className="flex flex-col items-center justify-center text-center p-3 sm:p-2 rounded-2xl sm:rounded-xl bg-white sm:bg-transparent border border-[#EAE4D7] sm:border-0 shadow-xs sm:shadow-none hover:bg-white/80 transition active:scale-95 group"
               >
-                <div className="w-9 h-9 rounded-full bg-[#E8E1D2] group-hover:bg-[#1B4D36] group-hover:text-white text-[#1B4D36] flex items-center justify-center mb-1.5 transition">
-                  <Sparkles className="w-4 h-4" />
+                <div className="w-10 h-10 sm:w-9 sm:h-9 rounded-full bg-[#E8E1D2] group-hover:bg-[#1B4D36] group-hover:text-white text-[#1B4D36] flex items-center justify-center mb-1.5 transition">
+                  <Palmtree className="w-4 h-4 sm:w-4 sm:h-4" />
                 </div>
-                <span className="text-[11px] font-bold text-[#2A3730] group-hover:text-[#1B4D36] transition">
-                  സംസ്കാരം
+                <span className="text-xs sm:text-[11px] font-bold text-[#2A3730] group-hover:text-[#1B4D36] transition font-malayalam-heading">
+                  ടൂറിസം
                 </span>
               </Link>
 
               {/* 3. വിദ്യാഭ്യാസം */}
               <Link
                 href="/education"
-                className="flex flex-col items-center justify-center text-center p-2 rounded-xl hover:bg-white/60 transition group"
+                className="flex flex-col items-center justify-center text-center p-3 sm:p-2 rounded-2xl sm:rounded-xl bg-white sm:bg-transparent border border-[#EAE4D7] sm:border-0 shadow-xs sm:shadow-none hover:bg-white/80 transition active:scale-95 group"
               >
-                <div className="w-9 h-9 rounded-full bg-[#E8E1D2] group-hover:bg-[#1B4D36] group-hover:text-white text-[#1B4D36] flex items-center justify-center mb-1.5 transition">
-                  <GraduationCap className="w-4 h-4" />
+                <div className="w-10 h-10 sm:w-9 sm:h-9 rounded-full bg-[#E8E1D2] group-hover:bg-[#1B4D36] group-hover:text-white text-[#1B4D36] flex items-center justify-center mb-1.5 transition">
+                  <GraduationCap className="w-4 h-4 sm:w-4 sm:h-4" />
                 </div>
-                <span className="text-[11px] font-bold text-[#2A3730] group-hover:text-[#1B4D36] transition">
+                <span className="text-xs sm:text-[11px] font-bold text-[#2A3730] group-hover:text-[#1B4D36] transition font-malayalam-heading">
                   വിദ്യാഭ്യാസം
                 </span>
               </Link>
 
-              {/* 4. പരിപാടികൾ */}
+              {/* 4. സേവനങ്ങൾ */}
               <Link
-                href="/events"
-                className="flex flex-col items-center justify-center text-center p-2 rounded-xl hover:bg-white/60 transition group"
+                href="/tanur/directory"
+                className="flex flex-col items-center justify-center text-center p-3 sm:p-2 rounded-2xl sm:rounded-xl bg-white sm:bg-transparent border border-[#EAE4D7] sm:border-0 shadow-xs sm:shadow-none hover:bg-white/80 transition active:scale-95 group"
               >
-                <div className="w-9 h-9 rounded-full bg-[#E8E1D2] group-hover:bg-[#1B4D36] group-hover:text-white text-[#1B4D36] flex items-center justify-center mb-1.5 transition">
-                  <Calendar className="w-4 h-4" />
+                <div className="w-10 h-10 sm:w-9 sm:h-9 rounded-full bg-[#E8E1D2] group-hover:bg-[#1B4D36] group-hover:text-white text-[#1B4D36] flex items-center justify-center mb-1.5 transition">
+                  <Building className="w-4 h-4 sm:w-4 sm:h-4" />
                 </div>
-                <span className="text-[11px] font-bold text-[#2A3730] group-hover:text-[#1B4D36] transition">
-                  പരിപാടികൾ
+                <span className="text-xs sm:text-[11px] font-bold text-[#2A3730] group-hover:text-[#1B4D36] transition font-malayalam-heading">
+                  സേവനങ്ങൾ
                 </span>
               </Link>
 
-              {/* 5. ഗാലറി */}
-              <Link
-                href="/gallery"
-                className="flex flex-col items-center justify-center text-center p-2 rounded-xl hover:bg-white/60 transition group"
-              >
-                <div className="w-9 h-9 rounded-full bg-[#E8E1D2] group-hover:bg-[#1B4D36] group-hover:text-white text-[#1B4D36] flex items-center justify-center mb-1.5 transition">
-                  <Camera className="w-4 h-4" />
-                </div>
-                <span className="text-[11px] font-bold text-[#2A3730] group-hover:text-[#1B4D36] transition">
-                  ഗാലറി
-                </span>
-              </Link>
-
-              {/* 6. വാർത്തകൾ */}
+              {/* 5. പുതിയ വാർത്തകൾ */}
               <Link
                 href="/news"
-                className="flex flex-col items-center justify-center text-center p-2 rounded-xl hover:bg-white/60 transition group cursor-pointer"
+                className="flex flex-col items-center justify-center text-center p-3 sm:p-2 rounded-2xl sm:rounded-xl bg-white sm:bg-transparent border border-[#EAE4D7] sm:border-0 shadow-xs sm:shadow-none hover:bg-white/80 transition active:scale-95 group cursor-pointer"
               >
-                <div className="w-9 h-9 rounded-full bg-[#E8E1D2] group-hover:bg-[#1B4D36] group-hover:text-white text-[#1B4D36] flex items-center justify-center mb-1.5 transition">
-                  <Newspaper className="w-4 h-4" />
+                <div className="w-10 h-10 sm:w-9 sm:h-9 rounded-full bg-[#E8E1D2] group-hover:bg-[#1B4D36] group-hover:text-white text-[#1B4D36] flex items-center justify-center mb-1.5 transition">
+                  <Newspaper className="w-4 h-4 sm:w-4 sm:h-4" />
                 </div>
-                <span className="text-[11px] font-bold text-[#2A3730] group-hover:text-[#1B4D36] transition">
-                  വാർത്തകൾ
+                <span className="text-xs sm:text-[11px] font-bold text-[#2A3730] group-hover:text-[#1B4D36] transition font-malayalam-heading">
+                  പുതിയ വാർത്തകൾ
+                </span>
+              </Link>
+
+              {/* 6. നമ്മുടെ ആളുകൾ */}
+              <Link
+                href="/culture"
+                className="flex flex-col items-center justify-center text-center p-3 sm:p-2 rounded-2xl sm:rounded-xl bg-white sm:bg-transparent border border-[#EAE4D7] sm:border-0 shadow-xs sm:shadow-none hover:bg-white/80 transition active:scale-95 group"
+              >
+                <div className="w-10 h-10 sm:w-9 sm:h-9 rounded-full bg-[#E8E1D2] group-hover:bg-[#1B4D36] group-hover:text-white text-[#1B4D36] flex items-center justify-center mb-1.5 transition">
+                  <Users className="w-4 h-4 sm:w-4 sm:h-4" />
+                </div>
+                <span className="text-xs sm:text-[11px] font-bold text-[#2A3730] group-hover:text-[#1B4D36] transition font-malayalam-heading">
+                  നമ്മുടെ ആളുകൾ
                 </span>
               </Link>
 

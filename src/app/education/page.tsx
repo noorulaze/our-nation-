@@ -116,6 +116,37 @@ export default function EducationPage() {
     },
   ];
 
+  const FEATURED_INSTITUTIONS = [
+    {
+      name: "താനൂർ ദേവധാർ ഗവ. ഹയർ സെക്കണ്ടറി സ്കൂൾ",
+      type: "ഹയർ സെക്കണ്ടറി സ്കൂൾ",
+      location: "താനൂർ, മലപ്പുറം",
+      est: "1919 (നൂറ്റാണ്ട് പിന്നിട്ട വിദ്യാലയം)",
+      link: "/tanur/education",
+    },
+    {
+      name: "ഇസ്ലാഹുൽ ഉലൂം അറബിക് കോളേജ്",
+      type: "ഉന്നത വിദ്യാഭ്യാസം",
+      location: "താനൂർ",
+      est: "1924",
+      link: "/tanur/education",
+    },
+    {
+      name: "കാലിക്കറ്റ് സർവ്വകലാശാല (University of Calicut)",
+      type: "സർവ്വകലാശാല",
+      location: "തേഞ്ഞിപ്പലം, മലപ്പുറം",
+      est: "1968",
+      link: "https://uoc.ac.in",
+    },
+    {
+      name: "കോളേജ് ഓഫ് അപ്ലൈഡ് സയൻസ് (IHRD താനൂർ)",
+      type: "ടെക്നിക്കൽ കോളേജ്",
+      location: "താനൂർ",
+      est: "കമ്പ്യൂട്ടർ & സയൻസ്",
+      link: "/tanur/education",
+    },
+  ];
+
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF7F0] text-[#1A2420]">
       <Navbar />
@@ -176,6 +207,53 @@ export default function EducationPage() {
               >
                 {cat}
               </button>
+            ))}
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* INSTITUTIONS DIRECTORY LIST (Matching Screen 5 in Mobile Demo) */}
+        {/* ========================================================================= */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <School className="w-5 h-5 text-[#1B4D36]" />
+              <h2 className="text-lg sm:text-xl font-bold font-malayalam-serif text-[#1B4D36]">
+                പ്രമുഖ വിദ്യാഭ്യാസ സ്ഥാപനങ്ങൾ
+              </h2>
+            </div>
+            <Link href="/tanur/education" className="text-xs font-bold text-[#1B4D36] hover:underline flex items-center gap-1">
+              <span>താനൂർ ലിസ്റ്റ്</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+            {FEATURED_INSTITUTIONS.map((inst, idx) => (
+              <Link
+                key={idx}
+                href={inst.link}
+                className="p-3.5 sm:p-4 rounded-2xl bg-white hover:bg-[#FAF4E6] border border-[#EAE4D7] flex items-center justify-between transition shadow-xs group"
+              >
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-10 h-10 rounded-xl bg-[#E0F1E7] text-[#1B4D36] flex items-center justify-center shrink-0 group-hover:bg-[#1B4D36] group-hover:text-white transition">
+                    <GraduationCap className="w-5 h-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="font-bold text-xs sm:text-sm text-[#1A2420] group-hover:text-[#1B4D36] transition truncate font-malayalam-heading">
+                      {inst.name}
+                    </h3>
+                    <div className="flex items-center gap-2 text-[10px] sm:text-xs text-[#7A8880] mt-0.5">
+                      <span className="font-semibold text-[#1B4D36] bg-[#E8F2EC] px-2 py-0.5 rounded-md">
+                        {inst.type}
+                      </span>
+                      <span>•</span>
+                      <span className="truncate">{inst.location}</span>
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-[#7A8880] group-hover:text-[#1B4D36] group-hover:translate-x-1 transition shrink-0 ml-2" />
+              </Link>
             ))}
           </div>
         </section>

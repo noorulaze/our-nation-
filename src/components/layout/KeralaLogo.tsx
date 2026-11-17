@@ -19,7 +19,7 @@ export function KeralaLogo({
       {/* Coconut Tree & Wave Emblem */}
       <svg 
         viewBox="0 0 64 64" 
-        className="w-10 h-10 flex-shrink-0" 
+        className="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0" 
         fill="none" 
         xmlns="http://www.w3.org/2000/svg"
       >
@@ -55,7 +55,7 @@ export function KeralaLogo({
 
       {/* Typography */}
       <div className="flex flex-col">
-        <span className={`text-2xl font-bold font-malayalam-serif tracking-tight leading-none ${textColor}`}>
+        <span className={`text-xl sm:text-2xl font-bold font-malayalam-serif tracking-tight leading-none ${textColor}`}>
           നമ്മുടെ നാട്
         </span>
         {showSubtext && (

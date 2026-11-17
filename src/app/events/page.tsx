@@ -112,14 +112,21 @@ export default function EventsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
             {/* Left Column: Event Cards Grid (8 Cols) */}
-            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
               {filteredEvents.map((event) => (
                 <div
                   key={event.id}
                   onClick={() => setActiveModalEvent(event)}
-                  className="bg-white rounded-3xl border border-[#EAE4D7] shadow-card overflow-hidden hover:border-[#1B4D36]/60 transition cursor-pointer group flex flex-col justify-between"
+                  className="bg-white rounded-2xl sm:rounded-3xl border border-[#EAE4D7] shadow-card overflow-hidden hover:border-[#1B4D36]/60 transition cursor-pointer group flex flex-row sm:flex-col justify-between p-3.5 sm:p-0"
                 >
-                  <div className="h-44 overflow-hidden relative bg-[#E5DDD0]">
+                  {/* On mobile: Yellow Date Badge on left (matching Screen 6 in Mobile Demo) */}
+                  <div className="sm:hidden flex flex-col items-center justify-center w-14 h-14 rounded-2xl bg-[#FFF4D6] border border-[#F0D598] text-center shrink-0 mr-3">
+                    <span className="text-[10px] uppercase font-bold text-[#8C5B0F] leading-none">{event.dateMonth}</span>
+                    <span className="text-base font-bold text-[#1B4D36] leading-none mt-1">{event.dateDay}</span>
+                  </div>
+
+                  {/* On desktop: Image with absolute date badge */}
+                  <div className="hidden sm:block h-44 overflow-hidden relative bg-[#E5DDD0]">
                     <img
                       src={event.imageUrl}
                       alt={event.title}
@@ -134,23 +141,29 @@ export default function EventsPage() {
                     </span>
                   </div>
 
-                  <div className="p-4 flex-1 flex flex-col justify-between">
+                  {/* Content */}
+                  <div className="flex-1 min-w-0 sm:p-4 flex flex-col justify-between">
                     <div>
-                      <h3 className="font-bold font-malayalam-serif text-sm sm:text-base text-[#1A2420] group-hover:text-[#1B4D36] transition line-clamp-1 mb-1">
+                      <div className="sm:hidden flex items-center gap-1.5 mb-1">
+                        <span className="text-[9px] font-bold text-[#1B4D36] bg-[#E0F1E7] px-2 py-0.5 rounded-full border border-[#BDE3CE]">
+                          {event.category}
+                        </span>
+                      </div>
+                      <h3 className="font-bold font-malayalam-serif text-xs sm:text-base text-[#1A2420] group-hover:text-[#1B4D36] transition truncate mb-0.5 sm:mb-1">
                         {event.title}
                       </h3>
-                      <div className="flex items-center gap-1 text-[11px] text-[#7A8880] mb-2">
-                        <MapPin className="w-3.5 h-3.5 text-[#1B4D36]" />
-                        <span className="truncate">{event.district}</span>
+                      <div className="flex items-center gap-1 text-[11px] text-[#7A8880] mb-1 sm:mb-2">
+                        <MapPin className="w-3.5 h-3.5 text-[#1B4D36] shrink-0" />
+                        <span className="truncate">{event.location || event.district}</span>
                       </div>
-                      <p className="text-xs text-[#5C6A64] line-clamp-2 leading-relaxed font-malayalam-body">
+                      <p className="hidden sm:block text-xs text-[#5C6A64] line-clamp-2 leading-relaxed font-malayalam-body">
                         {event.description}
                       </p>
                     </div>
 
-                    <div className="mt-4 pt-3 border-t border-[#F3EFE6] flex items-center justify-between text-xs font-bold text-[#1B4D36]">
-                      <span>വിശദാംശങ്ങൾ</span>
-                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition" />
+                    <div className="mt-1 sm:mt-4 sm:pt-3 sm:border-t sm:border-[#F3EFE6] flex items-center justify-between text-xs font-bold text-[#1B4D36]">
+                      <span className="hidden sm:inline">വിശദാംശങ്ങൾ</span>
+                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition ml-auto sm:ml-0" />
                     </div>
                   </div>
                 </div>

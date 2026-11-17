@@ -116,7 +116,7 @@ export function AuthSplitScreen({ initialMode }: AuthSplitScreenProps) {
   return (
     <div className="min-h-screen w-full flex flex-col lg:flex-row bg-[#FAF7F0] text-[#1A2420]">
       {/* LEFT COLUMN: Scenic Kerala Landscape & Editorial Showcase */}
-      <div className="relative w-full lg:w-1/2 min-h-[380px] lg:min-h-screen flex flex-col justify-between p-6 sm:p-10 lg:p-14 overflow-hidden text-white">
+      <div className="relative w-full lg:w-1/2 min-h-[220px] sm:min-h-[280px] lg:min-h-screen flex flex-col justify-between p-4 sm:p-8 lg:p-14 overflow-hidden text-white">
         {/* Background Image: Kerala Backwaters & Sunset */}
         <div
           className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 scale-105"
@@ -143,36 +143,35 @@ export function AuthSplitScreen({ initialMode }: AuthSplitScreenProps) {
         <div className="relative z-10 flex items-center justify-between">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/30 hover:bg-black/50 backdrop-blur-md border border-white/20 text-xs font-semibold text-white transition"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/30 hover:bg-black/50 backdrop-blur-md border border-white/20 text-xs font-semibold text-white transition active:scale-95"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>ഹോമിലേക്ക് മടങ്ങാം</span>
           </Link>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-[11px] font-bold text-amber-300">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>നമ്മുടെ നാട് • കേരളം</span>
+            <span>നമ്മുടെ നാട്</span>
           </div>
         </div>
 
-        {/* Center Content: Brand & Emotional Promise */}
-        <div className="relative z-10 my-auto py-8">
-          <div className="mb-4 inline-block">
-            <div className="p-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 inline-block shadow-lg">
+        {/* Center Content: Brand & Emotional Promise (Compact on mobile) */}
+        <div className="relative z-10 my-auto py-3 lg:py-8 text-center lg:text-left">
+          <div className="mb-2 lg:mb-4 inline-block">
+            <div className="p-2.5 sm:p-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 inline-block shadow-lg">
               <KeralaLogo variant="dark" />
             </div>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl lg:text-5xl font-black font-malayalam-heading leading-tight tracking-tight text-white drop-shadow-md">
-            നാടിനായി... <br />
-            <span className="text-amber-300">എപ്പോഴും ഒപ്പം...</span>
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black font-malayalam-heading leading-tight tracking-tight text-white drop-shadow-md">
+            നാടിനായി... <span className="text-amber-300">എപ്പോഴും ഒപ്പം...</span>
           </h1>
 
-          <p className="mt-4 text-xs sm:text-sm lg:text-base text-stone-200 font-malayalam-body leading-relaxed max-w-lg drop-shadow">
+          <p className="hidden lg:block mt-4 text-xs sm:text-sm lg:text-base text-stone-200 font-malayalam-body leading-relaxed max-w-lg drop-shadow">
             കേരളത്തിലെ 14 ജില്ലകളിലെയും പ്രാദേശിക വാർത്തകൾ, ഉത്സവങ്ങൾ, കലകൾ, സേവനങ്ങൾ, വിദ്യാഭ്യാസ വിവരങ്ങൾ — എല്ലാം വിരൽത്തുമ്പിൽ.
           </p>
 
-          {/* District & Community Stats Badge */}
-          <div className="mt-6 flex flex-wrap gap-2.5">
+          {/* District & Community Stats Badge (Desktop only) */}
+          <div className="hidden lg:flex mt-6 flex-wrap gap-2.5">
             <span className="px-3 py-1 rounded-lg bg-white/15 backdrop-blur-md border border-white/20 text-[11px] font-bold text-white">
               📍 14 ജില്ലകൾ
             </span>
@@ -185,8 +184,8 @@ export function AuthSplitScreen({ initialMode }: AuthSplitScreenProps) {
           </div>
         </div>
 
-        {/* Bottom Floating Testimonial Card */}
-        <div className="relative z-10 pt-4 border-t border-white/15">
+        {/* Bottom Floating Testimonial Card (Desktop only) */}
+        <div className="hidden lg:block relative z-10 pt-4 border-t border-white/15">
           <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/15 max-w-md">
             <p className="text-xs text-stone-200 font-malayalam-body italic leading-relaxed">
               &ldquo;ഒരു നാടിന്റെ സമഗ്ര വിവരങ്ങളും ഒരൊറ്റ കുടക്കീഴിൽ ലഭ്യമാകുന്ന കേരളത്തിന്റെ ആദ്യ ഡിജിറ്റൽ ജനകീയ കൂട്ടായ്മ.&rdquo;
@@ -203,8 +202,24 @@ export function AuthSplitScreen({ initialMode }: AuthSplitScreenProps) {
       </div>
 
       {/* RIGHT COLUMN: Clean Split-Screen Authentication Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 lg:p-12 overflow-y-auto">
-        <div className="w-full max-w-md bg-white rounded-3xl border border-[#EDE6D8] p-6 sm:p-9 shadow-card">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 lg:p-12 overflow-y-auto -mt-6 sm:-mt-8 lg:mt-0 relative z-20">
+        <div className="w-full max-w-md bg-white rounded-3xl border border-[#EDE6D8] p-5 sm:p-9 shadow-elevated">
+          {/* Palm Emblem Badge matching Screen 9 in Mobile Demo */}
+          <div className="flex flex-col items-center justify-center text-center mb-5">
+            <div className="w-12 h-12 rounded-full bg-[#E0F1E7] border-2 border-[#1B4D36] text-[#1B4D36] flex items-center justify-center mb-2 shadow-xs">
+              <svg className="w-6 h-6 fill-[#1B4D36]" viewBox="0 0 24 24">
+                <path d="M12 2C10.5 4 8 6 5 6c2 1.5 3 4 3 6 0 1-.5 2-1 3 2.5 0 5-1 6-3 1 2 3.5 3 6 3-.5-1-1-2-1-3 0-2 1-4.5 3-6-3 0-5.5-2-7-4z" />
+                <path d="M11 12h2v10h-2z" />
+              </svg>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-black font-malayalam-heading text-[#1B4D36]">
+              {mode === "login" ? "പ്രവേശിക്കുക" : "അംഗമാവുക"}
+            </h2>
+            <p className="text-xs text-[#5C6A64] font-malayalam-body mt-0.5">
+              നമ്മുടെ നാട്ടിലേക്ക് സ്നേഹത്തോടെ സ്വാഗതം
+            </p>
+          </div>
+
           {/* Dual Tab Switcher matching Row 3, Col 3 in reference collage */}
           <div className="grid grid-cols-2 p-1 rounded-2xl bg-[#F4EFE6] border border-[#E5DEC9] mb-6">
             <button

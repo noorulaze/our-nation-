@@ -67,8 +67,18 @@ const CULTURAL_ARTS: CulturalArt[] = [
     instruments: "മൃദംഗം, മദ്ദളം, കുഴൽ, ഇടയ്ക്ക, പുല്ലാങ്കുഴൽ",
   },
   {
+    id: "sadya",
+    name: "പാരമ്പര്യ ഭക്ഷണം",
+    category: "പാരമ്പര്യം",
+    district: "കേരളമൊട്ടാകെ",
+    imageUrl: "https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?w=800&auto=format&fit=crop&q=80",
+    shortDesc: "തനിമയാർന്ന വാഴയിലയിൽ വിളമ്പുന്ന വിഭവസമൃദ്ധമായ കേരളീയ സദ്യയും നാടൻ രുചികളും.",
+    fullHistory: "വാഴയിലയിൽ വിളമ്പുന്ന അവിയൽ, തോരൻ, കാളൻ, ഓലൻ, പച്ചടി, കിച്ചടി, സാമ്പാർ, പരിപ്പും നെയ്യും, പായസം എന്നിവ ചേർന്ന കേരളീയ സദ്യ നമ്മുടെ സാംസ്കാരിക പൈതൃകത്തിന്റെ അവിഭാജ്യ ഘടകമാണ്.",
+    instruments: "വാഴയില, പാരമ്പര്യ വിഭവങ്ങൾ",
+  },
+  {
     id: "kalaripayattu",
-    name: "കളരിപ്പയറ്റ്",
+    name: "തനതു കലകൾ",
     category: "പാരമ്പര്യം",
     district: "വടക്കൻ മലബാർ",
     imageUrl: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&auto=format&fit=crop&q=80",
@@ -205,9 +215,9 @@ export default function CulturePage() {
                 <div
                   key={art.id}
                   onClick={() => setActiveArtModal(art)}
-                  className="bg-white rounded-3xl border border-[#EAE4D7] shadow-card overflow-hidden hover:border-[#1B4D36]/60 transition cursor-pointer group flex flex-col justify-between"
+                  className="bg-white rounded-2xl sm:rounded-3xl border border-[#EAE4D7] shadow-card overflow-hidden hover:border-[#1B4D36]/60 transition cursor-pointer group flex flex-col justify-between"
                 >
-                  <div className="h-44 sm:h-52 overflow-hidden relative bg-[#E5DDD0]">
+                  <div className="h-36 sm:h-52 overflow-hidden relative bg-[#E5DDD0]">
                     <img
                       src={art.imageUrl}
                       alt={art.name}
@@ -217,11 +227,11 @@ export default function CulturePage() {
                       <span className="text-[11px] text-amber-200 font-semibold">വിശദാംശങ്ങൾ കാണുക</span>
                     </div>
                   </div>
-                  <div className="p-3.5 text-center">
-                    <h3 className="font-bold font-malayalam-serif text-sm sm:text-base text-[#1A2420] group-hover:text-[#1B4D36] transition">
+                  <div className="p-2.5 sm:p-3.5 text-center">
+                    <h3 className="font-bold font-malayalam-serif text-xs sm:text-base text-[#1A2420] group-hover:text-[#1B4D36] transition line-clamp-1">
                       {art.name}
                     </h3>
-                    <span className="text-[10px] text-[#7A8880] block mt-0.5">{art.district}</span>
+                    <span className="text-[10px] text-[#7A8880] block mt-0.5 truncate">{art.district}</span>
                   </div>
                 </div>
               ))}

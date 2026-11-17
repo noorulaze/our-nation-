@@ -33,6 +33,7 @@ export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) =
 
   const navLinks = [
     { href: "/", label: "Home", enLabel: "Home" },
+    { href: "/tanur", label: "താനൂർ", enLabel: "Tanur" },
     { href: "/about", label: "നമ്മുടെ നാട്", enLabel: "About Us" },
     { href: "/news", label: "വാർത്തകൾ", enLabel: "News" },
     { href: "/culture", label: "സംസ്കാരം", enLabel: "Culture" },

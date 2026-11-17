@@ -2,6 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { naaduAiQuerySchema } from "@/lib/validation/schemas";
 import { store } from "@/lib/data/store";
 import { getGeminiModel, isGeminiConfigured, buildSystemPrompt, GroundedContextItem } from "@/lib/gemini/client";
+import { 
+  TANUR_PLACES, 
+  TANUR_CORE_FACTS, 
+  TANUR_HISTORY_TIMELINE, 
+  TANUR_PUBLIC_SERVICES, 
+  TANUR_INSTITUTIONS, 
+  TANUR_CULTURE_ITEMS 
+} from "@/lib/data/tanurData";
 
 export async function POST(req: NextRequest) {
   try {
@@ -86,6 +94,72 @@ export async function POST(req: NextRequest) {
         details: `Category: ${i.category}, Location: ${i.location_name || 'N/A'}, Status: ${i.status}, Official Response: ${i.official_response || 'None yet'}`,
         link: `/community?issue=${i.id}`,
       });
+    });
+
+    // 2b. Add Tanur Comprehensive Grounded Profile Records
+    TANUR_PLACES.forEach(p => {
+      contextItems.push({
+        type: "place",
+        id: p.id,
+        title: `${p.name} (${p.name_ml})`,
+        details: `Category: ${p.category_ml}, Location: ${p.location_ml}, Significance: ${p.significance}, Description: ${p.description}, Visitor Info: ${p.visitorInfo?.timings || 'Open daily'}, Source: ${p.sourceId}`,
+        link: `/tanur/places#${p.id}`,
+        isVerified: true,
+      });
+    });
+
+    TANUR_HISTORY_TIMELINE.forEach(h => {
+      contextItems.push({
+        type: "announcement",
+        id: `hist-${h.year}`,
+        title: `${h.title} (${h.title_ml}) - ${h.year}`,
+        details: `Era: ${h.era}, Details: ${h.description}, Malayalam: ${h.description_ml}, Source: ${h.sourceId}`,
+        link: `/tanur/history`,
+        isVerified: true,
+      });
+    });
+
+    TANUR_PUBLIC_SERVICES.forEach(s => {
+      contextItems.push({
+        type: "business",
+        id: s.id,
+        title: `${s.name} (${s.name_ml})`,
+        details: `Category: ${s.category_ml}, Address: ${s.address}, Phone: ${s.phone}, Emergency: ${s.emergencyNumber || 'N/A'}, Hours: ${s.workingHours}`,
+        link: `/tanur/directory`,
+        isVerified: true,
+      });
+    });
+
+    TANUR_INSTITUTIONS.forEach(inst => {
+      contextItems.push({
+        type: "business",
+        id: inst.id,
+        title: `${inst.name} (${inst.name_ml})`,
+        details: `Established: ${inst.establishedYear}, Type: ${inst.type_ml}, Description: ${inst.description}, Website: ${inst.website || 'N/A'}, Phone: ${inst.phone || 'N/A'}`,
+        link: `/tanur/education`,
+        isVerified: true,
+      });
+    });
+
+    TANUR_CULTURE_ITEMS.forEach(c => {
+      contextItems.push({
+        type: "announcement",
+        id: c.id,
+        title: `${c.title} (${c.title_ml})`,
+        details: `Cultural Category: ${c.category_ml}, Significance: ${c.significance}, Description: ${c.description}`,
+        link: `/tanur/culture`,
+        isVerified: true,
+      });
+    });
+
+    // Core demographic & administrative fact item
+    contextItems.push({
+      type: "community",
+      id: "tanur-census-facts",
+      title: "Tanur Core Demographics & Administration (താനൂർ നഗരസഭ വിവരങ്ങൾ)",
+      details: `State: Kerala, District: Malappuram, Taluk: Tirur, PIN: 676302. Census 2011 Data: Area 19.49 sq km, 45 Divisions, Population 69,534 (Male 33,301, Female 36,233), 15,547 Households, Literacy 91.18%. Formed as Municipality on 1 Nov 2015. Note: Tanur Municipality is administratively distinct from Tanur Block Panchayat (which covers rural panchayats Ozhur, Ponmundam, Thanalur, Niramaruthur, Cheriyamundam).`,
+      link: `/tanur`,
+      isVerified: true,
     });
 
     // 3. Match relevant items against query tokens

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { BottomNav } from "@/components/layout/BottomNav";
+import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import {
   Phone,
   Mail,
@@ -155,6 +156,10 @@ export default function ContactPage() {
       <Navbar />
 
       <main className="flex-1 pb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2">
+          <Breadcrumbs items={[{ label: "ബന്ധപ്പെടുക (Contact)" }]} />
+        </div>
+
         {/* Hero Section matching Row 3, Col 2 in reference collage */}
         <section className="relative h-[280px] sm:h-[340px] md:h-[400px] overflow-hidden flex items-end">
           <div

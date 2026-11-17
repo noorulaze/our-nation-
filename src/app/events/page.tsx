@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Footer } from "@/components/layout/Footer";
+import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { useLanguage } from "@/lib/i18n/context";
 import { 
   Calendar as CalendarIcon, 
@@ -14,10 +15,10 @@ import {
   ArrowRight, 
   CheckCircle2, 
   Share2, 
-  X,
-  Search,
-  ChevronLeft,
-  ChevronRight
+  X, 
+  Search, 
+  ChevronLeft, 
+  ChevronRight 
 } from "lucide-react";
 import { KeralaEvent, KERALA_EVENTS_DATA } from "@/lib/data/keralaEventsData";
 
@@ -44,11 +45,14 @@ export default function EventsPage() {
       <Navbar />
 
       <main className="flex-1">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2">
+          <Breadcrumbs items={[{ label: "പരിപാടികൾ (Events)" }]} />
+        </div>
         
         {/* ========================================================================= */}
         {/* HERO BANNER: Row 2, Col 3 in reference image (Thrissur Pooram Elephants) */}
         {/* ========================================================================= */}
-        <section className="relative overflow-hidden pt-4 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <section className="relative overflow-hidden pt-2 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="relative rounded-3xl sm:rounded-[2.5rem] overflow-hidden shadow-elevated border border-[#E7DFD0] min-h-[380px] sm:min-h-[440px] flex items-center bg-[#1B3A2C]">
             
             {/* Background Panorama: Caparisoned Elephants with Golden Nettipattam */}

@@ -31,10 +31,11 @@ export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) =
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
 
-  // Main pill links matching exact header in IMAGE 2
+  // Main pill links matching exact header requirements
   const mainPillLinks = [
     { href: "/", label: "Home", enLabel: "Home" },
     { href: "/about", label: "നമ്മുടെ നാട്", enLabel: "About Us" },
+    { href: "/news", label: "വാർത്തകൾ", enLabel: "News" },
     { href: "/culture", label: "സംസ്കാരം", enLabel: "Culture" },
     { href: "/education", label: "വിദ്യാഭ്യാസം", enLabel: "Education" },
     { href: "/events", label: "പരിപാടികൾ", enLabel: "Events" },

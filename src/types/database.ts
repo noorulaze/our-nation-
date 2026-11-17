@@ -15,6 +15,7 @@ export interface Profile {
   id: string;
   username: string;
   display_name: string;
+  email?: string | null;
   avatar_url?: string | null;
   bio?: string | null;
   preferred_language: PreferredLanguage;

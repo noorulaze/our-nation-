@@ -5,6 +5,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Footer } from "@/components/layout/Footer";
 import { useLanguage } from "@/lib/i18n/context";
+import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { 
   Camera, 
   MapPin, 
@@ -13,13 +14,15 @@ import {
   Download, 
   Heart, 
   Sparkles,
-  Maximize2
+  Maximize2,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 
 interface GalleryPhoto {
   id: string;
   title: string;
-  category: "പ്രകൃതി" | "ഉത്സവങ്ങൾ" | "ക്ഷേത്രങ്ങൾ" | "സംസ്കാരം";
+  category: "പ്രകൃതി" | "പൈതൃകം" | "സംസ്കാരം" | "ഉത്സവങ്ങൾ" | "ജനങ്ങൾ" | "വാസ്തുവിദ്യ" | "ഗ്രാമീണ ജീവിതം";
   district: string;
   imageUrl: string;
   description: string;
@@ -53,7 +56,7 @@ const KERALA_GALLERY_PHOTOS: GalleryPhoto[] = [
   {
     id: "heritage-basilica",
     title: "പൈതൃക ദേവാലയം",
-    category: "ക്ഷേത്രങ്ങൾ",
+    category: "പൈതൃകം",
     district: "മധ്യകേരളം",
     imageUrl: "https://images.unsplash.com/photo-1548625361-195fe578cb26?w=1200&auto=format&fit=crop&q=85",
     description: "നൂറ്റാണ്ടുകളുടെ പഴക്കമുള്ള കേരളീയ വാസ്തുവിദ്യയിൽ തീർത്ത പുരാതന പൈതൃക സ്മാരകം.",
@@ -92,11 +95,27 @@ const KERALA_GALLERY_PHOTOS: GalleryPhoto[] = [
   },
   {
     id: "temple-architecture",
-    title: "കേരളീയ ക്ഷേത്ര ശില്പകല",
-    category: "ക്ഷേത്രങ്ങൾ",
+    title: "കേരളീയ വാസ്തുശില്പകല",
+    category: "വാസ്തുവിദ്യ",
     district: "പത്മനാഭപുരം",
     imageUrl: "https://images.unsplash.com/photo-1609137144822-54d9c79e6074?w=1200&auto=format&fit=crop&q=85",
     description: "തടികൊണ്ടുള്ള മേൽക്കൂരയും ചുവർച്ചിത്രങ്ങളും നിറഞ്ഞ തനതു വാസ്തുശിൽപ പാരമ്പര്യം.",
+  },
+  {
+    id: "coastal-fishermen",
+    title: "തീരദേശത്തെ മീൻപിടുത്തക്കാർ",
+    category: "ജനങ്ങൾ",
+    district: "താനൂർ / തീരദേശം",
+    imageUrl: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1200&auto=format&fit=crop&q=85",
+    description: "അറബിക്കടലിന്റെ തിരമാലകളോട് പടവെട്ടി നാടിന് അന്നമേകുന്ന അധ്വാനശാലികളായ പരമ്പരാഗത മത്സ്യത്തൊഴിലാളികൾ.",
+  },
+  {
+    id: "village-paddy",
+    title: "ഗ്രാമീണ നെൽപ്പാടങ്ങൾ",
+    category: "ഗ്രാമീണ ജീവിതം",
+    district: "പാലക്കാട് / കുട്ടനാട്",
+    imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1200&auto=format&fit=crop&q=85",
+    description: "പച്ചപ്പട്ടുവിരിച്ച നെൽപ്പാടങ്ങളും വരമ്പിലൂടെയുള്ള നാടൻ വഴികളും ചേർന്ന ഗ്രാമീണ തനിമ.",
   },
 ];
 
@@ -106,7 +125,16 @@ export default function GalleryPage() {
   const [activePhoto, setActivePhoto] = useState<GalleryPhoto | null>(null);
   const [likedPhotoIds, setLikedPhotoIds] = useState<string[]>([]);
 
-  const categories = ["എല്ലാം", "പ്രകൃതി", "ഉത്സവങ്ങൾ", "ക്ഷേത്രങ്ങൾ", "സംസ്കാരം"];
+  const categories = [
+    "എല്ലാം", 
+    "പ്രകൃതി", 
+    "പൈതൃകം", 
+    "സംസ്കാരം", 
+    "ഉത്സവങ്ങൾ", 
+    "ജനങ്ങൾ", 
+    "വാസ്തുവിദ്യ", 
+    "ഗ്രാമീണ ജീവിതം"
+  ];
 
   const filteredPhotos = selectedCategory === "എല്ലാം"
     ? KERALA_GALLERY_PHOTOS
@@ -120,16 +148,50 @@ export default function GalleryPage() {
     }
   };
 
+  const currentIndex = activePhoto ? filteredPhotos.findIndex((p) => p.id === activePhoto.id) : -1;
+  const handlePrevPhoto = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (filteredPhotos.length === 0) return;
+    const newIdx = currentIndex > 0 ? currentIndex - 1 : filteredPhotos.length - 1;
+    setActivePhoto(filteredPhotos[newIdx]);
+  };
+  const handleNextPhoto = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (filteredPhotos.length === 0) return;
+    const newIdx = currentIndex < filteredPhotos.length - 1 ? currentIndex + 1 : 0;
+    setActivePhoto(filteredPhotos[newIdx]);
+  };
+
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!activePhoto) return;
+      if (e.key === "Escape") setActivePhoto(null);
+      if (e.key === "ArrowLeft") {
+        const newIdx = currentIndex > 0 ? currentIndex - 1 : filteredPhotos.length - 1;
+        setActivePhoto(filteredPhotos[newIdx]);
+      }
+      if (e.key === "ArrowRight") {
+        const newIdx = currentIndex < filteredPhotos.length - 1 ? currentIndex + 1 : 0;
+        setActivePhoto(filteredPhotos[newIdx]);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activePhoto, currentIndex, filteredPhotos]);
+
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF7F0] text-[#1A2420]">
       <Navbar />
 
       <main className="flex-1">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2">
+          <Breadcrumbs items={[{ label: "ഗാലറി (Gallery)" }]} />
+        </div>
         
         {/* ========================================================================= */}
         {/* HERO BANNER: Row 3, Col 1 in reference image (Camera Icon + Landscape) */}
         {/* ========================================================================= */}
-        <section className="relative overflow-hidden pt-4 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <section className="relative overflow-hidden pt-2 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="relative rounded-3xl sm:rounded-[2.5rem] overflow-hidden shadow-elevated border border-[#E7DFD0] min-h-[340px] sm:min-h-[380px] flex items-center bg-[#193225]">
             
             {/* Background Panorama: Scenic Green Landscape */}
@@ -260,15 +322,37 @@ export default function GalleryPage() {
             onClick={(e) => e.stopPropagation()}
             className="max-w-4xl w-full bg-[#18241E] text-white rounded-3xl overflow-hidden shadow-2xl border border-white/10"
           >
-            <div className="relative max-h-[72vh] bg-black flex items-center justify-center">
+            <div className="relative max-h-[72vh] bg-black flex items-center justify-center group/nav">
               <img
                 src={activePhoto.imageUrl}
                 alt={activePhoto.title}
                 className="max-h-[72vh] w-auto max-w-full object-contain"
               />
+              {/* Previous Button */}
+              <button
+                type="button"
+                onClick={handlePrevPhoto}
+                aria-label="Previous image"
+                className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition border border-white/20 active:scale-95 shadow-lg"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+
+              {/* Next Button */}
+              <button
+                type="button"
+                onClick={handleNextPhoto}
+                aria-label="Next image"
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center transition border border-white/20 active:scale-95 shadow-lg"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+
+              {/* Close Button */}
               <button
                 onClick={() => setActivePhoto(null)}
-                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/70 hover:bg-black text-white flex items-center justify-center transition"
+                aria-label="Close"
+                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/70 hover:bg-black text-white flex items-center justify-center transition border border-white/20"
               >
                 <X className="w-5 h-5" />
               </button>

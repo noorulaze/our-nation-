@@ -7,6 +7,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Footer } from "@/components/layout/Footer";
 import { KERALA_NEWS_ARTICLES } from "@/lib/data/keralaNewsData";
+import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { 
   Calendar, 
   ArrowLeft, 
@@ -14,23 +15,51 @@ import {
   Tag, 
   ExternalLink,
   ChevronRight,
-  Newspaper
+  Newspaper,
+  Clock,
+  User,
+  Check
 } from "lucide-react";
 
 export default function SingleNewsPage() {
   const params = useParams();
   const router = useRouter();
   const newsId = params.id as string;
+  const [copied, setCopied] = React.useState(false);
 
   const article = KERALA_NEWS_ARTICLES.find((a) => a.id === newsId) || KERALA_NEWS_ARTICLES[0];
   const relatedArticles = KERALA_NEWS_ARTICLES.filter((a) => a.id !== article.id).slice(0, 3);
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: article.title, text: article.summary, url: window.location.href });
+      } catch (err) {
+        // Fallback
+      }
+    } else {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF7F0] text-[#1A2420]">
       <Navbar />
 
-      <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-8">
+      <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-6">
         
+        {/* Breadcrumbs */}
+        <div className="mb-4">
+          <Breadcrumbs
+            items={[
+              { label: "വാർത്തകൾ (News)", href: "/news" },
+              { label: article.title },
+            ]}
+          />
+        </div>
+
         {/* Back Link */}
         <div className="mb-6">
           <Link
@@ -58,37 +87,59 @@ export default function SingleNewsPage() {
           </div>
 
           <div className="p-6 sm:p-10">
-            <div className="flex items-center gap-3 text-xs text-[#7A8880] mb-3 pb-3 border-b border-[#F3EFE6]">
+            <div className="flex flex-wrap items-center gap-3 text-xs text-[#7A8880] mb-4 pb-4 border-b border-[#F3EFE6]">
               <div className="flex items-center gap-1.5">
                 <Calendar className="w-4 h-4 text-[#1B4D36]" />
                 <span>{article.date}</span>
               </div>
               <span>•</span>
-              <span className="font-semibold text-[#1A2420]">{article.source}</span>
+              <div className="flex items-center gap-1.5">
+                <User className="w-3.5 h-3.5 text-[#1B4D36]" />
+                <span className="font-semibold text-[#1A2420]">{article.source}</span>
+              </div>
+              <span>•</span>
+              <div className="flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-[#1B4D36]" />
+                <span>3 മിനിറ്റ് വായന</span>
+              </div>
             </div>
 
             <h1 className="text-2xl sm:text-4xl font-bold font-malayalam-serif text-[#1B4D36] leading-tight mb-6">
               {article.title}
             </h1>
 
-            <p className="text-sm sm:text-base text-[#3E4D45] leading-relaxed whitespace-pre-line font-malayalam-body">
-              {article.fullStory}
-            </p>
+            <div className="prose prose-stone max-w-none">
+              <p className="text-sm sm:text-base text-[#3E4D45] leading-relaxed whitespace-pre-line font-malayalam-body">
+                {article.fullStory}
+              </p>
+            </div>
 
-            <div className="mt-8 pt-6 border-t border-[#E5DFD1] flex items-center justify-between">
-              <span className="text-xs text-[#7A8880]">നമ്മുടെ നാട് • വാർത്താ വിഭാഗം</span>
-              <button
-                type="button"
-                onClick={() => {
-                  if (navigator.share) {
-                    navigator.share({ title: article.title, text: article.summary, url: window.location.href });
-                  }
-                }}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#FAF7F0] border border-[#DDD5C5] text-xs font-bold text-[#1B4D36] hover:bg-[#F3EFE6] transition"
-              >
-                <Share2 className="w-4 h-4" />
-                <span>പങ്കുവെക്കുക</span>
-              </button>
+            <div className="mt-8 pt-6 border-t border-[#E5DFD1] flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-[#E5DDD0] text-[#1B4D36] font-bold text-xs flex items-center justify-center">
+                  NN
+                </div>
+                <div>
+                  <span className="text-xs font-bold text-[#1A2420] block">നമ്മുടെ നാട് വാർത്താ വിഭാഗം</span>
+                  <span className="text-[10px] text-[#7A8880]">പരിശോധിച്ചുറപ്പിച്ച പ്രാദേശിക റിപ്പോർട്ട്</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {copied && (
+                  <span className="text-xs text-[#1B4D36] font-semibold animate-in fade-in">
+                    ലിങ്ക് കോപ്പി ചെയ്തു!
+                  </span>
+                )}
+                <button
+                  type="button"
+                  onClick={handleShare}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#FAF7F0] border border-[#DDD5C5] text-xs font-bold text-[#1B4D36] hover:bg-[#F3EFE6] transition active:scale-95"
+                >
+                  {copied ? <Check className="w-4 h-4 text-emerald-600" /> : <Share2 className="w-4 h-4" />}
+                  <span>{copied ? "കോപ്പി ചെയ്തു" : "പങ്കുവെക്കുക"}</span>
+                </button>
+              </div>
             </div>
           </div>
         </article>

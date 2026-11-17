@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Footer } from "@/components/layout/Footer";
+import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { useLanguage } from "@/lib/i18n/context";
 import { 
   Palmtree, 
@@ -15,14 +16,18 @@ import {
   X, 
   Music, 
   Award, 
-  BookOpen,
-  Share2
+  BookOpen, 
+  Share2,
+  Utensils,
+  Landmark,
+  Coffee,
+  Compass
 } from "lucide-react";
 
 interface CulturalArt {
   id: string;
   name: string;
-  category: "കലാരൂപങ്ങൾ" | "ഉത്സവങ്ങൾ" | "പാരമ്പര്യം" | "പ്രകൃതി";
+  category: "കലാരൂപങ്ങൾ" | "ഉത്സവങ്ങൾ" | "പാരമ്പര്യം" | "വാസ്തുവിദ്യ";
   district: string;
   imageUrl: string;
   shortDesc: string;
@@ -71,6 +76,46 @@ const CULTURAL_ARTS: CulturalArt[] = [
     fullHistory: "ശരീര വഴക്കവും മനസ്സാന്നിധ്യവും ആയുധ പ്രയോഗവും സമന്വയിക്കുന്ന പരമ്പരാഗത ആയോധന വിദ്യയാണ് കളരിപ്പയറ്റ്. മെയ്ത്താരി, കോൽത്താരി, അങ്കത്താരി, വെറുംകൈ പ്രയോഗം എന്നിങ്ങനെ നാല് പ്രധാന ഘട്ടങ്ങളിലായി പയറ്റ് അഭ്യസിക്കുന്നു. വാൾ, പരിച, ഉറുമി എന്നിവയുടെ പ്രയോഗം ആയോധന കലയുടെ അത്യുന്നതിയെ പ്രതിഫലിപ്പിക്കുന്നു.",
     instruments: "ഗുരുസ്തോത്രം, വായ്ത്താരികൾ",
   },
+  {
+    id: "padayani",
+    name: "പടയണി",
+    category: "കലാരൂപങ്ങൾ",
+    district: "പത്തനംതിട്ട & കോട്ടയം",
+    imageUrl: "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=800&auto=format&fit=crop&q=80",
+    shortDesc: "കവുങ്ങിൻ പാളകളിൽ വരച്ച ഭീമാകാരമായ കോലങ്ങളണിഞ്ഞ് തപ്പിന്റെ താളത്തിനൊത്ത് ഉറയുന്ന അനുഷ്ഠാന കല.",
+    fullHistory: "ഭദ്രകാളി ക്ഷേത്രങ്ങളിൽ കാളീപ്രീതിക്കായി നടത്തുന്ന അനുഷ്ഠാന നൃത്തമാണിത്. ഭൈരവി, കാലൻ, യക്ഷി, പക്ഷി, കുതിര തുടങ്ങിയ കോലങ്ങളാണ് പ്രധാനമായും എഴുന്നള്ളിക്കുന്നത്. തപ്പ് എന്ന തോൽവാദ്യത്തിന്റെ മുറുകിയ താളത്തിലാണ് പടയണി അവതരിപ്പിക്കപ്പെടുന്നത്.",
+    instruments: "തപ്പ്, കൈമണി, ചെണ്ട",
+  },
+  {
+    id: "nalukettu",
+    name: "നാലുകെട്ട് വാസ്തുവിദ്യ",
+    category: "വാസ്തുവിദ്യ",
+    district: "കേരളമൊട്ടാകെ",
+    imageUrl: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&auto=format&fit=crop&q=80",
+    shortDesc: "തച്ചുശാസ്ത്ര വിധിപ്രകാരം നടുമുറ്റവും ചരിഞ്ഞ ഓട്ടു മേൽക്കൂരയുമുള്ള പരമ്പരാഗത കേരളീയ ഗൃഹനിർമ്മാണം.",
+    fullHistory: "വടക്കിനി, തെക്കിനി, കിഴക്കിനി, പടിഞ്ഞാറ്റിനി എന്നീ നാല് കെട്ടുകൾ ഒത്തുചേർന്ന് നടുവിലൊരു നടുമുറ്റത്തോട് (അങ്കണം) കൂടിയ തനതു നിർമ്മാണ ശൈലിയാണ് നാലുകെട്ട്. കളിമൺ ഓടുകൾ, മരം, വെട്ടുകല്ല് എന്നിവ ഉപയോഗിച്ച് പ്രകൃതിയോട് ഇണങ്ങി നിൽക്കുന്ന അന്തരീക്ഷ ഊഷ്മാവ് നിലനിർത്തുന്ന വാസ്തുവിദ്യാ വിസ്മയമാണിത്.",
+    instruments: "തച്ചുശാസ്ത്രം, തച്ചുവിദ്യ",
+  },
+  {
+    id: "pooram",
+    name: "തൃശ്ശൂർ പൂരം",
+    category: "ഉത്സവങ്ങൾ",
+    district: "തൃശ്ശൂർ",
+    imageUrl: "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?w=800&auto=format&fit=crop&q=80",
+    shortDesc: "ഉത്സവങ്ങളുടെ ഉത്സവമായ തൃശ്ശൂർ പൂരം — കുടമാറ്റവും ഇലഞ്ഞിത്തറ മേളവും വെടിക്കെട്ടും.",
+    fullHistory: "ശക്തൻ തമ്പുരാൻ തുടക്കം കുറിച്ച തൃശ്ശൂർ പൂരം മെയ് മാസത്തിലെ പൂര നാളിൽ വടക്കുന്നാഥ ക്ഷേത്ര സന്നിധിയിൽ അരങ്ങേറുന്നു. പാറമേക്കാവ്, തിരുവമ്പാടി എന്നീ പ്രമുഖ പക്ഷങ്ങൾ തമ്മിലുള്ള സൗഹൃദ മത്സരമായ കുടമാറ്റവും ലോകോത്തര പഞ്ചവാദ്യവും വിശ്വപ്രസിദ്ധമാണ്.",
+    instruments: "പഞ്ചവാദ്യം, പാണ്ടിമേളം, കൊമ്പ്, കുഴൽ",
+  },
+  {
+    id: "oppana",
+    name: "ഒപ്പന & ദഫ്മുട്ട്",
+    category: "പാരമ്പര്യം",
+    district: "മലബാർ",
+    imageUrl: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&auto=format&fit=crop&q=80",
+    shortDesc: "മലബാറിലെ വിവാഹങ്ങളിലും സാംസ്കാരിക കൂട്ടായ്മകളിലും കൈകൊട്ടി പാടുന്ന മനോഹരമായ മാപ്പിള കലാരൂപം.",
+    fullHistory: "മണവാട്ടിയെ നടുവിലിരുത്തി സഖിമാർ താളത്തിൽ കൈകൊട്ടി പാടുന്ന കലാരൂപമാണ് ഒപ്പന. കവിഞ്ഞ ഭാവഹാവാദികളോടെ ഇശലുകൾ ആലപിക്കപ്പെടുന്നു. മാപ്പിളപ്പാട്ടിന്റെ മാസ്മരിക താളം ഇതിന്റെ മാറ്റുകൂട്ടുന്നു.",
+    instruments: "ഹാർമോണിയം, തബല, കൈത്താളം",
+  },
 ];
 
 export default function CulturePage() {
@@ -78,7 +123,7 @@ export default function CulturePage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("എല്ലാം");
   const [activeArtModal, setActiveArtModal] = useState<CulturalArt | null>(null);
 
-  const categories = ["എല്ലാം", "കലാരൂപങ്ങൾ", "ഉത്സവങ്ങൾ", "പാരമ്പര്യം", "പ്രകൃതി"];
+  const categories = ["എല്ലാം", "കലാരൂപങ്ങൾ", "ഉത്സവങ്ങൾ", "പാരമ്പര്യം", "വാസ്തുവിദ്യ"];
 
   const filteredArts = selectedCategory === "എല്ലാം" 
     ? CULTURAL_ARTS 
@@ -89,11 +134,14 @@ export default function CulturePage() {
       <Navbar />
 
       <main className="flex-1">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2">
+          <Breadcrumbs items={[{ label: "സംസ്കാരം (Culture)" }]} />
+        </div>
         
         {/* ========================================================================= */}
         {/* HERO BANNER: Row 2, Col 1 in reference image (Kathakali Face) */}
         {/* ========================================================================= */}
-        <section className="relative overflow-hidden pt-4 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <section className="relative overflow-hidden pt-2 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
           <div className="relative rounded-3xl sm:rounded-[2.5rem] overflow-hidden shadow-elevated border border-[#E7DFD0] min-h-[380px] sm:min-h-[440px] flex items-center bg-[#182C22]">
             
             {/* Background Panorama: Kathakali Face Closeup */}
@@ -252,6 +300,219 @@ export default function CulturePage() {
                 <h4 className="font-bold text-sm text-[#1A2420] mb-1">സോപാനസംഗീതം</h4>
                 <p className="text-xs text-[#5C6A64] leading-relaxed">
                   ഇടയ്ക്ക കൊട്ടി ശ്രീകോവിലിന്റെ പടികളിലിരുന്ന് പാടുന്ന അതിപുരാതന ഭക്തിഗാന ശാഖ.
+                </p>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* SECTION: TRADITIONAL KERALA CUISINE (ഭക്ഷണ സംസ്കാരം) */}
+        {/* ========================================================================= */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Utensils className="w-5 h-5 text-[#B87A1E]" />
+                <span className="text-xs font-bold text-[#B87A1E] uppercase tracking-wider">നാട്ടുരുചികൾ</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-bold font-malayalam-serif text-[#1B4D36]">
+                പരമ്പരാഗത ഭക്ഷണ സംസ്കാരം
+              </h2>
+              <p className="text-xs sm:text-sm text-[#5C6A64] mt-1 max-w-xl">
+                തേങ്ങയും സുഗന്ധവ്യഞ്ജനങ്ങളും ചേർത്തൊരുക്കുന്ന തനിമയാർന്ന കേരളീയ രുചിഭേദങ്ങൾ.
+              </p>
+            </div>
+            <Link
+              href="/gallery?category=സംസ്കാരം"
+              className="mt-3 sm:mt-0 text-xs font-bold text-[#1B4D36] hover:underline flex items-center gap-1"
+            >
+              <span>കൂടുതൽ രുചിചിത്രങ്ങൾ</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            {/* Dish 1: Kerala Sadya */}
+            <div className="bg-white rounded-3xl border border-[#EAE4D7] overflow-hidden shadow-card hover:border-[#1B4D36]/50 transition group flex flex-col justify-between">
+              <div>
+                <div className="h-44 overflow-hidden relative bg-[#E5DDD0]">
+                  <img
+                    src="https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?w=800&auto=format&fit=crop&q=80"
+                    alt="Kerala Sadya on Banana Leaf"
+                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                  />
+                  <span className="absolute bottom-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-black/60 text-amber-200 text-[10px] font-bold backdrop-blur-xs">
+                    വാഴയിലയിൽ വിളമ്പിയ വിരുന്ന്
+                  </span>
+                </div>
+                <div className="p-5">
+                  <h3 className="font-bold font-malayalam-serif text-base text-[#1A2420] mb-1.5 group-hover:text-[#1B4D36] transition">
+                    കേരള സദ്യ
+                  </h3>
+                  <p className="text-xs text-[#5C6A64] leading-relaxed line-clamp-3">
+                    അവിയിലും സാമ്പാറും കാളനും ഓലനും പായസവുമടങ്ങുന്ന 24-ലധികം വിഭവങ്ങളോടെ തുമ്പപ്പൂ ചോറിലൊരുക്കുന്ന സമ്പൂർണ്ണ സസ്യാഹാര സദ്യ.
+                  </p>
+                </div>
+              </div>
+              <div className="p-5 pt-0">
+                <span className="text-[11px] font-bold text-[#1B4D36] bg-[#E0F1E7] px-2.5 py-1 rounded-xl block text-center">
+                  ഓണം & ശുഭകാര്യങ്ങൾ
+                </span>
+              </div>
+            </div>
+
+            {/* Dish 2: Appam & Stew */}
+            <div className="bg-white rounded-3xl border border-[#EAE4D7] overflow-hidden shadow-card hover:border-[#1B4D36]/50 transition group flex flex-col justify-between">
+              <div>
+                <div className="h-44 overflow-hidden relative bg-[#E5DDD0]">
+                  <img
+                    src="https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=800&auto=format&fit=crop&q=80"
+                    alt="Kerala Appam with Stew"
+                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                  />
+                  <span className="absolute bottom-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-black/60 text-amber-200 text-[10px] font-bold backdrop-blur-xs">
+                    തേങ്ങാപ്പാൽ ചേർത്ത സ്റ്റൂ
+                  </span>
+                </div>
+                <div className="p-5">
+                  <h3 className="font-bold font-malayalam-serif text-base text-[#1A2420] mb-1.5 group-hover:text-[#1B4D36] transition">
+                    അപ്പവും സ്റ്റൂവും
+                  </h3>
+                  <p className="text-xs text-[#5C6A64] leading-relaxed line-clamp-3">
+                    പാലപ്പവും വെളിച്ചെണ്ണയിൽ മൂപ്പിച്ച തേങ്ങാപ്പാൽ ഇഷ്തുവും കേരളീയ പ്രാതലിന്റെയും ക്രിസ്മസ് വിരുന്നിന്റെയും പ്രിയപ്പെട്ട വിഭവമാണ്.
+                  </p>
+                </div>
+              </div>
+              <div className="p-5 pt-0">
+                <span className="text-[11px] font-bold text-[#1B4D36] bg-[#E0F1E7] px-2.5 py-1 rounded-xl block text-center">
+                  മധ്യതിരുവിതാംകൂർ രുചി
+                </span>
+              </div>
+            </div>
+
+            {/* Dish 3: Malabar Dum Biryani */}
+            <div className="bg-white rounded-3xl border border-[#EAE4D7] overflow-hidden shadow-card hover:border-[#1B4D36]/50 transition group flex flex-col justify-between">
+              <div>
+                <div className="h-44 overflow-hidden relative bg-[#E5DDD0]">
+                  <img
+                    src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=800&auto=format&fit=crop&q=80"
+                    alt="Malabar Biryani"
+                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                  />
+                  <span className="absolute bottom-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-black/60 text-amber-200 text-[10px] font-bold backdrop-blur-xs">
+                    ഖൈമ അരിയിൽ ദം ചെയ്തത്
+                  </span>
+                </div>
+                <div className="p-5">
+                  <h3 className="font-bold font-malayalam-serif text-base text-[#1A2420] mb-1.5 group-hover:text-[#1B4D36] transition">
+                    തലശ്ശേരി ബിരിയാണി
+                  </h3>
+                  <p className="text-xs text-[#5C6A64] leading-relaxed line-clamp-3">
+                    ജീരകശാല അരിയണിഞ്ഞ് നെയ്മണവും മലബാർ മസാലക്കൂട്ടും സമന്വയിക്കുന്ന തനതു മലബാർ ദം ബിരിയാണി.
+                  </p>
+                </div>
+              </div>
+              <div className="p-5 pt-0">
+                <span className="text-[11px] font-bold text-[#1B4D36] bg-[#E0F1E7] px-2.5 py-1 rounded-xl block text-center">
+                  മലബാർ തീരദേശ പാരമ്പര്യം
+                </span>
+              </div>
+            </div>
+
+            {/* Dish 4: Pazham Pori & Snacks */}
+            <div className="bg-white rounded-3xl border border-[#EAE4D7] overflow-hidden shadow-card hover:border-[#1B4D36]/50 transition group flex flex-col justify-between">
+              <div>
+                <div className="h-44 overflow-hidden relative bg-[#E5DDD0]">
+                  <img
+                    src="https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=800&auto=format&fit=crop&q=80"
+                    alt="Pazham Pori and Kerala Evening Snacks"
+                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                  />
+                  <span className="absolute bottom-2.5 left-2.5 px-2.5 py-0.5 rounded-full bg-black/60 text-amber-200 text-[10px] font-bold backdrop-blur-xs">
+                    നാടൻ ചായക്കട വിഭവങ്ങൾ
+                  </span>
+                </div>
+                <div className="p-5">
+                  <h3 className="font-bold font-malayalam-serif text-base text-[#1A2420] mb-1.5 group-hover:text-[#1B4D36] transition">
+                    പഴംപൊരി & നേന്ത്രക്കായ ഉപ്പേരി
+                  </h3>
+                  <p className="text-xs text-[#5C6A64] leading-relaxed line-clamp-3">
+                    പഴുത്ത നേന്ത്രപ്പഴം മാവിൽ മുക്കി വെളിച്ചെണ്ണയിൽ വറുത്തെടുത്ത പഴംപൊരിയും കട്ടൻ ചായയും കേരളത്തിലെ സായാഹ്ന കൂട്ടായ്മകളുടെ അടയാളമാണ്.
+                  </p>
+                </div>
+              </div>
+              <div className="p-5 pt-0">
+                <span className="text-[11px] font-bold text-[#1B4D36] bg-[#E0F1E7] px-2.5 py-1 rounded-xl block text-center">
+                  തട്ടുകട & ചായപ്പീടിക
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* SECTION: ARCHITECTURE & HERITAGE (വാസ്തുവിദ്യയും പൈതൃകവും) */}
+        {/* ========================================================================= */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+          <div className="bg-white rounded-3xl sm:rounded-[2.5rem] border border-[#EAE4D7] p-6 sm:p-10 shadow-card">
+            <div className="max-w-2xl mb-8">
+              <div className="flex items-center gap-2 mb-2">
+                <Landmark className="w-5 h-5 text-[#1B4D36]" />
+                <span className="text-xs font-bold text-[#1B4D36] uppercase tracking-wider">തച്ചുശാസ്ത്രം</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-bold font-malayalam-serif text-[#1B4D36]">
+                കേരള വാസ്തുവിദ്യയും പൈതൃക കേന്ദ്രങ്ങളും
+              </h2>
+              <p className="text-xs sm:text-sm text-[#5C6A64] mt-1">
+                പ്രകൃതിദത്ത മരപ്പണികളും ചുവർച്ചിത്രങ്ങളും മനോഹരമായ ചരിഞ്ഞ മേൽക്കൂരകളും സമ്മാനിക്കുന്ന വിസ്മയം.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              
+              <div className="rounded-2xl bg-[#FAF7F0] border border-[#EAE4D7] p-5 space-y-3">
+                <div className="h-40 rounded-xl overflow-hidden bg-[#E5DDD0]">
+                  <img
+                    src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&auto=format&fit=crop&q=80"
+                    alt="Traditional Kerala Nalukettu Courtyard"
+                    className="w-full h-full object-cover hover:scale-105 transition duration-500"
+                  />
+                </div>
+                <h4 className="font-bold text-base text-[#1A2420] font-malayalam-serif">നാലുകെട്ടും നടുമുറ്റവും</h4>
+                <p className="text-xs text-[#5C6A64] leading-relaxed">
+                  മഴയും വെയിലും സ്വീകരിക്കുന്ന നടുമുറ്റവും (അങ്കണം) പടിപ്പുരയും പത്തായപ്പുരയുമുള്ള പാരമ്പര്യ നിർമ്മാണ രീതി.
+                </p>
+              </div>
+
+              <div className="rounded-2xl bg-[#FAF7F0] border border-[#EAE4D7] p-5 space-y-3">
+                <div className="h-40 rounded-xl overflow-hidden bg-[#E5DDD0]">
+                  <img
+                    src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&auto=format&fit=crop&q=80"
+                    alt="Padmanabhapuram Palace Kerala Wooden Architecture"
+                    className="w-full h-full object-cover hover:scale-105 transition duration-500"
+                  />
+                </div>
+                <h4 className="font-bold text-base text-[#1A2420] font-malayalam-serif">പത്മനാഭപുരം കൊട്ടാരം</h4>
+                <p className="text-xs text-[#5C6A64] leading-relaxed">
+                  ഏഷ്യയിലെ ഏറ്റവും വലിയ തടി കൊട്ടാരം. കൊത്തുപണികൾ നിറഞ്ഞ മച്ചുകളും ഔഷധക്കൂട്ടുകൾ ചേർത്ത കറുത്ത മിനുസമുള്ള തറകളും.
+                </p>
+              </div>
+
+              <div className="rounded-2xl bg-[#FAF7F0] border border-[#EAE4D7] p-5 space-y-3">
+                <div className="h-40 rounded-xl overflow-hidden bg-[#E5DDD0]">
+                  <img
+                    src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&fit=crop&q=80"
+                    alt="Bekal Fort Arabian Sea Coast"
+                    className="w-full h-full object-cover hover:scale-105 transition duration-500"
+                  />
+                </div>
+                <h4 className="font-bold text-base text-[#1A2420] font-malayalam-serif">ബേക്കൽ കോട്ടയും ചരിത്ര സ്മാരകങ്ങളും</h4>
+                <p className="text-xs text-[#5C6A64] leading-relaxed">
+                  അറബിക്കടലിന്റെ തീരത്ത് തലയുയർത്തി നിൽക്കുന്ന അതിപുരാതന ചെങ്കൽ കോട്ടയും കേരള തീരദേശ പ്രതിരോധ ചരിത്രവും.
                 </p>
               </div>
 

@@ -3,134 +3,167 @@
 import React from "react";
 import Link from "next/link";
 import { useLanguage } from "@/lib/i18n/context";
-import { useCommunity } from "@/lib/community/context";
-import { ShieldCheck, Heart, Sparkles, MapPin } from "lucide-react";
+import { KeralaLogo } from "./KeralaLogo";
+import { 
+  Youtube, 
+  Facebook, 
+  Instagram, 
+  Twitter, 
+  Send as TelegramIcon,
+  Globe
+} from "lucide-react";
 
 export function Footer() {
-  const { t, language } = useLanguage();
-  const { setSelectedDistrict, availableCommunities } = useCommunity();
-
-  const keralaDistricts = [
-    "Thiruvananthapuram", "Kollam", "Pathanamthitta", "Alappuzha",
-    "Kottayam", "Idukki", "Ernakulam", "Thrissur",
-    "Palakkad", "Malappuram", "Kozhikode", "Wayanad",
-    "Kannur", "Kasaragod"
-  ];
+  const { language, setLanguage } = useLanguage();
 
   return (
-    <footer className="bg-surface border-t border-border mt-auto mb-16 md:mb-0 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        
-        {/* District Directory Bar */}
-        <div className="mb-10 pb-8 border-b border-border/80">
-          <div className="flex items-center gap-2 mb-3 text-xs font-bold text-foreground uppercase tracking-wider">
-            <MapPin className="w-4 h-4 text-brand-700" />
-            <span>{language === "ml" ? "കേരളത്തിലെ ജില്ലകൾ" : "Districts of Kerala"}</span>
-          </div>
-          <div className="flex flex-wrap gap-2 text-xs">
-            {keralaDistricts.map((district) => (
-              <Link
-                key={district}
-                href="/discover"
-                onClick={() => setSelectedDistrict(district)}
-                className="px-2.5 py-1 rounded-md bg-muted/60 hover:bg-brand-50 hover:text-brand-700 text-muted-foreground transition border border-transparent hover:border-brand-200"
-              >
-                {district}
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="bg-[#131A15] text-[#D8E2DC] border-t border-[#232F27] mt-auto pb-16 md:pb-0">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-[#232F27]">
           
-          {/* Brand & Mission */}
-          <div className="md:col-span-2 space-y-3">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-brand-700 text-white flex items-center justify-center font-bold text-base">
-                <span>നാ</span>
-              </div>
-              <span className="font-bold text-lg text-foreground">
-                {language === "ml" ? "നമ്മുടെ നാട്" : "Nammude Naadu"}
-              </span>
-            </div>
-            <p className="text-sm text-muted-foreground leading-relaxed max-w-md">
-              {t("heroDescription")}
+          {/* Logo & Tagline */}
+          <div className="lg:col-span-2 space-y-4">
+            <KeralaLogo variant="dark" showSubtext={true} />
+            <p className="text-xs text-[#98A8A0] leading-relaxed max-w-sm mt-3">
+              കേരളത്തിന്റെ സാംസ്കാരിക പൈതൃകവും, പ്രാദേശിക കൂട്ടായ്മകളും, തദ്ദേശീയ സേവനങ്ങളും ഒരുമിപ്പിക്കുന്ന സമഗ്ര ജനകീയ ഡിജിറ്റൽ വേദി.
             </p>
-            <div className="flex items-center gap-2 text-xs text-brand-700 font-medium">
-              <ShieldCheck className="w-4 h-4" />
-              <span>{t("trustTitle")}</span>
+          </div>
+
+          {/* Column 1: പ്രധാന ലിങ്കുകൾ */}
+          <div>
+            <h4 className="text-sm font-bold text-white mb-4 font-malayalam-serif tracking-wide">
+              പ്രധാന ലിങ്കുകൾ
+            </h4>
+            <ul className="space-y-2.5 text-xs text-[#A2B2AA]">
+              <li>
+                <Link href="/" className="hover:text-amber-300 transition">
+                  മുഖ്യ പേജ്
+                </Link>
+              </li>
+              <li>
+                <Link href="/discover" className="hover:text-amber-300 transition">
+                  നാടുകൾ
+                </Link>
+              </li>
+              <li>
+                <Link href="/discover?tab=services" className="hover:text-amber-300 transition">
+                  സേവനങ്ങൾ
+                </Link>
+              </li>
+              <li>
+                <Link href="/discover?tab=places" className="hover:text-amber-300 transition">
+                  വിദ്യാഭ്യാസം
+                </Link>
+              </li>
+              <li>
+                <Link href="/community" className="hover:text-amber-300 transition">
+                  കമ്മ്യൂണിറ്റി ഫോറം
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 2: കൂടുതൽ */}
+          <div>
+            <h4 className="text-sm font-bold text-white mb-4 font-malayalam-serif tracking-wide">
+              കൂടുതൽ
+            </h4>
+            <ul className="space-y-2.5 text-xs text-[#A2B2AA]">
+              <li>
+                <Link href="/community" className="hover:text-amber-300 transition">
+                  ഞങ്ങളെ കുറിച്ച്
+                </Link>
+              </li>
+              <li>
+                <Link href="/create" className="hover:text-amber-300 transition">
+                  ബന്ധപ്പെടുക
+                </Link>
+              </li>
+              <li>
+                <Link href="/profile" className="hover:text-amber-300 transition">
+                  പ്രൈവസി പോളിസി
+                </Link>
+              </li>
+              <li>
+                <Link href="/profile" className="hover:text-amber-300 transition">
+                  ഉപയോഗ നിബന്ധനകൾ
+                </Link>
+              </li>
+              <li>
+                <Link href="/ai" className="hover:text-amber-300 transition text-amber-300">
+                  നാട് AI സഹായി
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 3: ഞങ്ങളെ പിന്തുടരൂ & Kerala God's Own Country Outline */}
+          <div className="flex flex-col justify-between">
+            <div>
+              <h4 className="text-sm font-bold text-white mb-4 font-malayalam-serif tracking-wide">
+                ഞങ്ങളെ പിന്തുടരൂ
+              </h4>
+              <div className="flex items-center gap-3 text-[#A2B2AA]">
+                <a href="https://youtube.com" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-[#1C2720] hover:bg-amber-400 hover:text-[#131A15] flex items-center justify-center transition">
+                  <Youtube className="w-4 h-4" />
+                </a>
+                <a href="https://facebook.com" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-[#1C2720] hover:bg-amber-400 hover:text-[#131A15] flex items-center justify-center transition">
+                  <Facebook className="w-4 h-4" />
+                </a>
+                <a href="https://instagram.com" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-[#1C2720] hover:bg-amber-400 hover:text-[#131A15] flex items-center justify-center transition">
+                  <Instagram className="w-4 h-4" />
+                </a>
+                <a href="https://twitter.com" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-[#1C2720] hover:bg-amber-400 hover:text-[#131A15] flex items-center justify-center transition">
+                  <Twitter className="w-4 h-4" />
+                </a>
+                <a href="https://telegram.org" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-[#1C2720] hover:bg-amber-400 hover:text-[#131A15] flex items-center justify-center transition">
+                  <TelegramIcon className="w-4 h-4" />
+                </a>
+              </div>
             </div>
+
+            {/* Kerala Map Graphic & God's Own Country Tagline */}
+            <div className="mt-6 pt-4 flex items-center gap-3">
+              <svg 
+                viewBox="0 0 60 90" 
+                className="w-10 h-16 text-amber-300/80 fill-current opacity-80"
+              >
+                {/* Stylized Kerala Strip Map Outline */}
+                <path d="M42 5 C38 12 34 20 28 30 C24 38 20 46 22 55 C24 64 30 72 36 82 C38 85 36 88 32 88 C25 82 18 72 16 62 C14 52 18 40 22 30 C26 20 32 10 38 4 Z" />
+              </svg>
+              <div className="flex flex-col">
+                <span className="font-serif italic text-amber-200 text-lg leading-none">
+                  Kerala
+                </span>
+                <span className="text-[10px] text-amber-300/70 italic tracking-wider">
+                  God&apos;s Own Country
+                </span>
+              </div>
+            </div>
+
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="text-xs font-bold text-foreground uppercase tracking-wider mb-3">
-              {t("navDiscover")}
-            </h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>
-                <Link href="/discover?tab=events" className="hover:text-brand-700 transition">
-                  {t("tabEvents")}
-                </Link>
-              </li>
-              <li>
-                <Link href="/discover?tab=services" className="hover:text-brand-700 transition">
-                  {t("tabServices")}
-                </Link>
-              </li>
-              <li>
-                <Link href="/discover?tab=places" className="hover:text-brand-700 transition">
-                  {t("tabPlaces")}
-                </Link>
-              </li>
-              <li>
-                <Link href="/community" className="hover:text-brand-700 transition">
-                  {t("communityFeed")}
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Civic & Platform */}
-          <div>
-            <h4 className="text-xs font-bold text-foreground uppercase tracking-wider mb-3">
-              {t("civicTitle")}
-            </h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li>
-                <Link href="/create?type=issue" className="hover:text-brand-700 transition">
-                  {t("reportIssue")}
-                </Link>
-              </li>
-              <li>
-                <Link href="/create?type=service" className="hover:text-brand-700 transition">
-                  {t("submitService")}
-                </Link>
-              </li>
-              <li>
-                <Link href="/create?type=event" className="hover:text-brand-700 transition">
-                  {t("submitEvent")}
-                </Link>
-              </li>
-              <li>
-                <Link href="/ai" className="hover:text-brand-700 transition flex items-center gap-1.5 font-medium text-brand-700">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>{t("aiTitle")}</span>
-                </Link>
-              </li>
-            </ul>
-          </div>
         </div>
 
-        {/* Bottom copyright & attribution */}
-        <div className="mt-12 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between text-xs text-muted-foreground gap-3">
+        {/* Bottom Bar */}
+        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#7A8E84]">
           <p>
-            © {new Date().getFullYear()} Nammude Naadu. Built for the communities of Kerala.
+            © {new Date().getFullYear()} നമ്മുടെ നാട്. എല്ലാ അവകാശങ്ങളും സുരക്ഷിതമാണ്.
           </p>
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1">
-              Made with <Heart className="w-3.5 h-3.5 text-red-500 fill-red-500" /> for local civic life
-            </span>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setLanguage("ml")}
+              className={`hover:text-amber-300 transition ${language === "ml" ? "text-amber-300 font-bold" : ""}`}
+            >
+              മലയാളം
+            </button>
+            <span>|</span>
+            <button
+              onClick={() => setLanguage("en")}
+              className={`hover:text-amber-300 transition ${language === "en" ? "text-amber-300 font-bold" : ""}`}
+            >
+              English
+            </button>
           </div>
         </div>
 

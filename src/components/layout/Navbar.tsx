@@ -6,79 +6,79 @@ import { usePathname } from "next/navigation";
 import { useLanguage } from "@/lib/i18n/context";
 import { useCommunity } from "@/lib/community/context";
 import { useAuth } from "@/lib/auth/context";
+import { KeralaLogo } from "./KeralaLogo";
 import { 
+  Search, 
+  User, 
   MapPin, 
   Globe, 
-  Sparkles, 
-  ShieldCheck, 
-  User, 
   ChevronDown, 
   Menu, 
   X,
-  Compass,
-  MessageSquare,
-  PlusCircle,
-  ShieldAlert
+  Sparkles,
+  ShieldCheck
 } from "lucide-react";
 import { UserRole } from "@/types/database";
 
-export function Navbar() {
+export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) => void }) {
   const pathname = usePathname();
   const { t, language, toggleLanguage } = useLanguage();
   const { currentCommunity, availableCommunities, setCurrentCommunity } = useCommunity();
-  const { user, role, switchUserRole, logout, isAuthenticated } = useAuth();
+  const { user, role, switchUserRole, logout } = useAuth();
   
   const [isCommunityDropdownOpen, setIsCommunityDropdownOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
 
   const navLinks = [
-    { href: "/", label: t("navHome") },
-    { href: "/discover", label: t("navDiscover") },
-    { href: "/community", label: t("navCommunity") },
-    { href: "/create", label: t("navCreate") },
-    ...(role === "admin" || role === "moderator" ? [{ href: "/admin", label: t("navAdmin") }] : []),
+    { href: "/", label: "മുഖ്യ പേജ്", enLabel: "Home" },
+    { href: "/discover", label: "നാടുകൾ", enLabel: "Communities" },
+    { href: "/discover?tab=events", label: "സംഭവങ്ങൾ", enLabel: "Events" },
+    { href: "/discover?tab=places", label: "വിദ്യാഭ്യാസം", enLabel: "Education" },
+    { href: "/discover?tab=services", label: "സേവനങ്ങൾ", enLabel: "Services" },
+    { href: "/community", label: "കുറിച്ച്", enLabel: "About & Forum" },
+    ...(role === "admin" || role === "moderator" ? [{ href: "/admin", label: "അഡ്മിൻ", enLabel: "Admin" }] : []),
   ];
 
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (onOpenSearchAi) {
+      onOpenSearchAi(searchInput);
+    } else {
+      window.location.href = `/discover?search=${encodeURIComponent(searchInput)}`;
+    }
+  };
+
   return (
-    <header className="sticky top-0 z-50 bg-surface/95 backdrop-blur-md border-b border-border transition-colors">
+    <header className="sticky top-0 z-50 bg-[#FAF7F0]/95 backdrop-blur-md border-b border-[#EAE4D7] transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-20">
           
-          {/* Logo & Brand */}
+          {/* Logo & Locality Pill */}
           <div className="flex items-center gap-3">
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-9 h-9 rounded-lg bg-brand-700 text-white flex items-center justify-center font-bold text-lg shadow-sm group-hover:bg-brand-800 transition">
-                <span>നാ</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="font-bold text-lg tracking-tight text-foreground leading-none">
-                  {language === "ml" ? "നമ്മുടെ നാട്" : "Nammude Naadu"}
-                </span>
-                <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider mt-0.5">
-                  Kerala Local Network
-                </span>
-              </div>
+            <Link href="/" className="flex items-center group">
+              <KeralaLogo />
             </Link>
 
-            {/* Locality Selector Dropdown */}
-            <div className="relative ml-2 sm:ml-4">
+            {/* Locality Selector Pill */}
+            <div className="relative hidden xl:block ml-2">
               <button
                 onClick={() => setIsCommunityDropdownOpen(!isCommunityDropdownOpen)}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-brand-50 hover:bg-brand-100 text-brand-700 text-xs font-semibold border border-brand-200 transition"
-                title="Select active community"
+                className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EFE9DC] hover:bg-[#E5DECEx] text-[#1B4D36] text-xs font-semibold border border-[#DFD7C7] transition"
+                title="Select locality"
               >
-                <MapPin className="w-3.5 h-3.5 text-brand-600 flex-shrink-0" />
-                <span className="max-w-[110px] sm:max-w-[140px] truncate">
+                <MapPin className="w-3.5 h-3.5 text-[#1B4D36] flex-shrink-0" />
+                <span className="max-w-[120px] truncate">
                   {currentCommunity 
                     ? (language === "ml" ? currentCommunity.name_ml : currentCommunity.name)
-                    : t("allCommunities")}
+                    : "കേരളം"}
                 </span>
-                <ChevronDown className="w-3 h-3 opacity-70" />
+                <ChevronDown className="w-3 h-3 opacity-60" />
               </button>
 
               {isCommunityDropdownOpen && (
-                <div className="absolute left-0 mt-2 w-64 bg-surface rounded-xl shadow-xl border border-border py-2 z-50 animate-in fade-in zoom-in-95">
+                <div className="absolute left-0 mt-2 w-64 bg-surface rounded-2xl shadow-xl border border-border py-2 z-50 animate-in fade-in zoom-in-95">
                   <div className="px-3 py-1.5 border-b border-border text-[11px] font-semibold text-muted-foreground uppercase tracking-wider">
                     {t("selectCommunityPrompt")}
                   </div>
@@ -103,7 +103,7 @@ export function Navbar() {
                           </div>
                         </div>
                         {currentCommunity?.id === comm.id && (
-                          <div className="w-2 h-2 rounded-full bg-brand-600" />
+                          <div className="w-2 h-2 rounded-full bg-brand-700" />
                         )}
                       </button>
                     ))}
@@ -113,75 +113,81 @@ export function Navbar() {
             </div>
           </div>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1">
+          {/* Center Navigation Links - Styled as Pill Menu */}
+          <nav className="hidden lg:flex items-center gap-1.5 bg-[#EDE8DC]/50 p-1 rounded-full border border-[#DFD8C9]">
             {navLinks.map((link) => {
-              const isActive = pathname === link.href;
+              const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href.split("?")[0]));
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition ${
+                  className={`px-4 py-1.5 rounded-full text-xs font-semibold transition ${
                     isActive
-                      ? "text-brand-700 bg-brand-50 font-semibold"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                      ? "bg-[#1B4D36] text-white shadow-xs"
+                      : "text-[#3D4B44] hover:text-[#1B4D36] hover:bg-[#EDE8DC]"
                   }`}
                 >
-                  {link.label}
+                  {language === "ml" ? link.label : link.enLabel}
                 </Link>
               );
             })}
           </nav>
 
-          {/* Right Action Icons: Language switcher & User profile / role switcher */}
-          <div className="flex items-center gap-2">
+          {/* Right Section: Search Bar & Profile Avatar */}
+          <div className="flex items-center gap-3">
             
+            {/* Search Pill */}
+            <form onSubmit={handleSearchSubmit} className="hidden sm:flex items-center relative">
+              <input
+                type="text"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                placeholder="തിരയുക..."
+                className="w-44 md:w-52 pl-4 pr-9 py-1.5 text-xs rounded-full bg-[#EFE9DD] border border-[#DDD5C5] text-[#1A2420] placeholder-[#7A8680] focus:outline-none focus:ring-1 focus:ring-[#1B4D36] focus:bg-white transition"
+              />
+              <button
+                type="submit"
+                aria-label="Search"
+                className="absolute right-2.5 text-[#5C6A64] hover:text-[#1B4D36]"
+              >
+                <Search className="w-3.5 h-3.5" />
+              </button>
+            </form>
+
             {/* Language Switcher */}
             <button
               onClick={toggleLanguage}
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-muted transition border border-transparent hover:border-border"
+              className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold text-[#1B4D36] bg-[#EFE9DC] hover:bg-[#E5DECF] border border-[#DFD7C7] transition"
               title="Switch Language / ഭാഷ മാറ്റുക"
             >
-              <Globe className="w-3.5 h-3.5" />
-              <span>{t("switchLanguage")}</span>
+              <Globe className="w-3 h-3" />
+              <span>{language === "ml" ? "English" : "മലയാളം"}</span>
             </button>
 
-            {/* Role Tester & User Profile dropdown */}
+            {/* User Profile Avatar in Deep Green Circle */}
             <div className="relative">
               <button
                 onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
-                className="flex items-center gap-2 p-1.5 pl-2.5 rounded-full border border-border hover:bg-muted transition"
+                className="w-8 h-8 rounded-full bg-[#1B4D36] hover:bg-[#143B29] text-white flex items-center justify-center transition shadow-xs"
+                aria-label="User Account"
               >
-                <span className="text-xs font-medium text-foreground hidden sm:inline">
-                  {user ? user.display_name : t("navLogin")}
-                </span>
-                <span className={`text-[10px] uppercase font-bold px-1.5 py-0.5 rounded-full ${
-                  role === "admin" 
-                    ? "bg-purple-100 text-purple-800" 
-                    : role === "moderator"
-                    ? "bg-blue-100 text-blue-800"
-                    : role === "verified_org"
-                    ? "bg-amber-100 text-amber-800"
-                    : "bg-emerald-100 text-emerald-800"
-                }`}>
-                  {role}
-                </span>
-                <div className="w-7 h-7 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center font-bold text-xs">
-                  {user?.display_name ? user.display_name.charAt(0) : "U"}
-                </div>
+                <User className="w-4 h-4" />
               </button>
 
               {isUserDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-64 bg-surface rounded-xl shadow-xl border border-border py-2 z-50 animate-in fade-in zoom-in-95">
+                <div className="absolute right-0 mt-2 w-64 bg-surface rounded-2xl shadow-xl border border-border py-2 z-50 animate-in fade-in zoom-in-95">
                   <div className="px-4 py-2 border-b border-border">
                     <p className="text-xs font-bold text-foreground">{user?.display_name}</p>
                     <p className="text-[11px] text-muted-foreground truncate">@{user?.username}</p>
+                    <span className="inline-block mt-1 text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                      {role}
+                    </span>
                   </div>
 
                   {/* Role Switcher for MVP Testing */}
                   <div className="px-4 py-2 bg-muted/40 border-b border-border">
                     <p className="text-[10px] uppercase tracking-wider font-semibold text-muted-foreground mb-1">
-                      Switch Role (Testing Mode):
+                      Switch Role:
                     </p>
                     <div className="grid grid-cols-2 gap-1 text-[11px]">
                       {(["user", "moderator", "verified_org", "admin"] as UserRole[]).map((r) => (
@@ -192,7 +198,7 @@ export function Navbar() {
                             setIsUserDropdownOpen(false);
                           }}
                           className={`px-2 py-1 rounded text-center font-medium capitalize ${
-                            role === r ? "bg-brand-700 text-white" : "bg-surface hover:bg-muted text-foreground border border-border"
+                            role === r ? "bg-[#1B4D36] text-white" : "bg-surface hover:bg-muted text-foreground border border-border"
                           }`}
                         >
                           {r.replace("_", " ")}
@@ -235,7 +241,7 @@ export function Navbar() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted"
+              className="lg:hidden p-1.5 rounded-lg text-[#3D4B44] hover:bg-[#EDE8DC]"
               aria-label="Toggle navigation"
             >
               {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -246,15 +252,15 @@ export function Navbar() {
 
       {/* Mobile Drawer */}
       {isMobileMenuOpen && (
-        <div className="md:hidden border-b border-border bg-surface px-4 pt-2 pb-4 space-y-1">
+        <div className="lg:hidden border-b border-border bg-[#FAF7F0] px-4 pt-2 pb-4 space-y-1">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-md text-sm font-medium text-foreground hover:bg-muted"
+              className="block px-3 py-2 rounded-xl text-sm font-medium text-foreground hover:bg-[#EFE9DD]"
             >
-              {link.label}
+              {language === "ml" ? link.label : link.enLabel}
             </Link>
           ))}
         </div>

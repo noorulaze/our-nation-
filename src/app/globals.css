@@ -1,40 +1,54 @@
 @import "leaflet/dist/leaflet.css";
+@import url('https://fonts.googleapis.com/css2?family=Gayathri:wght@400;700&family=Manjari:wght@400;700&family=Noto+Serif+Malayalam:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #F8F9F7;
+  --background: #FAF7F0;
   --surface: #FFFFFF;
-  --foreground: #18211D;
-  --muted: #F0F3F1;
-  --muted-foreground: #68736D;
-  --border: #E6EAE6;
-  --primary-green: #176B4D;
-  --accent: #DDF2E6;
+  --foreground: #1A2420;
+  --muted: #F3EFE6;
+  --muted-foreground: #5C6A64;
+  --border: #EAE4D7;
+  --primary-green: #1B4D36;
+  --accent: #F4EFE6;
 }
 
 .dark {
-  --background: #101713;
-  --surface: #16201A;
-  --foreground: #F1F4F2;
-  --muted: #1B2921;
-  --muted-foreground: #8B9B92;
-  --border: #233129;
-  --primary-green: #248A64;
-  --accent: #1C382C;
+  --background: #111814;
+  --surface: #18221D;
+  --foreground: #F2F5F3;
+  --muted: #202D26;
+  --muted-foreground: #92A39A;
+  --border: #2A3B32;
+  --primary-green: #297452;
+  --accent: #1D2B23;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Malayalam", "Manjari", sans-serif;
+  font-family: "Manjari", "Gayathri", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Malayalam", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar for sleek editorial feel */
+/* Beautiful Malayalam font utilities */
+.font-malayalam-serif {
+  font-family: "Noto Serif Malayalam", serif;
+}
+
+.font-malayalam-script {
+  font-family: "Gayathri", cursive, sans-serif;
+}
+
+.font-malayalam-body {
+  font-family: "Manjari", sans-serif;
+}
+
+/* Custom scrollbar for sleek Kerala editorial feel */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -43,11 +57,11 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #d8d0c2;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #b5ac9d;
 }
 
 /* Leaflet Container Fixes */

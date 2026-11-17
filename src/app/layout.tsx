@@ -6,8 +6,8 @@ import { AuthProvider } from "@/lib/auth/context";
 import { initialCommunities } from "@/lib/data/initialData";
 
 export const metadata: Metadata = {
-  title: "Nammude Naadu | നമ്മുടെ നാട് — Community & Civic Network",
-  description: "Everything happening around your community, in one place. Discover events, verify local businesses, report civic issues, and consult Naadu AI.",
+  title: "Nammude Naadu | നമ്മുടെ നാട് — Malappuram & Tanur Hyperlocal Platform",
+  description: "മലപ്പുറം ജില്ലയുടെയും താനൂർ നഗരസഭയുടെയും സമഗ്ര ഡിജിറ്റൽ കമ്മ്യൂണിറ്റി പ്ലാറ്റ്‌ഫോം. Hyperlocal civic portal for Malappuram District and Tanur Municipality, Kerala.",
 };
 
 export const viewport: Viewport = {
@@ -28,7 +28,7 @@ export default function RootLayout({
           <AuthProvider>
             <CommunityProvider
               initialCommunities={initialCommunities}
-              defaultCommunity={initialCommunities[1]} // Kakkanad by default
+              defaultCommunity={initialCommunities.find(c => c.slug === "tanur") || initialCommunities[0]}
             >
               {children}
             </CommunityProvider>

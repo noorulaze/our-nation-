@@ -30,92 +30,100 @@ interface GalleryPhoto {
 
 const KERALA_GALLERY_PHOTOS: GalleryPhoto[] = [
   {
-    id: "munnar-tea",
-    title: "മൂന്നാർ തേയില മലനിരകൾ",
+    id: "tanur-beach",
+    title: "താനൂർ കടപ്പുറം & തിരമാലകൾ",
     category: "പ്രകൃതി",
-    district: "ഇടുക്കി",
-    imageUrl: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?w=1200&auto=format&fit=crop&q=85",
-    description: "കോടമഞ്ഞും ഹരിതഭംഗിയും പുതച്ചുനിൽക്കുന്ന മൂന്നാറിന്റെ പ്രകൃതി രമണീയമായ തേയിലത്തോട്ടങ്ങൾ.",
-  },
-  {
-    id: "alappuzha-houseboat",
-    title: "ആലപ്പുഴ കായലോളങ്ങൾ",
-    category: "പ്രകൃതി",
-    district: "ആലപ്പുഴ",
-    imageUrl: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=1200&auto=format&fit=crop&q=85",
-    description: "വേമ്പനാട്ട് കായലിലൂടെ ഒഴുകിനീങ്ങുന്ന പരമ്പരാഗത കെട്ടുവള്ളങ്ങളും തെങ്ങിൻതോപ്പുകളും.",
-  },
-  {
-    id: "sunset-backwaters",
-    title: "കായൽത്തീരത്തെ സൂര്യാസ്തമയം",
-    category: "പ്രകൃതി",
-    district: "കുമരകം / കോട്ടയം",
-    imageUrl: "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?w=1200&auto=format&fit=crop&q=85",
-    description: "കായൽപ്പരപ്പിൽ സ്വർണ്ണവർണ്ണം വിതറി അസ്തമിക്കുന്ന സൂര്യനും തുരുത്തുകളും.",
-  },
-  {
-    id: "heritage-basilica",
-    title: "പൈതൃക ദേവാലയം",
-    category: "പൈതൃകം",
-    district: "മധ്യകേരളം",
-    imageUrl: "https://images.unsplash.com/photo-1548625361-195fe578cb26?w=1200&auto=format&fit=crop&q=85",
-    description: "നൂറ്റാണ്ടുകളുടെ പഴക്കമുള്ള കേരളീയ വാസ്തുവിദ്യയിൽ തീർത്ത പുരാതന പൈതൃക സ്മാരകം.",
-  },
-  {
-    id: "athirappilly-falls",
-    title: "അതിരപ്പള്ളി വെള്ളച്ചാട്ടം",
-    category: "പ്രകൃതി",
-    district: "തൃശ്ശൂർ",
-    imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1200&auto=format&fit=crop&q=85",
-    description: "ഇന്ത്യയുടെ നയാഗ്ര എന്നറിയപ്പെടുന്ന ചാലക്കുടിപ്പുഴയിലെ ഗംഭീരമായ ജലപാതം.",
-  },
-  {
-    id: "kovalam-beach",
-    title: "കോവളം ലൈറ്റ് ഹൗസ് തീരം",
-    category: "പ്രകൃതി",
-    district: "തിരുവനന്തപുരം",
+    district: "താനൂർ നഗരസഭ",
     imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&auto=format&fit=crop&q=85",
-    description: "ചുവപ്പും വെളുപ്പും ചായമടിച്ച ലൈറ്റ് ഹൗസും അറബിക്കടലിന്റെ തിരമാലകളും.",
+    description: "അറബിക്കടലിന്റെ തീരത്ത് സ്വർണ്ണമണൽത്തരികളും കാറ്റാടിമരങ്ങളും സായാഹ്ന സൂര്യാസ്തമയവും വിരിയുന്ന താനൂർ ബീച്ച്.",
   },
   {
-    id: "kathakali-mudra",
-    title: "കഥകളി ഭാവങ്ങൾ",
-    category: "സംസ്കാരം",
-    district: "തൃശ്ശൂർ",
-    imageUrl: "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1200&auto=format&fit=crop&q=85",
-    description: "ഭാവഹാവാദികളും നവരസങ്ങളും തുളുമ്പുന്ന കേരളത്തിന്റെ വിശ്വപ്രസിദ്ധ ശാസ്ത്രീയ കലാരൂപം.",
-  },
-  {
-    id: "thrissur-pooram-kudamattam",
-    title: "തൃശ്ശൂർ പൂരം കുടമാറ്റം",
-    category: "ഉത്സവങ്ങൾ",
-    district: "തൃശ്ശൂർ",
-    imageUrl: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1200&auto=format&fit=crop&q=85",
-    description: "തേക്കിൻകാട് മൈതാനത്ത് തിങ്ങിനിറഞ്ഞ ജനസാഗരത്തിന് മുന്നിൽ വിരിയുന്ന വർണ്ണക്കുടകൾ.",
-  },
-  {
-    id: "temple-architecture",
-    title: "കേരളീയ വാസ്തുശില്പകല",
-    category: "വാസ്തുവിദ്യ",
-    district: "പത്മനാഭപുരം",
-    imageUrl: "https://images.unsplash.com/photo-1609137144822-54d9c79e6074?w=1200&auto=format&fit=crop&q=85",
-    description: "തടികൊണ്ടുള്ള മേൽക്കൂരയും ചുവർച്ചിത്രങ്ങളും നിറഞ്ഞ തനതു വാസ്തുശിൽപ പാരമ്പര്യം.",
-  },
-  {
-    id: "coastal-fishermen",
-    title: "തീരദേശത്തെ മീൻപിടുത്തക്കാർ",
+    id: "tanur-harbour",
+    title: "താനൂർ ഫിഷിംഗ് ഹാർബർ & പുലിമുട്ട്",
     category: "ജനങ്ങൾ",
-    district: "താനൂർ / തീരദേശം",
+    district: "താനൂർ, മലപ്പുറം",
     imageUrl: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1200&auto=format&fit=crop&q=85",
-    description: "അറബിക്കടലിന്റെ തിരമാലകളോട് പടവെട്ടി നാടിന് അന്നമേകുന്ന അധ്വാനശാലികളായ പരമ്പരാഗത മത്സ്യത്തൊഴിലാളികൾ.",
+    description: "വള്ളങ്ങളും ബോട്ടുകളും നങ്കൂരമിട്ട താനൂർ തുറമുഖവും തിരമാലകളെ തടഞ്ഞുനിർത്തുന്ന കടൽപ്പാലവും (പുലിമുട്ട്).",
   },
   {
-    id: "village-paddy",
-    title: "ഗ്രാമീണ നെൽപ്പാടങ്ങൾ",
-    category: "ഗ്രാമീണ ജീവിതം",
-    district: "പാലക്കാട് / കുട്ടനാട്",
+    id: "poorappuzha-estuary",
+    title: "പൂരപ്പുഴ അഴിമുഖം & കണ്ടൽക്കാടുകൾ",
+    category: "പ്രകൃതി",
+    district: "താനൂർ തീരം",
+    imageUrl: "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?w=1200&auto=format&fit=crop&q=85",
+    description: "പൂരപ്പുഴ അറബിക്കടലിലേക്ക് ചേരുന്ന മനോഹരമായ അഴിമുഖവും പക്ഷികൾ വിരുന്നെത്തുന്ന കണ്ടൽ തുരുത്തുകളും.",
+  },
+  {
+    id: "keraladeshapuram-temple",
+    title: "കേരളാദിത്യപുരം ശ്രീകൃഷ്ണ ക്ഷേത്രം",
+    category: "പൈതൃകം",
+    district: "മൂച്ചിക്കൽ, താനൂർ",
+    imageUrl: "https://images.unsplash.com/photo-1609137144822-54d9c79e6074?w=1200&auto=format&fit=crop&q=85",
+    description: "3000-ലധികം വർഷത്തെ ഐതിഹ്യപ്പെരുമയും വെട്ടത്തു രാജാക്കന്മാരുടെ ചരിത്രവും ഉറങ്ങുന്ന പുണ്യസങ്കേതം.",
+  },
+  {
+    id: "valia-kulangara-palli",
+    title: "താനൂർ വലിയ കുളങ്ങര പള്ളി",
+    category: "വാസ്തുവിദ്യ",
+    district: "താനൂർ ടൗൺ",
+    imageUrl: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&auto=format&fit=crop&q=85",
+    description: "നൂറ്റാണ്ടുകളുടെ തച്ചുശാസ്ത്ര തനിമയും കൊത്തുപണികളോടുകൂടിയ മരത്തൂണുകളും മേൽക്കൂരയുമുള്ള പൈതൃക പള്ളി.",
+  },
+  {
+    id: "mini-ooty-arimbra",
+    title: "മിനി ഊട്ടി മലനിരകൾ (അരിമ്പ്ര)",
+    category: "പ്രകൃതി",
+    district: "മലപ്പുറം",
+    imageUrl: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?w=1200&auto=format&fit=crop&q=85",
+    description: "സമുദ്രനിരപ്പിൽ നിന്ന് ഉയർന്നുനിൽക്കുന്ന അരിമ്പ്ര മലനിരകളിലെ കോടമഞ്ഞും ശാന്തമായ പ്രകൃതിഭംഗിയും.",
+  },
+  {
+    id: "thunchan-parambu",
+    title: "തുഞ്ചൻ പറമ്പ് & എഴുത്താണി",
+    category: "പൈതൃകം",
+    district: "തിരൂർ, മലപ്പുറം",
+    imageUrl: "https://images.unsplash.com/photo-1548625361-195fe578cb26?w=1200&auto=format&fit=crop&q=85",
+    description: "മലയാള ഭാഷാപിതാവ് തുഞ്ചത്തെഴുത്തച്ഛന്റെ പൂണ്യഭൂമിയും കിളിപ്പാട്ട് പ്രസ്ഥാനത്തിന്റെ ഉത്ഭവസ്ഥാനവും.",
+  },
+  {
+    id: "kottakkal-arya-vaidya-sala",
+    title: "കോട്ടക്കൽ കൈലാസ മന്ദിരം",
+    category: "വാസ്തുവിദ്യ",
+    district: "കോട്ടക്കൽ, മലപ്പുറം",
+    imageUrl: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=1200&auto=format&fit=crop&q=85",
+    description: "ലോകപ്രശസ്ത ആര്യവൈദ്യശാലയുടെ പൈതൃക ആസ്ഥാനവും പരമ്പരാഗത ആയുർവേദ കേന്ദ്രവും.",
+  },
+  {
+    id: "tanur-railway-heritage",
+    title: "താനൂർ ചരിത്ര റെയിൽവേ സ്റ്റേഷൻ (1861)",
+    category: "പൈതൃകം",
+    district: "താനൂർ ടൗൺ",
+    imageUrl: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=1200&auto=format&fit=crop&q=85",
+    description: "കേരളത്തിലെ ആദ്യ റെയിൽ പാതയായ തിരൂർ-ബേപ്പൂർ ലൈനിലെ ചരിത്രപ്രസിദ്ധമായ താനൂർ സ്റ്റേഷൻ.",
+  },
+  {
+    id: "kottappadi-football",
+    title: "കോട്ടപ്പടി സ്റ്റേഡിയം & മലപ്പുറം ഫുട്ബോൾ",
+    category: "ജനങ്ങൾ",
+    district: "മലപ്പുറം ടൗൺ",
+    imageUrl: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1200&auto=format&fit=crop&q=85",
+    description: "മലപ്പുറത്തിന്റെ സിരകളിൽ പടരുന്ന ഫുട്ബോൾ വീര്യവും ആയിരക്കണക്കിന് കാണികൾ തിങ്ങിനിറയുന്ന ഗാലറികളും.",
+  },
+  {
+    id: "ponnani-harbour",
+    title: "പൊന്നാനി അഴിമുഖവും വിളക്കുമാടവും",
+    category: "പ്രകൃതി",
+    district: "പൊന്നാനി, മലപ്പുറം",
     imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1200&auto=format&fit=crop&q=85",
-    description: "പച്ചപ്പട്ടുവിരിച്ച നെൽപ്പാടങ്ങളും വരമ്പിലൂടെയുള്ള നാടൻ വഴികളും ചേർന്ന ഗ്രാമീണ തനിമ.",
+    description: "ഭാരതപ്പുഴ അറബിക്കടലിൽ സംഗമിക്കുന്ന മലപ്പുറത്തിന്റെ ചരിത്ര തുറമുഖ നഗരവും വിളക്കുമാടവും.",
+  },
+  {
+    id: "malappuram-paddy",
+    title: "ഗ്രാമീണ കാർഷിക പാടശേഖരങ്ങൾ",
+    category: "ഗ്രാമീണ ജീവിതം",
+    district: "താനൂർ റൂറൽ & മലപ്പുറം",
+    imageUrl: "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1200&auto=format&fit=crop&q=85",
+    description: "തെങ്ങിൻതോപ്പുകളാൽ ചുറ്റപ്പെട്ട പച്ചപ്പാർന്ന നെൽപ്പാടങ്ങളും താനൂരിലെ കാർഷിക പാരമ്പര്യവും.",
   },
 ];
 
@@ -211,7 +219,7 @@ export default function GalleryPage() {
                   <Camera className="w-4 h-4" />
                 </div>
                 <span className="text-xs font-bold text-amber-200 uppercase tracking-wider">
-                  ദൃശ്യവിസ്മയം
+                  മലപ്പുറം & താനൂർ ദൃശ്യവിസ്മയം
                 </span>
               </div>
               <h1 className="text-4xl sm:text-6xl font-bold font-malayalam-serif tracking-tight leading-none mb-3">
@@ -221,7 +229,7 @@ export default function GalleryPage() {
                 നാടിന്റെ മനോഹര കാഴ്ച്ചകൾ...
               </p>
               <p className="text-xs sm:text-sm text-white/90 leading-relaxed font-malayalam-body max-w-md">
-                ദൈവത്തിന്റെ സ്വന്തം നാടായ കേരളത്തിന്റെ കടലോരങ്ങൾ, കായലോളങ്ങൾ, മലനിരകൾ, പൈതൃക സ്മാരകങ്ങൾ എന്നിവയുടെ ചിത്രസഞ്ചയം.
+                താനൂരിന്റെ കടലോരങ്ങൾ, പൂരപ്പുഴ അഴിമുഖം, ഹാർബർ പുലിമുട്ട്, മലപ്പുറത്തിന്റെ ചരിത്ര സ്മാരകങ്ങൾ, പൈതൃക കേന്ദ്രങ്ങൾ എന്നിവയുടെ സമഗ്ര ചിത്രസഞ്ചയം.
               </p>
             </div>
           </div>

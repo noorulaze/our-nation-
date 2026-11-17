@@ -78,7 +78,7 @@ function CreateContent() {
     e.preventDefault();
     if (!user) return;
 
-    const commId = currentCommunity?.id || "40000000-0000-0000-0000-000000000001";
+    const commId = currentCommunity?.id || "40000000-0000-0000-0000-000000000007";
 
     if (formType === "issue") {
       store.createIssueReport({
@@ -87,7 +87,7 @@ function CreateContent() {
         title: issueTitle,
         description: issueDesc,
         category: issueCategory,
-        location_name: issueLocation || "Near Kakkanad, Ernakulam",
+        location_name: issueLocation || "Near Tanur Town, Malappuram",
         image_url: issueImage || null,
       });
     } else if (formType === "event") {

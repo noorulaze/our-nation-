@@ -60,57 +60,51 @@ const faqs: FaqItem[] = [
   },
 ];
 
-const keralaDistricts = [
-  "തിരുവനന്തപുരം (Thiruvananthapuram)",
-  "കൊല്ലം (Kollam)",
-  "പത്തനംതിട്ട (Pathanamthitta)",
-  "ആലപ്പുഴ (Alappuzha)",
-  "കോട്ടയം (Kottayam)",
-  "ഇടുക്കി (Idukki)",
-  "എറണാകുളം (Ernakulam)",
-  "തൃശ്ശൂർ (Thrissur)",
-  "പാലക്കാട് (Palakkad)",
-  "മലപ്പുറം (Malappuram)",
-  "കോഴിക്കോട് (Kozhikode)",
-  "വയനാട് (Wayanad)",
-  "കണ്ണൂർ (Kannur)",
-  "കാസർഗോഡ് (Kasaragod)",
+const malappuramLocalities = [
+  "താനൂർ നഗരസഭ (Tanur Municipality)",
+  "തിരൂർ നഗരസഭ (Tirur Municipality)",
+  "മലപ്പുറം മുനിസിപ്പാലിറ്റി (Malappuram Town)",
+  "കോട്ടക്കൽ നഗരസഭ (Kottakkal)",
+  "പൊന്നാനി നഗരസഭ (Ponnani)",
+  "മഞ്ചേരി നഗരസഭ (Manjeri)",
+  "പരപ്പനങ്ങാടി നഗരസഭ (Parappanangadi)",
+  "കൊണ്ടോട്ടി നഗരസഭ (Kondotty)",
 ];
 
 const samplePlaces = [
   {
-    id: "hq-tvm",
-    name: "നമ്മുടെ നാട് ഹെഡ് ഓഫീസ് (HQ)",
-    description: "കേന്ദ്ര കാര്യാലയം തിരുവനന്തപുരം",
-    location_name: "വികാസ് ഭവൻ, തിരുവനന്തപുരം",
-    latitude: 8.5089,
-    longitude: 76.953,
-    community_id: "tvm",
-    category: "community_hub",
+    id: "tanur-munc-office",
+    name: "താനൂർ നഗരസഭാ കാര്യാലയം (Tanur Municipality)",
+    description: "താനൂർ നഗരസഭ കേന്ദ്ര ഓഫീസ്",
+    location_name: "മുനിസിപ്പൽ ബിൽഡിംഗ്, താനൂർ",
+    latitude: 10.9768,
+    longitude: 75.8675,
+    community_id: "tanur",
+    category: "municipality",
     is_active: true,
     created_at: new Date().toISOString(),
   },
   {
-    id: "hub-kochi",
-    name: "ഡിജിറ്റൽ കേരള ഹബ്ബ് (Kochi Desk)",
-    description: "മധ്യകേരള സമ്പർക്ക കേന്ദ്രം",
-    location_name: "ഇൻഫോപാർക്ക്, കാക്കനാട്, കൊച്ചി",
-    latitude: 10.0159,
-    longitude: 76.3419,
-    community_id: "ekm",
-    category: "tech_hub",
+    id: "malappuram-collectorate",
+    name: "മലപ്പുറം ജില്ലാ കളക്ടറേറ്റ് (Malappuram Collectorate)",
+    description: "ജില്ലാ ഭരണകൂടം & ഹെൽപ്പ് ഡെസ്ക്",
+    location_name: "സിവിൽ സ്റ്റേഷൻ, മലപ്പുറം",
+    latitude: 11.051,
+    longitude: 76.0711,
+    community_id: "malappuram",
+    category: "collectorate",
     is_active: true,
     created_at: new Date().toISOString(),
   },
   {
-    id: "hub-clt",
-    name: "മലബാർ കോർഡിനേഷൻ സെന്റർ (Kozhikode)",
-    description: "മലബാർ മേഖല ഹെൽപ്പ് ഡെസ്ക്",
-    location_name: "മനാഞ്ചിറ, കോഴിക്കോട്",
-    latitude: 11.2588,
-    longitude: 75.7804,
-    community_id: "clt",
-    category: "culture_center",
+    id: "tanur-harbour-office",
+    name: "താനൂർ ഫിഷിംഗ് ഹാർബർ കാര്യാലയം",
+    description: "തീരദേശ വികസന കേന്ദ്രം",
+    location_name: "ഹാർബർ റോഡ്, വെസ്റ്റ് താനൂർ",
+    latitude: 10.9802,
+    longitude: 75.8541,
+    community_id: "tanur",
+    category: "harbour",
     is_active: true,
     created_at: new Date().toISOString(),
   },
@@ -121,7 +115,7 @@ export default function ContactPage() {
     name: "",
     email: "",
     phone: "",
-    district: keralaDistricts[0],
+    district: malappuramLocalities[0],
     category: "പൊതു അന്വേഷണം (General Inquiry)",
     message: "",
   });
@@ -145,7 +139,7 @@ export default function ContactPage() {
       name: "",
       email: "",
       phone: "",
-      district: keralaDistricts[0],
+      district: malappuramLocalities[0],
       category: "പൊതു അന്വേഷണം (General Inquiry)",
       message: "",
     });
@@ -295,12 +289,12 @@ export default function ContactPage() {
                     നാടിന്റെ വികസനം, ജനങ്ങളുടെ പങ്കാളിത്തത്തിലൂടെ
                   </h3>
                   <p className="text-xs text-stone-200 font-malayalam-body leading-relaxed mb-4">
-                    14 ജില്ലകളിലും 77 താലൂക്കുകളിലും സജീവമായ പ്രാദേശിക സന്നദ്ധ പ്രവർത്തകരുമായി ചേർന്നാണ് നമ്മുടെ നാട് ഓരോ ദിവസവും വളരുന്നത്.
+                    താനൂർ നഗരസഭയിലെ 44 വാർഡുകളിലെയും മലപ്പുറം ജില്ലയിലെയും സജീവമായ സന്നദ്ധ പ്രവർത്തകരുമായി ചേർന്നാണ് നമ്മുടെ നാട് പ്രവർത്തിക്കുന്നത്.
                   </p>
                   <div className="grid grid-cols-2 gap-3 text-center pt-2">
                     <div className="p-2.5 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10">
-                      <div className="text-lg font-black text-amber-300 font-malayalam-heading">14</div>
-                      <div className="text-[10px] text-stone-300">ജില്ലാ കേന്ദ്രങ്ങൾ</div>
+                      <div className="text-lg font-black text-amber-300 font-malayalam-heading">44</div>
+                      <div className="text-[10px] text-stone-300">താനൂർ വാർഡുകൾ</div>
                     </div>
                     <div className="p-2.5 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10">
                       <div className="text-lg font-black text-amber-300 font-malayalam-heading">24/7</div>
@@ -310,28 +304,28 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              {/* District Helplines Quick Directory */}
+              {/* Tanur & Malappuram Helplines Directory */}
               <div className="bg-white rounded-3xl border border-[#EDE6D8] p-6 shadow-card">
                 <h3 className="text-sm font-bold font-malayalam-serif text-[#1B4D36] mb-3 flex items-center gap-2">
                   <Building className="w-4 h-4 text-[#B87A1E]" />
-                  <span>മേഖലാ സഹായ കേന്ദ്രങ്ങൾ</span>
+                  <span>താനൂർ & മലപ്പുറം സഹായ കേന്ദ്രങ്ങൾ</span>
                 </h3>
                 <div className="space-y-2.5 text-xs text-[#5C6A64]">
                   <div className="flex justify-between items-center py-1.5 border-b border-[#F5F1E8]">
-                    <span className="font-medium text-[#1A2420]">തിരുവനന്തപുരം (തെക്കൻ മേഖല)</span>
-                    <span className="font-mono text-[#1B4D36] font-bold">0471-2345678</span>
+                    <span className="font-medium text-[#1A2420]">താനൂർ നഗരസഭാ കാര്യാലയം</span>
+                    <span className="font-mono text-[#1B4D36] font-bold">0494-2582233</span>
                   </div>
                   <div className="flex justify-between items-center py-1.5 border-b border-[#F5F1E8]">
-                    <span className="font-medium text-[#1A2420]">എറണാകുളം (മധ്യ മേഖല)</span>
-                    <span className="font-mono text-[#1B4D36] font-bold">0484-2345678</span>
+                    <span className="font-medium text-[#1A2420]">മലപ്പുറം ജില്ലാ കളക്ടറേറ്റ് ഹെൽപ്പ്‌ലൈൻ</span>
+                    <span className="font-mono text-[#1B4D36] font-bold">0483-2734355</span>
                   </div>
                   <div className="flex justify-between items-center py-1.5 border-b border-[#F5F1E8]">
-                    <span className="font-medium text-[#1A2420]">കോഴിക്കോട് (മലബാർ മേഖല)</span>
-                    <span className="font-mono text-[#1B4D36] font-bold">0495-2345678</span>
+                    <span className="font-medium text-[#1A2420]">താനൂർ പോലീസ് സ്റ്റേഷൻ</span>
+                    <span className="font-mono text-[#1B4D36] font-bold">0494-2582225</span>
                   </div>
                   <div className="flex justify-between items-center py-1.5">
-                    <span className="font-medium text-[#1A2420]">തൃശ്ശൂർ (സാംസ്കാരിക കേന്ദ്രം)</span>
-                    <span className="font-mono text-[#1B4D36] font-bold">0487-2345678</span>
+                    <span className="font-medium text-[#1A2420]">താനൂർ താലൂക്ക് ആശുപത്രി / CHC</span>
+                    <span className="font-mono text-[#1B4D36] font-bold">0494-2582240</span>
                   </div>
                 </div>
               </div>
@@ -418,17 +412,17 @@ export default function ContactPage() {
                         />
                       </div>
 
-                      {/* District Selection */}
+                      {/* Locality Selection */}
                       <div>
                         <label className="block text-xs font-bold text-[#1A2420] mb-1.5 font-malayalam-body">
-                          ജില്ല (District)
+                          പ്രദേശം / തദ്ദേശ സ്ഥാപനം (Locality / Municipality)
                         </label>
                         <select
                           value={formData.district}
                           onChange={(e) => setFormData({ ...formData, district: e.target.value })}
                           className="w-full px-4 py-2.5 text-xs sm:text-sm rounded-xl border border-[#DDD5C5] bg-[#FAF7F0] text-[#1A2420] focus:outline-none focus:ring-2 focus:ring-[#1B4D36]"
                         >
-                          {keralaDistricts.map((d) => (
+                          {malappuramLocalities.map((d) => (
                             <option key={d} value={d}>
                               {d}
                             </option>

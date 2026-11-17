@@ -24,21 +24,15 @@ interface AuthSplitScreenProps {
   initialMode: "login" | "register";
 }
 
-const keralaDistricts = [
-  "തിരുവനന്തപുരം (Thiruvananthapuram)",
-  "കൊല്ലം (Kollam)",
-  "പത്തനംതിട്ട (Pathanamthitta)",
-  "ആലപ്പുഴ (Alappuzha)",
-  "കോട്ടയം (Kottayam)",
-  "ഇടുക്കി (Idukki)",
-  "എറണാകുളം (Ernakulam)",
-  "തൃശ്ശൂർ (Thrissur)",
-  "പാലക്കാട് (Palakkad)",
-  "മലപ്പുറം (Malappuram)",
-  "കോഴിക്കോട് (Kozhikode)",
-  "വയനാട് (Wayanad)",
-  "കണ്ണൂർ (Kannur)",
-  "കാസർഗോഡ് (Kasaragod)",
+const malappuramLocalities = [
+  "താനൂർ നഗരസഭ (Tanur Municipality)",
+  "തിരൂർ നഗരസഭ (Tirur Municipality)",
+  "മലപ്പുറം മുനിസിപ്പാലിറ്റി (Malappuram Town)",
+  "കോട്ടക്കൽ നഗരസഭ (Kottakkal)",
+  "പൊന്നാനി നഗരസഭ (Ponnani)",
+  "മഞ്ചേരി നഗരസഭ (Manjeri)",
+  "പരപ്പനങ്ങാടി നഗരസഭ (Parappanangadi)",
+  "കൊണ്ടോട്ടി നഗരസഭ (Kondotty)",
 ];
 
 export function AuthSplitScreen({ initialMode }: AuthSplitScreenProps) {
@@ -61,7 +55,7 @@ export function AuthSplitScreen({ initialMode }: AuthSplitScreenProps) {
   const [regUsername, setRegUsername] = useState("");
   const [regEmail, setRegEmail] = useState("");
   const [regPassword, setRegPassword] = useState("");
-  const [regDistrict, setRegDistrict] = useState(keralaDistricts[0]);
+  const [regDistrict, setRegDistrict] = useState(malappuramLocalities[0]);
   const [regLanguage, setRegLanguage] = useState<"ml" | "en">("ml");
   const [termsAccepted, setTermsAccepted] = useState(true);
 
@@ -167,16 +161,16 @@ export function AuthSplitScreen({ initialMode }: AuthSplitScreenProps) {
           </h1>
 
           <p className="hidden lg:block mt-4 text-xs sm:text-sm lg:text-base text-stone-200 font-malayalam-body leading-relaxed max-w-lg drop-shadow">
-            കേരളത്തിലെ 14 ജില്ലകളിലെയും പ്രാദേശിക വാർത്തകൾ, ഉത്സവങ്ങൾ, കലകൾ, സേവനങ്ങൾ, വിദ്യാഭ്യാസ വിവരങ്ങൾ — എല്ലാം വിരൽത്തുമ്പിൽ.
+            മലപ്പുറം ജില്ലയിലെയും താനൂർ നഗരസഭയിലെയും പ്രാദേശിക വാർത്തകൾ, ഉത്സവങ്ങൾ, കലകൾ, സേവനങ്ങൾ, വിദ്യാഭ്യാസ വിവരങ്ങൾ — എല്ലാം വിരൽത്തുമ്പിൽ.
           </p>
 
           {/* District & Community Stats Badge (Desktop only) */}
           <div className="hidden lg:flex mt-6 flex-wrap gap-2.5">
             <span className="px-3 py-1 rounded-lg bg-white/15 backdrop-blur-md border border-white/20 text-[11px] font-bold text-white">
-              📍 14 ജില്ലകൾ
+              📍 താനൂർ & മലപ്പുറം
             </span>
             <span className="px-3 py-1 rounded-lg bg-white/15 backdrop-blur-md border border-white/20 text-[11px] font-bold text-white">
-              🌿 3.5 കോടി ജനങ്ങൾ
+              🌿 44 നഗരസഭാ വാർഡുകൾ
             </span>
             <span className="px-3 py-1 rounded-lg bg-white/15 backdrop-blur-md border border-white/20 text-[11px] font-bold text-amber-300">
               ✨ 100% സൗജന്യം
@@ -547,14 +541,14 @@ export function AuthSplitScreen({ initialMode }: AuthSplitScreenProps) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-bold text-[#1A2420] mb-1 font-malayalam-body">
-                      ജില്ല (District)
+                      പ്രദേശം / തദ്ദേശ സ്ഥാപനം (Locality / Municipality)
                     </label>
                     <select
                       value={regDistrict}
                       onChange={(e) => setRegDistrict(e.target.value)}
                       className="w-full px-3 py-2 text-xs rounded-xl border border-[#DDD5C5] bg-[#FAF7F0] text-[#1A2420] focus:outline-none focus:ring-2 focus:ring-[#1B4D36]"
                     >
-                      {keralaDistricts.map((d) => (
+                      {malappuramLocalities.map((d) => (
                         <option key={d} value={d}>
                           {d}
                         </option>

@@ -76,144 +76,144 @@ interface GalleryItem {
 
 const NEWS_DATA: NewsItem[] = [
   {
-    id: "kerala-today",
-    title: "കേരളം: ഇന്ന് അറിയേണ്ട കാര്യങ്ങൾ",
-    category: "കേരളം",
+    id: "tanur-harbour",
+    title: "താനൂർ ഫിഷിംഗ് ഹാർബർ ആധുനികവൽക്കരണം: പുതിയ ലേലപ്പുര പൂർത്തിയായി",
+    category: "താനൂർ",
     date: "16 നവംബർ 2026",
-    imageUrl: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=900&auto=format&fit=crop&q=80",
-    summary: "സംസ്ഥാനത്തെ പ്രധാന വികസന വാർത്തകളും പ്രധാന വിവരങ്ങളും ഒറ്റനോട്ടത്തിൽ അറിയാം. പുതിയ ഗതാഗത പദ്ധതികൾ പുരോഗമിക്കുന്നു.",
-    fullStory: "സംസ്ഥാനത്തെ പ്രധാന നഗരങ്ങളിലും ഗ്രാമങ്ങളിലും അടിസ്ഥാന സൗകര്യ വികസനത്തിന് പുതിയ ഊർജ്ജം പകർന്ന് നിരവധി പദ്ധതികൾക്ക് ഇന്ന് തുടക്കമായി. റോഡ് നവീകരണം, ശുദ്ധജല വിതരണം, പരിസ്ഥിതി സൗഹൃദ പൊതുഗതാഗതം എന്നിവയ്ക്ക് മുൻഗണന നൽകിയാണ് പദ്ധതികൾ ആവിഷ്കരിച്ചിരിക്കുന്നത്.",
-    author: "നമ്മുടെ നാട് വാർത്താ വിഭാഗം",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/3/31/A_view_of_tanur_harbour.jpg",
+    summary: "താനൂർ ഫിഷിംഗ് ഹാർബറിലെ അത്യാധുനിക ലേലപ്പുരയും സോളാർ ശീതീകരണ സംവിധാനവും സജ്ജമായി.",
+    fullStory: "മലപ്പുറം തീരദേശത്തിന്റെ ജീവനാഡിയായ താനൂർ ഫിഷിംഗ് ഹാർബറിലെ നവീകരണ പ്രവർത്തനങ്ങൾ അവസാന ഘട്ടത്തിലെത്തി. കേരള ഫിഷറീസ് വകുപ്പും താനൂർ നഗരസഭയും സംയുക്തമായി നടപ്പിലാക്കുന്ന സമഗ്ര പദ്ധതിയിൽ ഹൈടെക് ലേല ഹാൾ, സോളാർ കോൾഡ് സ്റ്റോറേജ്, വിശ്രമ കേന്ദ്രം എന്നിവ പൂർത്തിയായി. അയ്യായിരത്തിലധികം പരമ്പരാഗത മത്സ്യത്തൊഴിലാളി കുടുംബങ്ങൾക്ക് ഇത് നേരിട്ട് പ്രയോജനം ചെയ്യും.",
+    author: "നമ്മുടെ നാട് താനൂർ ഡെസ്ക്",
   },
   {
-    id: "plus-two",
-    title: "+2 പരീക്ഷയ്ക്ക് തയാറെടുക്കുന്ന വിദ്യാർഥികൾ ശ്രദ്ധിക്കുക...",
+    id: "malappuram-kalolsavam",
+    title: "മലപ്പുറം ജില്ലാ സ്കൂൾ കലോത്സവം തിരൂരിൽ സമാപിച്ചു: താനൂർ ഉപജില്ലയ്ക്ക് മികച്ച മുന്നേറ്റം",
     category: "വിദ്യാഭ്യാസം",
     date: "15 നവംബർ 2026",
     imageUrl: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&auto=format&fit=crop&q=80",
-    summary: "ഹയർ സെക്കൻഡറി പരീക്ഷകൾക്കുള്ള ക്രമീകരണങ്ങളും മോഡൽ പരീക്ഷാ ടൈംടേബിളും പ്രഖ്യാപിച്ചു. വിദ്യാർഥികൾക്കായുള്ള ഹെൽപ്പ് ഡെസ്ക് തുടങ്ങി.",
-    fullStory: "സംസ്ഥാനത്തെ ഹയർ സെക്കൻഡറി പരീക്ഷകൾക്കുള്ള അന്തിമ ഒരുക്കങ്ങൾ പൂർത്തിയായതായി പൊതുവിദ്യാഭ്യാസ വകുപ്പ് അറിയിച്ചു. മോഡൽ പരീക്ഷകൾ അടുത്ത മാസം ആരംഭിക്കും. വിദ്യാർത്ഥികൾക്ക് പരീക്ഷാ ഭയം അകറ്റാനും സംശയ നിവാരണത്തിനുമായി പ്രത്യേക കൗൺസിലിംഗ് ഹെൽപ്പ് ലൈൻ സൗകര്യവും ആരംഭിച്ചിട്ടുണ്ട്.",
+    summary: "മലപ്പുറം ജില്ലാ സ്കൂൾ കലോത്സവത്തിൽ ദഫ്മുട്ട്, ഒപ്പന, നാടകം ഇനങ്ങളിൽ താനൂർ വിദ്യാലയങ്ങൾക്ക് തിളക്കമാർന്ന വിജയം.",
+    fullStory: "തുഞ്ചൻ മണ്ണിൽ അഞ്ച് ദിവസങ്ങളിലായി നടന്ന മലപ്പുറം ജില്ലാ സ്കൂൾ കലോത്സവം സമാപിച്ചു. ജില്ലയിലെ 17 ഉപജില്ലകളിൽ നിന്നുമുള്ള അയ്യായിരത്തിലധികം പ്രതിഭകൾ മാറ്റുരച്ച കലോത്സവത്തിൽ താനൂർ ഉപജില്ലയ്ക്ക് മികച്ച പോയിന്റ് മുന്നേറ്റം. ദേവധാർ ഹയർ സെക്കൻഡറി സ്കൂൾ വിദ്യാർത്ഥികൾ തനതു മാപ്പിള കലകളിൽ ഒന്നാം സ്ഥാനം നേടി.",
     author: "വിദ്യാഭ്യാസ ലേഖകൻ",
   },
   {
-    id: "pooram",
-    title: "തൃശ്ശൂർ പൂരം താലപ്പൊലി...",
-    category: "ഉത്സവങ്ങൾ",
+    id: "tanur-cleanliness",
+    title: "താനൂർ നഗരസഭയിലെ 44 വാർഡുകളിലും സമഗ്ര മാലിന്യ സംസ്കരണ പദ്ധതി",
+    category: "തദ്ദേശം",
     date: "14 നവംബർ 2026",
-    imageUrl: "https://images.unsplash.com/photo-1599818816942-8c1055728a50?w=600&auto=format&fit=crop&q=80",
-    summary: "സാംസ്കാരിക കേരളത്തിന്റെ മാമാങ്കമായ തൃശ്ശൂർ പൂരത്തിന് കൊടിയേറി. താളമേളങ്ങളുടെ വിസ്മയമൊരുക്കാൻ നാടും നഗരവും ഒരുങ്ങി.",
-    fullStory: "കേരളത്തിന്റെ സാംസ്കാരിക തലസ്ഥാനത്ത് പൂരപ്രേമികളുടെ ഹൃദയമിടിപ്പേറ്റിക്കൊണ്ട് തൃശ്ശൂർ പൂരത്തിന് കൊടിയേറി. ഘടകക്ഷേത്രങ്ങളിൽ നിന്നുള്ള എഴുന്നള്ളിപ്പുകളും പാറമേക്കാവ്-തിരുവമ്പാടി വിഭാഗങ്ങളുടെ മേള വിസ്മയവും ഇലഞ്ഞിത്തറ മേളവും കുടമാറ്റവും കാണാൻ നാടൊന്നാകെ ഒരുങ്ങിക്കഴിഞ്ഞു.",
-    author: "സാംസ്കാരിക വിഭാഗം",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/d/dd/Tanur.jpg",
+    summary: "താനൂർ നഗരസഭയിലെ 44 വാർഡുകളിലും ഹരിത കർമ്മ സേനയുടെ വീടുതോറുമുള്ള അജൈവ മാലിന്യ ശേഖരണം 100% പൂർത്തിയായി.",
+    fullStory: "കേരള തദ്ദേശ സ്വയംഭരണ വകുപ്പിന്റെ ശുചിത്വ പദവി താനൂർ നഗരസഭയ്ക്ക് ലഭിച്ചു. നഗരസഭയിലെ 44 വാർഡുകളിലും ഉറവിട മാലിന്യ സംസ്കരണവും ഹരിത കർമ്മ സേന മുഖേനയുള്ള തരംതിരിച്ച പ്ലാസ്റ്റിക് ശേഖരണവും സമ്പൂർണ്ണ വിജയകരമായി നടപ്പാക്കിയതിനാണ് അംഗീകാരം.",
+    author: "നഗരസഭാ വാർത്താ വിഭാഗം",
   },
   {
-    id: "ksrtc",
-    title: "കേരളത്തിൽ പുതിയ ബസ് സർവീസുകൾക്ക് തുടക്കമായി",
-    category: "ഗതാഗതം",
+    id: "malappuram-sevens",
+    title: "മലപ്പുറം ജില്ലാ സെവൻസ് ഫുട്ബോൾ ചാമ്പ്യൻഷിപ്പ്: കോട്ടപ്പടിയിൽ ആവേശകരമായ തുടക്കം",
+    category: "കായികം",
     date: "13 നവംബർ 2026",
-    imageUrl: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=900&auto=format&fit=crop&q=80",
-    summary: "സംസ്ഥാനത്ത് കൂടുതൽ പ്രദേശങ്ങളിലേക്ക് പുതിയ ബസ് സർവീസുകൾ ആരംഭിച്ചു. ഗ്രാമീണ റൂട്ടുകളിൽ കൂടുതൽ യാത്രാസൗകര്യം ലഭ്യമാക്കുകയാണ് ലക്ഷ്യം.",
-    fullStory: "സംസ്ഥാനത്ത് കൂടുതൽ ഗ്രാമീണ, നഗര പ്രദേശങ്ങളിലേക്ക് പുതിയ ഇലക്ട്രിക്, ഫാസ്റ്റ് പാസഞ്ചർ ബസ് സർവീസുകൾ ആരംഭിച്ചു.",
-    author: "നമ്മുടെ നാട് വാർത്താ വിഭാഗം",
+    imageUrl: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=900&auto=format&fit=crop&q=80",
+    summary: "മലപ്പുറത്തിന്റെ കാൽപ്പന്ത് ഹൃദയതുടിപ്പായ സെവൻസ് ഫുട്ബോൾ ടൂർണമെന്റുകൾക്ക് ഫ്ലഡ്‌ലൈറ്റ് വെളിച്ചത്തിൽ കോട്ടപ്പടിയിൽ വിസിൽ മുഴങ്ങി.",
+    fullStory: "ഫുട്ബോൾ പ്രേമികളുടെ കാത്തിരിപ്പിന് വിരാമമിട്ട് മലപ്പുറം ജില്ലാ ഓൾ ഇന്ത്യാ സെവൻസ് ഫുട്ബോൾ ടൂർണമെന്റിന് കോട്ടപ്പടി സ്റ്റേഡിയത്തിൽ തുടക്കമായി. പതിനായിരത്തിലധികം കാണികളാണ് ഓരോ ദിവസവും കളികാണാൻ ഒഴുകിയെത്തുന്നത്.",
+    author: "സ്പോർട്സ് ഡെസ്ക്",
   },
 ];
 
 const EVENTS_DATA: EventItem[] = [
   {
-    id: "keralotsavam",
-    title: "കേരളോത്സവം 2026",
+    id: "tanur-keraladeshapuram",
+    title: "താനൂർ കേരളാദിത്യപുരം വാർഷിക ഉത്സവം",
     category: "സാംസ്കാരികം",
     dateMonth: "Nov",
     dateDay: "20",
     fullDate: "നവംബർ 20, 2026 • 05:00 PM",
-    location: "മറൈൻ ഡ്രൈവ് ഗ്രൗണ്ട്, കൊച്ചി",
-    imageUrl: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=600&auto=format&fit=crop&q=80",
-    description: "സാംസ്കാരിക സമ്മേളനവും തനതു നാടൻ കലകളുടെ അരങ്ങേറ്റവും. കേരളത്തിലെ 14 ജില്ലകളിൽ നിന്നുള്ള കലാകാരന്മാരുടെ ചെണ്ടമേളം, തെയ്യം, കഥകളി പ്രദർശനം എന്നിവ നടക്കും.",
-    time: "വൈകുന്നേരം 5:00 മുതൽ രാത്രി 10:00 വരെ",
-    organizer: "കൊച്ചി സാംസ്കാരിക കൂട്ടായ്മ",
+    location: "കേരളാദിത്യപുരം ശ്രീകൃഷ്ണ ക്ഷേത്രം, താനൂർ",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/6/67/Tanur%2C_Malappuram_district.jpg",
+    description: "നൂറ്റാണ്ടുകളുടെ പാരമ്പര്യമുള്ള പുരാതന ക്ഷേത്രോത്സവം. പരമ്പരാഗത പഞ്ചവാദ്യം, തായമ്പക, കാഴ്ചശീവേലി, സാംസ്കാരിക കലാപരിപാടികൾ എന്നിവ അരങ്ങേറും.",
+    time: "രാവിലെ 06:00 മുതൽ രാത്രി 10:00 വരെ",
+    organizer: "കേരളാദിത്യപുരം ക്ഷേത്ര ദേവസ്വം",
   },
   {
-    id: "ai_seminar",
-    title: "AI & വിദ്യാഭ്യാസം സെമിനാർ",
-    category: "വിദ്യാഭ്യാസം",
+    id: "malappuram_sevens_event",
+    title: "മലപ്പുറം ജില്ലാ സെവൻസ് ഫുട്ബോൾ",
+    category: "കായികം",
     dateMonth: "Nov",
     dateDay: "25",
-    fullDate: "നവംബർ 25, 2026 • 10:00 AM",
-    location: "സെനറ്റ് ഹാൾ, തിരുവനന്തപുരം",
-    imageUrl: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&auto=format&fit=crop&q=80",
-    description: "നിർമ്മിത ബുദ്ധി എങ്ങനെ വിദ്യാർത്ഥികളുടെയും അധ്യാപകരുടെയും പഠന രീതിയെ പരിവർത്തനം ചെയ്യുന്നു എന്നതിനെക്കുറിച്ചുള്ള വിദഗ്ദ്ധ ചർച്ചയും വർക്ക്ഷോപ്പും.",
-    time: "രാവിലെ 10:00 മുതൽ ഉച്ചക്ക് 1:30 വരെ",
-    organizer: "കേരള ഇന്നൊവേഷൻ കൗൺസിൽ",
-  },
-  {
-    id: "sangeethotsavam",
-    title: "കേരള സംഗീതോത്സവം",
-    category: "കല & സംഗീതം",
-    dateMonth: "Nov",
-    dateDay: "28",
-    fullDate: "നവംബർ 28, 2026 • 06:00 PM",
-    location: "ടാഗോർ സെന്റിനറി ഹാൾ, കോഴിക്കോട്",
-    imageUrl: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=600&auto=format&fit=crop&q=80",
-    description: "ശാസ്‌ത്രീയ സംഗീതവും ഗസലുകളും കേരളീയ നാടൻ പാട്ടുകളും കോർത്തിണക്കിയ ഗംഭീര സംഗീത സന്ധ്യ. പ്രമുഖ പിന്നണി ഗായകർ പങ്കെടുക്കുന്നു.",
-    time: "വൈകുന്നേരം 6:00 മുതൽ",
-    organizer: "കോഴിക്കോട് സംഗീത സഭ",
-  },
-  {
-    id: "sports_meet",
-    title: "ജില്ലാതല കായികമേള",
-    category: "കായികം",
-    dateMonth: "Dec",
-    dateDay: "02",
-    fullDate: "ഡിസംബർ 02, 2026 • 08:30 AM",
+    fullDate: "നവംബർ 25, 2026 • 06:30 PM",
     location: "കോട്ടപ്പടി സ്റ്റേഡിയം, മലപ്പുറം",
     imageUrl: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=600&auto=format&fit=crop&q=80",
-    description: "ഫുട്ബോൾ, അത്‌ലറ്റിക്സ് എന്നിവ ഉൾപ്പെടുന്ന പ്രാദേശിക കായിക പ്രതിഭകളുടെ വാർഷിക ജില്ലാ മത്സരങ്ങൾ. 2000-ലധികം കായികതാരങ്ങൾ പങ്കെടുക്കുന്നു.",
-    time: "രാവിലെ 8:30 മുതൽ വൈകുന്നേരം 6:00 വരെ",
-    organizer: "ജില്ലാ സ്പോർട്സ് കൗൺസിൽ",
+    description: "മലപ്പുറത്തിന്റെ കാൽപ്പന്ത് വീര്യം വിളിച്ചോതുന്ന ഓൾ ഇന്ത്യാ സെവൻസ് ഫുട്ബോൾ ടൂർണമെന്റ്. പ്രമുഖ ക്ലബ്ബുകളും അന്താരാഷ്ട്ര താരങ്ങളും അണിനിരക്കുന്നു.",
+    time: "വൈകുന്നേരം 6:30 മുതൽ",
+    organizer: "ജില്ലാ സ്പോർട്സ് കൗൺസിൽ, മലപ്പുറം",
+  },
+  {
+    id: "thunchan_festival",
+    title: "തുഞ്ചൻ ഉത്സവം & സാഹിത്യ സമ്മേളനം",
+    category: "സാഹിത്യം",
+    dateMonth: "Dec",
+    dateDay: "05",
+    fullDate: "ഡിസംബർ 05, 2026 • 09:30 AM",
+    location: "തുഞ്ചൻ പറമ്പ്, തിരൂർ",
+    imageUrl: "https://images.unsplash.com/photo-1548625361-195fe578cb26?w=600&auto=format&fit=crop&q=80",
+    description: "ഭാഷാപിതാവ് തുഞ്ചത്തെഴുത്തച്ഛന്റെ സ്മരണയിൽ നടക്കുന്ന ദേശീയ സാഹിത്യ സംവാദം, പുസ്തകോത്സവം, കവി സമ്മേളനം എന്നിവ.",
+    time: "രാവിലെ 9:30 മുതൽ വൈകുന്നേരം 7:00 വരെ",
+    organizer: "തുഞ്ചൻ സ്മാരക സമിതി",
+  },
+  {
+    id: "tanur_coastal_fest",
+    title: "താനൂർ തീരദേശ പൈതൃക സംഗമം",
+    category: "മേളകൾ",
+    dateMonth: "Dec",
+    dateDay: "15",
+    fullDate: "ഡിസംബർ 15, 2026 • 04:30 PM",
+    location: "താനൂർ ബീച്ച് ഓപ്പൺ സ്റ്റേജ്, താനൂർ",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/d/d1/Tanur_beach%2C_Malappuram_%289%29.jpg",
+    description: "താനൂർ തുറമുഖ പൈതൃകവും കടലോര ജീവിതവും ആഘോഷിക്കുന്ന തീരദേശ മേള. ദഫ്മുട്ട്, കോൽക്കളി, മാപ്പിളപ്പാട്ട്, സമുദ്ര വിഭവ ഫുഡ് ഫെസ്റ്റ് എന്നിവ.",
+    time: "വൈകുന്നേരം 4:30 മുതൽ",
+    organizer: "താനൂർ നഗരസഭ & തീരദേശ കൂട്ടായ്മ",
   },
 ];
 
 const GALLERY_DATA: GalleryItem[] = [
   {
-    id: "kovalam",
-    title: "കോവളം & വർക്കല തീരങ്ങൾ",
-    district: "തിരുവനന്തപുരം",
-    imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&auto=format&fit=crop&q=85",
-    description: "അറബിക്കടലിന്റെ ശാന്തതയും സ്വർണ്ണ മണൽത്തരികളും നിറഞ്ഞ കേരളത്തിന്റെ വിഖ്യാത തീരദേശ സൗന്ദര്യം.",
+    id: "tanur-beach",
+    title: "താനൂർ തൂവൽതീരവും കടൽത്തീരവും",
+    district: "താനൂർ നഗരസഭ",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/d/d1/Tanur_beach%2C_Malappuram_%289%29.jpg",
+    description: "അറബിക്കടലിന്റെ തിരമാലകളും സ്വർണ്ണ മണൽത്തരികളും പരമ്പരാഗത വള്ളങ്ങളും നിറഞ്ഞ താനൂർ തീരം.",
   },
   {
-    id: "backwaters",
-    title: "ആലപ്പുഴ കായലോളങ്ങൾ",
-    district: "ആലപ്പുഴ",
-    imageUrl: "https://images.unsplash.com/photo-1593693397690-362cb9666fc2?w=1200&auto=format&fit=crop&q=85",
-    description: "കെട്ടുവള്ളങ്ങളും പച്ചപ്പ് നിറഞ്ഞ തുരുത്തുകളും ഇടകലർന്ന കിഴക്കിന്റെ വെനീസ്.",
+    id: "tanur-harbour",
+    title: "താനൂർ ഫിഷിംഗ് ഹാർബറും പുലിമുട്ടും",
+    district: "താനൂർ നഗരസഭ",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/3/31/A_view_of_tanur_harbour.jpg",
+    description: "മലബാറിലെ പ്രമുഖ സമുദ്ര മത്സ്യബന്ധന തുറമുഖവും കടലിലേക്ക് നീളുന്ന പുലിമുട്ട് നടപ്പാതയും.",
   },
   {
-    id: "heritage",
-    title: "പൈതൃക വാസ്തുവിദ്യ",
-    district: "മധ്യകേരളം",
-    imageUrl: "https://images.unsplash.com/photo-1548625361-195fe578cb26?w=1200&auto=format&fit=crop&q=85",
-    description: "കേരളത്തിന്റെ പരമ്പരാഗത തച്ചുശാസ്ത്രവും പൈതൃക ശൈലിയും ഒത്തുചേരുന്ന ചരിത്ര സ്മാരകം.",
+    id: "keraladeshapuram",
+    title: "കേരളാദിത്യപുരം ശ്രീകൃഷ്ണ ക്ഷേത്രം",
+    district: "താനൂർ, മലപ്പുറം",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/6/67/Tanur%2C_Malappuram_district.jpg",
+    description: "നൂറ്റാണ്ടുകളുടെ ചരിത്രമുള്ള പുരാതന മഹാവിഷ്ണു ക്ഷേത്രവും വെട്ടത്തുനാട് പൈതൃകവും.",
   },
   {
-    id: "munnar",
-    title: "മൂന്നാർ മലനിരകൾ",
-    district: "ഇടുക്കി",
+    id: "poorappuzha",
+    title: "പൂരപ്പുഴ അഴിമുഖവും കണ്ടൽക്കാടുകളും",
+    district: "താനൂർ, മലപ്പുറം",
+    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/d/dd/Tanur.jpg",
+    description: "പൂരപ്പുഴ അറബിക്കടലിൽ സംഗമിക്കുന്ന അഴിമുഖവും പച്ചപ്പ് നിറഞ്ഞ കണ്ടൽ വനങ്ങളും.",
+  },
+  {
+    id: "mini-ooty",
+    title: "മിനി ഊട്ടി ആരിമ്പ്ര മലനിരകൾ",
+    district: "മലപ്പുറം",
     imageUrl: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?w=1200&auto=format&fit=crop&q=85",
-    description: "കോടമഞ്ഞും പച്ചപ്പട്ടു വിരിച്ച തേയിലത്തോട്ടങ്ങളും സംഗമിക്കുന്ന ദൈവത്തിന്റെ സ്വന്തം നാട്ടിലെ മലയോര സുന്ദരി.",
+    description: "സമുദ്രനിരപ്പിൽ നിന്ന് ആയിരത്തിലധികം അടി ഉയരത്തിലുള്ള പ്രകൃതിരമണീയമായ മലയോര സായാഹ്ന കേന്ദ്രം.",
   },
   {
-    id: "sunrise",
-    title: "കായൽക്കരയിലെ പ്രഭാതം",
-    district: "കുമരകം / കോട്ടയം",
-    imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1200&auto=format&fit=crop&q=85",
-    description: "വേമ്പനാട്ടു കായൽപ്പരപ്പിൽ ഉദിച്ചുയരുന്ന പുലർകാല സൂര്യകിരണങ്ങളും നാടൻ വള്ളങ്ങളും.",
-  },
-  {
-    id: "kathakali",
-    title: "കഥകളി — തനതു കലാരൂപം",
-    district: "തൃശ്ശൂർ",
-    imageUrl: "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1200&auto=format&fit=crop&q=85",
-    description: "ഭാവസാന്ദ്രമായ മുദ്രകളും വർണ്ണാഭമായ വേഷവിധാനങ്ങളും ചേർന്ന കേരളത്തിന്റെ ശാസ്ത്രീയ ദൃശ്യവിസ്മയം.",
+    id: "thunchan-parambu",
+    title: "തുഞ്ചൻ പറമ്പ് സാഹിത്യതീർത്ഥം",
+    district: "തിരൂർ, മലപ്പുറം",
+    imageUrl: "https://images.unsplash.com/photo-1548625361-195fe578cb26?w=1200&auto=format&fit=crop&q=85",
+    description: "മലയാള ഭാഷാപിതാവ് തുഞ്ചത്തെഴുത്തച്ഛന്റെ പൂണ്യഭൂമിയും ചരിത്ര സ്മാരകവും.",
   },
 ];
 
@@ -289,6 +289,12 @@ export default function HomePage() {
             {/* Left Content */}
             <div className="relative z-10 p-6 sm:p-12 lg:p-16 max-w-2xl">
               
+              {/* Locality Badge */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/20 sm:bg-[#1B4D36]/10 text-amber-300 sm:text-[#1B4D36] text-[11px] font-bold mb-2 backdrop-blur-xs">
+                <MapPin className="w-3.5 h-3.5" />
+                <span>മലപ്പുറം ജില്ല • താനൂർ നഗരസഭ</span>
+              </div>
+
               {/* Big Malayalam Headline */}
               <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold font-malayalam-serif text-white sm:text-[#1B4D36] tracking-tight leading-none mb-3 drop-shadow-md sm:drop-shadow-none">
                 നമ്മുടെ നാട്
@@ -296,38 +302,37 @@ export default function HomePage() {
 
               {/* Tagline in Golden Script */}
               <p className="text-lg sm:text-2xl font-bold font-malayalam-script text-amber-300 sm:text-[#B87A1E] mb-3 drop-shadow-sm sm:drop-shadow-none">
-                നമ്മുടെ നാട്... നമ്മുടെ അഭിമാനം...
+                മലപ്പുറത്തിന്റെ പെരുമ... താനൂരിന്റെ പൈതൃകം...
               </p>
 
               {/* Short Description */}
               <p className="text-xs sm:text-sm text-stone-200 sm:text-[#4A5750] leading-relaxed max-w-md font-malayalam-body mb-8 drop-shadow-sm sm:drop-shadow-none">
-                കേരളത്തിന്റെ മനോഹാരിതയും, സംസ്കാരവും, വിവരങ്ങളും ഒറ്റ വേദിയിൽ.
+                മലപ്പുറം ജില്ലയുടെയും താനൂർ നഗരസഭയുടെയും സമഗ്ര വിവരങ്ങളും സാംസ്കാരിക പൈതൃകവും ഒരൊറ്റ ഹൈപ്പർലോക്കൽ വേദിയിൽ.
               </p>
 
               {/* Action Buttons */}
               <div className="flex flex-wrap items-center gap-3 sm:gap-4">
                 <Link
-                  href="/about"
+                  href="/tanur"
                   className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[#1B4D36] hover:bg-[#133A28] text-white font-bold text-xs sm:text-sm transition-all duration-200 active:scale-95 shadow-md flex items-center gap-2 group"
                 >
-                  <span>കൂടുതൽ അറിയാം</span>
+                  <MapPin className="w-4 h-4 text-amber-300" />
+                  <span>താനൂർ പ്രൊഫൈൽ</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition" />
                 </Link>
 
                 <button
                   type="button"
-                  onClick={() => setShowVideoModal(true)}
+                  onClick={() => setShowDistrictModal(true)}
                   className="px-4 sm:px-5 py-2.5 sm:py-3 rounded-full bg-white/90 hover:bg-white text-[#1B4D36] border border-[#DDD5C5] font-bold text-xs sm:text-sm transition-all duration-200 active:scale-95 shadow-sm flex items-center gap-2 backdrop-blur-xs"
                 >
-                  <div className="w-5 h-5 rounded-full bg-[#1B4D36] text-white flex items-center justify-center">
-                    <Play className="w-2.5 h-2.5 fill-current ml-0.5" />
-                  </div>
-                  <span>വിവരങ്ങൾ കാണുക</span>
+                  <Building className="w-4 h-4 text-[#1B4D36]" />
+                  <span>തദ്ദേശ സ്ഥാപനങ്ങൾ</span>
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => handleOpenAi("കേരളത്തിലെ പ്രധാന വിവരങ്ങളും വിശേഷങ്ങളും എന്തൊക്കെയാണ്?")}
+                  onClick={() => handleOpenAi("താനൂർ നഗരസഭയെയും മലപ്പുറം ജില്ലയെയും കുറിച്ച് പ്രധാന വിവരങ്ങൾ എന്തൊക്കെയാണ്?")}
                   className="px-4 sm:px-5 py-2.5 sm:py-3 rounded-full bg-[#EDE6D8] hover:bg-[#E2DAC8] text-[#1B4D36] border border-[#DDD5C5] font-bold text-xs sm:text-sm transition-all duration-200 active:scale-95 shadow-sm flex items-center gap-2"
                 >
                   <Sparkles className="w-4 h-4 text-[#B87A1E]" />
@@ -340,10 +345,10 @@ export default function HomePage() {
             {/* Right side artistic script overlay */}
             <div className="hidden lg:block absolute right-12 top-1/3 z-10 text-right pointer-events-none">
               <span className="font-malayalam-script text-white text-3xl xl:text-4xl font-bold drop-shadow-lg opacity-90 block">
-                എന്റെ നാട്...
+                എന്റെ മലപ്പുറം...
               </span>
               <span className="font-malayalam-script text-white text-3xl xl:text-4xl font-bold drop-shadow-lg opacity-90 block mt-1">
-                എന്റെ അഭിമാനം...
+                എന്റെ താനൂർ...
               </span>
             </div>
 
@@ -542,20 +547,20 @@ export default function HomePage() {
                   നമ്മുടെ നാട് കുറിച്ച്
                 </h3>
                 <p className="text-xs sm:text-sm text-[#5C6A64] leading-relaxed">
-                  കേരളത്തിന്റെ മനോഹാരിതയും, സംസ്കാരത്തെയും, ജനങ്ങളുടെ ഐക്യത്തെയും പ്രതിനിധീകരിക്കുന്ന ഒരു ഡിജിറ്റൽ വേദിയാണ് &quot;നമ്മുടെ നാട്&quot;.
+                  മലപ്പുറം ജില്ലയുടെയും താനൂർ നഗരസഭയുടെയും സമ്പന്നമായ സാംസ്കാരിക പൈതൃകത്തെയും തീരദേശ ജനതയുടെ ഐക്യത്തെയും പ്രതിനിധീകരിക്കുന്ന ഒരു ഡിജിറ്റൽ വേദിയാണ് &quot;നമ്മുടെ നാട്&quot;.
                 </p>
                 <div>
                   <Link
-                    href="/community"
+                    href="/tanur"
                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#1B4D36] hover:bg-[#133A28] text-white text-xs font-bold transition shadow-xs"
                   >
-                    <span>കൂടുതൽ അറിയാം</span>
+                    <span>താനൂർ നഗരസഭ കാണുക</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
               </div>
 
-              {/* Right Stats Box: 1Cr+ People, 14 Districts, 1000+ Heritage */}
+              {/* Right Stats Box: 45L+ People, 44 Wards, 100+ Heritage */}
               <div className="lg:col-span-4 bg-[#F2EDE1] rounded-2xl p-6 border border-[#E5DECEx] flex items-center justify-around text-center">
                 
                 {/* Stat 1 */}
@@ -564,10 +569,10 @@ export default function HomePage() {
                     <Users className="w-4 h-4" />
                   </div>
                   <span className="text-xl font-bold font-malayalam-serif text-[#1B4D36] leading-none">
-                    1Cr+
+                    45L+
                   </span>
                   <span className="text-[11px] font-bold text-[#5C6A64] mt-1">
-                    ജനങ്ങൾ
+                    മലപ്പുറം ജനങ്ങൾ
                   </span>
                 </div>
 
@@ -579,10 +584,10 @@ export default function HomePage() {
                     <Building className="w-4 h-4" />
                   </div>
                   <span className="text-xl font-bold font-malayalam-serif text-[#1B4D36] leading-none">
-                    14
+                    44
                   </span>
                   <span className="text-[11px] font-bold text-[#5C6A64] mt-1">
-                    ജില്ലകൾ
+                    താനൂർ വാർഡുകൾ
                   </span>
                 </div>
 
@@ -594,7 +599,7 @@ export default function HomePage() {
                     <Landmark className="w-4 h-4" />
                   </div>
                   <span className="text-xl font-bold font-malayalam-serif text-[#1B4D36] leading-none">
-                    1000+
+                    100+
                   </span>
                   <span className="text-[11px] font-bold text-[#5C6A64] mt-1">
                     പൈതൃകങ്ങൾ
@@ -1113,15 +1118,20 @@ export default function HomePage() {
         initialQuery={aiInitialQuery}
       />
 
-      {/* Districts Selector Modal */}
+      {/* Malappuram Local Bodies Selector Modal */}
       {showDistrictModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-in fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
           <div className="bg-[#FAF7F0] rounded-3xl border border-[#E7DFD0] p-6 max-w-lg w-full shadow-2xl">
             <div className="flex items-center justify-between mb-4 border-b border-[#E1D9C8] pb-3">
-              <h3 className="font-bold font-malayalam-serif text-lg text-[#1B4D36] flex items-center gap-2">
-                <MapPin className="w-5 h-5" />
-                <span>കേരളത്തിലെ 14 ജില്ലകൾ</span>
-              </h3>
+              <div>
+                <h3 className="font-bold font-malayalam-serif text-lg text-[#1B4D36] flex items-center gap-2">
+                  <MapPin className="w-5 h-5" />
+                  <span>മലപ്പുറം തദ്ദേശ സ്വയംഭരണ സ്ഥാപനങ്ങൾ</span>
+                </h3>
+                <p className="text-[11px] text-[#5C6A64] mt-0.5 font-malayalam-body">
+                  പ്രധാന നഗരസഭകളും തദ്ദേശ സ്ഥാപനങ്ങളും (നമ്മുടെ നാട് ഹൈപ്പർലോക്കൽ ശൃംഖല)
+                </p>
+              </div>
               <button
                 onClick={() => setShowDistrictModal(false)}
                 className="text-xs font-bold text-[#5C6A64] hover:text-[#1A2420] px-2 py-1"
@@ -1129,20 +1139,56 @@ export default function HomePage() {
                 ✕
               </button>
             </div>
+
+            {/* Featured Tanur Municipality Spotlight Card */}
+            <div className="mb-4 p-3.5 rounded-2xl bg-[#E8F2EC] border border-[#C5DEC8]">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#1B4D36] bg-white px-2 py-0.5 rounded-full border border-[#C5DEC8]">
+                    Featured Community
+                  </span>
+                  <h4 className="font-bold font-malayalam-serif text-base text-[#1B4D36] mt-1">
+                    താനൂർ നഗരസഭ (Tanur Municipality)
+                  </h4>
+                  <p className="text-[11px] text-[#3D5E4E] font-malayalam-body">
+                    44 വാർഡുകൾ • ചരിത്ര തുറമുഖം • വെട്ടത്തുനാട് പൈതൃകം
+                  </p>
+                </div>
+                <Link
+                  href="/tanur"
+                  onClick={() => setShowDistrictModal(false)}
+                  className="px-3.5 py-2 rounded-xl bg-[#1B4D36] hover:bg-[#143d2b] text-white text-xs font-bold font-malayalam-heading transition shrink-0 ml-3"
+                >
+                  പ്രൊഫൈൽ
+                </Link>
+              </div>
+            </div>
+
             <div className="grid grid-cols-2 gap-2 text-xs">
               {[
-                "തിരുവനന്തപുരം", "കൊല്ലം", "പത്തനംതിട്ട", "ആലപ്പുഴ",
-                "കോട്ടയം", "ഇടുക്കി", "എറണാകുളം", "തൃശ്ശൂർ",
-                "പാലക്കാട്", "മലപ്പുറം", "കോഴിക്കോട്", "വയനാട്",
-                "കണ്ണൂർ", "കാസർഗോഡ്"
-              ].map((district) => (
+                { name: "താനൂർ നഗരസഭ", slug: "tanur", desc: "44 വാർഡുകൾ (Primary)" },
+                { name: "തിരൂർ നഗരസഭ", slug: "tirur", desc: "തുഞ്ചൻ പറമ്പ്" },
+                { name: "മലപ്പുറം മുനിസിപ്പാലിറ്റി", slug: "malappuram", desc: "ജില്ലാ ആസ്ഥാനം" },
+                { name: "കോട്ടക്കൽ നഗരസഭ", slug: "kottakkal", desc: "ആയുർവേദ നഗരം" },
+                { name: "പൊന്നാനി നഗരസഭ", slug: "ponnani", desc: "പൈതൃക തുറമുഖം" },
+                { name: "മഞ്ചേരി നഗരസഭ", slug: "manjeri", desc: "വാണിജ്യ കേന്ദ്രം" },
+                { name: "പരപ്പനങ്ങാടി നഗരസഭ", slug: "parappanangadi", desc: "തീരദേശ നഗരം" },
+                { name: "കൊണ്ടോട്ടി നഗരസഭ", slug: "kondotty", desc: "വിമാനത്താവളം" }
+              ].map((locality) => (
                 <Link
-                  key={district}
-                  href={`/discover?district=${encodeURIComponent(district)}`}
+                  key={locality.slug}
+                  href={locality.slug === "tanur" ? "/tanur" : `/discover?locality=${encodeURIComponent(locality.name)}`}
                   onClick={() => setShowDistrictModal(false)}
-                  className="px-3 py-2 rounded-xl bg-white hover:bg-[#EFE9DD] border border-[#EAE4D7] font-semibold text-[#2A3730] transition text-center"
+                  className={`p-3 rounded-xl border font-semibold transition text-left flex flex-col justify-between ${
+                    locality.slug === "tanur" 
+                      ? "bg-[#1B4D36] text-white border-[#1B4D36]" 
+                      : "bg-white hover:bg-[#EFE9DD] border-[#EAE4D7] text-[#2A3730]"
+                  }`}
                 >
-                  {district}
+                  <span className="font-bold">{locality.name}</span>
+                  <span className={`text-[10px] mt-0.5 ${locality.slug === "tanur" ? "text-amber-300" : "text-[#7A8880]"}`}>
+                    {locality.desc}
+                  </span>
                 </Link>
               ))}
             </div>

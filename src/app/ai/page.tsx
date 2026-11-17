@@ -51,16 +51,16 @@ export default function AiPage() {
 
   const suggestedQuestions = language === "ml"
     ? [
-        "കാക്കനാട് ഈ ആഴ്ച നടക്കുന്ന പരിപാടികൾ ഏതെല്ലാമാണ്?",
-        "ഫോർട്ട് കൊച്ചിയിലെ ഇലക്ട്രീഷ്യൻമാരുടെ നമ്പർ ലഭിക്കുമോ?",
-        "കെഎസ്ഇബി വൈദ്യുതി മുടങ്ങുന്ന അറിയിപ്പ് വിശദീകരിക്കാമോ?",
-        "റോഡിലെ കുഴികൾ എങ്ങനെയാണ് അധികാരികളെ അറിയിക്കേണ്ടത്?",
+        "താനൂർ നഗരസഭയിൽ ഈ ആഴ്ച നടക്കുന്ന പരിപാടികൾ ഏതെല്ലാമാണ്?",
+        "താനൂരിലെയും തിരൂരിലെയും പ്ലംബർ/ഇലക്ട്രീഷ്യൻമാരെ ലഭിക്കുമോ?",
+        "താനൂർ കെഎസ്ഇബി വൈദ്യുതി മുടങ്ങുന്ന അറിയിപ്പ് വിശദീകരിക്കാമോ?",
+        "താനൂർ നഗരസഭയിൽ റോഡിലെ കുഴികൾ എങ്ങനെയാണ് അറിയിക്കേണ്ടത്?",
       ]
     : [
-        "What upcoming events are scheduled around Kakkanad?",
-        "Can I find verified electricians or plumbers in this area?",
-        "Tell me about the latest KSEB scheduled maintenance notice.",
-        "How do I report a pothole or streetlight issue?",
+        "What upcoming events are scheduled around Tanur & Malappuram?",
+        "Can I find verified electricians or plumbers in Tanur?",
+        "Tell me about the latest KSEB scheduled maintenance notice in Tanur.",
+        "How do I report civic issues to Tanur Municipality?",
       ];
 
   const handleSend = async (queryText?: string) => {

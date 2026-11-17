@@ -53,7 +53,7 @@ export default function CommunityPage() {
     if (!newPostContent.trim() || !user) return;
 
     const created = store.createPost({
-      community_id: currentCommunity?.id || "40000000-0000-0000-0000-000000000001",
+      community_id: currentCommunity?.id || "40000000-0000-0000-0000-000000000007",
       author_id: user.id,
       content: newPostContent.trim(),
       media_urls: newPostImage.trim() ? [newPostImage.trim()] : [],
@@ -125,7 +125,7 @@ export default function CommunityPage() {
                 {currentCommunity?.type || "Locality"}
               </span>
               <span className="text-xs text-[#5C6A64]">
-                {currentCommunity?.district || "Ernakulam"} • Kerala
+                {currentCommunity?.district || "Malappuram"} • Kerala
               </span>
             </div>
             <h1 className="text-2xl font-bold font-malayalam-serif text-[#1B4D36]">

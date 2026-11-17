@@ -51,6 +51,7 @@ export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) =
     { href: "/education", label: "വിദ്യാഭ്യാസം", enLabel: "Education" },
     { href: "/events", label: "പരിപാടികൾ", enLabel: "Events" },
     { href: "/gallery", label: "ഗാലറി", enLabel: "Gallery" },
+    { href: "/politics/pk-navas", label: "ജനപ്രതിനിധി (MLA)", enLabel: "MLA Profile" },
     { href: "/tanur", label: "താനൂർ പ്രൊഫൈൽ", enLabel: "Tanur Profile" },
     { href: "/contact", label: "ബന്ധപ്പെടുക", enLabel: "Contact" },
     ...(role === "admin" || role === "moderator" ? [{ href: "/admin", label: "അഡ്മിൻ", enLabel: "Admin" }] : []),

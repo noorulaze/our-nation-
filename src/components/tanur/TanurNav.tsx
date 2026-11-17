@@ -31,6 +31,7 @@ const tanurNavItems = [
   { name: "ഗാലറി", name_en: "Gallery", href: "/tanur/gallery", icon: ImageIcon },
   { name: "വാർത്തകൾ", name_en: "News & Events", href: "/tanur/news", icon: Newspaper },
   { name: "സേവനങ്ങൾ", name_en: "Directory", href: "/tanur/directory", icon: Building2 },
+  { name: "എം.എൽ.എ പ്രൊഫൈൽ", name_en: "MLA Profile", href: "/politics/pk-navas", icon: Landmark },
   { name: "പങ്കുവെക്കാം", name_en: "Contribute", href: "/tanur/contribute", icon: PenTool },
 ];
 

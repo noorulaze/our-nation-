@@ -1022,6 +1022,17 @@ export const TANUR_BUSINESSES: TanurBusinessItem[] = [
 // -------------------------------------------------------------
 export const TANUR_PUBLIC_SERVICES: TanurPublicService[] = [
   {
+    id: "srv-mla-office",
+    name: "Tanur MLA Constituency Office (P. K. Navas MLA)",
+    name_ml: "താനൂർ എം.എൽ.എ ഓഫീസ് (പി. കെ. നവാസ്)",
+    category: "municipality",
+    category_ml: "ജനപ്രതിനിധി കാര്യാലയം",
+    address: "Railway Station Road, Tanur, Malappuram - 676302",
+    phone: "0494 2582250",
+    officialLink: "/politics/pk-navas",
+    workingHours: "Monday to Saturday: 10:00 AM – 5:00 PM (Subject to Niyamasabha sessions)",
+  },
+  {
     id: "srv-municipality",
     name: "Tanur Municipality Office",
     name_ml: "താനൂർ നഗരസഭാ കാര്യാലയം",

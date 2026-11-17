@@ -95,6 +95,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/politics/pk-navas" className="hover:text-amber-300 transition text-amber-200/90 font-medium">
+                  ജനപ്രതിനിധികൾ (MLA Profile)
+                </Link>
+              </li>
+              <li>
                 <Link href="/ai" className="hover:text-amber-300 transition text-amber-300">
                   നാട് AI സഹായി
                 </Link>

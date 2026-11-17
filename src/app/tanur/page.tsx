@@ -213,6 +213,31 @@ export default function TanurOverviewPage() {
                     <strong>താനൂർ നഗരസഭ (Tanur Municipality)</strong> എന്നത് 19.49 ച.കി.മീ വിസ്തൃതിയും 45 വാർഡുകളുമുള്ള നഗര ഭരണ സംവിധാനമാണ്. ഇത് സമീപത്തെ ഗ്രാമീണ പഞ്ചായത്തുകൾ (ഒഴൂർ, പൊന്മമുണ്ടം, താനാളൂർ, നിറമരുതൂർ, ചെറിയമുണ്ടം) ഉൾപ്പെടുന്ന <strong>താനൂർ ബ്ലോക്ക് പഞ്ചായത്തുമായി (Block Panchayat)</strong> വേറിട്ടുനിൽക്കുന്നു. രണ്ടിന്റെയും കണക്കുകൾ കൂട്ടിക്കലർത്തരുത്.
                   </p>
                 </div>
+
+                {/* MLA & Legislative Representation Callout */}
+                <div className="mt-4 p-4.5 rounded-2xl bg-white border border-[#EAE4D7] shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs font-malayalam-body">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-[#E0F1E7] text-[#1B4D36] flex items-center justify-center shrink-0">
+                      <Landmark className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-bold text-sm text-[#1B4D36]">പി. കെ. നവാസ് (P. K. Navas MLA)</span>
+                        <span className="text-[10px] bg-[#E0F1E7] text-[#1B4D36] font-bold px-2 py-0.5 rounded-full">താനൂർ എം.എൽ.എ</span>
+                      </div>
+                      <p className="text-xs text-[#5C6A64] mt-0.5">
+                        പതിനാറാം കേരള നിയമസഭാംഗം • താനൂർ നിയമസഭാ മണ്ഡലം (LAC 044)
+                      </p>
+                    </div>
+                  </div>
+                  <Link
+                    href="/politics/pk-navas"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#FAF7F0] hover:bg-[#1B4D36] hover:text-white text-[#1B4D36] border border-[#DDD5C5] text-xs font-bold transition shrink-0 self-start sm:self-auto"
+                  >
+                    <span>ജനപ്രതിനിധി പ്രൊഫൈൽ</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
               </div>
 
               {/* Geographic Highlights Grid */}

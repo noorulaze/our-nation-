@@ -31,18 +31,31 @@ export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) =
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
 
-  const navLinks = [
+  // Main pill links matching exact header in IMAGE 2
+  const mainPillLinks = [
     { href: "/", label: "Home", enLabel: "Home" },
-    { href: "/tanur", label: "താനൂർ", enLabel: "Tanur" },
+    { href: "/about", label: "നമ്മുടെ നാട്", enLabel: "About Us" },
+    { href: "/culture", label: "സംസ്കാരം", enLabel: "Culture" },
+    { href: "/education", label: "വിദ്യാഭ്യാസം", enLabel: "Education" },
+    { href: "/events", label: "പരിപാടികൾ", enLabel: "Events" },
+    { href: "/gallery", label: "ഗാലറി", enLabel: "Gallery" },
+  ];
+
+  // Comprehensive navigation for mobile drawer & dropdown
+  const allNavLinks = [
+    { href: "/", label: "Home", enLabel: "Home" },
     { href: "/about", label: "നമ്മുടെ നാട്", enLabel: "About Us" },
     { href: "/news", label: "വാർത്തകൾ", enLabel: "News" },
     { href: "/culture", label: "സംസ്കാരം", enLabel: "Culture" },
     { href: "/education", label: "വിദ്യാഭ്യാസം", enLabel: "Education" },
     { href: "/events", label: "പരിപാടികൾ", enLabel: "Events" },
     { href: "/gallery", label: "ഗാലറി", enLabel: "Gallery" },
+    { href: "/tanur", label: "താനൂർ പ്രൊഫൈൽ", enLabel: "Tanur Profile" },
     { href: "/contact", label: "ബന്ധപ്പെടുക", enLabel: "Contact" },
     ...(role === "admin" || role === "moderator" ? [{ href: "/admin", label: "അഡ്മിൻ", enLabel: "Admin" }] : []),
   ];
+
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,7 +81,7 @@ export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) =
             <div className="relative hidden xl:block ml-2">
               <button
                 onClick={() => setIsCommunityDropdownOpen(!isCommunityDropdownOpen)}
-                className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EFE9DC] hover:bg-[#E5DECEx] text-[#1B4D36] text-xs font-semibold border border-[#DFD7C7] transition"
+                className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EFE9DC] hover:bg-[#E5DECF] text-[#1B4D36] text-xs font-semibold border border-[#DFD7C7] transition"
                 title="Select locality"
               >
                 <MapPin className="w-3.5 h-3.5 text-[#1B4D36] flex-shrink-0" />
@@ -116,9 +129,9 @@ export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) =
             </div>
           </div>
 
-          {/* Center Navigation Links - Styled as Pill Menu */}
-          <nav className="hidden lg:flex items-center gap-1.5 bg-[#EDE8DC]/50 p-1 rounded-full border border-[#DFD8C9]">
-            {navLinks.map((link) => {
+          {/* Center Navigation Links - Exact Match to IMAGE 2 Pill Menu */}
+          <nav className="hidden lg:flex items-center gap-1 bg-[#EDE8DC]/50 p-1 rounded-full border border-[#DFD8C9]">
+            {mainPillLinks.map((link) => {
               const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href.split("?")[0]));
               return (
                 <Link
@@ -136,26 +149,40 @@ export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) =
             })}
           </nav>
 
-          {/* Right Section: Search Bar & Profile Avatar */}
-          <div className="flex items-center gap-3">
+          {/* Right Section: Search & Profile Avatar (Matching IMAGE 2) */}
+          <div className="flex items-center gap-2 sm:gap-3">
             
-            {/* Search Pill */}
-            <form onSubmit={handleSearchSubmit} className="hidden sm:flex items-center relative">
-              <input
-                type="text"
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="തിരയുക..."
-                className="w-44 md:w-52 pl-4 pr-9 py-1.5 text-xs rounded-full bg-[#EFE9DD] border border-[#DDD5C5] text-[#1A2420] placeholder-[#7A8680] focus:outline-none focus:ring-1 focus:ring-[#1B4D36] focus:bg-white transition"
-              />
+            {/* Search Button or Expandable Pill */}
+            {isSearchOpen ? (
+              <form onSubmit={handleSearchSubmit} className="flex items-center relative animate-in fade-in duration-200">
+                <input
+                  type="text"
+                  autoFocus
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  onBlur={() => !searchInput && setIsSearchOpen(false)}
+                  placeholder="തിരയുക..."
+                  className="w-40 sm:w-52 pl-3.5 pr-8 py-1.5 text-xs rounded-full bg-[#EFE9DD] border border-[#DDD5C5] text-[#1A2420] placeholder-[#7A8680] focus:outline-none focus:ring-1 focus:ring-[#1B4D36] focus:bg-white transition"
+                />
+                <button
+                  type="submit"
+                  aria-label="Submit search"
+                  className="absolute right-2.5 text-[#5C6A64] hover:text-[#1B4D36]"
+                >
+                  <Search className="w-3.5 h-3.5" />
+                </button>
+              </form>
+            ) : (
               <button
-                type="submit"
+                type="button"
+                onClick={() => setIsSearchOpen(true)}
+                className="w-8 h-8 rounded-full bg-[#EFE9DC] hover:bg-[#E5DECF] text-[#1B4D36] flex items-center justify-center transition border border-[#DFD7C7]"
+                title="Search / തിരയുക"
                 aria-label="Search"
-                className="absolute right-2.5 text-[#5C6A64] hover:text-[#1B4D36]"
               >
-                <Search className="w-3.5 h-3.5" />
+                <Search className="w-4 h-4" />
               </button>
-            </form>
+            )}
 
             {/* Language Switcher */}
             <button
@@ -256,7 +283,7 @@ export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) =
       {/* Mobile Drawer */}
       {isMobileMenuOpen && (
         <div className="lg:hidden border-b border-border bg-[#FAF7F0] px-4 pt-2 pb-4 space-y-1">
-          {navLinks.map((link) => (
+          {allNavLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}

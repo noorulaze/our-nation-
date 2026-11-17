@@ -35,7 +35,10 @@ import {
   Eye,
   Volume2,
   VolumeX,
-  Info
+  Info,
+  GraduationCap,
+  Camera,
+  Newspaper
 } from "lucide-react";
 
 interface NewsItem {
@@ -73,44 +76,44 @@ interface GalleryItem {
 
 const NEWS_DATA: NewsItem[] = [
   {
-    id: "ksrtc",
-    title: "കേരളത്തിൽ പുതിയ ബസ് സർവീസുകൾക്ക് തുടക്കമായി",
+    id: "kerala-today",
+    title: "കേരളം: ഇന്ന് അറിയേണ്ട കാര്യങ്ങൾ",
     category: "കേരളം",
-    date: "17 നവംബർ 2026",
-    imageUrl: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=900&auto=format&fit=crop&q=80",
-    summary: "സംസ്ഥാനത്ത് കൂടുതൽ പ്രദേശങ്ങളിലേക്ക് പുതിയ ബസ് സർവീസുകൾ ആരംഭിച്ചു. ഗ്രാമീണ റൂട്ടുകളിൽ കൂടുതൽ യാത്രാസൗകര്യം ലഭ്യമാക്കുകയാണ് ലക്ഷ്യം.",
-    fullStory: "സംസ്ഥാനത്ത് കൂടുതൽ ഗ്രാമീണ, നഗര പ്രദേശങ്ങളിലേക്ക് പുതിയ ഇലക്ട്രിക്, ഫാസ്റ്റ് പാസഞ്ചർ ബസ് സർവീസുകൾ ആരംഭിച്ചു. ഗ്രാമീണ റൂട്ടുകളിൽ വിദ്യാർത്ഥികൾക്കും ജീവനക്കാർക്കും കൂടുതൽ യാത്രാസൗകര്യം ലഭ്യമാക്കുകയാണ് ഇതിന്റെ പ്രധാന ലക്ഷ്യം.\n\nആദ്യ ഘട്ടത്തിൽ 100 പുതിയ പരിസ്ഥിതി സൗഹൃദ ബസുകളാണ് വിവിധ ഡിപ്പോകളിലേക്ക് കൈമാറിയത്. പൊതുഗതാഗത സൗകര്യം കൂടുതൽ ജനകീയമാക്കാനും യാത്രാ നിരക്കുകളിൽ ഇളവ് വരുത്താനും നവീകരിച്ച ലൈവ് ട്രാക്കിംഗ് സംവിധാനവും ലഭ്യമാക്കിയിട്ടുണ്ട്.",
+    date: "16 നവംബർ 2026",
+    imageUrl: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=900&auto=format&fit=crop&q=80",
+    summary: "സംസ്ഥാനത്തെ പ്രധാന വികസന വാർത്തകളും പ്രധാന വിവരങ്ങളും ഒറ്റനോട്ടത്തിൽ അറിയാം. പുതിയ ഗതാഗത പദ്ധതികൾ പുരോഗമിക്കുന്നു.",
+    fullStory: "സംസ്ഥാനത്തെ പ്രധാന നഗരങ്ങളിലും ഗ്രാമങ്ങളിലും അടിസ്ഥാന സൗകര്യ വികസനത്തിന് പുതിയ ഊർജ്ജം പകർന്ന് നിരവധി പദ്ധതികൾക്ക് ഇന്ന് തുടക്കമായി. റോഡ് നവീകരണം, ശുദ്ധജല വിതരണം, പരിസ്ഥിതി സൗഹൃദ പൊതുഗതാഗതം എന്നിവയ്ക്ക് മുൻഗണന നൽകിയാണ് പദ്ധതികൾ ആവിഷ്കരിച്ചിരിക്കുന്നത്.",
     author: "നമ്മുടെ നാട് വാർത്താ വിഭാഗം",
   },
   {
-    id: "tvm",
-    title: "തിരുവനന്തപുരത്ത് പുതിയ വികസന പദ്ധതി",
-    category: "വികസനം",
-    date: "16 നവംബർ 2026",
-    imageUrl: "https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?w=600&auto=format&fit=crop&q=80",
-    summary: "തലസ്ഥാന നഗരിയിൽ സമഗ്ര അടിസ്ഥാന സൗകര്യ വികസനത്തിന് തുടക്കമായി.",
-    fullStory: "തലസ്ഥാന നഗരിയിൽ സ്മാർട്ട് സിറ്റി മിഷന്റെ ഭാഗമായി പുതിയ നടപ്പാതകൾ, സോളാർ തെരുവ് വിളക്കുകൾ, ശാസ്ത്രീയ ഡ്രെയിനേജ് നവീകരണം എന്നിവയ്ക്കുള്ള സമഗ്ര വികസന പദ്ധതി ഉദ്ഘാടനം ചെയ്തു. നഗരസഭാ പരിധിയിലെ പ്രധാന ജംഗ്ഷനുകളിൽ ട്രാഫിക് നിയന്ത്രണത്തിനായി അത്യാധുനിക എഐ അധിഷ്ഠിത ക്യാമറ സംവിധാനവും ഏർപ്പെടുത്തും.",
-    author: "പ്രാദേശിക റിപ്പോർട്ടർ, തിരുവനന്തപുരം",
-  },
-  {
-    id: "results",
-    title: "+2 ഫലങ്ങൾ പ്രസിദ്ധീകരിച്ചു",
+    id: "plus-two",
+    title: "+2 പരീക്ഷയ്ക്ക് തയാറെടുക്കുന്ന വിദ്യാർഥികൾ ശ്രദ്ധിക്കുക...",
     category: "വിദ്യാഭ്യാസം",
     date: "15 നവംബർ 2026",
     imageUrl: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&auto=format&fit=crop&q=80",
-    summary: "ഹയർ സെക്കൻഡറി പരീക്ഷാ ഫലങ്ങൾ ഔദ്യോഗിക വെബ്സൈറ്റിൽ ലഭ്യമാണ്.",
-    fullStory: "സംസ്ഥാന ഹയർ സെക്കൻഡറി പരീക്ഷാ ഫലങ്ങൾ ഔദ്യോഗിക പോർട്ടലിൽ പ്രസിദ്ധീകരിച്ചു. 82.95 ശതമാനം വിദ്യാർത്ഥികൾ ഉന്നത വിദ്യാഭ്യാസത്തിന് യോഗ്യത നേടി. വിജയശതമാനത്തിൽ മലപ്പുറം ജില്ലയാണ് മുന്നിൽ. സ്കൂൾ തിരിച്ചുള്ള ഫലങ്ങളും സേ പരീക്ഷാ തീയതികളും വിദ്യാഭ്യാസ വകുപ്പ് പോർട്ടലിൽ ലഭ്യമാണ്.",
-    author: "വിദ്യാഭ്യാസ വിഭാഗം",
+    summary: "ഹയർ സെക്കൻഡറി പരീക്ഷകൾക്കുള്ള ക്രമീകരണങ്ങളും മോഡൽ പരീക്ഷാ ടൈംടേബിളും പ്രഖ്യാപിച്ചു. വിദ്യാർഥികൾക്കായുള്ള ഹെൽപ്പ് ഡെസ്ക് തുടങ്ങി.",
+    fullStory: "സംസ്ഥാനത്തെ ഹയർ സെക്കൻഡറി പരീക്ഷകൾക്കുള്ള അന്തിമ ഒരുക്കങ്ങൾ പൂർത്തിയായതായി പൊതുവിദ്യാഭ്യാസ വകുപ്പ് അറിയിച്ചു. മോഡൽ പരീക്ഷകൾ അടുത്ത മാസം ആരംഭിക്കും. വിദ്യാർത്ഥികൾക്ക് പരീക്ഷാ ഭയം അകറ്റാനും സംശയ നിവാരണത്തിനുമായി പ്രത്യേക കൗൺസിലിംഗ് ഹെൽപ്പ് ലൈൻ സൗകര്യവും ആരംഭിച്ചിട്ടുണ്ട്.",
+    author: "വിദ്യാഭ്യാസ ലേഖകൻ",
   },
   {
-    id: "weather",
-    title: "കേരളത്തിൽ മഴ മുന്നറിയിപ്പ്",
-    category: "കാലാവസ്ഥ",
+    id: "pooram",
+    title: "തൃശ്ശൂർ പൂരം താലപ്പൊലി...",
+    category: "ഉത്സവങ്ങൾ",
     date: "14 നവംബർ 2026",
-    imageUrl: "https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?w=600&auto=format&fit=crop&q=80",
-    summary: "തുലാവർഷത്തിന്റെ ഭാഗമായി മധ്യ, തെക്കൻ ജില്ലകളിൽ ഒറ്റപ്പെട്ട ശക്തമായ മഴയ്ക്ക് സാധ്യത.",
-    fullStory: "വടക്കുകിഴക്കൻ മൺസൂണിന്റെ ഭാഗമായി കേരളത്തിലെ മധ്യ, തെക്കൻ ജില്ലകളിൽ അടുത്ത മൂന്ന് ദിവസങ്ങളിൽ ഒറ്റപ്പെട്ട ശക്തമായ മഴയ്ക്ക് സാധ്യതയെന്ന് കാലാവസ്ഥാ നിരീക്ഷണ കേന്ദ്രം. ഇടുക്കി, കോട്ടയം, പത്തനംതിട്ട ജില്ലകളിൽ യെല്ലോ അലർട്ട് പ്രഖ്യാപിച്ചിട്ടുണ്ട്. തീരദേശവാസികളും മലയോര നിവാസികളും ജാഗ്രത പാലിക്കാൻ നിർദ്ദേശം.",
-    author: "കാലാവസ്ഥാ നിരീക്ഷണം",
+    imageUrl: "https://images.unsplash.com/photo-1599818816942-8c1055728a50?w=600&auto=format&fit=crop&q=80",
+    summary: "സാംസ്കാരിക കേരളത്തിന്റെ മാമാങ്കമായ തൃശ്ശൂർ പൂരത്തിന് കൊടിയേറി. താളമേളങ്ങളുടെ വിസ്മയമൊരുക്കാൻ നാടും നഗരവും ഒരുങ്ങി.",
+    fullStory: "കേരളത്തിന്റെ സാംസ്കാരിക തലസ്ഥാനത്ത് പൂരപ്രേമികളുടെ ഹൃദയമിടിപ്പേറ്റിക്കൊണ്ട് തൃശ്ശൂർ പൂരത്തിന് കൊടിയേറി. ഘടകക്ഷേത്രങ്ങളിൽ നിന്നുള്ള എഴുന്നള്ളിപ്പുകളും പാറമേക്കാവ്-തിരുവമ്പാടി വിഭാഗങ്ങളുടെ മേള വിസ്മയവും ഇലഞ്ഞിത്തറ മേളവും കുടമാറ്റവും കാണാൻ നാടൊന്നാകെ ഒരുങ്ങിക്കഴിഞ്ഞു.",
+    author: "സാംസ്കാരിക വിഭാഗം",
+  },
+  {
+    id: "ksrtc",
+    title: "കേരളത്തിൽ പുതിയ ബസ് സർവീസുകൾക്ക് തുടക്കമായി",
+    category: "ഗതാഗതം",
+    date: "13 നവംബർ 2026",
+    imageUrl: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=900&auto=format&fit=crop&q=80",
+    summary: "സംസ്ഥാനത്ത് കൂടുതൽ പ്രദേശങ്ങളിലേക്ക് പുതിയ ബസ് സർവീസുകൾ ആരംഭിച്ചു. ഗ്രാമീണ റൂട്ടുകളിൽ കൂടുതൽ യാത്രാസൗകര്യം ലഭ്യമാക്കുകയാണ് ലക്ഷ്യം.",
+    fullStory: "സംസ്ഥാനത്ത് കൂടുതൽ ഗ്രാമീണ, നഗര പ്രദേശങ്ങളിലേക്ക് പുതിയ ഇലക്ട്രിക്, ഫാസ്റ്റ് പാസഞ്ചർ ബസ് സർവീസുകൾ ആരംഭിച്ചു.",
+    author: "നമ്മുടെ നാട് വാർത്താ വിഭാഗം",
   },
 ];
 
@@ -304,10 +307,10 @@ export default function HomePage() {
               {/* Action Buttons */}
               <div className="flex flex-wrap items-center gap-4">
                 <Link
-                  href="/discover"
+                  href="/about"
                   className="px-6 py-3 rounded-full bg-[#1B4D36] hover:bg-[#133A28] text-white font-bold text-xs sm:text-sm transition-all duration-200 active:scale-95 shadow-md flex items-center gap-2 group"
                 >
-                  <span>നാടിനെ അറിയാം</span>
+                  <span>കൂടുതൽ അറിയാം</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition" />
                 </Link>
 
@@ -319,7 +322,7 @@ export default function HomePage() {
                   <div className="w-5 h-5 rounded-full bg-[#1B4D36] text-white flex items-center justify-center">
                     <Play className="w-2.5 h-2.5 fill-current ml-0.5" />
                   </div>
-                  <span>വീഡിയോ കാണുക</span>
+                  <span>വിവരങ്ങൾ കാണുക</span>
                 </button>
 
                 <button
@@ -355,90 +358,89 @@ export default function HomePage() {
         </section>
 
         {/* ========================================================================= */}
-        {/* 2. QUICK NAVIGATION CATEGORY BAR (Exact Match to Reference Image) */}
+        {/* 2. QUICK NAVIGATION CATEGORY BAR (Exact Match to IMAGE 2 Panel 1) */}
         {/* ========================================================================= */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
           <div className="bg-[#F3EFE6] rounded-2xl border border-[#E5DFD1] shadow-card p-3 sm:p-4">
             <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 sm:gap-4 divide-y sm:divide-y-0 sm:divide-x divide-[#E1D9C8]">
               
-              {/* 1. ക്ഷേത്രങ്ങൾ / പൈതൃകം */}
+              {/* 1. കേരളം */}
               <Link
-                href="/discover?tab=places&category=Historic%20Landmark"
+                href="/about"
                 className="flex flex-col items-center justify-center text-center p-2 rounded-xl hover:bg-white/60 transition group"
               >
                 <div className="w-9 h-9 rounded-full bg-[#E8E1D2] group-hover:bg-[#1B4D36] group-hover:text-white text-[#1B4D36] flex items-center justify-center mb-1.5 transition">
                   <Landmark className="w-4 h-4" />
                 </div>
                 <span className="text-[11px] font-bold text-[#2A3730] group-hover:text-[#1B4D36] transition">
-                  ക്ഷേത്രങ്ങൾ
+                  കേരളം
                 </span>
               </Link>
 
-              {/* 2. ടൂറിസം */}
+              {/* 2. സംസ്കാരം */}
               <Link
-                href="/discover?tab=places&category=Scenic%20Views"
+                href="/culture"
                 className="flex flex-col items-center justify-center text-center p-2 rounded-xl hover:bg-white/60 transition group"
               >
                 <div className="w-9 h-9 rounded-full bg-[#E8E1D2] group-hover:bg-[#1B4D36] group-hover:text-white text-[#1B4D36] flex items-center justify-center mb-1.5 transition">
-                  <Palmtree className="w-4 h-4" />
+                  <Sparkles className="w-4 h-4" />
                 </div>
                 <span className="text-[11px] font-bold text-[#2A3730] group-hover:text-[#1B4D36] transition">
-                  ടൂറിസം
+                  സംസ്കാരം
                 </span>
               </Link>
 
               {/* 3. വിദ്യാഭ്യാസം */}
               <Link
-                href="/discover?tab=events&category=Workshops%20%26%20Education"
+                href="/education"
                 className="flex flex-col items-center justify-center text-center p-2 rounded-xl hover:bg-white/60 transition group"
               >
                 <div className="w-9 h-9 rounded-full bg-[#E8E1D2] group-hover:bg-[#1B4D36] group-hover:text-white text-[#1B4D36] flex items-center justify-center mb-1.5 transition">
-                  <BookOpen className="w-4 h-4" />
+                  <GraduationCap className="w-4 h-4" />
                 </div>
                 <span className="text-[11px] font-bold text-[#2A3730] group-hover:text-[#1B4D36] transition">
                   വിദ്യാഭ്യാസം
                 </span>
               </Link>
 
-              {/* 4. സേവനങ്ങൾ */}
+              {/* 4. പരിപാടികൾ */}
               <Link
-                href="/discover?tab=services"
+                href="/events"
                 className="flex flex-col items-center justify-center text-center p-2 rounded-xl hover:bg-white/60 transition group"
               >
                 <div className="w-9 h-9 rounded-full bg-[#E8E1D2] group-hover:bg-[#1B4D36] group-hover:text-white text-[#1B4D36] flex items-center justify-center mb-1.5 transition">
-                  <Handshake className="w-4 h-4" />
+                  <Calendar className="w-4 h-4" />
                 </div>
                 <span className="text-[11px] font-bold text-[#2A3730] group-hover:text-[#1B4D36] transition">
-                  സേവനങ്ങൾ
+                  പരിപാടികൾ
                 </span>
               </Link>
 
-              {/* 5. പുതിയ വാർത്തകൾ */}
+              {/* 5. ഗാലറി */}
               <Link
-                href="/community"
+                href="/gallery"
                 className="flex flex-col items-center justify-center text-center p-2 rounded-xl hover:bg-white/60 transition group"
               >
                 <div className="w-9 h-9 rounded-full bg-[#E8E1D2] group-hover:bg-[#1B4D36] group-hover:text-white text-[#1B4D36] flex items-center justify-center mb-1.5 transition">
-                  <Megaphone className="w-4 h-4" />
+                  <Camera className="w-4 h-4" />
                 </div>
                 <span className="text-[11px] font-bold text-[#2A3730] group-hover:text-[#1B4D36] transition">
-                  പുതിയ വാർത്തകൾ
+                  ഗാലറി
                 </span>
               </Link>
 
-              {/* 6. നമ്മുടെ ജില്ലകൾ */}
-              <button
-                type="button"
-                onClick={() => setShowDistrictModal(true)}
+              {/* 6. വാർത്തകൾ */}
+              <Link
+                href="/news"
                 className="flex flex-col items-center justify-center text-center p-2 rounded-xl hover:bg-white/60 transition group cursor-pointer"
               >
                 <div className="w-9 h-9 rounded-full bg-[#E8E1D2] group-hover:bg-[#1B4D36] group-hover:text-white text-[#1B4D36] flex items-center justify-center mb-1.5 transition">
-                  <MapPin className="w-4 h-4" />
+                  <Newspaper className="w-4 h-4" />
                 </div>
                 <span className="text-[11px] font-bold text-[#2A3730] group-hover:text-[#1B4D36] transition">
-                  നമ്മുടെ ജില്ലകൾ
+                  വാർത്തകൾ
                 </span>
-              </button>
+              </Link>
 
             </div>
           </div>
@@ -457,7 +459,7 @@ export default function HomePage() {
               </h2>
             </div>
             <Link
-              href="/community"
+              href="/news"
               className="text-xs font-bold text-[#1B4D36] hover:text-[#133A28] flex items-center gap-1 group"
             >
               <span>എല്ലാം കാണുക</span>
@@ -465,110 +467,56 @@ export default function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            
-            {/* Left Big Card: KSRTC Kerala Bus Story */}
-            <div 
-              onClick={() => setSelectedNews(NEWS_DATA[0])}
-              className="lg:col-span-5 bg-white rounded-3xl border border-[#EAE4D7] shadow-card overflow-hidden hover:border-[#1B4D36]/60 transition group flex flex-col justify-between cursor-pointer"
-            >
-              <div>
-                <div className="h-56 sm:h-64 overflow-hidden relative">
-                  <img
-                    src={NEWS_DATA[0].imageUrl}
-                    alt="Kerala Public Transport"
-                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                  />
-                  <span className="absolute top-3 left-3 bg-[#1B4D36] text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-sm">
-                    {NEWS_DATA[0].category}
+          {/* 3 Vertical News Cards matching IMAGE 2 Panel 1 */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {NEWS_DATA.slice(0, 3).map((item) => (
+              <div
+                key={item.id}
+                onClick={() => setSelectedNews(item)}
+                className="bg-white rounded-3xl border border-[#EAE4D7] shadow-card overflow-hidden hover:border-[#1B4D36]/60 transition duration-300 group flex flex-col justify-between cursor-pointer"
+              >
+                <div>
+                  <div className="h-52 overflow-hidden relative">
+                    <img
+                      src={item.imageUrl}
+                      alt={item.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                    />
+                    <span className="absolute top-3 left-3 bg-[#1B4D36] text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-sm">
+                      {item.category}
+                    </span>
+                  </div>
+                  <div className="p-5 sm:p-6">
+                    <h3 className="font-bold font-malayalam-serif text-base sm:text-lg text-[#1A2420] group-hover:text-[#1B4D36] transition leading-snug mb-2 line-clamp-2">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs text-[#5C6A64] leading-relaxed line-clamp-2">
+                      {item.summary}
+                    </p>
+                  </div>
+                </div>
+                <div className="px-5 sm:px-6 pb-5 text-[11px] text-[#7A8880] flex items-center justify-between border-t border-[#F3EFE6] pt-3">
+                  <div className="flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-[#1B4D36]" />
+                    <span>{item.date}</span>
+                  </div>
+                  <span className="text-[#1B4D36] font-bold group-hover:underline flex items-center gap-1 text-[11px]">
+                    വായിക്കാം <ArrowRight className="w-3 h-3" />
                   </span>
                 </div>
-                <div className="p-5 sm:p-6">
-                  <h3 className="font-bold font-malayalam-serif text-lg text-[#1A2420] group-hover:text-[#1B4D36] transition leading-snug mb-2">
-                    {NEWS_DATA[0].title}
-                  </h3>
-                  <p className="text-xs text-[#5C6A64] leading-relaxed line-clamp-2">
-                    {NEWS_DATA[0].summary}
-                  </p>
-                </div>
               </div>
-              <div className="px-5 sm:px-6 pb-5 text-[11px] text-[#7A8880] flex items-center justify-between border-t border-[#F3EFE6] pt-3">
-                <div className="flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-[#1B4D36]" />
-                  <span>{NEWS_DATA[0].date}</span>
-                </div>
-                <span className="text-[#1B4D36] font-bold group-hover:underline flex items-center gap-1 text-[11px]">
-                  മുഴുവൻ വായിക്കാം <ArrowRight className="w-3 h-3" />
-                </span>
-              </div>
-            </div>
+            ))}
+          </div>
 
-            {/* Middle Column: 3 Horizontal News Items */}
-            <div className="lg:col-span-4 flex flex-col gap-3.5">
-              
-              {NEWS_DATA.slice(1).map((news) => (
-                <div 
-                  key={news.id}
-                  onClick={() => setSelectedNews(news)}
-                  className="bg-white rounded-2xl border border-[#EAE4D7] shadow-xs p-3.5 flex gap-3 hover:border-[#1B4D36]/60 transition cursor-pointer group"
-                >
-                  <img
-                    src={news.imageUrl}
-                    alt={news.title}
-                    className="w-20 h-20 rounded-xl object-cover flex-shrink-0 group-hover:scale-105 transition"
-                  />
-                  <div className="flex flex-col justify-between flex-1">
-                    <h4 className="font-bold text-xs sm:text-sm text-[#1A2420] leading-snug group-hover:text-[#1B4D36] transition line-clamp-2">
-                      {news.title}
-                    </h4>
-                    <div className="flex items-center justify-between text-[10px] text-[#7A8880] mt-1">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-3 h-3 text-[#1B4D36]" /> {news.date}
-                      </span>
-                      <span className="text-[#1B4D36] font-semibold opacity-0 group-hover:opacity-100 transition">
-                        വിശദാംശങ്ങൾ
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-
-            </div>
-
-            {/* Right Card: Dark Green Highlight Card */}
-            <div className="lg:col-span-3 bg-gradient-to-b from-[#1C5139] to-[#123826] text-white rounded-3xl p-6 relative overflow-hidden flex flex-col justify-between shadow-card">
-              <div 
-                className="absolute inset-0 bg-cover bg-center opacity-30 mix-blend-overlay"
-                style={{
-                  backgroundImage: `url('https://images.unsplash.com/photo-1593693397690-362cb9666fc2?w=800&auto=format&fit=crop&q=80')`,
-                }}
-              />
-              <div className="relative z-10">
-                <span className="font-malayalam-script text-2xl sm:text-3xl font-bold leading-tight block">
-                  നമ്മുടെ നാട്...
-                </span>
-                <span className="font-malayalam-script text-2xl sm:text-3xl font-bold leading-tight block mt-1 text-amber-200">
-                  എന്നും....
-                </span>
-                <p className="text-xs text-white/80 mt-3 leading-relaxed">
-                  കേരളത്തിന്റെ തനിമയും പാരമ്പര്യവും ഒരുമിച്ച് അനുഭവിക്കൂ.
-                </p>
-              </div>
-
-              <div className="relative z-10 pt-12">
-                <button
-                  type="button"
-                  onClick={() => setShowVideoModal(true)}
-                  className="flex items-center gap-2.5 text-xs text-white hover:text-amber-200 transition font-medium w-full py-2.5 px-3 rounded-xl bg-white/10 hover:bg-white/20 backdrop-blur-xs"
-                >
-                  <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center">
-                    <Play className="w-3 h-3 fill-current ml-0.5 text-amber-200" />
-                  </div>
-                  <span>നമ്മുടെ നാടിന്റെ സൗന്ദര്യം കാണുക</span>
-                </button>
-              </div>
-            </div>
-
+          {/* Leafy botanical ornamental divider accent from IMAGE 2 Panel 1 */}
+          <div className="mt-12 flex items-center justify-center gap-4 text-[#8C9B8E] opacity-75">
+            <div className="h-px bg-gradient-to-r from-transparent via-[#C5D0C6] to-transparent flex-1 max-w-xs" />
+            <svg className="w-8 h-8 text-[#1B4D36]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9 9 0 0 0 9-9c0-4.97-4.03-9-9-9-4.97 0-9 4.03-9 9a9 9 0 0 0 9 9z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v18M3 12h18" opacity="0.3" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c4 4 4 14 0 18-4-4-4-14 0-18z" />
+            </svg>
+            <div className="h-px bg-gradient-to-r from-transparent via-[#C5D0C6] to-transparent flex-1 max-w-xs" />
           </div>
         </section>
 

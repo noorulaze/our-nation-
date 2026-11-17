@@ -32,12 +32,14 @@ export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) =
   const [searchInput, setSearchInput] = useState("");
 
   const navLinks = [
-    { href: "/", label: "മുഖ്യ പേജ്", enLabel: "Home" },
-    { href: "/discover", label: "നാടുകൾ", enLabel: "Communities" },
-    { href: "/discover?tab=events", label: "സംഭവങ്ങൾ", enLabel: "Events" },
-    { href: "/discover?tab=places", label: "വിദ്യാഭ്യാസം", enLabel: "Education" },
-    { href: "/discover?tab=services", label: "സേവനങ്ങൾ", enLabel: "Services" },
-    { href: "/community", label: "കുറിച്ച്", enLabel: "About & Forum" },
+    { href: "/", label: "Home", enLabel: "Home" },
+    { href: "/about", label: "നമ്മുടെ നാട്", enLabel: "About Us" },
+    { href: "/news", label: "വാർത്തകൾ", enLabel: "News" },
+    { href: "/culture", label: "സംസ്കാരം", enLabel: "Culture" },
+    { href: "/education", label: "വിദ്യാഭ്യാസം", enLabel: "Education" },
+    { href: "/events", label: "പരിപാടികൾ", enLabel: "Events" },
+    { href: "/gallery", label: "ഗാലറി", enLabel: "Gallery" },
+    { href: "/contact", label: "ബന്ധപ്പെടുക", enLabel: "Contact" },
     ...(role === "admin" || role === "moderator" ? [{ href: "/admin", label: "അഡ്മിൻ", enLabel: "Admin" }] : []),
   ];
 

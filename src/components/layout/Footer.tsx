@@ -37,27 +37,27 @@ export function Footer() {
             <ul className="space-y-2.5 text-xs text-[#A2B2AA]">
               <li>
                 <Link href="/" className="hover:text-amber-300 transition">
-                  മുഖ്യ പേജ്
+                  മുഖ്യ പേജ് (Home)
                 </Link>
               </li>
               <li>
-                <Link href="/discover" className="hover:text-amber-300 transition">
-                  നാടുകൾ
+                <Link href="/about" className="hover:text-amber-300 transition">
+                  നമ്മുടെ നാട് (About Us)
                 </Link>
               </li>
               <li>
-                <Link href="/discover?tab=services" className="hover:text-amber-300 transition">
-                  സേവനങ്ങൾ
+                <Link href="/news" className="hover:text-amber-300 transition">
+                  വാർത്തകൾ (News)
                 </Link>
               </li>
               <li>
-                <Link href="/discover?tab=places" className="hover:text-amber-300 transition">
-                  വിദ്യാഭ്യാസം
+                <Link href="/culture" className="hover:text-amber-300 transition">
+                  സംസ്കാരം (Culture)
                 </Link>
               </li>
               <li>
-                <Link href="/community" className="hover:text-amber-300 transition">
-                  കമ്മ്യൂണിറ്റി ഫോറം
+                <Link href="/education" className="hover:text-amber-300 transition">
+                  വിദ്യാഭ്യാസം (Education)
                 </Link>
               </li>
             </ul>
@@ -70,18 +70,23 @@ export function Footer() {
             </h4>
             <ul className="space-y-2.5 text-xs text-[#A2B2AA]">
               <li>
+                <Link href="/events" className="hover:text-amber-300 transition">
+                  പരിപാടികൾ (Events)
+                </Link>
+              </li>
+              <li>
+                <Link href="/gallery" className="hover:text-amber-300 transition">
+                  ഗാലറി (Gallery)
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="hover:text-amber-300 transition">
+                  ബന്ധപ്പെടുക (Contact)
+                </Link>
+              </li>
+              <li>
                 <Link href="/community" className="hover:text-amber-300 transition">
-                  ഞങ്ങളെ കുറിച്ച്
-                </Link>
-              </li>
-              <li>
-                <Link href="/create" className="hover:text-amber-300 transition">
-                  ബന്ധപ്പെടുക
-                </Link>
-              </li>
-              <li>
-                <Link href="/profile" className="hover:text-amber-300 transition">
-                  പ്രൈവസി പോളിസി
+                  കമ്മ്യൂണിറ്റി ഫോറം
                 </Link>
               </li>
               <li>

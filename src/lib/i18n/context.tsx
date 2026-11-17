@@ -20,8 +20,12 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Check saved preference or browser setting
     const saved = localStorage.getItem("nammude_naadu_lang") as PreferredLanguage | null;
-    if (saved === "en" || saved === "ml") {
-      setLanguageState(saved);
+    const initial = saved === "en" || saved === "ml" ? saved : "ml";
+    setLanguageState(initial);
+    if (typeof document !== "undefined") {
+      document.documentElement.lang = initial;
+      document.documentElement.classList.toggle("lang-ml", initial === "ml");
+      document.documentElement.classList.toggle("lang-en", initial === "en");
     }
     setMounted(true);
   }, []);
@@ -31,6 +35,8 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     if (typeof window !== "undefined") {
       localStorage.setItem("nammude_naadu_lang", lang);
       document.documentElement.lang = lang;
+      document.documentElement.classList.toggle("lang-ml", lang === "ml");
+      document.documentElement.classList.toggle("lang-en", lang === "en");
     }
   };
 

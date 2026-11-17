@@ -139,7 +139,9 @@ export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) =
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-4 py-1.5 rounded-full text-xs font-semibold transition ${
+                  className={`px-4 py-1.5 rounded-full text-xs font-semibold ${
+                    language === "ml" ? "font-malayalam tracking-normal" : "font-manrope tracking-tight"
+                  } transition ${
                     isActive
                       ? "bg-[#1B4D36] text-white shadow-xs"
                       : "text-[#3D4B44] hover:text-[#1B4D36] hover:bg-[#EDE8DC]"
@@ -342,7 +344,9 @@ export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) =
                   key={link.href}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`px-3 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-between ${
+                  className={`px-3 py-2.5 rounded-xl text-xs font-semibold ${
+                    language === "ml" ? "font-malayalam tracking-normal" : "font-manrope"
+                  } transition flex items-center justify-between ${
                     isActive 
                       ? "bg-[#1B4D36] text-white shadow-xs" 
                       : "bg-white text-[#3D4B44] hover:bg-[#EFE9DD] border border-[#EAE4D7]"

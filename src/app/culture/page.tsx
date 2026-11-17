@@ -325,7 +325,7 @@ export default function CulturePage() {
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <Utensils className="w-5 h-5 text-[#B87A1E]" />
-                <span className="text-xs font-bold text-[#B87A1E] uppercase tracking-wider">നാട്ടുരുചികൾ</span>
+                <span className="text-xs font-semibold text-[#B87A1E] font-malayalam tracking-normal">നാട്ടുരുചികൾ</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-bold font-malayalam-serif text-[#1B4D36]">
                 താനൂർ & മലപ്പുറം ഭക്ഷണ സംസ്കാരം
@@ -472,7 +472,7 @@ export default function CulturePage() {
             <div className="max-w-2xl mb-8">
               <div className="flex items-center gap-2 mb-2">
                 <Landmark className="w-5 h-5 text-[#1B4D36]" />
-                <span className="text-xs font-bold text-[#1B4D36] uppercase tracking-wider">തച്ചുശാസ്ത്രം</span>
+                <span className="text-xs font-semibold text-[#1B4D36] font-malayalam tracking-normal">തച്ചുശാസ്ത്രം</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-bold font-malayalam-serif text-[#1B4D36]">
                 മലപ്പുറം & താനൂർ വാസ്തുവിദ്യയും പൈതൃക കേന്ദ്രങ്ങളും

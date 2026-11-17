@@ -1,11 +1,14 @@
 @import "leaflet/dist/leaflet.css";
-@import url('https://fonts.googleapis.com/css2?family=Gayathri:wght@400;700&family=Manjari:wght@400;700&family=Noto+Serif+Malayalam:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+/* Professional Typography: Manrope (English) & Anek Malayalam (Malayalam) */
+@import url('https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@300;400;500;600;700;800&family=Manrope:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
+  --font-manrope: 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-anek-malayalam: 'Anek Malayalam', 'Noto Sans Malayalam', sans-serif;
   --background: #FAF7F0;
   --surface: #FFFFFF;
   --foreground: #1A2420;
@@ -35,31 +38,158 @@ html, body {
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: "Manjari", "Gayathri", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Malayalam", sans-serif;
+  font-family: var(--font-manrope), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
+/* ========================================================================= */
+/* 1. MALAYALAM TYPOGRAPHY SYSTEM (Anek Malayalam)                           */
+/* ========================================================================= */
+
+/* When page is in Malayalam mode or block has Malayalam class */
+html[lang="ml"] body,
+html.lang-ml body,
+[lang="ml"],
+.lang-ml,
+.font-malayalam {
+  font-family: var(--font-anek-malayalam), 'Anek Malayalam', 'Noto Sans Malayalam', sans-serif;
+  letter-spacing: normal !important;
+  line-height: 1.62;
+}
+
+/* 
+ * CRITICAL MALAYALAM SCRIPT INTEGRITY RULE:
+ * In Malayalam typography, artificial letter spacing (tracking) breaks
+ * OpenType GSUB/GPOS conjunct ligatures (കൂട്ടക്ഷരങ്ങൾ) and detaches vowel matras.
+ * We strictly enforce letter-spacing: normal across all Malayalam elements.
+ */
+.font-malayalam,
+.font-malayalam-serif,
+.font-malayalam-script,
+.font-malayalam-body,
+.font-malayalam-heading,
+.brand-wordmark-ml,
+[lang="ml"] h1, [lang="ml"] h2, [lang="ml"] h3, [lang="ml"] h4, [lang="ml"] h5, [lang="ml"] h6,
+[lang="ml"] p, [lang="ml"] span, [lang="ml"] button, [lang="ml"] a, [lang="ml"] label {
+  letter-spacing: normal !important;
+  word-spacing: normal;
+  font-feature-settings: "kern" 1, "liga" 1, "clig" 1;
+}
+
+/* Main Display & Page Headings (Anek Malayalam Bold / ExtraBold) */
+.font-malayalam-serif {
+  font-family: var(--font-anek-malayalam), 'Anek Malayalam', sans-serif;
+  letter-spacing: normal !important;
+  line-height: 1.34;
+  font-weight: 700;
+}
+
+/* Section Headings & Interactive Pill Labels (Anek Malayalam SemiBold) */
+.font-malayalam-heading {
+  font-family: var(--font-anek-malayalam), 'Anek Malayalam', sans-serif;
+  letter-spacing: normal !important;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+/* Sub-headings, Taglines & Accents (Anek Malayalam Medium/SemiBold) */
+.font-malayalam-script {
+  font-family: var(--font-anek-malayalam), 'Anek Malayalam', sans-serif;
+  letter-spacing: normal !important;
+  line-height: 1.45;
+  font-weight: 600;
+}
+
+/* High-Readability Body Text (Anek Malayalam Regular with Generous Line Height) */
+.font-malayalam-body {
+  font-family: var(--font-anek-malayalam), 'Anek Malayalam', sans-serif;
+  letter-spacing: normal !important;
+  line-height: 1.68;
+  font-weight: 400;
+}
+
+/* ========================================================================= */
+/* 2. ENGLISH TYPOGRAPHY SYSTEM (Manrope)                                    */
+/* ========================================================================= */
+
+html[lang="en"] body,
+html.lang-en body,
+[lang="en"],
+.lang-en,
+.font-english {
+  font-family: var(--font-manrope), 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.55;
+}
+
+/* English Display Headings: Strong, modern, tight tracking */
+html[lang="en"] h1,
+.font-english-display {
+  font-family: var(--font-manrope), 'Manrope', sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+
+/* English Section Headings: Semi-bold / Bold */
+html[lang="en"] h2,
+html[lang="en"] h3,
+.font-english-heading {
+  font-family: var(--font-manrope), 'Manrope', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+/* English Body Paragraphs */
+html[lang="en"] p,
+.font-english-body {
+  font-family: var(--font-manrope), 'Manrope', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+/* ========================================================================= */
+/* 3. BRAND WORDMARK & NAVIGATION HIERARCHY                                  */
+/* ========================================================================= */
+
+/* English Brand Wordmark: Bold, clean, distinctive */
+.brand-wordmark-en {
+  font-family: var(--font-manrope), 'Manrope', sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+/* Malayalam Brand Wordmark: Bold, balanced, natural spacing */
+.brand-wordmark-ml {
+  font-family: var(--font-anek-malayalam), 'Anek Malayalam', sans-serif;
+  font-weight: 700;
+  letter-spacing: normal !important;
+}
+
+/* Navigation Links: Clean, balanced, medium/semi-bold */
+nav a,
+.nav-link {
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+/* Buttons and Labels: Medium/SemiBold with excellent legibility */
+button,
+.btn-label {
+  font-weight: 600;
+}
+
+/* iOS Safe Area Padding */
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
   .safe-area-pb {
     padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem);
   }
 }
 
-/* Beautiful Malayalam font utilities */
-.font-malayalam-serif {
-  font-family: "Noto Serif Malayalam", serif;
-}
-
-.font-malayalam-script {
-  font-family: "Gayathri", cursive, sans-serif;
-}
-
-.font-malayalam-body {
-  font-family: "Manjari", sans-serif;
-}
-
-/* Custom scrollbar for sleek Kerala editorial feel */
+/* Sleek Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;

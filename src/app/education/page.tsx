@@ -383,7 +383,7 @@ export default function EducationPage() {
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <School className="w-5 h-5 text-[#1B4D36]" />
-                  <span className="text-xs font-bold text-[#1B4D36] uppercase tracking-wider">ഉന്നത വിദ്യാഭ്യാസം</span>
+                  <span className="text-xs font-semibold text-[#1B4D36] font-malayalam tracking-normal">ഉന്നത വിദ്യാഭ്യാസം</span>
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-bold font-malayalam-serif text-[#1B4D36]">
                   കേരളത്തിലെ സർവ്വകലാശാലകൾ
@@ -442,7 +442,7 @@ export default function EducationPage() {
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <Award className="w-5 h-5 text-[#B87A1E]" />
-                  <span className="text-xs font-bold text-[#B87A1E] uppercase tracking-wider">ധനസഹായം</span>
+                  <span className="text-xs font-semibold text-[#B87A1E] font-malayalam tracking-normal">ധനസഹായം</span>
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-bold font-malayalam-serif text-[#1B4D36]">
                   പ്രധാന സ്കോളർഷിപ്പുകൾ & ഗ്രാന്റുകൾ

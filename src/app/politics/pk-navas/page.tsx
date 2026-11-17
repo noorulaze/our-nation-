@@ -341,7 +341,7 @@ export default function PkNavasPoliticalProfilePage() {
                   ) : (
                     /* High-fidelity fallback editorial representative portrait */
                     <div className="w-full h-full bg-[#1B4D36] text-white flex flex-col items-center justify-center p-4">
-                      <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold font-serif mb-2">
+                      <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-2xl font-extrabold font-brand mb-2">
                         PK
                       </div>
                       <span className="text-xs font-bold text-center">പി. കെ. നവാസ്</span>

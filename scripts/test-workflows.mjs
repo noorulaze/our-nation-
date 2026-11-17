@@ -258,5 +258,30 @@ runTest("Workflow 14: Community Submission Moderation & Rejection Reason Auditin
   assert.strictEqual(pendingSubmission.rejection_reason, rejectionReason);
 });
 
+// 15. PROFESSIONAL TYPOGRAPHY SYSTEM (MANROPE & ANEK MALAYALAM)
+runTest("Workflow 15: Professional Typography System (Manrope & Anek Malayalam)", async () => {
+  const fs = await import("node:fs");
+  
+  // Verify next/font/google in layout.tsx
+  const layout = fs.readFileSync("./src/app/layout.tsx", "utf8");
+  assert.strictEqual(layout.includes("Manrope"), true);
+  assert.strictEqual(layout.includes("Anek_Malayalam"), true);
+  assert.strictEqual(layout.includes("--font-manrope"), true);
+  assert.strictEqual(layout.includes("--font-anek-malayalam"), true);
+
+  // Verify globals.css typography configuration & Malayalam letter-spacing safety
+  const globals = fs.readFileSync("./src/app/globals.css", "utf8");
+  assert.strictEqual(globals.includes("--font-manrope"), true);
+  assert.strictEqual(globals.includes("--font-anek-malayalam"), true);
+  assert.strictEqual(globals.includes("letter-spacing: normal !important"), true);
+
+  // Verify tailwind.config.ts fontFamily declarations
+  const tailwind = fs.readFileSync("./tailwind.config.ts", "utf8");
+  assert.strictEqual(tailwind.includes("var(--font-manrope)"), true);
+  assert.strictEqual(tailwind.includes("var(--font-anek-malayalam)"), true);
+  assert.strictEqual(tailwind.includes("'Anek Malayalam'"), true);
+  assert.strictEqual(tailwind.includes("manrope:"), true);
+});
+
 console.log(`\nResults: ${passed}/${total} test suites PASSED (100% success rate)`);
 console.log("======================================================================\n");

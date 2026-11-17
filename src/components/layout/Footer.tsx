@@ -142,10 +142,10 @@ export function Footer() {
                 <path d="M42 5 C38 12 34 20 28 30 C24 38 20 46 22 55 C24 64 30 72 36 82 C38 85 36 88 32 88 C25 82 18 72 16 62 C14 52 18 40 22 30 C26 20 32 10 38 4 Z" />
               </svg>
               <div className="flex flex-col">
-                <span className="font-serif italic text-amber-200 text-lg leading-none">
-                  Kerala
+                <span className="font-brand font-bold text-amber-200 text-base tracking-wide leading-none">
+                  KERALA
                 </span>
-                <span className="text-[10px] text-amber-300/70 italic tracking-wider">
+                <span className="text-[10px] text-amber-300/80 font-medium tracking-wide">
                   God&apos;s Own Country
                 </span>
               </div>

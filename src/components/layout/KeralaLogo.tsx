@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+import { useLanguage } from "@/lib/i18n/context";
 
 export function KeralaLogo({ 
   className = "h-10", 
@@ -9,10 +12,13 @@ export function KeralaLogo({
   variant?: "light" | "dark";
   showSubtext?: boolean;
 }) {
+  const { language } = useLanguage();
   const isDark = variant === "dark";
   const strokeColor = isDark ? "#FFFFFF" : "#1B4D36";
   const textColor = isDark ? "text-white" : "text-[#1B4D36]";
-  const subtextColor = isDark ? "text-amber-200/80" : "text-[#9E6A1E]";
+  const subtextColor = isDark ? "text-amber-200/90" : "text-[#9E6A1E]";
+
+  const isEn = language === "en";
 
   return (
     <div className={`flex items-center gap-3 ${className}`}>
@@ -22,6 +28,7 @@ export function KeralaLogo({
         className="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0" 
         fill="none" 
         xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
       >
         {/* Palm Fronds */}
         <path 
@@ -53,15 +60,26 @@ export function KeralaLogo({
         />
       </svg>
 
-      {/* Typography */}
+      {/* Brand Wordmark Typography Hierarchy */}
       <div className="flex flex-col">
-        <span className={`text-xl sm:text-2xl font-bold font-malayalam-serif tracking-tight leading-none ${textColor}`}>
-          നമ്മുടെ നാട്
-        </span>
-        {showSubtext && (
-          <span className={`text-[11px] font-malayalam-script tracking-wide mt-0.5 ${subtextColor}`}>
-            നമ്മുടെ നാട്... നമ്മുടെ അഭിമാനം...
-          </span>
+        {isEn ? (
+          <>
+            <span className={`text-lg sm:text-2xl font-extrabold font-brand tracking-tight leading-none ${textColor}`}>
+              OUR NATION
+            </span>
+            <span className={`text-[10px] sm:text-[11px] font-medium font-malayalam tracking-normal mt-0.5 ${subtextColor}`}>
+              നമ്മുടെ നാട് • Malappuram & Tanur
+            </span>
+          </>
+        ) : (
+          <>
+            <span className={`text-xl sm:text-2xl font-bold font-malayalam leading-none tracking-normal ${textColor}`}>
+              നമ്മുടെ നാട്
+            </span>
+            <span className={`text-[10px] sm:text-[11px] font-semibold font-brand tracking-wider uppercase mt-0.5 ${subtextColor}`}>
+              OUR NATION • താനൂർ & മലപ്പുറം
+            </span>
+          </>
         )}
       </div>
     </div>

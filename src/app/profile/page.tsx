@@ -627,7 +627,7 @@ export default function ProfilePage() {
             </div>
 
             <div className="bg-[#FAF4E6] rounded-3xl border border-[#E8DCBF] p-6 shadow-card text-[#8C5B0F]">
-              <h4 className="text-xs font-bold uppercase tracking-wider mb-2">നമ്മുടെ നാട് സുരക്ഷ</h4>
+              <h4 className="text-xs font-semibold font-malayalam tracking-normal mb-2">നമ്മുടെ നാട് സുരക്ഷ</h4>
               <p className="text-xs leading-relaxed">
                 നിങ്ങളുടെ വിവരങ്ങൾ സുരക്ഷിതമായി സൂക്ഷിക്കപ്പെടുന്നു. പ്രാദേശിക കാര്യങ്ങളിൽ സജീവമായി പങ്കാളിയാകൂ.
               </p>

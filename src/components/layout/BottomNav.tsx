@@ -58,7 +58,7 @@ export function BottomNav() {
               <div className={`p-1 rounded-full transition ${tab.isActive ? "bg-[#E0F1E7]/80" : ""}`}>
                 <Icon className={`w-5 h-5 ${tab.isActive ? "stroke-[2.5]" : "stroke-[1.8]"}`} />
               </div>
-              <span className={`text-[10px] mt-0.5 tracking-tight ${tab.isActive ? "font-bold text-[#1B4D36]" : "font-medium"}`}>
+              <span className={`text-[10px] mt-0.5 ${language === "ml" ? "font-malayalam tracking-normal" : "font-manrope tracking-tight"} ${tab.isActive ? "font-bold text-[#1B4D36]" : "font-medium"}`}>
                 {tab.label}
               </span>
             </Link>

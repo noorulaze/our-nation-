@@ -18,25 +18,28 @@ import {
   ChevronRight,
   X
 } from "lucide-react";
-import { NewsArticle, KERALA_NEWS_ARTICLES } from "@/lib/data/keralaNewsData";
+import { store } from "@/lib/data/store";
+import { NewsArticleEntity } from "@/types/database";
 
 export default function NewsPage() {
   const { language } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState("എല്ലാം");
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeArticleModal, setActiveArticleModal] = useState<NewsArticle | null>(null);
+  const [activeArticleModal, setActiveArticleModal] = useState<NewsArticleEntity | null>(null);
 
-  const categories = ["എല്ലാം", "കേരളം", "വിദ്യാഭ്യാസം", "സർക്കാർ", "രാഷ്ട്രീയം", "കായികം"];
+  const categories = ["എല്ലാം", "താനൂർ", "വിദ്യാഭ്യാസം", "ഭരണം", "കായികം", "പൈതൃകം", "തീരദേശം"];
+
+  const allNews = useMemo(() => store.getNewsArticles(), []);
 
   const filteredNews = useMemo(() => {
-    return KERALA_NEWS_ARTICLES.filter((item) => {
+    return allNews.filter((item) => {
       const matchCat = selectedCategory === "എല്ലാം" || item.category === selectedCategory;
-      const matchSearch = (item.title + " " + item.summary + " " + item.fullStory)
+      const matchSearch = (item.title + " " + item.summary + " " + (item.full_story || ""))
         .toLowerCase()
         .includes(searchQuery.toLowerCase());
       return matchCat && matchSearch;
     });
-  }, [selectedCategory, searchQuery]);
+  }, [allNews, selectedCategory, searchQuery]);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF7F0] text-[#1A2420]">
@@ -141,10 +144,10 @@ export default function NewsPage() {
                       onClick={() => setActiveArticleModal(news)}
                       className="bg-white rounded-2xl sm:rounded-3xl border border-[#EAE4D7] p-3 sm:p-5 shadow-card hover:border-[#1B4D36]/60 transition flex flex-row gap-3 sm:gap-4 cursor-pointer group"
                     >
-                      {/* Thumbnail Image (Side-by-side on mobile matching Screen 3) */}
+                      {/* Thumbnail Image */}
                       <div className="w-24 h-24 sm:w-44 sm:h-28 rounded-xl sm:rounded-2xl overflow-hidden flex-shrink-0 bg-[#E5DDD0]">
                         <img
-                          src={news.imageUrl}
+                          src={news.image_url}
                           alt={news.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
                         />
@@ -153,10 +156,15 @@ export default function NewsPage() {
                       {/* Content */}
                       <div className="flex-1 min-w-0 flex flex-col justify-between">
                         <div>
-                          <div className="flex items-center gap-2 mb-1">
+                          <div className="flex flex-wrap items-center gap-1.5 mb-1">
                             <span className="text-[9px] sm:text-[10px] font-bold text-[#1B4D36] bg-[#E0F1E7] px-2 py-0.5 rounded-full border border-[#BDE3CE]">
                               {news.category}
                             </span>
+                            {news.is_verified && (
+                              <span className="text-[9px] sm:text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                                Verified ✓
+                              </span>
+                            )}
                             <span className="text-[10px] sm:text-[11px] text-[#7A8880] flex items-center gap-1">
                               <Calendar className="w-3 h-3 text-[#1B4D36]" /> {news.date}
                             </span>
@@ -170,7 +178,7 @@ export default function NewsPage() {
                         </div>
 
                         <div className="pt-1.5 flex items-center justify-between text-[11px] sm:text-xs font-bold text-[#1B4D36]">
-                          <span className="text-[10px] sm:text-[11px] text-[#7A8880] font-normal truncate max-w-[120px] sm:max-w-none">{news.source}</span>
+                          <span className="text-[10px] sm:text-[11px] text-[#7A8880] font-normal truncate max-w-[120px] sm:max-w-none">{news.source_name}</span>
                           <span className="group-hover:underline flex items-center gap-1 shrink-0">
                             <span className="hidden sm:inline">പൂർണ്ണമായി വായിക്കുക</span>
                             <ArrowRight className="w-3.5 h-3.5" />
@@ -257,7 +265,7 @@ export default function NewsPage() {
           <div className="bg-[#FAF7F0] rounded-3xl border border-[#E7DFD0] max-w-2xl w-full shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
             <div className="relative h-60 w-full flex-shrink-0 bg-neutral-900">
               <img
-                src={activeArticleModal.imageUrl}
+                src={activeArticleModal.image_url}
                 alt={activeArticleModal.title}
                 className="w-full h-full object-cover"
               />
@@ -267,17 +275,30 @@ export default function NewsPage() {
               >
                 <X className="w-4 h-4" />
               </button>
-              <span className="absolute bottom-4 left-4 bg-[#1B4D36] text-white text-xs font-bold px-3 py-1 rounded-full">
-                {activeArticleModal.category}
-              </span>
+              <div className="absolute bottom-4 left-4 flex items-center gap-2">
+                <span className="bg-[#1B4D36] text-white text-xs font-bold px-3 py-1 rounded-full">
+                  {activeArticleModal.category}
+                </span>
+                {activeArticleModal.is_verified && (
+                  <span className="bg-emerald-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-xs">
+                    Verified Source ✓
+                  </span>
+                )}
+              </div>
             </div>
 
             <div className="p-6 sm:p-8 overflow-y-auto flex-1">
-              <div className="flex items-center gap-2 text-xs text-[#7A8880] mb-2">
+              <div className="flex flex-wrap items-center gap-2 text-xs text-[#7A8880] mb-2">
                 <Calendar className="w-3.5 h-3.5 text-[#1B4D36]" />
                 <span>{activeArticleModal.date}</span>
                 <span>•</span>
-                <span>{activeArticleModal.source}</span>
+                <span className="font-semibold text-[#1A2420]">{activeArticleModal.source_name}</span>
+                {activeArticleModal.verified_at && (
+                  <>
+                    <span>•</span>
+                    <span>സ്ഥിരീകരിച്ചത്: {activeArticleModal.verified_at}</span>
+                  </>
+                )}
               </div>
 
               <h2 className="text-xl sm:text-2xl font-bold font-malayalam-serif text-[#1B4D36] mb-4 leading-snug">
@@ -285,11 +306,26 @@ export default function NewsPage() {
               </h2>
 
               <p className="text-xs sm:text-sm text-[#3E4D45] leading-relaxed whitespace-pre-line font-malayalam-body">
-                {activeArticleModal.fullStory}
+                {activeArticleModal.full_story}
               </p>
 
-              <div className="mt-8 pt-4 border-t border-[#E5DFD1] flex items-center justify-between">
-                <span className="text-xs text-[#7A8880]">നമ്മുടെ നാട് വാർത്താ ശൃംഖല</span>
+              {activeArticleModal.source_url && (
+                <div className="mt-5 p-3 rounded-2xl bg-[#FAF7F0] border border-[#EAE4D7] flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                  <span className="text-[#5C6A64]">ഔദ്യോഗിക പ്രൈമറി ഉറവിടം:</span>
+                  <a
+                    href={activeArticleModal.source_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold text-[#1B4D36] hover:underline flex items-center gap-1"
+                  >
+                    <span>ഉറവിട പോർട്ടൽ സന്ദർശിക്കുക</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
+              )}
+
+              <div className="mt-6 pt-4 border-t border-[#E5DFD1] flex items-center justify-between">
+                <span className="text-xs text-[#7A8880]">നമ്മുടെ നാട് വാർത്താ ശൃംഖല • Malappuram</span>
                 <button
                   type="button"
                   onClick={() => {

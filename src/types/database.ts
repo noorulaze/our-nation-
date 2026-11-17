@@ -104,11 +104,19 @@ export interface Event {
   start_date: string;
   end_date?: string | null;
   image_url?: string | null;
+  image_license?: string | null;
+  image_attribution?: string | null;
   organizer_name: string;
   contact_phone?: string | null;
   contact_email?: string | null;
   status: EventStatus;
   rejection_reason?: string | null;
+  is_verified?: boolean;
+  is_community_submitted?: boolean;
+  source_url?: string | null;
+  source_name?: string | null;
+  verified_at?: string | null;
+  archived?: boolean;
   created_at: string;
   community?: Community;
   creator?: Profile;
@@ -130,8 +138,15 @@ export interface Business {
   website?: string | null;
   opening_hours?: Record<string, string> | null;
   image_url?: string | null;
+  image_license?: string | null;
+  image_attribution?: string | null;
   is_verified: boolean;
+  is_community_submitted?: boolean;
+  source_url?: string | null;
+  source_name?: string | null;
+  verified_at?: string | null;
   status: BusinessStatus;
+  archived?: boolean;
   created_at: string;
   community?: Community;
 }
@@ -147,6 +162,13 @@ export interface Place {
   latitude?: number | null;
   longitude?: number | null;
   image_url?: string | null;
+  image_license?: string | null;
+  image_attribution?: string | null;
+  is_verified?: boolean;
+  source_url?: string | null;
+  source_name?: string | null;
+  verified_at?: string | null;
+  archived?: boolean;
   created_at: string;
   community?: Community;
 }
@@ -162,11 +184,136 @@ export interface Announcement {
   is_official: boolean;
   publisher_organization: string;
   image_url?: string | null;
+  image_license?: string | null;
+  image_attribution?: string | null;
+  is_verified?: boolean;
+  is_community_submitted?: boolean;
+  source_url?: string | null;
+  source_name?: string | null;
+  verified_at?: string | null;
   status: AnnouncementStatus;
   expires_at?: string | null;
+  archived?: boolean;
   created_at: string;
   publisher?: Profile;
   community?: Community;
+}
+
+export interface NewsArticleEntity {
+  id: string;
+  community_id: string;
+  title: string;
+  title_ml?: string | null;
+  summary: string;
+  summary_ml?: string | null;
+  full_story: string;
+  full_story_ml?: string | null;
+  category: string;
+  date: string;
+  image_url: string;
+  image_license?: string | null;
+  image_attribution?: string | null;
+  source_name: string;
+  source?: string;
+  read_time?: string;
+  featured?: boolean;
+  source_url?: string | null;
+  is_official: boolean;
+  is_verified: boolean;
+  is_community_submitted?: boolean;
+  verified_at?: string | null;
+  status: 'pending' | 'approved' | 'rejected' | 'archived';
+  archived?: boolean;
+  created_at: string;
+}
+
+export interface Institution {
+  id: string;
+  community_id: string;
+  name: string;
+  name_ml: string;
+  type: 'school' | 'college' | 'university' | 'arabic_college' | 'library' | 'vocational';
+  type_ml: string;
+  established_year: string;
+  location: string;
+  location_ml?: string;
+  address: string;
+  phone?: string | null;
+  email?: string | null;
+  website?: string | null;
+  description: string;
+  description_ml?: string;
+  courses_or_facilities: string[];
+  image_url: string;
+  image_license?: string | null;
+  image_attribution?: string | null;
+  is_verified: boolean;
+  source_url?: string | null;
+  source_name?: string | null;
+  verified_at?: string | null;
+  archived?: boolean;
+  created_at: string;
+}
+
+export interface PublicService {
+  id: string;
+  community_id: string;
+  name: string;
+  name_ml: string;
+  category: 'municipality' | 'health' | 'police' | 'fire' | 'revenue' | 'transport' | 'utility';
+  category_ml: string;
+  address: string;
+  phone: string;
+  emergency_number?: string | null;
+  official_link?: string | null;
+  working_hours: string;
+  description?: string;
+  is_verified: boolean;
+  source_url?: string | null;
+  source_name?: string | null;
+  verified_at?: string | null;
+  archived?: boolean;
+  created_at: string;
+}
+
+export interface PublicRepresentative {
+  id: string;
+  community_id: string;
+  name: string;
+  name_ml: string;
+  designation: string;
+  designation_ml: string;
+  role_type: 'mla' | 'mp' | 'chairperson' | 'councilor';
+  jurisdiction: string;
+  jurisdiction_ml: string;
+  party: string;
+  office_address: string;
+  phone: string;
+  email?: string | null;
+  term_period: string;
+  image_url: string;
+  image_license?: string | null;
+  profile_url?: string | null;
+  source_url?: string | null;
+  verified_at?: string | null;
+  is_verified: boolean;
+}
+
+export interface CulturalHeritageItem {
+  id: string;
+  community_id: string;
+  name: string;
+  category: 'കലാരൂപങ്ങൾ' | 'ഉത്സവങ്ങൾ' | 'പാരമ്പര്യം' | 'വാസ്തുവിദ്യ';
+  district: string;
+  image_url: string;
+  image_license?: string | null;
+  short_desc: string;
+  full_history: string;
+  instruments?: string;
+  source_name?: string;
+  source_url?: string | null;
+  verified_at?: string | null;
+  is_verified: boolean;
 }
 
 export interface IssueReport {
@@ -184,6 +331,9 @@ export interface IssueReport {
   official_response?: string | null;
   status_updated_at: string;
   status_updated_by?: string | null;
+  is_verified?: boolean;
+  verified_at?: string | null;
+  source_url?: string | null;
   created_at: string;
   reporter?: Profile;
   community?: Community;

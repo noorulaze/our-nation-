@@ -9,7 +9,12 @@ import {
   Comment,
   Profile,
   ModerationReport,
-  AuditLog
+  AuditLog,
+  NewsArticleEntity,
+  Institution,
+  PublicService,
+  PublicRepresentative,
+  CulturalHeritageItem
 } from "@/types/database";
 import { 
   initialCommunities, 
@@ -19,7 +24,12 @@ import {
   initialPlaces, 
   initialAnnouncements, 
   initialIssueReports, 
-  initialPosts 
+  initialPosts,
+  initialNewsArticles,
+  initialInstitutions,
+  initialPublicServices,
+  initialRepresentatives,
+  initialCulturalItems
 } from "./initialData";
 
 class DataStore {
@@ -29,6 +39,11 @@ class DataStore {
   private businesses: Business[] = [...initialBusinesses];
   private places: Place[] = [...initialPlaces];
   private announcements: Announcement[] = [...initialAnnouncements];
+  private newsArticles: NewsArticleEntity[] = [...initialNewsArticles];
+  private institutions: Institution[] = [...initialInstitutions];
+  private publicServices: PublicService[] = [...initialPublicServices];
+  private representatives: PublicRepresentative[] = [...initialRepresentatives];
+  private culturalItems: CulturalHeritageItem[] = [...initialCulturalItems];
   private issueReports: IssueReport[] = [...initialIssueReports];
   private posts: Post[] = [...initialPosts];
   private comments: Comment[] = [
@@ -139,15 +154,18 @@ class DataStore {
   }
 
   // EVENTS
-  getEvents(communityId?: string, category?: string, onlyApproved = true): Event[] {
+  getEvents(communityId?: string, category?: string, onlyApproved = true, includeArchived = false): Event[] {
     let list = this.events;
+    if (!includeArchived) {
+      list = list.filter(e => !e.archived);
+    }
     if (onlyApproved) {
       list = list.filter(e => e.status === "approved");
     }
     if (communityId) {
       list = list.filter(e => e.community_id === communityId);
     }
-    if (category && category !== "All") {
+    if (category && category !== "All" && category !== "എല്ലാം") {
       list = list.filter(e => e.category.toLowerCase() === category.toLowerCase());
     }
     return list
@@ -173,13 +191,26 @@ class DataStore {
     const newEvent: Event = {
       ...eventData,
       id: "event-" + Date.now(),
-      status: "approved", // auto-approve in demo mode or pending in production
+      status: "approved", // default approved in local state
+      is_verified: false,
+      is_community_submitted: true,
+      archived: false,
       created_at: new Date().toISOString(),
       community: this.communities.find(c => c.id === eventData.community_id),
     };
     this.events.push(newEvent);
     this.addAuditLog(eventData.creator_id, "SUBMIT_EVENT", "event", newEvent.id);
     return newEvent;
+  }
+
+  updateEvent(id: string, updates: Partial<Event>, actorId?: string): boolean {
+    const e = this.events.find(item => item.id === id);
+    if (e) {
+      Object.assign(e, updates);
+      this.addAuditLog(actorId, "UPDATE_EVENT", "event", id, updates);
+      return true;
+    }
+    return false;
   }
 
   updateEventStatus(id: string, status: Event['status'], reason?: string, actorId?: string): boolean {
@@ -193,9 +224,22 @@ class DataStore {
     return false;
   }
 
+  archiveEvent(id: string, actorId?: string): boolean {
+    const e = this.events.find(item => item.id === id);
+    if (e) {
+      e.archived = true;
+      this.addAuditLog(actorId, "ARCHIVE_EVENT", "event", id);
+      return true;
+    }
+    return false;
+  }
+
   // BUSINESSES (SERVICES)
-  getBusinesses(communityId?: string, category?: string, onlyApproved = true): Business[] {
+  getBusinesses(communityId?: string, category?: string, onlyApproved = true, includeArchived = false): Business[] {
     let list = this.businesses;
+    if (!includeArchived) {
+      list = list.filter(b => !b.archived);
+    }
     if (onlyApproved) {
       list = list.filter(b => b.status === "approved");
     }
@@ -227,7 +271,9 @@ class DataStore {
       ...bizData,
       id: "biz-" + Date.now(),
       is_verified: false,
+      is_community_submitted: true,
       status: "approved",
+      archived: false,
       created_at: new Date().toISOString(),
       community: this.communities.find(c => c.id === bizData.community_id),
     };
@@ -236,15 +282,222 @@ class DataStore {
     return newBiz;
   }
 
+  updateBusiness(id: string, updates: Partial<Business>, actorId?: string): boolean {
+    const b = this.businesses.find(item => item.id === id);
+    if (b) {
+      Object.assign(b, updates);
+      this.addAuditLog(actorId, "UPDATE_BUSINESS", "business", id, updates);
+      return true;
+    }
+    return false;
+  }
+
   updateBusinessStatus(id: string, status: Business['status'], verified?: boolean, actorId?: string): boolean {
     const b = this.businesses.find(item => item.id === id);
     if (b) {
       b.status = status;
-      if (typeof verified === "boolean") b.is_verified = verified;
+      if (typeof verified === "boolean") {
+        b.is_verified = verified;
+        if (verified) b.verified_at = new Date().toISOString().split("T")[0];
+      }
       this.addAuditLog(actorId, "UPDATE_BUSINESS_STATUS", "business", id, { status, verified });
       return true;
     }
     return false;
+  }
+
+  archiveBusiness(id: string, actorId?: string): boolean {
+    const b = this.businesses.find(item => item.id === id);
+    if (b) {
+      b.archived = true;
+      this.addAuditLog(actorId, "ARCHIVE_BUSINESS", "business", id);
+      return true;
+    }
+    return false;
+  }
+
+  // NEWS ARTICLES
+  getNewsArticles(communityId?: string, onlyApproved = true, includeArchived = false): NewsArticleEntity[] {
+    let list = this.newsArticles;
+    if (!includeArchived) {
+      list = list.filter(n => !n.archived);
+    }
+    if (onlyApproved) {
+      list = list.filter(n => n.status === "approved");
+    }
+    if (communityId) {
+      list = list.filter(n => n.community_id === communityId);
+    }
+    return list.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  }
+
+  getNewsArticleById(id: string): NewsArticleEntity | undefined {
+    return this.newsArticles.find(n => n.id === id);
+  }
+
+  createNewsArticle(data: Omit<NewsArticleEntity, "id" | "created_at" | "archived">, actorId?: string): NewsArticleEntity {
+    const item: NewsArticleEntity = {
+      ...data,
+      id: "news-" + Date.now(),
+      archived: false,
+      created_at: new Date().toISOString(),
+    };
+    this.newsArticles.unshift(item);
+    this.addAuditLog(actorId, "CREATE_NEWS_ARTICLE", "news", item.id);
+    return item;
+  }
+
+  updateNewsArticle(id: string, updates: Partial<NewsArticleEntity>, actorId?: string): boolean {
+    const n = this.newsArticles.find(item => item.id === id);
+    if (n) {
+      Object.assign(n, updates);
+      this.addAuditLog(actorId, "UPDATE_NEWS_ARTICLE", "news", id, updates);
+      return true;
+    }
+    return false;
+  }
+
+  archiveNewsArticle(id: string, actorId?: string): boolean {
+    const n = this.newsArticles.find(item => item.id === id);
+    if (n) {
+      n.archived = true;
+      n.status = "archived";
+      this.addAuditLog(actorId, "ARCHIVE_NEWS_ARTICLE", "news", id);
+      return true;
+    }
+    return false;
+  }
+
+  // INSTITUTIONS
+  getInstitutions(communityId?: string, type?: string, includeArchived = false): Institution[] {
+    let list = this.institutions;
+    if (!includeArchived) {
+      list = list.filter(i => !i.archived);
+    }
+    if (communityId) {
+      list = list.filter(i => i.community_id === communityId);
+    }
+    if (type && type !== "All" && type !== "എല്ലാം") {
+      list = list.filter(i => i.type.toLowerCase() === type.toLowerCase());
+    }
+    return list.sort((a, b) => (b.is_verified ? 1 : 0) - (a.is_verified ? 1 : 0));
+  }
+
+  getInstitutionById(id: string): Institution | undefined {
+    return this.institutions.find(i => i.id === id);
+  }
+
+  createInstitution(data: Omit<Institution, "id" | "created_at" | "archived">, actorId?: string): Institution {
+    const item: Institution = {
+      ...data,
+      id: "inst-" + Date.now(),
+      archived: false,
+      created_at: new Date().toISOString(),
+    };
+    this.institutions.push(item);
+    this.addAuditLog(actorId, "CREATE_INSTITUTION", "institution", item.id);
+    return item;
+  }
+
+  updateInstitution(id: string, updates: Partial<Institution>, actorId?: string): boolean {
+    const item = this.institutions.find(i => i.id === id);
+    if (item) {
+      Object.assign(item, updates);
+      this.addAuditLog(actorId, "UPDATE_INSTITUTION", "institution", id, updates);
+      return true;
+    }
+    return false;
+  }
+
+  archiveInstitution(id: string, actorId?: string): boolean {
+    const item = this.institutions.find(i => i.id === id);
+    if (item) {
+      item.archived = true;
+      this.addAuditLog(actorId, "ARCHIVE_INSTITUTION", "institution", id);
+      return true;
+    }
+    return false;
+  }
+
+  // PUBLIC SERVICES & EMERGENCY
+  getPublicServices(communityId?: string, category?: string, includeArchived = false): PublicService[] {
+    let list = this.publicServices;
+    if (!includeArchived) {
+      list = list.filter(s => !s.archived);
+    }
+    if (communityId) {
+      list = list.filter(s => s.community_id === communityId);
+    }
+    if (category && category !== "all" && category !== "All") {
+      list = list.filter(s => s.category.toLowerCase() === category.toLowerCase());
+    }
+    return list;
+  }
+
+  getPublicServiceById(id: string): PublicService | undefined {
+    return this.publicServices.find(s => s.id === id);
+  }
+
+  createPublicService(data: Omit<PublicService, "id" | "created_at" | "archived">, actorId?: string): PublicService {
+    const item: PublicService = {
+      ...data,
+      id: "srv-" + Date.now(),
+      archived: false,
+      created_at: new Date().toISOString(),
+    };
+    this.publicServices.push(item);
+    this.addAuditLog(actorId, "CREATE_PUBLIC_SERVICE", "service", item.id);
+    return item;
+  }
+
+  updatePublicService(id: string, updates: Partial<PublicService>, actorId?: string): boolean {
+    const item = this.publicServices.find(s => s.id === id);
+    if (item) {
+      Object.assign(item, updates);
+      this.addAuditLog(actorId, "UPDATE_PUBLIC_SERVICE", "service", id, updates);
+      return true;
+    }
+    return false;
+  }
+
+  archivePublicService(id: string, actorId?: string): boolean {
+    const item = this.publicServices.find(s => s.id === id);
+    if (item) {
+      item.archived = true;
+      this.addAuditLog(actorId, "ARCHIVE_PUBLIC_SERVICE", "service", id);
+      return true;
+    }
+    return false;
+  }
+
+  // PUBLIC REPRESENTATIVES
+  getRepresentatives(communityId?: string): PublicRepresentative[] {
+    if (communityId) {
+      return this.representatives.filter(r => r.community_id === communityId);
+    }
+    return this.representatives;
+  }
+
+  getRepresentativeById(id: string): PublicRepresentative | undefined {
+    return this.representatives.find(r => r.id === id);
+  }
+
+  updateRepresentative(id: string, updates: Partial<PublicRepresentative>, actorId?: string): boolean {
+    const item = this.representatives.find(r => r.id === id);
+    if (item) {
+      Object.assign(item, updates);
+      this.addAuditLog(actorId, "UPDATE_REPRESENTATIVE", "representative", id, updates);
+      return true;
+    }
+    return false;
+  }
+
+  // CULTURAL HERITAGE ITEMS
+  getCulturalItems(communityId?: string): CulturalHeritageItem[] {
+    if (communityId) {
+      return this.culturalItems.filter(c => c.community_id === communityId);
+    }
+    return this.culturalItems;
   }
 
   // PLACES
@@ -347,7 +600,154 @@ class DataStore {
     return false;
   }
 
-  // PROFILES & AUTH MOCK
+  // PLACES MANAGEMENT
+  updatePlace(id: string, updates: Partial<Place>, actorId?: string): boolean {
+    const item = this.places.find(p => p.id === id);
+    if (item) {
+      Object.assign(item, updates);
+      this.addAuditLog(actorId, "UPDATE_PLACE", "place", id, updates);
+      return true;
+    }
+    return false;
+  }
+
+  archivePlace(id: string, actorId?: string): boolean {
+    const item = this.places.find(p => p.id === id);
+    if (item) {
+      item.archived = true;
+      this.addAuditLog(actorId, "ARCHIVE_PLACE", "place", id);
+      return true;
+    }
+    return false;
+  }
+
+  // ANNOUNCEMENTS MANAGEMENT
+  updateAnnouncement(id: string, updates: Partial<Announcement>, actorId?: string): boolean {
+    const item = this.announcements.find(a => a.id === id);
+    if (item) {
+      Object.assign(item, updates);
+      this.addAuditLog(actorId, "UPDATE_ANNOUNCEMENT", "announcement", id, updates);
+      return true;
+    }
+    return false;
+  }
+
+  archiveAnnouncement(id: string, actorId?: string): boolean {
+    const item = this.announcements.find(a => a.id === id);
+    if (item) {
+      item.archived = true;
+      item.status = "expired";
+      this.addAuditLog(actorId, "ARCHIVE_ANNOUNCEMENT", "announcement", id);
+      return true;
+    }
+    return false;
+  }
+
+  // UNIFIED VERIFICATION HELPER
+  verifyEntity(targetType: string, id: string, sourceUrl: string, sourceName: string, actorId?: string): boolean {
+    const today = new Date().toISOString().split("T")[0];
+    if (targetType === "event") {
+      const e = this.events.find(item => item.id === id);
+      if (e) {
+        e.is_verified = true;
+        e.source_url = sourceUrl;
+        e.source_name = sourceName;
+        e.verified_at = today;
+        this.addAuditLog(actorId, "VERIFY_EVENT", "event", id, { sourceUrl, sourceName });
+        return true;
+      }
+    } else if (targetType === "business") {
+      const b = this.businesses.find(item => item.id === id);
+      if (b) {
+        b.is_verified = true;
+        b.source_url = sourceUrl;
+        b.source_name = sourceName;
+        b.verified_at = today;
+        this.addAuditLog(actorId, "VERIFY_BUSINESS", "business", id, { sourceUrl, sourceName });
+        return true;
+      }
+    } else if (targetType === "news") {
+      const n = this.newsArticles.find(item => item.id === id);
+      if (n) {
+        n.is_verified = true;
+        n.source_url = sourceUrl;
+        n.source_name = sourceName;
+        n.verified_at = today;
+        this.addAuditLog(actorId, "VERIFY_NEWS", "news", id, { sourceUrl, sourceName });
+        return true;
+      }
+    } else if (targetType === "institution") {
+      const inst = this.institutions.find(item => item.id === id);
+      if (inst) {
+        inst.is_verified = true;
+        inst.source_url = sourceUrl;
+        inst.source_name = sourceName;
+        inst.verified_at = today;
+        this.addAuditLog(actorId, "VERIFY_INSTITUTION", "institution", id, { sourceUrl, sourceName });
+        return true;
+      }
+    } else if (targetType === "service") {
+      const srv = this.publicServices.find(item => item.id === id);
+      if (srv) {
+        srv.is_verified = true;
+        srv.source_url = sourceUrl;
+        srv.source_name = sourceName;
+        srv.verified_at = today;
+        this.addAuditLog(actorId, "VERIFY_SERVICE", "service", id, { sourceUrl, sourceName });
+        return true;
+      }
+    } else if (targetType === "issue") {
+      const iss = this.issueReports.find(item => item.id === id);
+      if (iss) {
+        iss.is_verified = true;
+        iss.source_url = sourceUrl;
+        iss.verified_at = today;
+        this.addAuditLog(actorId, "VERIFY_ISSUE", "issue", id, { sourceUrl, sourceName });
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // PLATFORM VERIFICATION & HEALTH STATS
+  getVerificationStats() {
+    const totalNews = this.newsArticles.length;
+    const verifiedNews = this.newsArticles.filter(n => n.is_verified).length;
+    const totalEvents = this.events.length;
+    const verifiedEvents = this.events.filter(e => e.is_verified).length;
+    const totalBiz = this.businesses.length;
+    const verifiedBiz = this.businesses.filter(b => b.is_verified).length;
+    const totalInst = this.institutions.length;
+    const verifiedInst = this.institutions.filter(i => i.is_verified).length;
+    const totalSrv = this.publicServices.length;
+    const verifiedSrv = this.publicServices.filter(s => s.is_verified).length;
+
+    const totalRecords = totalNews + totalEvents + totalBiz + totalInst + totalSrv;
+    const totalVerified = verifiedNews + verifiedEvents + verifiedBiz + verifiedInst + verifiedSrv;
+    const percentVerified = totalRecords > 0 ? Math.round((totalVerified / totalRecords) * 100) : 100;
+
+    const pendingSubmissions = 
+      this.events.filter(e => e.status === "pending").length +
+      this.businesses.filter(b => b.status === "pending").length +
+      this.newsArticles.filter(n => n.status === "pending").length;
+
+    return {
+      totalRecords,
+      totalVerified,
+      percentVerified,
+      pendingSubmissions,
+      totalNews,
+      verifiedNews,
+      totalEvents,
+      verifiedEvents,
+      totalBiz,
+      verifiedBiz,
+      totalInst,
+      verifiedInst,
+      totalSrv,
+      verifiedSrv,
+    };
+  }
   getProfiles(): Profile[] {
     return this.profiles;
   }

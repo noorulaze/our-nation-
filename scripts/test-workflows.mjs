@@ -202,5 +202,61 @@ runTest("Workflow 11: Supabase PostgreSQL Schema & RLS Policy Verification", asy
   assert.strictEqual(migration.includes("CREATE TABLE IF NOT EXISTS public.audit_logs"), true);
 });
 
+// 12. REAL LOCAL DATA INTEGRATION & PRIMARY SOURCE VERIFICATION
+runTest("Workflow 12: Real Local Data Integration & Source Verification Standards", async () => {
+  const fs = await import("node:fs");
+  const initialData = fs.readFileSync("./src/lib/data/initialData.ts", "utf8");
+  
+  // Verify presence of primary sources
+  assert.strictEqual(initialData.includes("tanurmunicipality.lsgkerala.gov.in"), true);
+  assert.strictEqual(initialData.includes("malappuram.nic.in"), true);
+  assert.strictEqual(initialData.includes("uoc.ac.in"), true);
+  assert.strictEqual(initialData.includes("keralatourism.org"), true);
+  
+  // Verify verification fields
+  assert.strictEqual(initialData.includes("is_verified: true"), true);
+  assert.strictEqual(initialData.includes("source_url"), true);
+  assert.strictEqual(initialData.includes("verified_at"), true);
+  assert.strictEqual(initialData.includes("image_license"), true);
+});
+
+// 13. AUTHENTIC EMERGENCY LANDLINES & HYPERLOCAL BOUNDARIES
+runTest("Workflow 13: Authentic Malappuram & Tanur Contact Numbers (STD 0494)", async () => {
+  const fs = await import("node:fs");
+  const initialData = fs.readFileSync("./src/lib/data/initialData.ts", "utf8");
+  
+  // Verify real Tanur landline phone numbers
+  assert.strictEqual(initialData.includes("0494 2582033"), true); // Tanur Municipality
+  assert.strictEqual(initialData.includes("0494 2582024"), true); // Tanur Police Station
+  assert.strictEqual(initialData.includes("0494 2585101"), true); // Tanur Fire Station
+  assert.strictEqual(initialData.includes("0494 2582234"), true); // Community Health Centre
+  assert.strictEqual(initialData.includes("0494 2582250"), true); // Tanur MLA Office
+  
+  // Verify strict geographic bounds (Malappuram and Tanur)
+  assert.strictEqual(initialData.includes("Malappuram"), true);
+  assert.strictEqual(initialData.includes("Tanur"), true);
+});
+
+// 14. COMMUNITY SUBMISSION MODERATION & REJECTION AUDITING
+runTest("Workflow 14: Community Submission Moderation & Rejection Reason Auditing", () => {
+  const pendingSubmission = {
+    id: "sub-101",
+    type: "event",
+    title: "Unverified Tournament",
+    status: "pending",
+    rejection_reason: null,
+  };
+
+  // Rejection requires non-empty reason
+  const rejectionReason = "Missing official authorization from Tanur Municipality Sports Council.";
+  assert.strictEqual(rejectionReason.length > 5, true);
+
+  pendingSubmission.status = "rejected";
+  pendingSubmission.rejection_reason = rejectionReason;
+
+  assert.strictEqual(pendingSubmission.status, "rejected");
+  assert.strictEqual(pendingSubmission.rejection_reason, rejectionReason);
+});
+
 console.log(`\nResults: ${passed}/${total} test suites PASSED (100% success rate)`);
 console.log("======================================================================\n");

@@ -74,103 +74,52 @@ interface GalleryItem {
   description: string;
 }
 
-const NEWS_DATA: NewsItem[] = [
-  {
-    id: "tanur-harbour",
-    title: "താനൂർ ഫിഷിംഗ് ഹാർബർ ആധുനികവൽക്കരണം: പുതിയ ലേലപ്പുര പൂർത്തിയായി",
-    category: "താനൂർ",
-    date: "16 നവംബർ 2026",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/3/31/A_view_of_tanur_harbour.jpg",
-    summary: "താനൂർ ഫിഷിംഗ് ഹാർബറിലെ അത്യാധുനിക ലേലപ്പുരയും സോളാർ ശീതീകരണ സംവിധാനവും സജ്ജമായി.",
-    fullStory: "മലപ്പുറം തീരദേശത്തിന്റെ ജീവനാഡിയായ താനൂർ ഫിഷിംഗ് ഹാർബറിലെ നവീകരണ പ്രവർത്തനങ്ങൾ അവസാന ഘട്ടത്തിലെത്തി. കേരള ഫിഷറീസ് വകുപ്പും താനൂർ നഗരസഭയും സംയുക്തമായി നടപ്പിലാക്കുന്ന സമഗ്ര പദ്ധതിയിൽ ഹൈടെക് ലേല ഹാൾ, സോളാർ കോൾഡ് സ്റ്റോറേജ്, വിശ്രമ കേന്ദ്രം എന്നിവ പൂർത്തിയായി. അയ്യായിരത്തിലധികം പരമ്പരാഗത മത്സ്യത്തൊഴിലാളി കുടുംബങ്ങൾക്ക് ഇത് നേരിട്ട് പ്രയോജനം ചെയ്യും.",
-    author: "നമ്മുടെ നാട് താനൂർ ഡെസ്ക്",
-  },
-  {
-    id: "malappuram-kalolsavam",
-    title: "മലപ്പുറം ജില്ലാ സ്കൂൾ കലോത്സവം തിരൂരിൽ സമാപിച്ചു: താനൂർ ഉപജില്ലയ്ക്ക് മികച്ച മുന്നേറ്റം",
-    category: "വിദ്യാഭ്യാസം",
-    date: "15 നവംബർ 2026",
-    imageUrl: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=600&auto=format&fit=crop&q=80",
-    summary: "മലപ്പുറം ജില്ലാ സ്കൂൾ കലോത്സവത്തിൽ ദഫ്മുട്ട്, ഒപ്പന, നാടകം ഇനങ്ങളിൽ താനൂർ വിദ്യാലയങ്ങൾക്ക് തിളക്കമാർന്ന വിജയം.",
-    fullStory: "തുഞ്ചൻ മണ്ണിൽ അഞ്ച് ദിവസങ്ങളിലായി നടന്ന മലപ്പുറം ജില്ലാ സ്കൂൾ കലോത്സവം സമാപിച്ചു. ജില്ലയിലെ 17 ഉപജില്ലകളിൽ നിന്നുമുള്ള അയ്യായിരത്തിലധികം പ്രതിഭകൾ മാറ്റുരച്ച കലോത്സവത്തിൽ താനൂർ ഉപജില്ലയ്ക്ക് മികച്ച പോയിന്റ് മുന്നേറ്റം. ദേവധാർ ഹയർ സെക്കൻഡറി സ്കൂൾ വിദ്യാർത്ഥികൾ തനതു മാപ്പിള കലകളിൽ ഒന്നാം സ്ഥാനം നേടി.",
-    author: "വിദ്യാഭ്യാസ ലേഖകൻ",
-  },
-  {
-    id: "tanur-cleanliness",
-    title: "താനൂർ നഗരസഭയിലെ 44 വാർഡുകളിലും സമഗ്ര മാലിന്യ സംസ്കരണ പദ്ധതി",
-    category: "തദ്ദേശം",
-    date: "14 നവംബർ 2026",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/d/dd/Tanur.jpg",
-    summary: "താനൂർ നഗരസഭയിലെ 44 വാർഡുകളിലും ഹരിത കർമ്മ സേനയുടെ വീടുതോറുമുള്ള അജൈവ മാലിന്യ ശേഖരണം 100% പൂർത്തിയായി.",
-    fullStory: "കേരള തദ്ദേശ സ്വയംഭരണ വകുപ്പിന്റെ ശുചിത്വ പദവി താനൂർ നഗരസഭയ്ക്ക് ലഭിച്ചു. നഗരസഭയിലെ 44 വാർഡുകളിലും ഉറവിട മാലിന്യ സംസ്കരണവും ഹരിത കർമ്മ സേന മുഖേനയുള്ള തരംതിരിച്ച പ്ലാസ്റ്റിക് ശേഖരണവും സമ്പൂർണ്ണ വിജയകരമായി നടപ്പാക്കിയതിനാണ് അംഗീകാരം.",
-    author: "നഗരസഭാ വാർത്താ വിഭാഗം",
-  },
-  {
-    id: "malappuram-sevens",
-    title: "മലപ്പുറം ജില്ലാ സെവൻസ് ഫുട്ബോൾ ചാമ്പ്യൻഷിപ്പ്: കോട്ടപ്പടിയിൽ ആവേശകരമായ തുടക്കം",
-    category: "കായികം",
-    date: "13 നവംബർ 2026",
-    imageUrl: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=900&auto=format&fit=crop&q=80",
-    summary: "മലപ്പുറത്തിന്റെ കാൽപ്പന്ത് ഹൃദയതുടിപ്പായ സെവൻസ് ഫുട്ബോൾ ടൂർണമെന്റുകൾക്ക് ഫ്ലഡ്‌ലൈറ്റ് വെളിച്ചത്തിൽ കോട്ടപ്പടിയിൽ വിസിൽ മുഴങ്ങി.",
-    fullStory: "ഫുട്ബോൾ പ്രേമികളുടെ കാത്തിരിപ്പിന് വിരാമമിട്ട് മലപ്പുറം ജില്ലാ ഓൾ ഇന്ത്യാ സെവൻസ് ഫുട്ബോൾ ടൂർണമെന്റിന് കോട്ടപ്പടി സ്റ്റേഡിയത്തിൽ തുടക്കമായി. പതിനായിരത്തിലധികം കാണികളാണ് ഓരോ ദിവസവും കളികാണാൻ ഒഴുകിയെത്തുന്നത്.",
-    author: "സ്പോർട്സ് ഡെസ്ക്",
-  },
-];
+const formatEventFullDate = (dateString: string) => {
+  const d = new Date(dateString);
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const mlMonths = ["ജനുവരി", "ഫെബ്രുവരി", "മാർച്ച്", "ഏപ്രിൽ", "മേയ്", "ജൂൺ", "ജൂലൈ", "ഓഗസ്റ്റ്", "സെപ്റ്റംബർ", "ഒക്ടോബർ", "നവംബർ", "ഡിസംബർ"];
+  const month = months[d.getMonth()] || "Nov";
+  const mlMonth = mlMonths[d.getMonth()] || "നവംബർ";
+  const day = String(d.getDate() || 20);
+  const year = d.getFullYear() || 2026;
+  return {
+    month,
+    day,
+    fullDate: `${mlMonth} ${day}, ${year} • 09:30 AM`,
+  };
+};
 
-const EVENTS_DATA: EventItem[] = [
-  {
-    id: "tanur-keraladeshapuram",
-    title: "താനൂർ കേരളാദിത്യപുരം വാർഷിക ഉത്സവം",
-    category: "സാംസ്കാരികം",
-    dateMonth: "Nov",
-    dateDay: "20",
-    fullDate: "നവംബർ 20, 2026 • 05:00 PM",
-    location: "കേരളാദിത്യപുരം ശ്രീകൃഷ്ണ ക്ഷേത്രം, താനൂർ",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/6/67/Tanur%2C_Malappuram_district.jpg",
-    description: "നൂറ്റാണ്ടുകളുടെ പാരമ്പര്യമുള്ള പുരാതന ക്ഷേത്രോത്സവം. പരമ്പരാഗത പഞ്ചവാദ്യം, തായമ്പക, കാഴ്ചശീവേലി, സാംസ്കാരിക കലാപരിപാടികൾ എന്നിവ അരങ്ങേറും.",
-    time: "രാവിലെ 06:00 മുതൽ രാത്രി 10:00 വരെ",
-    organizer: "കേരളാദിത്യപുരം ക്ഷേത്ര ദേവസ്വം",
-  },
-  {
-    id: "malappuram_sevens_event",
-    title: "മലപ്പുറം ജില്ലാ സെവൻസ് ഫുട്ബോൾ",
-    category: "കായികം",
-    dateMonth: "Nov",
-    dateDay: "25",
-    fullDate: "നവംബർ 25, 2026 • 06:30 PM",
-    location: "കോട്ടപ്പടി സ്റ്റേഡിയം, മലപ്പുറം",
-    imageUrl: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=600&auto=format&fit=crop&q=80",
-    description: "മലപ്പുറത്തിന്റെ കാൽപ്പന്ത് വീര്യം വിളിച്ചോതുന്ന ഓൾ ഇന്ത്യാ സെവൻസ് ഫുട്ബോൾ ടൂർണമെന്റ്. പ്രമുഖ ക്ലബ്ബുകളും അന്താരാഷ്ട്ര താരങ്ങളും അണിനിരക്കുന്നു.",
-    time: "വൈകുന്നേരം 6:30 മുതൽ",
-    organizer: "ജില്ലാ സ്പോർട്സ് കൗൺസിൽ, മലപ്പുറം",
-  },
-  {
-    id: "thunchan_festival",
-    title: "തുഞ്ചൻ ഉത്സവം & സാഹിത്യ സമ്മേളനം",
-    category: "സാഹിത്യം",
-    dateMonth: "Dec",
-    dateDay: "05",
-    fullDate: "ഡിസംബർ 05, 2026 • 09:30 AM",
-    location: "തുഞ്ചൻ പറമ്പ്, തിരൂർ",
-    imageUrl: "https://images.unsplash.com/photo-1548625361-195fe578cb26?w=600&auto=format&fit=crop&q=80",
-    description: "ഭാഷാപിതാവ് തുഞ്ചത്തെഴുത്തച്ഛന്റെ സ്മരണയിൽ നടക്കുന്ന ദേശീയ സാഹിത്യ സംവാദം, പുസ്തകോത്സവം, കവി സമ്മേളനം എന്നിവ.",
-    time: "രാവിലെ 9:30 മുതൽ വൈകുന്നേരം 7:00 വരെ",
-    organizer: "തുഞ്ചൻ സ്മാരക സമിതി",
-  },
-  {
-    id: "tanur_coastal_fest",
-    title: "താനൂർ തീരദേശ പൈതൃക സംഗമം",
-    category: "മേളകൾ",
-    dateMonth: "Dec",
-    dateDay: "15",
-    fullDate: "ഡിസംബർ 15, 2026 • 04:30 PM",
-    location: "താനൂർ ബീച്ച് ഓപ്പൺ സ്റ്റേജ്, താനൂർ",
-    imageUrl: "https://upload.wikimedia.org/wikipedia/commons/d/d1/Tanur_beach%2C_Malappuram_%289%29.jpg",
-    description: "താനൂർ തുറമുഖ പൈതൃകവും കടലോര ജീവിതവും ആഘോഷിക്കുന്ന തീരദേശ മേള. ദഫ്മുട്ട്, കോൽക്കളി, മാപ്പിളപ്പാട്ട്, സമുദ്ര വിഭവ ഫുഡ് ഫെസ്റ്റ് എന്നിവ.",
-    time: "വൈകുന്നേരം 4:30 മുതൽ",
-    organizer: "താനൂർ നഗരസഭ & തീരദേശ കൂട്ടായ്മ",
-  },
-];
+const NEWS_DATA: NewsItem[] = store.getNewsArticles().map((article) => ({
+  id: article.id,
+  title: article.title,
+  category: article.category,
+  date: article.date,
+  imageUrl: article.image_url,
+  summary: article.summary,
+  fullStory: article.full_story || article.summary,
+  author: article.source_name || article.source || "നമ്മുടെ നാട് ഡെസ്ക്",
+}));
+
+const EVENTS_DATA: EventItem[] = store.getEvents().slice(0, 4).map((evt) => {
+  const dateMeta = formatEventFullDate(evt.start_date);
+  return {
+    id: evt.id,
+    title: evt.title_ml || evt.title,
+    category: evt.category.includes("Culture") || evt.category.includes("കല")
+      ? "സാംസ്കാരികം"
+      : evt.category.includes("Sport") || evt.category.includes("കായികം")
+      ? "കായികം"
+      : "സാഹിത്യം",
+    dateMonth: dateMeta.month,
+    dateDay: dateMeta.day,
+    fullDate: dateMeta.fullDate,
+    location: evt.location_name,
+    imageUrl: evt.image_url || "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=600&auto=format&fit=crop&q=80",
+    description: evt.description,
+    time: "രാവിലെ 09:30 മുതൽ",
+    organizer: evt.organizer_name,
+  };
+});
 
 const GALLERY_DATA: GalleryItem[] = [
   {

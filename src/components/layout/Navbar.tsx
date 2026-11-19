@@ -391,7 +391,7 @@ export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) =
               </div>
             ) : (
               <Link
-                href="/profile"
+                href="/login"
                 className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#194B35] hover:bg-[#123626] text-white text-xs font-bold shadow-xs transition shrink-0"
               >
                 <User className="w-3.5 h-3.5 text-[#C39A5B]" />

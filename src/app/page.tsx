@@ -119,12 +119,12 @@ export default function HomePage() {
     },
   ];
 
-  // 2. OVERLAPPING QUICK ACTIONS BAR (Simple English)
+  // 2. OVERLAPPING QUICK ACTIONS BAR (Exact match with official design mockup)
   const quickActions = [
     {
       id: "qa-tax",
       title: "Pay Property Tax",
-      sub: "Online tax payment",
+      sub: "Online & Easy",
       href: "/public-services",
       icon: CreditCard,
       color: "text-emerald-700 bg-emerald-50 border-emerald-200"
@@ -139,16 +139,16 @@ export default function HomePage() {
     },
     {
       id: "qa-grievance",
-      title: "Report an Issue",
-      sub: "Track with your ID",
+      title: "File Grievance",
+      sub: "Quick Resolution",
       href: "/civic-connect",
       icon: AlertTriangle,
       color: "text-orange-700 bg-orange-50 border-orange-200"
     },
     {
       id: "qa-progress",
-      title: "Track Projects",
-      sub: "Work progress & budgets",
+      title: "View Progress",
+      sub: "Projects & budgets",
       href: "/development-tracker",
       icon: HardHat,
       color: "text-amber-800 bg-amber-50 border-amber-200"
@@ -197,14 +197,20 @@ export default function HomePage() {
               {/* Left Column: Confident Editorial Typography & Primary CTAs */}
               <div className="md:col-span-7 space-y-6 text-white text-left">
                 
-                {/* Statutory Citizen-Centric Pill */}
-                <div 
-                  className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-[#F5E2B8] text-xs font-bold border border-white/20 shadow-sm"
-                  data-ulb="താനൂർ നഗരസഭ"
-                  aria-label="Tanur Municipality (താനൂർ നഗരസഭ)"
-                >
-                  <Building2 className="w-3.5 h-3.5 text-[#C39A5B]" />
-                  <span>Tanur Municipality — Official Citizen Portal</span>
+                {/* Statutory Citizen-Centric Pill & Official Tagline */}
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div 
+                    className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-[#F5E2B8] text-xs font-bold border border-white/20 shadow-sm"
+                    data-ulb="താനൂർ നഗരസഭ"
+                    aria-label="Tanur Municipality (താനൂർ നഗരസഭ)"
+                  >
+                    <Building2 className="w-3.5 h-3.5 text-[#C39A5B]" />
+                    <span>Tanur Municipality — Official Citizen Portal</span>
+                  </div>
+
+                  <span className="text-xs sm:text-sm font-serif italic text-[#F3CE7A]/95 tracking-wide">
+                    Smart Municipality... Stronger Community...
+                  </span>
                 </div>
 
                 {/* Confident Headline */}
@@ -464,7 +470,137 @@ export default function HomePage() {
         </section>
 
         {/* ========================================================================= */}
-        {/* 4. THE SIX PRIMARY PUBLIC FEATURES                                        */}
+        {/* 4. CORE CIVIC PILLARS SHOWCASE (EXACT MATCHING DESIGN REFERENCE MOCKUP)   */}
+        {/* ========================================================================= */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#EDE6D8] pb-4">
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#C39A5B] block">
+                Official Digital Experience
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-black text-[#194B35] font-sans">
+                Explore Tanur Municipality
+              </h2>
+            </div>
+            <p className="text-xs sm:text-sm font-serif italic text-[#C39A5B] font-semibold">
+              Smart Municipality... Stronger Community...
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5">
+            {[
+              {
+                id: "card-about",
+                title: "About Tanur",
+                subtitle: "Our History, Our Pride",
+                description: "Centuries of maritime trade, renowned fisheries heritage, and rapid modern civic progress across 45 wards.",
+                btnLabel: "About Tanur",
+                href: "/tanur",
+                image: "/images/tanur-coastal-pride.jpg",
+                icon: Landmark,
+                badge: "Heritage"
+              },
+              {
+                id: "card-services",
+                title: "Our Services",
+                subtitle: "Digital. Simple. For You.",
+                description: "Online property tax payments, birth/death certificates, trade licenses, building permits, and welfare schemes.",
+                btnLabel: "Services",
+                href: "/public-services",
+                image: "/images/tanur-heritage-hero.jpg",
+                icon: Briefcase,
+                badge: "18+ Services"
+              },
+              {
+                id: "card-civic",
+                title: "Civic Connect",
+                subtitle: "Your Voice, Our Priority",
+                description: "Report road repairs, streetlight faults, or waste issues with photos and track resolution in real time.",
+                btnLabel: "Civic Connect",
+                href: "/civic-connect",
+                image: "/images/tanur-heritage-hero.jpg",
+                icon: AlertTriangle,
+                badge: "Grievance"
+              },
+              {
+                id: "card-news",
+                title: "News & Updates",
+                subtitle: "Stay Informed",
+                description: "Official town council resolutions, project tenders, public health advisories, and municipal notices.",
+                btnLabel: "News & Updates",
+                href: "/news",
+                image: "/images/tanur-coastal-pride.jpg",
+                icon: Megaphone,
+                badge: "Official"
+              },
+              {
+                id: "card-contact",
+                title: "Contact Us",
+                subtitle: "We're Here to Help",
+                description: "Civil Station Road, Tanur - 676302. Central Switchboard: 0494 2440228 (10:00 AM - 5:00 PM).",
+                btnLabel: "Contact Us",
+                href: "/contact",
+                image: "/images/tanur-heritage-hero.jpg",
+                icon: Phone,
+                badge: "0494 2440228"
+              }
+            ].map((card) => {
+              const Icon = card.icon;
+              return (
+                <div
+                  key={card.id}
+                  className="bg-white rounded-3xl border border-[#EDE6D8] overflow-hidden shadow-xs hover:shadow-xl hover:border-[#194B35] transition-all flex flex-col justify-between group"
+                >
+                  <div>
+                    {/* Header Banner matching design reference */}
+                    <div className="relative h-28 sm:h-32 w-full overflow-hidden bg-[#194B35]">
+                      <Image
+                        src={card.image}
+                        alt={card.title}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 20vw"
+                        className="object-cover object-center group-hover:scale-105 transition-transform duration-500 opacity-60"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#194B35] via-[#194B35]/70 to-transparent" />
+                      <div className="absolute inset-0 p-3 sm:p-4 flex flex-col justify-end text-white">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#F3CE7A]">
+                          {card.badge}
+                        </span>
+                        <h3 className="text-base font-black font-sans leading-tight">
+                          {card.title}
+                        </h3>
+                        <p className="text-[11px] text-[#F5E2B8] font-medium truncate">
+                          {card.subtitle}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Card Content Body */}
+                    <div className="p-4 space-y-2">
+                      <p className="text-[11px] sm:text-xs text-[#5C6A64] leading-relaxed line-clamp-3">
+                        {card.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Centered Distinct Dark Green Pill Button matching mockup */}
+                  <div className="p-4 pt-0 text-center">
+                    <Link
+                      href={card.href}
+                      className="w-full inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-full bg-[#194B35] hover:bg-[#123626] text-white text-xs font-bold font-sans shadow-xs transition group-hover:shadow-md"
+                    >
+                      <span>{card.btnLabel}</span>
+                      <ChevronRight className="w-3.5 h-3.5 text-[#C39A5B] group-hover:translate-x-0.5 transition-transform" />
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 5. THE SIX PRIMARY PUBLIC FEATURES                                        */}
         {/* ========================================================================= */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#EDE6D8] pb-4">

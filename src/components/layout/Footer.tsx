@@ -10,79 +10,96 @@ import {
   Instagram, 
   Twitter, 
   Send as TelegramIcon,
-  Globe
+  ShieldCheck,
+  ExternalLink,
+  Phone
 } from "lucide-react";
 
 export function Footer() {
   const { language, setLanguage } = useLanguage();
 
   return (
-    <footer className="bg-[#131A15] text-[#D8E2DC] border-t border-[#232F27] mt-auto pb-24 lg:pb-0">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-[#232F27]">
+    <footer className="bg-[#111814] text-[#D8E2DC] border-t border-[#1F2922] mt-auto pb-20 lg:pb-0">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-6">
+        
+        {/* 4-Column Compact & Balanced Main Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-6 pb-8 border-b border-[#1F2922]">
           
-          {/* Logo & Tagline */}
-          <div className="lg:col-span-2 space-y-4">
+          {/* Column 1: Brand & Independent Platform Disclaimer (4 cols) */}
+          <div className="lg:col-span-4 space-y-3">
             <KeralaLogo variant="dark" showSubtext={true} />
-            <p className="text-xs text-[#98A8A0] leading-relaxed max-w-sm mt-3">
-              താനൂർ നഗരസഭയിലെ പൗരന്മാർക്കായി വികസിപ്പിച്ച സമഗ്ര ഡിജിറ്റൽ മുൻസിപ്പാലിറ്റി പ്ലാറ്റ്‌ഫോം. വാർഡുകൾ, പൗര സേവനങ്ങൾ, വികസന പദ്ധതികൾ, പരാതി പരിഹാരം എന്നിവ ഒരൊറ്റ കുടക്കീഴിൽ.
+            <p className="text-xs text-[#98A8A0] leading-relaxed max-w-sm">
+              {language === "ml"
+                ? "താനൂർ നഗരസഭയിലെ പൗരന്മാർക്കായി വികസിപ്പിച്ച സമഗ്ര ഡിജിറ്റൽ വേദി. വാർഡുകൾ, പൗര സേവനങ്ങൾ, വികസന പദ്ധതികൾ, പരാതി പരിഹാരം എന്നിവ ഒരൊറ്റ കുടക്കീഴിൽ."
+                : "A unified digital municipality platform connecting Tanur residents to verified public services, ward information, development tracking, and civic governance."}
             </p>
-            <div className="p-3 rounded-2xl bg-white/5 border border-white/10 text-[11px] text-[#A2B2AA] space-y-1 max-w-sm">
-              <span className="font-bold text-amber-300 block">സ്വതന്ത്ര സിവിക് പ്ലാറ്റ്‌ഫോം (Independent Platform)</span>
-              <p className="leading-relaxed">
-                ഔർ നേഷൻ (OUR NATION) താനൂർ നഗരസഭയിലെ പൗരന്മാർക്കായുള്ള സ്വതന്ത്ര സിവിക് ടെക്നോളജി പ്ലാറ്റ്‌ഫോമാണ്. ഇത് സർക്കാരിന്റെ ഔദ്യോഗിക പോർട്ടലല്ല. ഔദ്യോഗിക നടപടികൾക്ക് K-Smart പോർട്ടൽ സന്ദർശിക്കുക.
+
+            {/* Independent Platform Disclaimer Notice */}
+            <div className="p-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-[11px] text-[#A2B2AA] space-y-0.5 max-w-sm">
+              <div className="flex items-center gap-1.5 font-bold text-[#C39A5B]">
+                <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
+                <span>
+                  {language === "ml" 
+                    ? "സ്വതന്ത്ര സിവിക് പ്ലാറ്റ്‌ഫോം (Independent Platform)" 
+                    : "Independent Platform"}
+                </span>
+              </div>
+              <p className="leading-normal text-white/60 text-[10.5px]">
+                {language === "ml"
+                  ? "ഔർ നേഷൻ ഒരു സ്വതന്ത്ര പൗര സാങ്കേതിക പ്ലാറ്റ്‌ഫോമാണ്. ഔദ്യോഗിക നടപടികൾക്ക് K-Smart പോർട്ടൽ സന്ദർശിക്കുക. കൺട്രോൾ റൂം: 0494 2440228."
+                  : "OUR NATION is an independent civic platform. Public information reflects documented sources. Central switchboard: 0494 2440228."}
               </p>
             </div>
           </div>
 
-          {/* Column 1: ആറ് പ്രധാന സേവനങ്ങൾ (Six Core Features) */}
-          <div>
-            <h4 className="text-sm font-bold text-white mb-4 font-malayalam-serif tracking-wide">
-              പ്രധാന സേവനങ്ങൾ
+          {/* Column 2: Six Core Features (3 cols) */}
+          <div className="lg:col-span-3 space-y-2.5">
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider font-sans">
+              {language === "ml" ? "പ്രധാന സേവനങ്ങൾ" : "Primary Features"}
             </h4>
-            <ul className="space-y-2.5 text-xs text-[#A2B2AA]">
+            <ul className="space-y-1.5 text-xs text-[#A2B2AA]">
               <li>
-                <Link href="/digital-municipality" className="hover:text-amber-300 transition">
-                  ഡിജിറ്റൽ നഗരസഭ (Digital Municipality)
+                <Link href="/digital-municipality" className="hover:text-[#C39A5B] transition-colors block py-0.5">
+                  {language === "ml" ? "ഡിജിറ്റൽ നഗരസഭ" : "Digital Municipality Hub"}
                 </Link>
               </li>
               <li>
-                <Link href="/civic-connect" className="hover:text-amber-300 transition">
-                  സിവിക് കണക്ട് (Civic Connect)
+                <Link href="/civic-connect" className="hover:text-[#C39A5B] transition-colors block py-0.5">
+                  {language === "ml" ? "സിവിക് കണക്ട് (പരാതികൾ)" : "Civic Connect (Reports)"}
                 </Link>
               </li>
               <li>
-                <Link href="/development-tracker" className="hover:text-amber-300 transition">
-                  വികസന ട്രാക്കർ (Development Tracker)
+                <Link href="/development-tracker" className="hover:text-[#C39A5B] transition-colors block py-0.5">
+                  {language === "ml" ? "വികസന പദ്ധതി ട്രാക്കർ" : "Development Tracker"}
                 </Link>
               </li>
               <li>
-                <Link href="/public-services" className="hover:text-amber-300 transition">
-                  പൗര സേവനങ്ങൾ (Public Services)
+                <Link href="/public-services" className="hover:text-[#C39A5B] transition-colors block py-0.5">
+                  {language === "ml" ? "പൗര സേവന സൂചിക" : "Public Services Directory"}
                 </Link>
               </li>
               <li>
-                <Link href="/documents" className="hover:text-amber-300 transition">
-                  രേഖകളും ഉത്തരവുകളും (Documents)
+                <Link href="/documents" className="hover:text-[#C39A5B] transition-colors block py-0.5">
+                  {language === "ml" ? "ഔദ്യോഗിക രേഖകളും ഗസറ്റും" : "Documents & Notices"}
                 </Link>
               </li>
               <li>
-                <Link href="/peoples-voice" className="hover:text-amber-300 transition">
-                  ജനകീയ ശബ്ദം (People&apos;s Voice)
+                <Link href="/peoples-voice" className="hover:text-[#C39A5B] transition-colors block py-0.5">
+                  {language === "ml" ? "ജനകീയ ശബ്ദം (പങ്കാളിത്തം)" : "People's Voice"}
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 2: നഗരസഭ വിവരങ്ങൾ & സഹായം */}
-          <div>
-            <h4 className="text-sm font-bold text-white mb-4 font-malayalam-serif tracking-wide">
-              വിവരങ്ങൾ &amp; ലിങ്കുകൾ
+          {/* Column 3: Important Links & Useful Resources (3 cols) */}
+          <div className="lg:col-span-3 space-y-2.5">
+            <h4 className="text-xs font-bold text-white uppercase tracking-wider font-sans">
+              {language === "ml" ? "വിവരങ്ങൾ & ലിങ്കുകൾ" : "Useful Resources"}
             </h4>
-            <ul className="space-y-2.5 text-xs text-[#A2B2AA]">
+            <ul className="space-y-1.5 text-xs text-[#A2B2AA]">
               <li>
-                <Link href="/about" className="hover:text-amber-300 transition">
-                  പ്ലാറ്റ്‌ഫോമിനെക്കുറിച്ച് (About Us)
+                <Link href="/about" className="hover:text-[#C39A5B] transition-colors block py-0.5">
+                  {language === "ml" ? "പ്ലാറ്റ്‌ഫോമിനെക്കുറിച്ച്" : "About OUR NATION"}
                 </Link>
               </li>
               <li>
@@ -90,9 +107,10 @@ export function Footer() {
                   href="https://ksmart.lsgkerala.gov.in" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="hover:text-amber-300 transition flex items-center gap-1 text-amber-200/90 font-medium"
+                  className="hover:text-[#C39A5B] transition-colors flex items-center gap-1 text-[#F3CE7A] font-medium py-0.5"
                 >
-                  <span>K-Smart കേരള പോർട്ടൽ</span>
+                  <span>K-Smart Kerala Portal</span>
+                  <ExternalLink className="w-3 h-3" />
                 </a>
               </li>
               <li>
@@ -100,92 +118,112 @@ export function Footer() {
                   href="https://tanurmunicipality.lsgkerala.gov.in" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="hover:text-amber-300 transition flex items-center gap-1"
+                  className="hover:text-[#C39A5B] transition-colors flex items-center gap-1 py-0.5"
                 >
-                  <span>താനൂർ നഗരസഭാ പോർട്ടൽ</span>
+                  <span>Tanur Municipality Portal</span>
+                  <ExternalLink className="w-3 h-3" />
                 </a>
               </li>
               <li>
-                <Link href="/ai" className="hover:text-amber-300 transition text-amber-300">
-                  നാട് AI സഹായി (Naadu AI)
+                <Link href="/ai" className="hover:text-[#C39A5B] transition-colors flex items-center gap-1 text-emerald-400 py-0.5">
+                  <span>{language === "ml" ? "നാട് AI അസിസ്റ്റന്റ്" : "Naadu AI Assistant"}</span>
                 </Link>
               </li>
               <li>
-                <Link href="/admin" className="hover:text-amber-300 transition">
-                  അഡ്മിൻ പോർട്ടൽ (Admin Desk)
+                <a href="tel:04942440228" className="hover:text-[#C39A5B] transition-colors flex items-center gap-1 py-0.5">
+                  <Phone className="w-3 h-3 text-[#C39A5B]" />
+                  <span>Switchboard: 0494 2440228</span>
+                </a>
+              </li>
+              <li>
+                <Link href="/admin" className="hover:text-[#C39A5B] transition-colors text-white/50 block py-0.5">
+                  {language === "ml" ? "അഡ്മിൻ ഡെസ്ക്" : "Admin Desk"}
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 3: ഞങ്ങളെ പിന്തുടരൂ & Kerala God's Own Country Outline */}
-          <div className="flex flex-col justify-between">
-            <div>
-              <h4 className="text-sm font-bold text-white mb-4 font-malayalam-serif tracking-wide">
-                ഞങ്ങളെ പിന്തുടരൂ
+          {/* Column 4: Social Links & Kerala Identity (2 cols) */}
+          <div className="lg:col-span-2 flex flex-col justify-between space-y-4">
+            <div className="space-y-2.5">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider font-sans">
+                {language === "ml" ? "ഞങ്ങളെ പിന്തുടരൂ" : "Follow Us"}
               </h4>
-              <div className="flex items-center gap-3 text-[#A2B2AA]">
-                <a href="https://youtube.com" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-[#1C2720] hover:bg-amber-400 hover:text-[#131A15] flex items-center justify-center transition">
-                  <Youtube className="w-4 h-4" />
+              <div className="flex items-center gap-2 text-[#A2B2AA]">
+                <a href="https://youtube.com" target="_blank" rel="noreferrer" aria-label="YouTube" className="w-7 h-7 rounded-lg bg-[#1C2720] hover:bg-[#C39A5B] hover:text-[#111814] flex items-center justify-center transition">
+                  <Youtube className="w-3.5 h-3.5" />
                 </a>
-                <a href="https://facebook.com" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-[#1C2720] hover:bg-amber-400 hover:text-[#131A15] flex items-center justify-center transition">
-                  <Facebook className="w-4 h-4" />
+                <a href="https://facebook.com" target="_blank" rel="noreferrer" aria-label="Facebook" className="w-7 h-7 rounded-lg bg-[#1C2720] hover:bg-[#C39A5B] hover:text-[#111814] flex items-center justify-center transition">
+                  <Facebook className="w-3.5 h-3.5" />
                 </a>
-                <a href="https://instagram.com" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-[#1C2720] hover:bg-amber-400 hover:text-[#131A15] flex items-center justify-center transition">
-                  <Instagram className="w-4 h-4" />
+                <a href="https://instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram" className="w-7 h-7 rounded-lg bg-[#1C2720] hover:bg-[#C39A5B] hover:text-[#111814] flex items-center justify-center transition">
+                  <Instagram className="w-3.5 h-3.5" />
                 </a>
-                <a href="https://twitter.com" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-[#1C2720] hover:bg-amber-400 hover:text-[#131A15] flex items-center justify-center transition">
-                  <Twitter className="w-4 h-4" />
+                <a href="https://twitter.com" target="_blank" rel="noreferrer" aria-label="Twitter" className="w-7 h-7 rounded-lg bg-[#1C2720] hover:bg-[#C39A5B] hover:text-[#111814] flex items-center justify-center transition">
+                  <Twitter className="w-3.5 h-3.5" />
                 </a>
-                <a href="https://telegram.org" target="_blank" rel="noreferrer" className="w-8 h-8 rounded-full bg-[#1C2720] hover:bg-amber-400 hover:text-[#131A15] flex items-center justify-center transition">
-                  <TelegramIcon className="w-4 h-4" />
+                <a href="https://telegram.org" target="_blank" rel="noreferrer" aria-label="Telegram" className="w-7 h-7 rounded-lg bg-[#1C2720] hover:bg-[#C39A5B] hover:text-[#111814] flex items-center justify-center transition">
+                  <TelegramIcon className="w-3.5 h-3.5" />
                 </a>
               </div>
             </div>
 
-            {/* Kerala Map Graphic & God's Own Country Tagline */}
-            <div className="mt-6 pt-4 flex items-center gap-3">
+            {/* Kerala Identity Silhouette Badge */}
+            <div className="flex items-center gap-2.5 p-2 rounded-xl bg-white/[0.03] border border-white/5">
               <svg 
                 viewBox="0 0 60 90" 
-                className="w-10 h-16 text-amber-300/80 fill-current opacity-80"
+                className="w-6 h-10 text-[#C39A5B] fill-current shrink-0 opacity-80"
+                aria-hidden="true"
               >
-                {/* Stylized Kerala Strip Map Outline */}
                 <path d="M42 5 C38 12 34 20 28 30 C24 38 20 46 22 55 C24 64 30 72 36 82 C38 85 36 88 32 88 C25 82 18 72 16 62 C14 52 18 40 22 30 C26 20 32 10 38 4 Z" />
               </svg>
-              <div className="flex flex-col">
-                <span className="font-brand font-bold text-amber-200 text-base tracking-wide leading-none">
+              <div className="flex flex-col text-left">
+                <span className="font-brand font-bold text-white text-xs tracking-wide leading-tight">
                   KERALA
                 </span>
-                <span className="text-[10px] text-amber-300/80 font-medium tracking-wide">
+                <span className="text-[9px] text-[#C39A5B] font-medium tracking-wide">
                   God&apos;s Own Country
+                </span>
+                <span className="text-[8.5px] text-white/50">
+                  Tanur Grade II ULB
                 </span>
               </div>
             </div>
-
           </div>
 
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#7A8E84]">
-          <p>
-            © {new Date().getFullYear()} നമ്മുടെ നാട്. എല്ലാ അവകാശങ്ങളും സുരക്ഷിതമാണ്.
+        {/* 3. Slim Horizontal Bottom Copyright & Language Strip */}
+        <div className="pt-4 pb-2 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[#7A8E84]">
+          <p className="text-center sm:text-left text-[11px]">
+            {language === "ml"
+              ? "© 2026 ഔർ നേഷൻ (OUR NATION). എല്ലാ അവകാശങ്ങളും നിക്ഷിപ്തം."
+              : "Copyright © 2026 OUR NATION. All rights reserved."}
           </p>
-          <div className="flex items-center gap-2">
+
+          <div className="flex items-center gap-2 text-[11px]">
             <button
               onClick={() => setLanguage("ml")}
-              className={`hover:text-amber-300 transition ${language === "ml" ? "text-amber-300 font-bold" : ""}`}
+              className={`hover:text-[#C39A5B] transition-colors ${language === "ml" ? "text-[#C39A5B] font-bold" : ""}`}
             >
               മലയാളം
             </button>
-            <span>|</span>
+            <span className="text-white/20">|</span>
             <button
               onClick={() => setLanguage("en")}
-              className={`hover:text-amber-300 transition ${language === "en" ? "text-amber-300 font-bold" : ""}`}
+              className={`hover:text-[#C39A5B] transition-colors ${language === "en" ? "text-[#C39A5B] font-bold" : ""}`}
             >
               English
             </button>
           </div>
+        </div>
+
+        {/* 4. Elegant CRAFTIQ Developer Credit */}
+        <div className="pt-2 text-center text-[10.5px] text-[#7A8E84]/80 tracking-wide">
+          Designed &amp; Developed by{" "}
+          <span className="font-extrabold text-[#D8E2DC] tracking-wider hover:text-[#C39A5B] transition-colors cursor-default">
+            CRAFTIQ
+          </span>
         </div>
 
       </div>

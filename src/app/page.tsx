@@ -36,7 +36,8 @@ import {
   FileCheck2,
   HelpCircle,
   Search,
-  MessageSquareQuote
+  MessageSquareQuote,
+  Landmark
 } from "lucide-react";
 
 export default function HomePage() {
@@ -431,19 +432,24 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* Direct Action Link */}
-                <div className="pt-2 flex items-center justify-between">
+                {/* Direct Action Links */}
+                <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-t border-[#EDE6D8]/60">
                   <Link
                     href="/digital-municipality"
                     className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#194B35] hover:text-[#123626] group"
                   >
-                    <span>Explore Tanur GIS Map & Ward Directory</span>
+                    <span>Explore Tanur GIS Map &amp; Ward Directory</span>
                     <ArrowRight className="w-4 h-4 text-[#C39A5B] group-hover:translate-x-1 transition-transform" />
                   </Link>
 
-                  <span className="text-[11px] text-gray-400 font-mono hidden sm:inline">
-                    Code: 0494
-                  </span>
+                  <Link
+                    href="/local-governments"
+                    className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#C39A5B] hover:text-[#194B35] group"
+                  >
+                    <Landmark className="w-3.5 h-3.5 text-[#C39A5B]" />
+                    <span>Explore Local Governments Directory</span>
+                    <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                  </Link>
                 </div>
               </div>
 

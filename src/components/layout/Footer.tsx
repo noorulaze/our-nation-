@@ -53,6 +53,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/local-governments" className="hover:text-[#C39A5B] transition-colors block py-0.5">
+                  Local Governments &amp; Panchayats
+                </Link>
+              </li>
+              <li>
                 <Link href="/civic-connect" className="hover:text-[#C39A5B] transition-colors block py-0.5">
                   Report an Issue
                 </Link>

@@ -28,6 +28,7 @@ import {
   Clock, 
   ArrowRight,
   Building,
+  Landmark,
   Plus,
   Edit,
   ExternalLink,
@@ -842,6 +843,34 @@ export default function AdminPage() {
                       className="flex-1 text-center py-1.5 px-2 bg-white hover:bg-neutral-100 text-[#194B35] border border-[#DDD5C5] rounded-lg text-xs font-bold transition"
                     >
                       പബ്ലിക് പോർട്ടൽ
+                    </Link>
+                  </div>
+                </div>
+
+                {/* 7. Local Governments Directory */}
+                <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] hover:border-[#194B35] transition space-y-3 md:col-span-2 lg:col-span-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-9 h-9 rounded-xl bg-emerald-100 text-[#194B35] flex items-center justify-center">
+                      <Landmark className="w-5 h-5 text-[#194B35]" />
+                    </div>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#194B35] text-white">Civic Governance Directory</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-sm text-[#194B35]">Local Governments &amp; Representatives Directory</h4>
+                    <p className="text-[11px] text-[#5C6A64] mt-0.5">താനൂർ നഗരസഭ 44 വാർഡുകൾ, താനൂർ ബ്ലോക്ക് പഞ്ചായത്ത് (17 ഡിവിഷനുകൾ), 7 ഗ്രാമപഞ്ചായത്തുകൾ, ജനപ്രതിനിധികൾ, വെരിഫിക്കേഷൻ സ്റ്റാറ്റസ്</p>
+                  </div>
+                  <div className="flex items-center gap-2 pt-2 border-t border-[#EDE6D8]/60">
+                    <Link
+                      href="/admin/local-governments"
+                      className="flex-1 text-center py-1.5 px-2 bg-[#194B35] hover:bg-[#143E2C] text-white rounded-lg text-xs font-bold transition"
+                    >
+                      പ്രതിനിധികളെ മാനേജ് ചെയ്യുക
+                    </Link>
+                    <Link
+                      href="/local-governments"
+                      className="flex-1 text-center py-1.5 px-2 bg-white hover:bg-neutral-100 text-[#194B35] border border-[#DDD5C5] rounded-lg text-xs font-bold transition"
+                    >
+                      പബ്ലിക് ഡയറക്ടറി കാണുക
                     </Link>
                   </div>
                 </div>

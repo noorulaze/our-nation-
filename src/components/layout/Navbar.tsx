@@ -20,6 +20,7 @@ import {
   AlertTriangle,
   TrendingUp,
   Building2,
+  Landmark,
   FileText,
   Phone,
   Layers,
@@ -45,6 +46,7 @@ export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) =
   const mainPillLinks = [
     { href: "/", label: "Home" },
     { href: "/digital-municipality", label: "Municipality" },
+    { href: "/local-governments", label: "Local Governments" },
     { href: "/public-services", label: "Services" },
     { href: "/civic-connect", label: "Report Issue" },
     { href: "/development-tracker", label: "Projects" },
@@ -54,6 +56,7 @@ export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) =
 
   // Contextual Civic Modules Dropdown
   const civicDropdownModules = [
+    { href: "/local-governments", label: "Local Governments", sub: "Municipality, Block & 7 Panchayats", icon: Landmark },
     { href: "/digital-municipality", label: "Tanur Municipality", sub: "Wards, leaders & town map", icon: Building2 },
     { href: "/public-services", label: "Municipal Services", sub: "Certificates, tax & licenses", icon: Briefcase },
     { href: "/civic-connect", label: "Report an Issue", sub: "Roads, streetlights & waste", icon: AlertTriangle },
@@ -67,6 +70,7 @@ export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) =
   // Grouped Navigation for Mobile Drawer
   const primaryDestinations = [
     { href: "/", label: "Home" },
+    { href: "/local-governments", label: "Local Governments" },
     { href: "/digital-municipality", label: "Municipality" },
     { href: "/public-services", label: "Services" },
     { href: "/civic-connect", label: "Report Issue" },

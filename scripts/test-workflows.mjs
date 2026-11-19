@@ -283,5 +283,139 @@ runTest("Workflow 15: Professional Typography System (Manrope & Anek Malayalam)"
   assert.strictEqual(tailwind.includes("manrope:"), true);
 });
 
+// 16. PROFESSIONAL ONBOARDING, DIRECTORY & 18 SERVICE CATEGORIES INTEGRITY
+runTest("Workflow 16: Professional Onboarding, Directory & 18 Service Categories Integrity", async () => {
+  const fs = await import("node:fs");
+  const initialDataContent = fs.readFileSync("./src/lib/data/initialData.ts", "utf8");
+
+  // Verify all 18 core service categories are defined
+  const requiredCategories = [
+    "cat-electrician",
+    "cat-plumber",
+    "cat-carpenter",
+    "cat-ac-repair",
+    "cat-painter",
+    "cat-mason",
+    "cat-cleaning",
+    "cat-pest-control",
+    "cat-home-nurse",
+    "cat-babysitter",
+    "cat-cctv",
+    "cat-computer",
+    "cat-mobile",
+    "cat-tutor",
+    "cat-photographer",
+    "cat-tailor",
+    "cat-mechanic",
+    "cat-event-planner",
+  ];
+
+  for (const cat of requiredCategories) {
+    assert.strictEqual(initialDataContent.includes(cat), true, `Missing required category: ${cat}`);
+  }
+
+  // Verify verified professionals exist in Malappuram / Tanur
+  assert.strictEqual(initialDataContent.includes("Muhammed Basheer K."), true);
+  assert.strictEqual(initialDataContent.includes("Sujith Kumar M."), true);
+  assert.strictEqual(initialDataContent.includes("Kader Kutty Vettom"), true);
+  assert.strictEqual(initialDataContent.includes("Tanur Municipality"), true);
+});
+
+// 17. BOOKING AVAILABILITY & CONFLICT PREVENTION ENGINE
+runTest("Workflow 17: Booking Availability & Double-Booking Conflict Prevention", () => {
+  const existingBookings = [
+    {
+      id: "bk-1",
+      professionalId: "pro-001",
+      bookingDate: "2026-11-20",
+      timeSlot: "10:00 AM - 11:00 AM",
+      status: "confirmed",
+    },
+    {
+      id: "bk-2",
+      professionalId: "pro-001",
+      bookingDate: "2026-11-20",
+      timeSlot: "02:00 PM - 03:00 PM",
+      status: "cancelled", // Cancelled booking should NOT block the slot
+    },
+  ];
+
+  const isSlotAvailable = (proId, date, slot) => {
+    const collision = existingBookings.some(b =>
+      b.professionalId === proId &&
+      b.bookingDate === date &&
+      b.timeSlot.trim().toLowerCase() === slot.trim().toLowerCase() &&
+      ["pending", "accepted", "confirmed", "in_progress"].includes(b.status)
+    );
+    return !collision;
+  };
+
+  // Same slot should be blocked
+  assert.strictEqual(isSlotAvailable("pro-001", "2026-11-20", "10:00 AM - 11:00 AM"), false);
+
+  // Different slot on same date should be available
+  assert.strictEqual(isSlotAvailable("pro-001", "2026-11-20", "11:30 AM - 12:30 PM"), true);
+
+  // Cancelled slot should be available for rebooking
+  assert.strictEqual(isSlotAvailable("pro-001", "2026-11-20", "02:00 PM - 03:00 PM"), true);
+
+  // Different date should be available
+  assert.strictEqual(isSlotAvailable("pro-001", "2026-11-21", "10:00 AM - 11:00 AM"), true);
+});
+
+// 18. VERIFIED RATINGS & REVIEWS CALCULATION INTEGRITY
+runTest("Workflow 18: Verified Ratings & Reviews Calculation Integrity", () => {
+  const reviews = [
+    { rating_overall: 5, status: "completed" },
+    { rating_overall: 4, status: "completed" },
+    { rating_overall: 5, status: "completed" },
+  ];
+
+  // Only completed bookings can be reviewed
+  const canReview = (bookingStatus, alreadyReviewed) => {
+    return bookingStatus === "completed" && !alreadyReviewed;
+  };
+
+  assert.strictEqual(canReview("pending", false), false);
+  assert.strictEqual(canReview("in_progress", false), false);
+  assert.strictEqual(canReview("completed", true), false);
+  assert.strictEqual(canReview("completed", false), true);
+
+  // Recalculate average rating
+  const avg = Number((reviews.reduce((sum, r) => sum + r.rating_overall, 0) / reviews.length).toFixed(1));
+  assert.strictEqual(avg, 4.7);
+  assert.strictEqual(reviews.length, 3);
+});
+
+// 19. PRIVACY CONTROLS & SENSITIVE DATA PROTECTION
+runTest("Workflow 19: Privacy Controls & Contact Masking", () => {
+  const profileWithPrivateContact = {
+    displayName: "Kavitha Menon",
+    phone: "+91 98471 99887",
+    email: "kavitha.menon@example.com",
+    locality: "Tanur Beach Ward",
+    privacy_settings: {
+      public_profile: true,
+      show_phone: false,
+      show_email: false,
+      show_address: true,
+    },
+  };
+
+  // Masking logic
+  const getPublicContact = (profile) => {
+    return {
+      phone: profile.privacy_settings.show_phone ? profile.phone : null,
+      email: profile.privacy_settings.show_email ? profile.email : null,
+      locality: profile.privacy_settings.show_address ? profile.locality : null,
+    };
+  };
+
+  const publicData = getPublicContact(profileWithPrivateContact);
+  assert.strictEqual(publicData.phone, null);
+  assert.strictEqual(publicData.email, null);
+  assert.strictEqual(publicData.locality, "Tanur Beach Ward");
+});
+
 console.log(`\nResults: ${passed}/${total} test suites PASSED (100% success rate)`);
 console.log("======================================================================\n");

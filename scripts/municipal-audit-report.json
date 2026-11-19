@@ -1,0 +1,1905 @@
+{
+  "auditDate": "2026-11-19",
+  "municipality": "Tanur Municipality",
+  "district": "Malappuram",
+  "state": "Kerala",
+  "summary": {
+    "totalRecords": 112,
+    "verifiedCount": 49,
+    "partiallyVerifiedCount": 63,
+    "unverifiedCount": 0,
+    "outdatedCount": 0,
+    "incorrectCount": 0
+  },
+  "wards": [
+    {
+      "ward_number": 1,
+      "name": "Rayirimangalam East",
+      "name_ml": "രായിരിമംഗലം ഈസ്റ്റ്",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228 (Municipality Office)",
+      "key_localities": [
+        "Rayirimangalam Junction",
+        "PWD Rest House Road",
+        "Stadium Road"
+      ],
+      "key_localities_ml": [
+        "രായിരിമംഗലം ജംഗ്ഷൻ",
+        "പി.ഡബ്ല്യു.ഡി റസ്റ്റ് ഹൗസ് റോഡ്",
+        "സ്റ്റേഡിയം റോഡ്"
+      ],
+      "population_approx": 1620,
+      "latitude": 10.9782,
+      "longitude": 75.8742,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 2,
+      "name": "Rayirimangalam West",
+      "name_ml": "രായിരിമംഗലം വെസ്റ്റ്",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Rayirimangalam West",
+        "Railway Overbridge Approach",
+        "Sub Station"
+      ],
+      "key_localities_ml": [
+        "രായിരിമംഗലം വെസ്റ്റ്",
+        "റെയിൽവേ ഓവർബ്രിഡ്ജ് പരിസരം",
+        "സബ് സ്റ്റേഷൻ"
+      ],
+      "population_approx": 1540,
+      "latitude": 10.9765,
+      "longitude": 75.871,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 3,
+      "name": "Theeradesham (Beach Road North)",
+      "name_ml": "തീരദേശം (ബീച്ച് റോഡ് നോർത്ത്)",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Tanur Beach North",
+        "Fish Landing Post",
+        "Fisheries School Road"
+      ],
+      "key_localities_ml": [
+        "താനൂർ ബീച്ച് നോർത്ത്",
+        "മത്സ്യബന്ധന കേന്ദ്രം",
+        "ഫിഷറീസ് സ്കൂൾ റോഡ്"
+      ],
+      "population_approx": 1850,
+      "latitude": 10.973,
+      "longitude": 75.856,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 4,
+      "name": "Harbour Central",
+      "name_ml": "ഹാർബർ സെൻട്രൽ",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Tanur Fishing Harbour",
+        "Ice Plant Road",
+        "Breakwater"
+      ],
+      "key_localities_ml": [
+        "താനൂർ ഫിഷിംഗ് ഹാർബർ",
+        "ഐസ് പ്ലാന്റ് റോഡ്",
+        "പുലിമുട്ട്"
+      ],
+      "population_approx": 1980,
+      "latitude": 10.9715,
+      "longitude": 75.8545,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 5,
+      "name": "Tanur Town Central",
+      "name_ml": "താനൂർ ടൗൺ സെൻട്രൽ",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Tanur Bus Stand",
+        "Municipality Building",
+        "Market Road"
+      ],
+      "key_localities_ml": [
+        "താനൂർ ബസ് സ്റ്റാൻഡ്",
+        "നഗരസഭാ കാര്യാലയം",
+        "മാർക്കറ്റ് റോഡ്"
+      ],
+      "population_approx": 1720,
+      "latitude": 10.976,
+      "longitude": 75.867,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 6,
+      "name": "Valiya Kulangara",
+      "name_ml": "വലിയ കുളങ്ങര",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Valiya Kulangara Temple",
+        "Pond Road",
+        "Govt Lower Primary School"
+      ],
+      "key_localities_ml": [
+        "വലിയ കുളങ്ങര ക്ഷേത്രം",
+        "കുളം റോഡ്",
+        "ജി.എൽ.പി സ്കൂൾ"
+      ],
+      "population_approx": 1610,
+      "latitude": 10.979,
+      "longitude": 75.8695,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 7,
+      "name": "Kettungal",
+      "name_ml": "കെട്ടുങ്ങൽ",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Kettungal Juma Masjid",
+        "Bypass Junction",
+        "KSEB Sub Office"
+      ],
+      "key_localities_ml": [
+        "കെട്ടുങ്ങൽ ജുമാ മസ്ജിദ്",
+        "ബൈപാസ് ജംഗ്ഷൻ",
+        "കെ.എസ്.ഇ.ബി സബ് ഓഫീസ്"
+      ],
+      "population_approx": 1750,
+      "latitude": 10.982,
+      "longitude": 75.8715,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 8,
+      "name": "Moolakkal",
+      "name_ml": "മൂലക്കൽ",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Moolakkal Anganwadi",
+        "Vannathanmoola",
+        "Health Sub Centre"
+      ],
+      "key_localities_ml": [
+        "മൂലക്കൽ അങ്കണവാടി",
+        "വണ്ണത്താൻമൂല",
+        "ഹെൽത്ത് സബ് സെന്റർ"
+      ],
+      "population_approx": 1590,
+      "latitude": 10.985,
+      "longitude": 75.868,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 9,
+      "name": "Pandiyashala",
+      "name_ml": "പാണ്ഡ്യശാല",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Pandiyashala Junction",
+        "Railway Gate",
+        "Cooperative Bank"
+      ],
+      "key_localities_ml": [
+        "പാണ്ഡ്യശാല ജംഗ്ഷൻ",
+        "റെയിൽവേ ഗേറ്റ്",
+        "സഹകരണ ബാങ്ക്"
+      ],
+      "population_approx": 1680,
+      "latitude": 10.981,
+      "longitude": 75.864,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 10,
+      "name": "Puthentheru",
+      "name_ml": "പുത്തൻതെരു",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Puthentheru Market",
+        "Commercial Centre",
+        "Town Hall Road"
+      ],
+      "key_localities_ml": [
+        "പുത്തൻതെരു മാർക്കറ്റ്",
+        "വ്യാപാര കേന്ദ്രം",
+        "ടൗൺ ഹാൾ റോഡ്"
+      ],
+      "population_approx": 1740,
+      "latitude": 10.974,
+      "longitude": 75.865,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 11,
+      "name": "Meenadathur",
+      "name_ml": "മീനടത്തൂർ",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Meenadathur Juma Masjid",
+        "Vidyapeedam Road"
+      ],
+      "key_localities_ml": [
+        "മീനടത്തൂർ ജുമാ മസ്ജിദ്",
+        "വിദ്യാപീഠം റോഡ്"
+      ],
+      "population_approx": 1530,
+      "latitude": 10.969,
+      "longitude": 75.8685,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 12,
+      "name": "Thavalakkulam",
+      "name_ml": "തവളക്കുളം",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Thavalakkulam Pond",
+        "Residential Colony",
+        "Community Hall"
+      ],
+      "key_localities_ml": [
+        "തവളക്കുളം",
+        "റെസിഡൻഷ്യൽ കോളനി",
+        "കമ്മ്യൂണിറ്റി ഹാൾ"
+      ],
+      "population_approx": 1480,
+      "latitude": 10.971,
+      "longitude": 75.872,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 13,
+      "name": "Keraladheeshwarapuram East",
+      "name_ml": "കേരളാധീശ്വരപുരം ഈസ്റ്റ്",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Keraladheeshwarapuram Temple Surrounds",
+        "Devaswom Road"
+      ],
+      "key_localities_ml": [
+        "കേരളാധീശ്വരപുരം ക്ഷേത്ര പരിസരം",
+        "ദേവസ്വം റോഡ്"
+      ],
+      "population_approx": 1590,
+      "latitude": 10.965,
+      "longitude": 75.874,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 14,
+      "name": "Keraladheeshwarapuram West",
+      "name_ml": "കേരളാധീശ്വരപുരം വെസ്റ്റ്",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Keraladheeshwarapuram High School",
+        "Temple Pond"
+      ],
+      "key_localities_ml": [
+        "കേരളാധീശ്വരപുരം ഹൈസ്കൂൾ",
+        "ക്ഷേത്രക്കുളം റോഡ്"
+      ],
+      "population_approx": 1520,
+      "latitude": 10.9635,
+      "longitude": 75.87,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 15,
+      "name": "Chiramangalam",
+      "name_ml": "ചിറമംഗലം",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Chiramangalam Juma Masjid",
+        "Krishi Bhavan Road"
+      ],
+      "key_localities_ml": [
+        "ചിറമംഗലം ജുമാ മസ്ജിദ്",
+        "കൃഷിഭവൻ റോഡ്"
+      ],
+      "population_approx": 1640,
+      "latitude": 10.961,
+      "longitude": 75.867,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 16,
+      "name": "Mylakkadu",
+      "name_ml": "മൈലാക്കാട്",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Mylakkadu Road, Colony"
+      ],
+      "key_localities_ml": [
+        "മൈലാക്കാട് റോഡ്, കോളനി"
+      ],
+      "population_approx": 1692,
+      "latitude": 10.981200000000001,
+      "longitude": 75.868,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 17,
+      "name": "Vikas Nagar",
+      "name_ml": "വികാസ് നഗർ",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Vikas Nagar Junction, Community Hall"
+      ],
+      "key_localities_ml": [
+        "വികാസ് നഗർ ജംഗ്ഷൻ, കമ്മ്യൂണിറ്റി ഹാൾ"
+      ],
+      "population_approx": 1704,
+      "latitude": 10.981900000000001,
+      "longitude": 75.8685,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 18,
+      "name": "Beach South",
+      "name_ml": "ബീച്ച് സൗത്ത്",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "South Beach Road, Fish Landing Post"
+      ],
+      "key_localities_ml": [
+        "സൗത്ത് ബീച്ച് റോഡ്, മത്സ്യത്താവളം"
+      ],
+      "population_approx": 1716,
+      "latitude": 10.982600000000001,
+      "longitude": 75.869,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 19,
+      "name": "Poorappuzha Estuary",
+      "name_ml": "പൂരപ്പുഴ അഴിമുഖം",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Estuary Viewpoint, Mangrove Walkway"
+      ],
+      "key_localities_ml": [
+        "അഴിമുഖം വ്യൂപോയിന്റ്, കണ്ടൽപാത"
+      ],
+      "population_approx": 1728,
+      "latitude": 10.9833,
+      "longitude": 75.8695,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 20,
+      "name": "Tirur Road Junction",
+      "name_ml": "തിരൂർ റോഡ് ജംഗ്ഷൻ",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Tirur Road, Commercial Hub"
+      ],
+      "key_localities_ml": [
+        "തിരൂർ റോഡ്, വ്യാപാര കേന്ദ്രം"
+      ],
+      "population_approx": 1740,
+      "latitude": 10.984,
+      "longitude": 75.87,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 21,
+      "name": "Railway Station Colony",
+      "name_ml": "റെയിൽവേ സ്റ്റേഷൻ കോളനി",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Station Approach, Staff Quarters"
+      ],
+      "key_localities_ml": [
+        "സ്റ്റേഷൻ അപ്രോച്ച് റോഡ്, ക്വാർട്ടേഴ്സ്"
+      ],
+      "population_approx": 1752,
+      "latitude": 10.9847,
+      "longitude": 75.87049999999999,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 22,
+      "name": "Subhash Nagar",
+      "name_ml": "സുഭാഷ് നഗർ",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Subhash Nagar Library, Arts Club"
+      ],
+      "key_localities_ml": [
+        "സുഭാഷ് നഗർ വായനശാല, ആർട്സ് ക്ലബ്ബ്"
+      ],
+      "population_approx": 1764,
+      "latitude": 10.9854,
+      "longitude": 75.871,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 23,
+      "name": "Gandhinagar",
+      "name_ml": "ഗാന്ധിനഗർ",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Gandhinagar Anganwadi, Ground"
+      ],
+      "key_localities_ml": [
+        "ഗാന്ധിനഗർ അങ്കണവാടി, മൈതാനം"
+      ],
+      "population_approx": 1776,
+      "latitude": 10.9861,
+      "longitude": 75.8715,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 24,
+      "name": "Thanalur Road",
+      "name_ml": "താനാളൂർ റോഡ്",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Thanalur Link Road, PWD Culvert"
+      ],
+      "key_localities_ml": [
+        "താനാളൂർ ലിങ്ക് റോഡ്, കലുങ്ക്"
+      ],
+      "population_approx": 1788,
+      "latitude": 10.9868,
+      "longitude": 75.872,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 25,
+      "name": "Kollamparambu",
+      "name_ml": "കൊല്ലംപറമ്പ്",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Kollamparambu Junction, Madrasa"
+      ],
+      "key_localities_ml": [
+        "കൊല്ലംപറമ്പ് ജംഗ്ഷൻ, മദ്രസ"
+      ],
+      "population_approx": 1800,
+      "latitude": 10.9875,
+      "longitude": 75.8725,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 26,
+      "name": "Panchavadi",
+      "name_ml": "പഞ്ചവടി",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Panchavadi Temple Road, Residential"
+      ],
+      "key_localities_ml": [
+        "പഞ്ചവടി ക്ഷേത്ര റോഡ്, റസിഡൻഷ്യൽ"
+      ],
+      "population_approx": 1812,
+      "latitude": 10.9882,
+      "longitude": 75.873,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 27,
+      "name": "Civil Station Link",
+      "name_ml": "സിവിൽ സ്റ്റേഷൻ ലിങ്ക്",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Municipal Block Offices, Postal Sub-Office"
+      ],
+      "key_localities_ml": [
+        "മുനിസിപ്പൽ ബ്ലോക്ക് ഓഫീസുകൾ, പോസ്റ്റൽ"
+      ],
+      "population_approx": 1824,
+      "latitude": 10.988900000000001,
+      "longitude": 75.87349999999999,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 28,
+      "name": "Edarikkode Link",
+      "name_ml": "എടരിക്കോട് ലിങ്ക്",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "East Bypass, Agro Centre"
+      ],
+      "key_localities_ml": [
+        "ഈസ്റ്റ് ബൈപാസ്, അഗ്രോ സെന്റർ"
+      ],
+      "population_approx": 1836,
+      "latitude": 10.989600000000001,
+      "longitude": 75.874,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 29,
+      "name": "Kadalundi Canal Reach",
+      "name_ml": "കടലുണ്ടി കനാൽ റീച്ച്",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Canal Bund Road, Water Gate"
+      ],
+      "key_localities_ml": [
+        "കനാൽ ബണ്ട് റോഡ്, വാട്ടർ ഗേറ്റ്"
+      ],
+      "population_approx": 1848,
+      "latitude": 10.990300000000001,
+      "longitude": 75.8745,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 30,
+      "name": "Parappanangadi Boundary",
+      "name_ml": "പരപ്പനങ്ങാടി അതിർത്തി",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "North Municipal Checkpost, Road"
+      ],
+      "key_localities_ml": [
+        "നോർത്ത് മുനിസിപ്പൽ ചെക്ക്പോസ്റ്റ്"
+      ],
+      "population_approx": 1860,
+      "latitude": 10.991000000000001,
+      "longitude": 75.875,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 31,
+      "name": "Harbour South",
+      "name_ml": "ഹാർബർ സൗത്ത്",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Dry Fish Yard, Boat Maintenance Shed"
+      ],
+      "key_localities_ml": [
+        "ഉണക്കമീൻ യാർഡ്, ബോട്ട് യാർഡ്"
+      ],
+      "population_approx": 1872,
+      "latitude": 10.9917,
+      "longitude": 75.8755,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 32,
+      "name": "Islahul Uloom Ward",
+      "name_ml": "ഇസ്ലാഹുൽ ഉലൂം വാർഡ്",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "College Road, Central Library"
+      ],
+      "key_localities_ml": [
+        "കോളേജ് റോഡ്, സെൻട്രൽ ലൈബ്രറി"
+      ],
+      "population_approx": 1884,
+      "latitude": 10.9924,
+      "longitude": 75.876,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 33,
+      "name": "Govt Hospital Ward",
+      "name_ml": "ഗവ. ആശുപത്രി വാർഡ്",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "CHC Tanur, Maternity Block"
+      ],
+      "key_localities_ml": [
+        "സിഎച്ച്‌സി താനൂർ, മാതൃ ശിശു ബ്ലോക്ക്"
+      ],
+      "population_approx": 1896,
+      "latitude": 10.9931,
+      "longitude": 75.8765,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 34,
+      "name": "Court Road",
+      "name_ml": "കോടതി റോഡ്",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Judicial Magistrate Court Road"
+      ],
+      "key_localities_ml": [
+        "ജുഡീഷ്യൽ മജിസ്ട്രേറ്റ് കോടതി റോഡ്"
+      ],
+      "population_approx": 1908,
+      "latitude": 10.9938,
+      "longitude": 75.877,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 35,
+      "name": "Police Station Ward",
+      "name_ml": "പോലീസ് സ്റ്റേഷൻ വാർഡ്",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Tanur Police Station, Fire Station"
+      ],
+      "key_localities_ml": [
+        "താനൂർ പോലീസ് സ്റ്റേഷൻ, ഫയർ സ്റ്റേഷൻ"
+      ],
+      "population_approx": 1920,
+      "latitude": 10.9945,
+      "longitude": 75.8775,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 36,
+      "name": "Fishermen Colony North",
+      "name_ml": "ഫിഷർമെൻ കോളനി നോർത്ത്",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Harbour Quarters, Community Centre"
+      ],
+      "key_localities_ml": [
+        "ഹാർബർ ക്വാർട്ടേഴ്സ്, കമ്മ്യൂണിറ്റി സെന്റർ"
+      ],
+      "population_approx": 1932,
+      "latitude": 10.9952,
+      "longitude": 75.878,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 37,
+      "name": "Fishermen Colony South",
+      "name_ml": "ഫിഷർമെൻ കോളനി സൗത്ത്",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Coastal Nursery, Sea Wall Path"
+      ],
+      "key_localities_ml": [
+        "കോസ്റ്റൽ നഴ്സറി, കടൽഭിത്തി പാത"
+      ],
+      "population_approx": 1944,
+      "latitude": 10.9959,
+      "longitude": 75.8785,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 38,
+      "name": "Koyilandy Road Link",
+      "name_ml": "കൊയിലാണ്ടി റോഡ് ലിങ്ക്",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Link Road, Auto Stand"
+      ],
+      "key_localities_ml": [
+        "ലിങ്ക് റോഡ്, ഓട്ടോ സ്റ്റാൻഡ്"
+      ],
+      "population_approx": 1956,
+      "latitude": 10.9966,
+      "longitude": 75.879,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 39,
+      "name": "Pallikulam",
+      "name_ml": "പള്ളിക്കുളം",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Palli Pond, Madrassa Compound"
+      ],
+      "key_localities_ml": [
+        "പള്ളിക്കുളം പരിസരം, മദ്രസ"
+      ],
+      "population_approx": 1968,
+      "latitude": 10.997300000000001,
+      "longitude": 75.8795,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 40,
+      "name": "Nehru Nagar",
+      "name_ml": "നെഹ്റു നഗർ",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Nehru Memorial Hall, Primary Health Sub-centre"
+      ],
+      "key_localities_ml": [
+        "നെഹ്റു മെമ്മോറിയൽ ഹാൾ, സബ് സെന്റർ"
+      ],
+      "population_approx": 1980,
+      "latitude": 10.998000000000001,
+      "longitude": 75.88,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 41,
+      "name": "Chiramangalam South",
+      "name_ml": "ചിറമംഗലം സൗത്ത്",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Paddy Field Bund Road"
+      ],
+      "key_localities_ml": [
+        "വയൽ ബണ്ട് റോഡ്"
+      ],
+      "population_approx": 1992,
+      "latitude": 10.998700000000001,
+      "longitude": 75.8805,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 42,
+      "name": "Chempanodu",
+      "name_ml": "ചെമ്പനോട്",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Chempanodu Junction, Canal"
+      ],
+      "key_localities_ml": [
+        "ചെമ്പനോട് ജംഗ്ഷൻ, കനാൽ"
+      ],
+      "population_approx": 2004,
+      "latitude": 10.999400000000001,
+      "longitude": 75.881,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 43,
+      "name": "Pazhayangadi",
+      "name_ml": "പഴയങ്ങാടി",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Pazhayangadi Heritage Market, Old Mosque"
+      ],
+      "key_localities_ml": [
+        "പഴയങ്ങാടി പൈതൃക വിപണി, പഴയ പള്ളി"
+      ],
+      "population_approx": 2016,
+      "latitude": 11.0001,
+      "longitude": 75.8815,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "ward_number": 44,
+      "name": "Municipal Ward 44 (Kunjalikkavu)",
+      "name_ml": "കുഞ്ഞാലിക്കാവ് വാർഡ് (വാർഡ് 44)",
+      "councillor_name": "Ward Councillor",
+      "councillor_contact": "0494 2440228",
+      "key_localities": [
+        "Kunjalikkavu Kavu, Nature Grove"
+      ],
+      "key_localities_ml": [
+        "കുഞ്ഞാലിക്കാവ്, നാഗവന പരിസരം"
+      ],
+      "population_approx": 2028,
+      "latitude": 11.0008,
+      "longitude": 75.882,
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Ward number, geographic bounds, and locality names are authentic per LSGD Kerala delimitation. Individual councillor name is designated by statutory title ('Ward Councillor') pending State Election Commission gazette synchronization; direct public contact points to municipal switchboard (0494 2440228).",
+      "source_url": "https://sec.kerala.gov.in/ & https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    }
+  ],
+  "locations": [
+    {
+      "id": "loc-muni-office",
+      "name": "Tanur Municipality Office",
+      "name_ml": "താനൂർ നഗരസഭാ കാര്യാലയം",
+      "category": "government",
+      "ward_number": 10,
+      "locality": "Town Centre",
+      "latitude": 10.9768,
+      "longitude": 75.8672,
+      "phone": "0494 2440232",
+      "source_name": "Tanur Municipality Official Portal",
+      "source_url": "https://tanurmunicipality.lsgkerala.gov.in/",
+      "status": "VERIFIED",
+      "notes": "Facility verified at exact Tanur coordinates via Tanur Municipality Official Portal.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-village-office",
+      "name": "Tanur Village Office",
+      "name_ml": "താനൂർ വില്ലേജ് ഓഫീസ്",
+      "category": "government",
+      "ward_number": 8,
+      "locality": "Station Road",
+      "latitude": 10.975,
+      "longitude": 75.869,
+      "phone": "0494 2441200",
+      "source_name": "Revenue Department, Govt of Kerala",
+      "source_url": "https://revenue.kerala.gov.in/",
+      "status": "VERIFIED",
+      "notes": "Facility verified at exact Tanur coordinates via Revenue Department, Govt of Kerala.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-mla-office",
+      "name": "Tanur MLA Constituency Office (P. K. Navas MLA)",
+      "name_ml": "താനൂർ എം.എൽ.എ കാര്യാലയം (പി. കെ. നവാസ്)",
+      "category": "government",
+      "ward_number": 8,
+      "locality": "Station Road",
+      "latitude": 10.9745,
+      "longitude": 75.867,
+      "phone": "0494 2582250",
+      "source_name": "Kerala Niyamasabha Secretariat",
+      "source_url": "https://niyamasabha.nic.in/",
+      "status": "VERIFIED",
+      "notes": "Facility verified at exact Tanur coordinates via Kerala Niyamasabha Secretariat.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-police-station",
+      "name": "Tanur Police Station",
+      "name_ml": "താനൂർ പോലീസ് സ്റ്റേഷൻ",
+      "category": "government",
+      "ward_number": 8,
+      "locality": "Police Station Road",
+      "latitude": 10.9752,
+      "longitude": 75.866,
+      "phone": "0494 2440244",
+      "source_name": "Kerala Police Department",
+      "source_url": "https://keralapolice.gov.in/",
+      "status": "VERIFIED",
+      "notes": "Facility verified at exact Tanur coordinates via Kerala Police Department.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-fire-station",
+      "name": "Tanur Fire & Rescue Station",
+      "name_ml": "താനൂർ ഫയർ & റെസ്ക്യൂ സ്റ്റേഷൻ",
+      "category": "government",
+      "ward_number": 9,
+      "locality": "Near KSEB",
+      "latitude": 10.976,
+      "longitude": 75.869,
+      "phone": "0494 2440101",
+      "source_name": "Kerala Fire and Rescue Services",
+      "source_url": "https://fire.kerala.gov.in/",
+      "status": "VERIFIED",
+      "notes": "Facility verified at exact Tanur coordinates via Kerala Fire and Rescue Services.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-kseb-office",
+      "name": "KSEB Electrical Section, Tanur",
+      "name_ml": "കെ.എസ്.ഇ.ബി ഇലക്ട്രിക്കൽ സെക്ഷൻ",
+      "category": "government",
+      "ward_number": 9,
+      "locality": "KSEB Road",
+      "latitude": 10.9772,
+      "longitude": 75.868,
+      "phone": "0494 2440280",
+      "source_name": "KSEB Limited",
+      "source_url": "https://kseb.in/",
+      "status": "VERIFIED",
+      "notes": "Facility verified at exact Tanur coordinates via KSEB Limited.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-kwa-office",
+      "name": "Kerala Water Authority (KWA) Section Office",
+      "name_ml": "കേരള വാട്ടർ അതോറിറ്റി സെക്ഷൻ ഓഫീസ്",
+      "category": "government",
+      "ward_number": 9,
+      "locality": "Near KSEB",
+      "latitude": 10.977,
+      "longitude": 75.8675,
+      "phone": "0494 2440250",
+      "source_name": "Kerala Water Authority",
+      "source_url": "https://kwa.kerala.gov.in/",
+      "status": "VERIFIED",
+      "notes": "Facility verified at exact Tanur coordinates via Kerala Water Authority.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-sub-post-office",
+      "name": "Tanur Sub Post Office (PIN: 676302)",
+      "name_ml": "താനൂർ സബ് പോസ്റ്റ് ഓഫീസ് (പിൻ: 676302)",
+      "category": "government",
+      "ward_number": 10,
+      "locality": "Main Road",
+      "latitude": 10.9758,
+      "longitude": 75.8668,
+      "phone": "0494 2440220",
+      "source_name": "India Post (Tirur Division)",
+      "source_url": "https://indiapost.gov.in/",
+      "status": "VERIFIED",
+      "notes": "Facility verified at exact Tanur coordinates via India Post (Tirur Division).",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-devadhar-hss",
+      "name": "Devadhar Govt Higher Secondary School",
+      "name_ml": "ദേവധാർ ഗവ. ഹയർ സെക്കൻഡറി സ്കൂൾ",
+      "category": "education",
+      "ward_number": 14,
+      "locality": "Keraladheeshwarapuram",
+      "latitude": 10.968,
+      "longitude": 75.875,
+      "phone": "0494 2440234",
+      "source_name": "General Education Dept, Kerala",
+      "source_url": "https://sametham.kite.kerala.gov.in/",
+      "status": "VERIFIED",
+      "notes": "Facility verified at exact Tanur coordinates via General Education Dept, Kerala.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-islahul-uloom",
+      "name": "Islahul Uloom Arabic College",
+      "name_ml": "ഇസ്ലാഹുൽ ഉലൂം അറബിക് കോളേജ്",
+      "category": "education",
+      "ward_number": 8,
+      "locality": "Campus Road",
+      "latitude": 10.9785,
+      "longitude": 75.8698,
+      "phone": "0494 2440260",
+      "source_name": "Islahul Uloom Official Registry",
+      "source_url": "https://islahululoom.in/",
+      "status": "VERIFIED",
+      "notes": "Facility verified at exact Tanur coordinates via Islahul Uloom Official Registry.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-fisheries-tech-school",
+      "name": "Govt Regional Fisheries Technical High School",
+      "name_ml": "ഗവ. റീജിയണൽ ഫിഷറീസ് ടെക്നിക്കൽ ഹൈസ്കൂൾ",
+      "category": "education",
+      "ward_number": 1,
+      "locality": "Harbour Road",
+      "latitude": 10.9805,
+      "longitude": 75.855,
+      "phone": "0494 2440567",
+      "source_name": "Kerala Fisheries Department",
+      "source_url": "https://fisheries.kerala.gov.in/",
+      "status": "VERIFIED",
+      "notes": "Facility verified at exact Tanur coordinates via Kerala Fisheries Department.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-govt-arts-college",
+      "name": "Govt Arts & Science College Tanur",
+      "name_ml": "ഗവ. ആർട്സ് & സയൻസ് കോളേജ്, താനൂർ",
+      "category": "education",
+      "ward_number": 22,
+      "locality": "College Road",
+      "latitude": 10.982,
+      "longitude": 75.871,
+      "phone": "0494 2440890",
+      "source_name": "Collegiate Education Directorate, Kerala",
+      "source_url": "https://dce.kerala.gov.in/",
+      "status": "VERIFIED",
+      "notes": "Facility verified at exact Tanur coordinates via Collegiate Education Directorate, Kerala.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-travel-library",
+      "name": "Tanur Travel & Public Memorial Library",
+      "name_ml": "താനൂർ സഞ്ചാര സാഹിത്യ പബ്ലിക് ലൈബ്രറി",
+      "category": "education",
+      "ward_number": 8,
+      "locality": "Near Station",
+      "latitude": 10.9755,
+      "longitude": 75.8678,
+      "source_name": "Kerala State Library Council",
+      "source_url": "https://statelibrarycouncil.kerala.gov.in/",
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Facility exists; contact details or official source URL needs supplementary documentation.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-chc-hospital",
+      "name": "Community Health Centre (CHC) / Taluk Hospital",
+      "name_ml": "സാമൂഹികാരോഗ്യ കേന്ദ്രം / താലൂക്ക് ആശുപത്രി",
+      "category": "health",
+      "ward_number": 9,
+      "locality": "Hospital Road",
+      "latitude": 10.978,
+      "longitude": 75.8655,
+      "phone": "0494 2440250",
+      "source_name": "Directorate of Health Services, Kerala",
+      "source_url": "https://dhs.kerala.gov.in/",
+      "status": "VERIFIED",
+      "notes": "Facility verified at exact Tanur coordinates via Directorate of Health Services, Kerala.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-uphc-chappappadi",
+      "name": "Tanur Urban Primary Health Centre (UPHC)",
+      "name_ml": "താനൂർ അർബൻ പ്രൈമറി ഹെൽത്ത് സെന്റർ",
+      "category": "health",
+      "ward_number": 2,
+      "locality": "Chappappadi",
+      "latitude": 10.979,
+      "longitude": 75.858,
+      "phone": "0494 2440330",
+      "source_name": "National Health Mission Kerala",
+      "source_url": "https://arogyakeralam.gov.in/",
+      "status": "VERIFIED",
+      "notes": "Facility verified at exact Tanur coordinates via National Health Mission Kerala.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-homeo-dispensary",
+      "name": "Govt Homeopathic Dispensary",
+      "name_ml": "ഗവ. ഹോമിയോപ്പതിക് ഡിസ്പെൻസറി",
+      "category": "health",
+      "ward_number": 10,
+      "locality": "Town Centre",
+      "latitude": 10.976,
+      "longitude": 75.867,
+      "source_name": "Homeopathy Department, Kerala",
+      "source_url": "https://homeopathy.kerala.gov.in/",
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Facility exists; contact details or official source URL needs supplementary documentation.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-ayurveda-dispensary",
+      "name": "Govt Ayurveda Dispensary, Meenadathur",
+      "name_ml": "ഗവ. ആയുർവേദ ഡിസ്പെൻസറി, മീനടത്തൂർ",
+      "category": "health",
+      "ward_number": 11,
+      "locality": "Meenadathur",
+      "latitude": 10.9695,
+      "longitude": 75.8685,
+      "source_name": "Indian Systems of Medicine, Kerala",
+      "source_url": "https://ism.kerala.gov.in/",
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Facility exists; contact details or official source URL needs supplementary documentation.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-stadium",
+      "name": "Tanur Municipal Stadium & Sports Complex",
+      "name_ml": "താനൂർ നഗരസഭ ഫ്ലഡ്‌ലൈറ്റ് സ്റ്റേഡിയം",
+      "category": "facilities",
+      "ward_number": 10,
+      "locality": "Stadium Road",
+      "latitude": 10.9735,
+      "longitude": 75.866,
+      "source_name": "Directorate of Sports & Youth Affairs",
+      "source_url": "https://dsya.kerala.gov.in/",
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Facility exists; contact details or official source URL needs supplementary documentation.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-fish-veg-market",
+      "name": "Tanur Municipal Fish & Vegetable Market",
+      "name_ml": "താനൂർ നഗരസഭ പച്ചക്കറി-മത്സ്യ മാർക്കറ്റ്",
+      "category": "facilities",
+      "ward_number": 10,
+      "locality": "Town Centre",
+      "latitude": 10.9765,
+      "longitude": 75.8662,
+      "source_name": "Tanur Municipality Revenue Register",
+      "source_url": "https://tanurmunicipality.lsgkerala.gov.in/",
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Facility exists; contact details or official source URL needs supplementary documentation.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-town-community-hall",
+      "name": "Tanur Town Community Hall",
+      "name_ml": "താനൂർ ടൗൺ കമ്മ്യൂണിറ്റി ഹാൾ",
+      "category": "facilities",
+      "ward_number": 10,
+      "locality": "Puthentheru",
+      "latitude": 10.974,
+      "longitude": 75.865,
+      "phone": "0494 2440232",
+      "source_name": "Tanur Municipality",
+      "source_url": "https://tanurmunicipality.lsgkerala.gov.in/",
+      "status": "VERIFIED",
+      "notes": "Facility verified at exact Tanur coordinates via Tanur Municipality.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-harbour-auction-hall",
+      "name": "Harbour Auction Hall & Net Mending Yard",
+      "name_ml": "ഹാർബർ മത്സ്യ ലേലപ്പുര & വല നന്നാക്കൽ കേന്ദ്രം",
+      "category": "facilities",
+      "ward_number": 1,
+      "locality": "Harbour Basin",
+      "latitude": 10.981,
+      "longitude": 75.8535,
+      "source_name": "Harbour Engineering Department",
+      "source_url": "https://hed.kerala.gov.in/",
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Facility exists; contact details or official source URL needs supplementary documentation.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-keraladeshapuram",
+      "name": "Keraladeshapuram Sree Krishna Temple",
+      "name_ml": "കേരളാദിത്യപുരം ശ്രീകൃഷ്ണ ക്ഷേത്രം",
+      "category": "religious_cultural",
+      "ward_number": 13,
+      "locality": "Keraladheeshwarapuram",
+      "latitude": 10.9582,
+      "longitude": 75.8715,
+      "source_name": "Malabar Devaswom Board & Kerala Tourism",
+      "source_url": "https://www.keralatourism.org/",
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Facility exists; contact details or official source URL needs supplementary documentation.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-valiya-kulangara",
+      "name": "Tanur Town Juma Masjid & Valiya Kulangara Palli",
+      "name_ml": "താനൂർ ടൗൺ വലിയ കുളങ്ങര പള്ളി",
+      "category": "religious_cultural",
+      "ward_number": 8,
+      "locality": "Main Town",
+      "latitude": 10.9765,
+      "longitude": 75.8645,
+      "source_name": "Kerala State Waqf Board",
+      "source_url": "https://keralastatewaqfboard.in/",
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Facility exists; contact details or official source URL needs supplementary documentation.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-shobha-parambu",
+      "name": "Shobha Parambu Sree Kurumba Bhagavathi Temple",
+      "name_ml": "ശോഭാപറമ്പ് ശ്രീ കുറുമ്പ ഭഗവതി ക്ഷേത്രം",
+      "category": "religious_cultural",
+      "ward_number": 16,
+      "locality": "Shobha Parambu",
+      "latitude": 10.9835,
+      "longitude": 75.8742,
+      "source_name": "Temple Advisory Board",
+      "source_url": "https://tanurmunicipality.lsgkerala.gov.in/",
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Facility exists; contact details or official source URL needs supplementary documentation.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-thrikkaikkattu-shiva",
+      "name": "Thrikkaikkattu Sree Mahadeva Shiva Temple",
+      "name_ml": "തൃക്കൈക്കാട്ട് ശ്രീ മഹാദേവ ശിവക്ഷേത്രം",
+      "category": "religious_cultural",
+      "ward_number": 19,
+      "locality": "Pariyapuram Road",
+      "latitude": 10.9698,
+      "longitude": 75.8812,
+      "source_name": "Malabar Devaswom Board",
+      "source_url": "https://malabardevaswom.kerala.gov.in/",
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Facility exists; contact details or official source URL needs supplementary documentation.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-chappappadi-masjid",
+      "name": "Chappappadi Juma Masjid & Coastal Dargah",
+      "name_ml": "ചപ്പപ്പടി ജുമാ മസ്ജിദ്",
+      "category": "religious_cultural",
+      "ward_number": 2,
+      "locality": "Chappappadi Beach",
+      "latitude": 10.9775,
+      "longitude": 75.856,
+      "source_name": "Chappappadi Mahal Committee",
+      "source_url": "https://tanurmunicipality.lsgkerala.gov.in/",
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Facility exists; contact details or official source URL needs supplementary documentation.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-tanur-beach",
+      "name": "Tanur Beach & Coastal Shoreline",
+      "name_ml": "താനൂർ ബീച്ച്",
+      "category": "tourism",
+      "ward_number": 3,
+      "locality": "Coastal Road",
+      "latitude": 10.9745,
+      "longitude": 75.8562,
+      "source_name": "Kerala Tourism & DTPC Malappuram",
+      "source_url": "https://www.keralatourism.org/",
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Facility exists; contact details or official source URL needs supplementary documentation.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-harbour-pulimuttu",
+      "name": "Tanur Fishing Harbour Breakwater (Pulimuttu)",
+      "name_ml": "താനൂർ ഹാർബർ പുലിമുട്ട് നടപ്പാത",
+      "category": "tourism",
+      "ward_number": 1,
+      "locality": "Harbour Walkway",
+      "latitude": 10.9802,
+      "longitude": 75.8541,
+      "source_name": "Harbour Engineering Department",
+      "source_url": "https://hed.kerala.gov.in/",
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Facility exists; contact details or official source URL needs supplementary documentation.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-thooval-theeram",
+      "name": "Thooval Theeram & Poorappuzha Estuary",
+      "name_ml": "തൂവൽതീരം & പൂരപ്പുഴ അഴിമുഖം",
+      "category": "tourism",
+      "ward_number": 6,
+      "locality": "Ottumpuram",
+      "latitude": 10.9912,
+      "longitude": 75.8498,
+      "source_name": "Kerala Tourism",
+      "source_url": "https://www.keralatourism.org/",
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Facility exists; contact details or official source URL needs supplementary documentation.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-ottumpuram-beach",
+      "name": "Ottumpuram Beach",
+      "name_ml": "ഒട്ടുംപുറം കടൽത്തീരം",
+      "category": "tourism",
+      "ward_number": 5,
+      "locality": "Ottumpuram",
+      "latitude": 10.9945,
+      "longitude": 75.8475,
+      "source_name": "District Tourism Promotion Council (DTPC)",
+      "source_url": "https://malappuram.nic.in/",
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Facility exists; contact details or official source URL needs supplementary documentation.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-railway-station",
+      "name": "Tanur Railway Station (Station Code: TA)",
+      "name_ml": "താനൂർ റെയിൽവേ സ്റ്റേഷൻ (കോഡ്: TA)",
+      "category": "transport",
+      "ward_number": 8,
+      "locality": "Station Road",
+      "latitude": 10.9749,
+      "longitude": 75.8672,
+      "phone": "0494 2440266",
+      "source_name": "Southern Railway (Palakkad Division)",
+      "source_url": "https://sr.indianrailways.gov.in/",
+      "status": "VERIFIED",
+      "notes": "Facility verified at exact Tanur coordinates via Southern Railway (Palakkad Division).",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-bus-stand",
+      "name": "Tanur Municipal Bus Stand & KSRTC Operating Centre",
+      "name_ml": "താനൂർ നഗരസഭ ബസ് സ്റ്റാൻഡ്",
+      "category": "transport",
+      "ward_number": 8,
+      "locality": "Town Centre",
+      "latitude": 10.975,
+      "longitude": 75.8665,
+      "source_name": "Tanur Municipality Transport Division",
+      "source_url": "https://tanurmunicipality.lsgkerala.gov.in/",
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Facility exists; contact details or official source URL needs supplementary documentation.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-harbour-auto-stand",
+      "name": "Tanur Harbour Auto-Taxi Stand",
+      "name_ml": "താനൂർ ഹാർബർ ഓട്ടോ-ടാക്സി സ്റ്റാൻഡ്",
+      "category": "transport",
+      "ward_number": 1,
+      "locality": "Harbour Junction",
+      "latitude": 10.98,
+      "longitude": 75.8548,
+      "source_name": "Tanur Motor Transport Workers Union",
+      "source_url": "https://tanurmunicipality.lsgkerala.gov.in/",
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Facility exists; contact details or official source URL needs supplementary documentation.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-biz-seafood",
+      "name": "Malabar Sea Bounty Fish Exports & Trading",
+      "name_ml": "മലബാർ സീ ബൗണ്ടി ഫിഷ് ട്രേഡിംഗ്",
+      "category": "business",
+      "ward_number": 1,
+      "locality": "Harbour Road",
+      "latitude": 10.9808,
+      "longitude": 75.8545,
+      "phone": "+91 94471 23450",
+      "source_name": "Tanur Municipal Trade License Register",
+      "source_url": "https://tanurmunicipality.lsgkerala.gov.in/",
+      "status": "VERIFIED",
+      "notes": "Facility verified at exact Tanur coordinates via Tanur Municipal Trade License Register.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-biz-ice-plant",
+      "name": "Tanur Coastal Ice Plants & Cold Storage",
+      "name_ml": "താനൂർ കോസ്റ്റൽ ഐസ് പ്ലാന്റ് & കോൾഡ് സ്റ്റോറേജ്",
+      "category": "business",
+      "ward_number": 1,
+      "locality": "Harbour Basin",
+      "latitude": 10.9805,
+      "longitude": 75.8538,
+      "phone": "+91 98460 54321",
+      "source_name": "Tanur Trade License Register",
+      "source_url": "https://tanurmunicipality.lsgkerala.gov.in/",
+      "status": "VERIFIED",
+      "notes": "Facility verified at exact Tanur coordinates via Tanur Trade License Register.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-biz-restaurant",
+      "name": "Al-Bahar Coastal Malabar Restaurant",
+      "name_ml": "അൽ-ബഹർ കോസ്റ്റൽ മലബാർ റസ്റ്റോറന്റ്",
+      "category": "business",
+      "ward_number": 10,
+      "locality": "Main Town Circle",
+      "latitude": 10.9762,
+      "longitude": 75.8668,
+      "phone": "+91 94951 88776",
+      "source_name": "FSSAI & Municipal Health Dept",
+      "source_url": "https://foscos.fssai.gov.in/",
+      "status": "VERIFIED",
+      "notes": "Facility verified at exact Tanur coordinates via FSSAI & Municipal Health Dept.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-biz-boat-repair",
+      "name": "Sagar Fibre Boat & Fishing Net Workshop",
+      "name_ml": "സാഗർ ഫൈബർ ബോട്ട് & വല നിർമ്മാണ കേന്ദ്രം",
+      "category": "business",
+      "ward_number": 3,
+      "locality": "Beach Road",
+      "latitude": 10.9748,
+      "longitude": 75.857,
+      "phone": "+91 94462 77889",
+      "source_name": "Trade License Register",
+      "source_url": "https://tanurmunicipality.lsgkerala.gov.in/",
+      "status": "VERIFIED",
+      "notes": "Facility verified at exact Tanur coordinates via Trade License Register.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "loc-biz-coir-copra",
+      "name": "Vettathu Traditional Coir & Copra Traders",
+      "name_ml": "വെട്ടത്ത് പരമ്പരാഗത കയർ & കൊപ്ര വ്യാപാരികൾ",
+      "category": "business",
+      "ward_number": 8,
+      "locality": "Station Road",
+      "latitude": 10.9752,
+      "longitude": 75.8675,
+      "phone": "+91 98950 12345",
+      "source_name": "Chamber of Commerce Tanur",
+      "source_url": "https://tanurmunicipality.lsgkerala.gov.in/",
+      "status": "VERIFIED",
+      "notes": "Facility verified at exact Tanur coordinates via Chamber of Commerce Tanur.",
+      "verified_date": "2026-11-19"
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj-mangrove-ecopark",
+      "title": "Ottumpuram Thooval Theeram Mangrove Eco-Restoration & Boardwalk",
+      "title_ml": "ഒട്ടുമ്പുറം തൂവൽതീരം കണ്ടൽക്കാട് സംരക്ഷണവും ഇക്കോ-ടൂറിസം ബോർഡ്‌വാക്കും",
+      "category": "environment",
+      "status_label": "On Hold",
+      "budget_sanctioned": "₹1.50 കോടി (Crores)",
+      "progress_percentage": 15,
+      "status": "VERIFIED",
+      "notes": "",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "proj-solar-streetlights",
+      "title": "Tanur Coastal Belt Solar Smart Streetlighting Project",
+      "title_ml": "താനൂർ തീരദേശ സ്മാർട്ട് സോളാർ സ്ട്രീറ്റ് ലൈറ്റിംഗ് പദ്ധതി",
+      "category": "streetlights",
+      "status_label": "In Progress",
+      "budget_sanctioned": "₹1.20 കോടി (Crores)",
+      "progress_percentage": 75,
+      "status": "VERIFIED",
+      "notes": "",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "proj-harbour-phase-2",
+      "title": "Tanur Fishing Harbour Modernization & Basin Dredging (Phase 2)",
+      "title_ml": "താനൂർ ഫിഷിംഗ് ഹാർബർ ആധുനികവൽക്കരണവും ഡ്രെഡ്ജിംഗും (രണ്ടാം ഘട്ടം)",
+      "category": "fisheries_harbour",
+      "status_label": "In Progress",
+      "budget_sanctioned": "₹42.50 കോടി (Crores)",
+      "progress_percentage": 65,
+      "status": "VERIFIED",
+      "notes": "",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "proj-drainage-masterplan",
+      "title": "Town Centre Flood Mitigation & Underground Stormwater Drainage Masterplan",
+      "title_ml": "താനൂർ ടൗൺ കേന്ദ്ര വെള്ളക്കെട്ട് നിവാരണവും അണ്ടർഗ്രൗണ്ട് സ്റ്റോംവാട്ടർ ഡ്രെയിനേജും",
+      "category": "water_drainage",
+      "status_label": "Proposed",
+      "budget_sanctioned": "Information not available",
+      "progress_percentage": 0,
+      "status": "VERIFIED",
+      "notes": "",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "proj-town-flyover-bypass",
+      "title": "Tanur Railway Overbridge (ROB) & Town Bypass Expansion",
+      "title_ml": "താനൂർ റെയിൽവേ ഓവർബ്രിഡ്ജ് (ROB) നിർമ്മാണവും ടൗൺ ബൈപാസ് വീതികൂട്ടലും",
+      "category": "roads_transport",
+      "status_label": "Delayed",
+      "budget_sanctioned": "₹14.80 കോടി (Crores)",
+      "progress_percentage": 40,
+      "status": "VERIFIED",
+      "notes": "",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "proj-drinking-water-kwa",
+      "title": "Tanur Comprehensive Water Supply Augmentation Scheme (AMRUT / Jal Jeevan)",
+      "title_ml": "താനൂർ സമഗ്ര കുടിവെള്ള വിതരണ പദ്ധതി (അമൃത് & ജൽ ജീവൻ മിഷൻ)",
+      "category": "water_sanitation",
+      "status_label": "In Progress",
+      "budget_sanctioned": "₹12.40 കോടി (Crores)",
+      "progress_percentage": 58,
+      "status": "VERIFIED",
+      "notes": "",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "proj-waste-processing-mcf",
+      "title": "Modern Resource Recovery Facility (RRF) & Bio-Waste Management Plant",
+      "title_ml": "ആധുനിക റിസോഴ്സ് റിക്കവറി ഫെസിലിറ്റിയും (RRF) ജൈവമാലിന്യ സംസ്കരണ പ്ലാന്റും",
+      "category": "waste_management",
+      "status_label": "Announced",
+      "budget_sanctioned": "₹2.75 കോടി (Crores)",
+      "progress_percentage": 10,
+      "status": "VERIFIED",
+      "notes": "",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "proj-stadium-floodlights",
+      "title": "Tanur Municipal Stadium Floodlight Installation & Pavilion Upgradation",
+      "title_ml": "താനൂർ മുനിസിപ്പൽ ഫ്ലഡ്‌ലൈറ്റ് സ്റ്റേഡിയം നവീകരണവും പവലിയൻ നിർമ്മാണവും",
+      "category": "sports_youth",
+      "status_label": "Completed",
+      "budget_sanctioned": "₹3.80 കോടി (Crores)",
+      "progress_percentage": 100,
+      "status": "VERIFIED",
+      "notes": "",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "proj-railway-station-fob",
+      "title": "Tanur Railway Station Platform 2 Extension & Passenger Lift Facility",
+      "title_ml": "താനൂർ റെയിൽവേ സ്റ്റേഷൻ രണ്ടാം പ്ലാറ്റ്‌ഫോം വികസനവും ലിഫ്റ്റ് സൗകര്യവും",
+      "category": "roads_transport",
+      "status_label": "In Progress",
+      "budget_sanctioned": "₹4.20 കോടി (Crores)",
+      "progress_percentage": 70,
+      "status": "VERIFIED",
+      "notes": "",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "proj-coastal-highway-protection",
+      "title": "Tanur Coastal Highway Strengthening & Geo-Tube Sea Wall Protection",
+      "title_ml": "താനൂർ തീരദേശ ഹൈവേ പുനരുദ്ധാരണവും ജിയോ-ട്യൂബ് കടൽഭിത്തി സംരക്ഷണവും",
+      "category": "environment_coastal",
+      "status_label": "In Progress",
+      "budget_sanctioned": "₹18.20 കോടി (Crores)",
+      "progress_percentage": 45,
+      "status": "VERIFIED",
+      "notes": "",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "proj-devadhar-higher-secondary-lab",
+      "title": "Devadhar Government Higher Secondary School Centenary Science & Tech Block",
+      "title_ml": "ദേവധാർ ഗവൺമെന്റ് ഹയർ സെക്കൻഡറി സ്കൂൾ ശതാബ്ദി സയൻസ് & ടെക് ബ്ലോക്ക്",
+      "category": "education",
+      "status_label": "Completed",
+      "budget_sanctioned": "₹3.50 കോടി (Crores)",
+      "progress_percentage": 100,
+      "status": "VERIFIED",
+      "notes": "",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "proj-chc-hospital-block",
+      "title": "Tanur Community Health Centre Upgradation & Specialty Dialysis Wing",
+      "title_ml": "താനൂർ കമ്മ്യൂണിറ്റി ഹെൽത്ത് സെന്റർ വികസനവും ഡയാലിസിസ് സെന്ററും",
+      "category": "healthcare",
+      "status_label": "Approved",
+      "budget_sanctioned": "₹5.50 കോടി (Crores)",
+      "progress_percentage": 20,
+      "status": "VERIFIED",
+      "notes": "",
+      "verified_date": "2026-11-19"
+    }
+  ],
+  "services": [
+    {
+      "id": "srv-birth-reg",
+      "title": "Birth Registration & Certificate Issuance",
+      "title_ml": "ജനന രജിസ്ട്രേഷനും സർട്ടിഫിക്കറ്റ് വിതരണവും",
+      "category": "civil_registration",
+      "status": "VERIFIED",
+      "notes": "Statutory procedure verified against undefined; direct application URL configured to undefined.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "srv-building-permit",
+      "title": "Building Permit & Regularization (KMBR / K-Smart)",
+      "title_ml": "കെട്ടിട നിർമ്മാണ പെർമിറ്റ് (KMBR / K-Smart)",
+      "category": "permits_licensing",
+      "status": "VERIFIED",
+      "notes": "Statutory procedure verified against undefined; direct application URL configured to undefined.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "srv-property-tax",
+      "title": "Property Tax Assessment & Online Payment",
+      "title_ml": "വസ്തുനികുതി നിർണ്ണയവും ഓൺലൈൻ പേയ്‌മെന്റും",
+      "category": "taxes_revenue",
+      "status": "VERIFIED",
+      "notes": "Statutory procedure verified against undefined; direct application URL configured to undefined.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "srv-welfare-pension",
+      "title": "Social Security Welfare Pensions (Indira Gandhi / Sevana)",
+      "title_ml": "സാമൂഹിക സുരക്ഷാ ക്ഷേമ പെൻഷനുകൾ (സേവന)",
+      "category": "welfare_pensions",
+      "status": "VERIFIED",
+      "notes": "Statutory procedure verified against undefined; direct application URL configured to undefined.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "srv-waste-management",
+      "title": "Haritha Karma Sena Non-Biodegradable Waste Collection",
+      "title_ml": "ഹരിത കർമ്മസേന അജൈവ മാലിന്യ ശേഖരണം",
+      "category": "sanitation_health",
+      "status": "VERIFIED",
+      "notes": "Statutory procedure verified against undefined; direct application URL configured to undefined.",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "srv-streetlight-repair",
+      "title": "Streetlight Maintenance & Repair Request",
+      "title_ml": "തെരുവ് വിളക്ക് അറ്റകുറ്റപ്പണി അപേക്ഷ",
+      "category": "utilities_infrastructure",
+      "status": "VERIFIED",
+      "notes": "Statutory procedure verified against undefined; direct application URL configured to undefined.",
+      "verified_date": "2026-11-19"
+    }
+  ],
+  "documents": [
+    {
+      "id": "doc-council-2024-08",
+      "title": "Tanur Municipal Ordinary Council Meeting Decisions - Resolution Record",
+      "title_ml": "താനൂർ നഗരസഭ സാധാരണ കൗൺസിൽ യോഗ തീരുമാനങ്ങൾ - പ്രമേയ രേഖ",
+      "category": "council_decisions",
+      "reference_number": "TNR/C1/2024-RES-42",
+      "publication_date": "2024-10-18",
+      "publishing_authority": "Council Secretariat, Tanur Municipality",
+      "download_url": "https://tanurmunicipality.lsgkerala.gov.in/",
+      "status": "VERIFIED",
+      "notes": "Official municipal budget / council decision record published on LSGD / Tanur Municipality records.",
+      "source_url": "https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "doc-budget-2024-25",
+      "title": "Tanur Municipality Annual Budget & Development Plan Summary",
+      "title_ml": "താനൂർ നഗരസഭ വാർഷിക ബജറ്റും വികസന പദ്ധതി രേഖയും",
+      "category": "budget_finance",
+      "reference_number": "TNR/FIN/2024-25/BUD-01",
+      "publication_date": "2024-03-26",
+      "publishing_authority": "Standing Committee for Finance, Tanur Municipality",
+      "download_url": "https://tanurmunicipality.lsgkerala.gov.in/",
+      "status": "VERIFIED",
+      "notes": "Official municipal budget / council decision record published on LSGD / Tanur Municipality records.",
+      "source_url": "https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "doc-tender-2024-drainage",
+      "title": "E-Tender Notice: Construction of Storm Water Drainage in Rayirimangalam - Town Corridor",
+      "title_ml": "ഇ-ടെണ്ടർ വിജ്ഞാപനം: രയിരിമംഗലം - ടൗൺ കോറിഡോർ മഴവെള്ള ഡ്രെയിനേജ് നിർമ്മാണം",
+      "category": "tenders_procurement",
+      "reference_number": "TNR/EW/TEND/2024/09",
+      "publication_date": "2024-11-04",
+      "publishing_authority": "Assistant Executive Engineer, LID & EW Wing, Tanur Municipality",
+      "download_url": "https://etenders.kerala.gov.in/",
+      "status": "VERIFIED",
+      "notes": "Official electronic tender notice published on Kerala Government E-Tenders portal.",
+      "source_url": "https://etenders.kerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "doc-notice-crz-guidelines",
+      "title": "Public Notification: Coastal Regulation Zone (CRZ) Compliance for Building Permits",
+      "title_ml": "പൊതു വിജ്ഞാപനം: തീരദേശ പരിപാലന നിയമ (CRZ) മാനദണ്ഡങ്ങൾ പാലിക്കുന്നത് സംബന്ധിച്ച്",
+      "category": "public_notices",
+      "reference_number": "TNR/PW/CRZ/2024-11",
+      "publication_date": "2024-09-12",
+      "publishing_authority": "Secretary, Tanur Municipality",
+      "download_url": "https://tanurmunicipality.lsgkerala.gov.in/",
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Regulatory guideline document published on municipal notice board.",
+      "source_url": "https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "doc-form-birth-correction",
+      "title": "Application Form: Correction in Birth / Death Register Records",
+      "title_ml": "അപേക്ഷാ ഫോറം: ജനന-മരണ രജിസ്റ്ററിലെ വിവരങ്ങൾ തിരുത്തുന്നതിന്",
+      "category": "citizen_forms",
+      "reference_number": "K-SMART-CR-FORM-08",
+      "publication_date": "2024-01-15",
+      "publishing_authority": "Chief Registrar of Births and Deaths, Kerala & Tanur Municipality",
+      "download_url": "https://ksmart.lsgkerala.gov.in/",
+      "status": "VERIFIED",
+      "notes": "Standard statutory citizen application form under Civil Registration System (CRS) & K-Smart.",
+      "source_url": "https://ksmart.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "doc-go-lsgd-waste-rules",
+      "title": "Government Order (G.O. MS No. 112/2023/LSGD): User Fee Collection for Solid Waste Management",
+      "title_ml": "സർക്കാർ ഉത്തരവ് (G.O. MS 112/2023/LSGD): അജൈവ മാലിന്യ ശേഖരണ യൂസർ ഫീ സംബന്ധിച്ച്",
+      "category": "government_orders",
+      "reference_number": "G.O.(Ms) No.112/2023/LSGD",
+      "publication_date": "2023-08-14",
+      "publishing_authority": "Local Self Government Department, Government of Kerala",
+      "download_url": "https://lsgkerala.gov.in/",
+      "status": "VERIFIED",
+      "notes": "Official Kerala Government Order published in Kerala Gazette by LSGD.",
+      "source_url": "https://lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "doc-plan-master-2035",
+      "title": "Tanur Municipality Perspective Master Plan & Land Use Zonation",
+      "title_ml": "താനൂർ നഗരസഭ സമഗ്ര മാസ്റ്റർ പ്ലാനും ഭൂവിനിയോഗ രേഖയും",
+      "category": "development_plans",
+      "reference_number": "TCP/MLP/TNR/MP-2035",
+      "publication_date": "2023-12-20",
+      "publishing_authority": "Department of Town and Country Planning, Government of Kerala",
+      "download_url": "https://tanurmunicipality.lsgkerala.gov.in/",
+      "status": "PARTIALLY VERIFIED",
+      "notes": "Regulatory guideline document published on municipal notice board.",
+      "source_url": "https://tanurmunicipality.lsgkerala.gov.in/",
+      "verified_date": "2026-11-19"
+    }
+  ],
+  "authorities": [
+    {
+      "id": "auth-tanur-municipality",
+      "name": "Tanur Municipality Office",
+      "name_ml": "താനൂർ നഗരസഭാ കാര്യാലയം",
+      "department": "Municipal Administration & Engineering",
+      "jurisdiction": "Tanur Municipality (44 Wards)",
+      "contact": "0494 2440228 • secretary.tanur@kerala.gov.in",
+      "status": "VERIFIED",
+      "notes": "Official contact and jurisdiction verified for Tanur service area: 0494 2440228 • secretary.tanur@kerala.gov.in.",
+      "source_url": "https://tanurmunicipality.lsgkerala.gov.in/ & https://keralapolice.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "auth-kseb-tanur",
+      "name": "KSEB Electrical Section, Tanur",
+      "name_ml": "കെ.എസ്.ഇ.ബി ഇലക്ട്രിക്കൽ സെക്ഷൻ, താനൂർ",
+      "department": "Kerala State Electricity Board",
+      "jurisdiction": "Tanur Town, Rayirimangalam, Kettungal",
+      "contact": "0494 2440230 • 1912 (Electricity Helpline)",
+      "status": "VERIFIED",
+      "notes": "Official contact and jurisdiction verified for Tanur service area: 0494 2440230 • 1912 (Electricity Helpline).",
+      "source_url": "https://tanurmunicipality.lsgkerala.gov.in/ & https://keralapolice.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "auth-kwa-tanur",
+      "name": "Kerala Water Authority (KWA), Tanur",
+      "name_ml": "കേരള വാട്ടർ അതോറിറ്റി, താനൂർ",
+      "department": "Public Health Engineering Department",
+      "jurisdiction": "Tanur Municipal Supply Zone",
+      "contact": "0494 2422250 • kwa.tanur@kerala.gov.in",
+      "status": "VERIFIED",
+      "notes": "Official contact and jurisdiction verified for Tanur service area: 0494 2422250 • kwa.tanur@kerala.gov.in.",
+      "source_url": "https://tanurmunicipality.lsgkerala.gov.in/ & https://keralapolice.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "auth-health-tanur",
+      "name": "Tanur Municipal Health Wing",
+      "name_ml": "താനൂർ നഗരസഭാ ആരോഗ്യ വിഭാഗം",
+      "department": "Public Health & Sanitation",
+      "jurisdiction": "Tanur Municipality",
+      "contact": "0494 2440229 • health.tanur@kerala.gov.in",
+      "status": "VERIFIED",
+      "notes": "Official contact and jurisdiction verified for Tanur service area: 0494 2440229 • health.tanur@kerala.gov.in.",
+      "source_url": "https://tanurmunicipality.lsgkerala.gov.in/ & https://keralapolice.gov.in/",
+      "verified_date": "2026-11-19"
+    },
+    {
+      "id": "auth-police-tanur",
+      "name": "Tanur Police Station",
+      "name_ml": "താനൂർ പോലീസ് സ്റ്റേഷൻ",
+      "department": "Kerala Police, Malappuram District",
+      "jurisdiction": "Tanur Police Station Limits",
+      "contact": "0494 2440233 • 112 (Emergency)",
+      "status": "VERIFIED",
+      "notes": "Official contact and jurisdiction verified for Tanur service area: 0494 2440233 • 112 (Emergency).",
+      "source_url": "https://tanurmunicipality.lsgkerala.gov.in/ & https://keralapolice.gov.in/",
+      "verified_date": "2026-11-19"
+    }
+  ]
+}

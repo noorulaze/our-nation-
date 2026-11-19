@@ -8,13 +8,27 @@ import {
   Post, 
   Comment,
   Profile,
+  UserRole,
   ModerationReport,
+  ReportContentType,
   AuditLog,
   NewsArticleEntity,
   Institution,
   PublicService,
   PublicRepresentative,
-  CulturalHeritageItem
+  CulturalHeritageItem,
+  ServiceCategory,
+  ProfessionalProfile,
+  ProfessionalService,
+  PortfolioItem,
+  Booking,
+  BookingStatus,
+  Review,
+  Conversation,
+  ChatMessage,
+  SavedProfessional,
+  AppNotification,
+  NotificationPreferences
 } from "@/types/database";
 import { 
   initialCommunities, 
@@ -29,7 +43,17 @@ import {
   initialInstitutions,
   initialPublicServices,
   initialRepresentatives,
-  initialCulturalItems
+  initialCulturalItems,
+  initialServiceCategories,
+  initialProfessionalProfiles,
+  initialProfessionalServices,
+  initialPortfolioItems,
+  initialBookings,
+  initialReviews,
+  initialConversations,
+  initialChatMessages,
+  initialSavedProfessionals,
+  initialNotifications
 } from "./initialData";
 
 class DataStore {
@@ -56,6 +80,16 @@ class DataStore {
       created_at: new Date(Date.now() - 3600000 * 6).toISOString(),
     }
   ];
+  private serviceCategories: ServiceCategory[] = [...initialServiceCategories];
+  private professionals: ProfessionalProfile[] = [...initialProfessionalProfiles];
+  private professionalServices: ProfessionalService[] = [...initialProfessionalServices];
+  private portfolioItems: PortfolioItem[] = [...initialPortfolioItems];
+  private bookings: Booking[] = [...initialBookings];
+  private reviews: Review[] = [...initialReviews];
+  private conversations: Conversation[] = [...initialConversations];
+  private chatMessages: ChatMessage[] = [...initialChatMessages];
+  private savedProfessionals: SavedProfessional[] = [...initialSavedProfessionals];
+  private notifications: AppNotification[] = [...initialNotifications];
   private moderationReports: ModerationReport[] = [];
   private auditLogs: AuditLog[] = [];
 
@@ -759,10 +793,81 @@ class DataStore {
   updateProfile(id: string, updates: Partial<Profile>): Profile | undefined {
     const p = this.profiles.find(item => item.id === id);
     if (p) {
-      Object.assign(p, updates, { updated_at: new Date().toISOString() });
+      // SECURITY: Disallow self-role modification through updateProfile
+      const { role: _forbiddenRole, ...safeUpdates } = updates as any;
+      Object.assign(p, safeUpdates, { updated_at: new Date().toISOString() });
       return p;
     }
     return undefined;
+  }
+
+  /**
+   * Secure Administrative Role Assignment
+   * Enforces that only verified administrators can modify a user's role.
+   * Generates immutable audit logs for all attempts (both authorized and rejected).
+   */
+  assignUserRole(
+    adminUserId: string,
+    targetUserId: string,
+    newRole: UserRole,
+    reason: string
+  ): { success: boolean; error?: string; profile?: Profile } {
+    // 1. Verify caller exists and holds the admin role
+    const caller = this.profiles.find(p => p.id === adminUserId);
+    if (!caller || caller.role !== "admin") {
+      this.addAuditLog(
+        adminUserId || "unauthenticated",
+        "UNAUTHORIZED_ROLE_CHANGE_ATTEMPT",
+        "profile",
+        targetUserId,
+        {
+          attempted_role: newRole,
+          caller_role: caller?.role || "unauthenticated",
+          caller_username: caller?.username || "unknown",
+          reason: reason || "Unspecified"
+        }
+      );
+      return { 
+        success: false, 
+        error: "Access Denied: Only platform administrators can assign or modify user roles." 
+      };
+    }
+
+    // 2. Validate target role
+    const validRoles: UserRole[] = ["user", "moderator", "verified_org", "admin"];
+    if (!validRoles.includes(newRole)) {
+      return { 
+        success: false, 
+        error: `Invalid role specified: ${newRole}. Valid roles are: ${validRoles.join(", ")}` 
+      };
+    }
+
+    // 3. Find target user
+    const target = this.profiles.find(p => p.id === targetUserId);
+    if (!target) {
+      return { success: false, error: "Target user not found." };
+    }
+
+    const previousRole = target.role;
+    target.role = newRole;
+    target.updated_at = new Date().toISOString();
+
+    // 4. Log role change event in immutable audit log
+    this.addAuditLog(
+      adminUserId,
+      "ASSIGN_USER_ROLE",
+      "profile",
+      targetUserId,
+      {
+        target_username: target.username,
+        previous_role: previousRole,
+        new_role: newRole,
+        reason: reason || "Administrative update",
+        admin_username: caller.username
+      }
+    );
+
+    return { success: true, profile: target };
   }
 
   // AUDIT LOGS
@@ -780,6 +885,733 @@ class DataStore {
 
   getAuditLogs(): AuditLog[] {
     return this.auditLogs.slice(0, 50);
+  }
+
+  // MODERATION REPORTS
+  reportContent(
+    reporterId: string | undefined,
+    contentType: ReportContentType,
+    contentId: string,
+    reason: string,
+    details?: string
+  ): ModerationReport {
+    const report: ModerationReport = {
+      id: "rep-" + Date.now(),
+      reporter_id: reporterId || "anonymous",
+      content_type: contentType,
+      content_id: contentId,
+      reason,
+      details: details || null,
+      status: "pending",
+      created_at: new Date().toISOString(),
+      reporter: reporterId ? this.profiles.find(p => p.id === reporterId) : undefined,
+    };
+    this.moderationReports.unshift(report);
+    this.addAuditLog(reporterId, "REPORT_CONTENT", contentType, contentId, { reason, details });
+    return report;
+  }
+
+  getModerationReports(): ModerationReport[] {
+    return this.moderationReports.map(r => ({
+      ...r,
+      reporter: r.reporter_id ? this.profiles.find(p => p.id === r.reporter_id) : undefined,
+    }));
+  }
+
+  updateModerationReportStatus(reportId: string, status: 'reviewed' | 'dismissed' | 'actioned', reviewerId?: string): boolean {
+    const rep = this.moderationReports.find(r => r.id === reportId);
+    if (rep) {
+      rep.status = status;
+      rep.reviewed_by = reviewerId || null;
+      this.addAuditLog(reviewerId, "UPDATE_REPORT_STATUS", "report", reportId, { status });
+      return true;
+    }
+    return false;
+  }
+
+
+  // ==========================================
+  // SERVICE CATEGORIES
+  // ==========================================
+  getServiceCategories(): ServiceCategory[] {
+    return [...this.serviceCategories].sort((a, b) => a.display_order - b.display_order);
+  }
+
+  getCategoryBySlug(slug: string): ServiceCategory | undefined {
+    return this.serviceCategories.find(c => c.slug.toLowerCase() === slug.toLowerCase() || c.id.toLowerCase() === slug.toLowerCase());
+  }
+
+  addServiceCategory(cat: Omit<ServiceCategory, 'id'>): ServiceCategory {
+    const newCat: ServiceCategory = {
+      ...cat,
+      id: "cat-" + cat.slug,
+    };
+    this.serviceCategories.push(newCat);
+    this.addAuditLog(undefined, "CREATE_CATEGORY", "category", newCat.id, { name: cat.name });
+    return newCat;
+  }
+
+  updateServiceCategory(id: string, updates: Partial<ServiceCategory>): boolean {
+    const cat = this.serviceCategories.find(c => c.id === id);
+    if (cat) {
+      Object.assign(cat, updates);
+      return true;
+    }
+    return false;
+  }
+
+  // ==========================================
+  // PROFESSIONALS
+  // ==========================================
+  getProfessionals(filters?: {
+    categorySlug?: string;
+    categoryId?: string;
+    locality?: string;
+    minRating?: number;
+    verifiedOnly?: boolean;
+    search?: string;
+    sort?: 'rating' | 'reviews' | 'price_asc' | 'price_desc';
+  }): ProfessionalProfile[] {
+    let list = [...this.professionals];
+
+    if (filters?.categorySlug && filters.categorySlug !== "all") {
+      const cat = this.getCategoryBySlug(filters.categorySlug);
+      if (cat) {
+        list = list.filter(p => p.category_id === cat.id || p.category_id === cat.slug);
+      }
+    }
+
+    if (filters?.categoryId && filters.categoryId !== "all") {
+      list = list.filter(p => p.category_id === filters.categoryId);
+    }
+
+    if (filters?.locality && filters.locality !== "all" && filters.locality !== "All") {
+      const loc = filters.locality.toLowerCase();
+      list = list.filter(p => 
+        p.locality.toLowerCase().includes(loc) ||
+        p.service_areas.some(a => a.toLowerCase().includes(loc))
+      );
+    }
+
+    if (filters?.minRating) {
+      list = list.filter(p => p.rating >= (filters.minRating || 0));
+    }
+
+    if (filters?.verifiedOnly) {
+      list = list.filter(p => p.is_verified);
+    }
+
+    if (filters?.search && filters.search.trim()) {
+      const q = filters.search.toLowerCase().trim();
+      list = list.filter(p =>
+        p.display_name.toLowerCase().includes(q) ||
+        (p.display_name_ml && p.display_name_ml.includes(q)) ||
+        (p.business_name && p.business_name.toLowerCase().includes(q)) ||
+        (p.category_name && p.category_name.toLowerCase().includes(q)) ||
+        (p.category_name_ml && p.category_name_ml.includes(q)) ||
+        p.subcategories.some(s => s.toLowerCase().includes(q)) ||
+        p.locality.toLowerCase().includes(q)
+      );
+    }
+
+    // Sorting
+    if (filters?.sort === 'price_asc') {
+      list.sort((a, b) => a.starting_price - b.starting_price);
+    } else if (filters?.sort === 'price_desc') {
+      list.sort((a, b) => b.starting_price - a.starting_price);
+    } else if (filters?.sort === 'reviews') {
+      list.sort((a, b) => b.reviews_count - a.reviews_count);
+    } else {
+      // default: highest rating
+      list.sort((a, b) => b.rating - a.rating || b.reviews_count - a.reviews_count);
+    }
+
+    return list;
+  }
+
+  getProfessionalById(id: string): ProfessionalProfile | undefined {
+    return this.professionals.find(p => p.id === id);
+  }
+
+  getProfessionalByUsername(username: string): ProfessionalProfile | undefined {
+    return this.professionals.find(p => p.username.toLowerCase() === username.toLowerCase());
+  }
+
+  getProfessionalByUserId(userId: string): ProfessionalProfile | undefined {
+    return this.professionals.find(p => p.user_id === userId);
+  }
+
+  createProfessionalProfile(data: Omit<ProfessionalProfile, 'id' | 'rating' | 'reviews_count' | 'created_at' | 'updated_at'>): ProfessionalProfile {
+    const newPro: ProfessionalProfile = {
+      ...data,
+      id: "pro-" + Date.now(),
+      rating: 5.0,
+      reviews_count: 0,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+    this.professionals.push(newPro);
+
+    // Also mark the user profile as professional
+    const userProfile = this.profiles.find(p => p.id === data.user_id);
+    if (userProfile) {
+      userProfile.is_professional = true;
+    }
+
+    this.addAuditLog(data.user_id, "REGISTER_PROFESSIONAL", "professional", newPro.id, {
+      name: newPro.display_name,
+      category: newPro.category_name,
+    });
+
+    return newPro;
+  }
+
+  updateProfessionalProfile(id: string, updates: Partial<ProfessionalProfile>): ProfessionalProfile | undefined {
+    const pro = this.professionals.find(p => p.id === id);
+    if (pro) {
+      Object.assign(pro, updates, { updated_at: new Date().toISOString() });
+      return pro;
+    }
+    return undefined;
+  }
+
+  verifyProfessional(id: string, actorId?: string): boolean {
+    const pro = this.professionals.find(p => p.id === id);
+    if (pro) {
+      pro.is_verified = true;
+      pro.verification_status = "verified";
+      if (!pro.badges.includes("verified_pro")) {
+        pro.badges.unshift("verified_pro");
+      }
+      this.addAuditLog(actorId, "VERIFY_PROFESSIONAL", "professional", id, { name: pro.display_name });
+      return true;
+    }
+    return false;
+  }
+
+  // ==========================================
+  // SERVICES OFFERED
+  // ==========================================
+  getServicesByProfessional(proId: string): ProfessionalService[] {
+    return this.professionalServices.filter(s => s.professional_id === proId && s.is_active);
+  }
+
+  getAllServicesByProfessional(proId: string): ProfessionalService[] {
+    return this.professionalServices.filter(s => s.professional_id === proId);
+  }
+
+  addProfessionalService(data: Omit<ProfessionalService, 'id' | 'created_at'>): ProfessionalService {
+    const srv: ProfessionalService = {
+      ...data,
+      id: "srv-" + Date.now(),
+      created_at: new Date().toISOString(),
+    };
+    this.professionalServices.push(srv);
+    return srv;
+  }
+
+  updateProfessionalService(id: string, updates: Partial<ProfessionalService>): boolean {
+    const srv = this.professionalServices.find(s => s.id === id);
+    if (srv) {
+      Object.assign(srv, updates);
+      return true;
+    }
+    return false;
+  }
+
+  deleteProfessionalService(id: string): boolean {
+    const idx = this.professionalServices.findIndex(s => s.id === id);
+    if (idx !== -1) {
+      this.professionalServices.splice(idx, 1);
+      return true;
+    }
+    return false;
+  }
+
+  // ==========================================
+  // PORTFOLIO ITEMS
+  // ==========================================
+  getPortfolioItems(proId: string): PortfolioItem[] {
+    return this.portfolioItems.filter(p => p.professional_id === proId);
+  }
+
+  addPortfolioItem(data: Omit<PortfolioItem, 'id'>): PortfolioItem {
+    const item: PortfolioItem = {
+      ...data,
+      id: "port-" + Date.now(),
+    };
+    this.portfolioItems.push(item);
+    return item;
+  }
+
+  deletePortfolioItem(id: string): boolean {
+    const idx = this.portfolioItems.findIndex(p => p.id === id);
+    if (idx !== -1) {
+      this.portfolioItems.splice(idx, 1);
+      return true;
+    }
+    return false;
+  }
+
+  // ==========================================
+  // BOOKINGS & SCHEDULING
+  // ==========================================
+  isSlotAvailable(professionalId: string, date: string, timeSlot: string): boolean {
+    const pro = this.getProfessionalById(professionalId);
+    if (!pro) return false;
+
+    // Check blocked dates
+    if (pro.availability.blockedDates && pro.availability.blockedDates.includes(date)) {
+      return false;
+    }
+
+    // Check day of week
+    const dayOfWeek = new Date(date).toLocaleDateString('en-US', { weekday: 'short' }).toLowerCase() as keyof typeof pro.availability.days;
+    const daySchedule = pro.availability.days[dayOfWeek];
+    if (daySchedule && !daySchedule.enabled) {
+      return false;
+    }
+
+    // Check existing active bookings for collision
+    const collision = this.bookings.some(b => 
+      b.professional_id === professionalId &&
+      b.booking_date === date &&
+      b.time_slot.trim().toLowerCase() === timeSlot.trim().toLowerCase() &&
+      ['pending', 'accepted', 'confirmed', 'in_progress'].includes(b.status)
+    );
+
+    return !collision;
+  }
+
+  getBookings(filter?: { customerId?: string; professionalId?: string; status?: BookingStatus }): Booking[] {
+    let list = [...this.bookings];
+
+    if (filter?.customerId) {
+      list = list.filter(b => b.customer_id === filter.customerId);
+    }
+    if (filter?.professionalId) {
+      list = list.filter(b => b.professional_id === filter.professionalId);
+    }
+    if (filter?.status) {
+      list = list.filter(b => b.status === filter.status);
+    }
+
+    // Enrich with customer and professional
+    return list.map(b => ({
+      ...b,
+      customer: this.profiles.find(p => p.id === b.customer_id),
+      professional: this.professionals.find(p => p.id === b.professional_id),
+    })).sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  }
+
+  getBookingById(id: string): Booking | undefined {
+    const b = this.bookings.find(item => item.id === id || item.booking_number === id);
+    if (!b) return undefined;
+    return {
+      ...b,
+      customer: this.profiles.find(p => p.id === b.customer_id),
+      professional: this.professionals.find(p => p.id === b.professional_id),
+    };
+  }
+
+  createBooking(data: Omit<Booking, 'id' | 'booking_number' | 'status' | 'created_at' | 'updated_at'>): { success: boolean; booking?: Booking; error?: string } {
+    // 1. Conflict check
+    if (!this.isSlotAvailable(data.professional_id, data.booking_date, data.time_slot)) {
+      return { success: false, error: "The selected time slot is already booked or unavailable. Please choose another slot." };
+    }
+
+    const count = this.bookings.length + 1001;
+    const newBooking: Booking = {
+      ...data,
+      id: "bk-" + Date.now(),
+      booking_number: `BK-TAN-${count}`,
+      status: "pending",
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+
+    this.bookings.push(newBooking);
+
+    // Notify professional
+    const pro = this.getProfessionalById(data.professional_id);
+    if (pro) {
+      this.addNotification({
+        user_id: pro.user_id,
+        title: "New Booking Request",
+        title_ml: "പുതിയ സേവന ബുക്കിംഗ്",
+        message: `${data.customer_name} requested ${data.service_title} for ${data.booking_date} at ${data.time_slot}.`,
+        message_ml: `${data.customer_name} ${data.booking_date} തീയതിയിൽ (${data.time_slot}) സേവനത്തിനായി ബുക്ക് ചെയ്തിരിക്കുന്നു.`,
+        type: "booking_request",
+        link: "/dashboard/bookings",
+      });
+    }
+
+    this.addAuditLog(data.customer_id, "CREATE_BOOKING", "booking", newBooking.id, {
+      booking_number: newBooking.booking_number,
+      service: data.service_title,
+    });
+
+    return { success: true, booking: newBooking };
+  }
+
+  updateBookingStatus(id: string, status: BookingStatus, reason?: string, actorId?: string): boolean {
+    const booking = this.bookings.find(b => b.id === id || b.booking_number === id);
+    if (!booking) return false;
+
+    const oldStatus = booking.status;
+    booking.status = status;
+    booking.updated_at = new Date().toISOString();
+
+    if (status === "declined" && reason) {
+      booking.decline_reason = reason;
+    }
+    if (status === "cancelled" && reason) {
+      booking.cancellation_reason = reason;
+    }
+
+    // Send notifications based on status change
+    const pro = this.getProfessionalById(booking.professional_id);
+
+    if (status === "accepted" || status === "confirmed") {
+      this.addNotification({
+        user_id: booking.customer_id,
+        title: "Booking Accepted",
+        title_ml: "ബുക്കിംഗ് സ്വീകരിച്ചു",
+        message: `${pro?.display_name || "Provider"} accepted your booking for ${booking.booking_date}.`,
+        message_ml: `${pro?.display_name || "സർവീസ് പ്രൊവൈഡർ"} നിങ്ങളുടെ ബുക്കിംഗ് സ്വീകരിച്ചു.`,
+        type: "booking_accepted",
+        link: "/dashboard/bookings",
+      });
+    } else if (status === "declined") {
+      this.addNotification({
+        user_id: booking.customer_id,
+        title: "Booking Declined",
+        title_ml: "ബുക്കിംഗ് നിരസിച്ചു",
+        message: `Booking ${booking.booking_number} was declined${reason ? `: ${reason}` : "."}`,
+        message_ml: `നിങ്ങളുടെ ബുക്കിംഗ് നിരസിക്കപ്പെട്ടു${reason ? `: ${reason}` : "."}`,
+        type: "booking_declined",
+        link: "/dashboard/bookings",
+      });
+    } else if (status === "completed") {
+      this.addNotification({
+        user_id: booking.customer_id,
+        title: "Service Completed - Leave a Review",
+        title_ml: "സേവനം പൂർത്തിയായി - റേറ്റിംഗ് നൽകൂ",
+        message: `Your service ${booking.service_title} is complete. Share your feedback!`,
+        message_ml: `${booking.service_title} സേവനം പൂർത്തിയായി. ദയവായി നിങ്ങളുടെ വിലയിരുത്തൽ രേഖപ്പെടുത്തൂ.`,
+        type: "booking_completed",
+        link: `/dashboard/bookings?review=${booking.id}`,
+      });
+    }
+
+    this.addAuditLog(actorId, "UPDATE_BOOKING_STATUS", "booking", booking.id, {
+      from: oldStatus,
+      to: status,
+      reason,
+    });
+
+    return true;
+  }
+
+  rescheduleBooking(id: string, newDate: string, newSlot: string, actorId?: string): { success: boolean; error?: string } {
+    const booking = this.bookings.find(b => b.id === id || b.booking_number === id);
+    if (!booking) return { success: false, error: "Booking not found" };
+
+    if (!this.isSlotAvailable(booking.professional_id, newDate, newSlot)) {
+      return { success: false, error: "Requested slot is not available." };
+    }
+
+    booking.status = "rescheduled";
+    booking.rescheduled_date = newDate;
+    booking.rescheduled_slot = newSlot;
+    booking.booking_date = newDate;
+    booking.time_slot = newSlot;
+    booking.updated_at = new Date().toISOString();
+
+    // Notify customer
+    this.addNotification({
+      user_id: booking.customer_id,
+      title: "Booking Rescheduled",
+      title_ml: "ബുക്കിംഗ് സമയം മാറ്റി",
+      message: `Your booking was rescheduled to ${newDate} at ${newSlot}.`,
+      message_ml: `നിങ്ങളുടെ ബുക്കിംഗ് ${newDate} (${newSlot}) സമയത്തേക്ക് മാറ്റിയിരിക്കുന്നു.`,
+      type: "booking_rescheduled",
+      link: "/dashboard/bookings",
+    });
+
+    this.addAuditLog(actorId, "RESCHEDULE_BOOKING", "booking", booking.id, {
+      newDate,
+      newSlot,
+    });
+
+    return { success: true };
+  }
+
+  // ==========================================
+  // REVIEWS & RATINGS (MODULE 9)
+  // ==========================================
+  getReviews(professionalId?: string): Review[] {
+    let list = [...this.reviews];
+    if (professionalId) {
+      list = list.filter(r => r.professional_id === professionalId);
+    }
+    return list.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  }
+
+  canUserReview(userId: string, bookingId: string): { eligible: boolean; reason?: string } {
+    const booking = this.bookings.find(b => b.id === bookingId || b.booking_number === bookingId);
+    if (!booking) {
+      return { eligible: false, reason: "Booking does not exist." };
+    }
+    if (booking.customer_id !== userId) {
+      return { eligible: false, reason: "Only the customer who booked the service can review." };
+    }
+    if (booking.status !== "completed") {
+      return { eligible: false, reason: "Reviews can only be submitted after service completion." };
+    }
+    const alreadyReviewed = this.reviews.some(r => r.booking_id === booking.id);
+    if (alreadyReviewed) {
+      return { eligible: false, reason: "You have already reviewed this booking." };
+    }
+    return { eligible: true };
+  }
+
+  createReview(data: {
+    booking_id: string;
+    professional_id: string;
+    customer_id: string;
+    customer_name: string;
+    customer_avatar?: string | null;
+    rating_overall: number;
+    rating_punctuality?: number;
+    rating_quality?: number;
+    rating_value?: number;
+    comment: string;
+    work_photo_url?: string | null;
+  }): { success: boolean; review?: Review; error?: string } {
+    const check = this.canUserReview(data.customer_id, data.booking_id);
+    if (!check.eligible) {
+      return { success: false, error: check.reason };
+    }
+
+    const newRev: Review = {
+      ...data,
+      id: "rev-" + Date.now(),
+      is_verified_booking: true,
+      created_at: new Date().toISOString(),
+    };
+
+    this.reviews.push(newRev);
+
+    // Recalculate professional overall rating & reviews count
+    const proReviews = this.reviews.filter(r => r.professional_id === data.professional_id);
+    const avgRating = Number((proReviews.reduce((sum, r) => sum + r.rating_overall, 0) / proReviews.length).toFixed(1));
+    
+    const pro = this.professionals.find(p => p.id === data.professional_id);
+    if (pro) {
+      pro.rating = avgRating;
+      pro.reviews_count = proReviews.length;
+
+      // Notify professional
+      this.addNotification({
+        user_id: pro.user_id,
+        title: "New Review Received",
+        title_ml: "പുതിയ റേറ്റിംഗ് ലഭിച്ചു",
+        message: `${data.customer_name} rated your service ${data.rating_overall} stars.`,
+        message_ml: `${data.customer_name} നിങ്ങളുടെ സേവനത്തിന് ${data.rating_overall} സ്റ്റാർ റേറ്റിംഗ് നൽകി.`,
+        type: "new_review",
+        link: `/professionals/${pro.username}`,
+      });
+    }
+
+    this.addAuditLog(data.customer_id, "CREATE_REVIEW", "review", newRev.id, {
+      rating: data.rating_overall,
+      professional: data.professional_id,
+    });
+
+    return { success: true, review: newRev };
+  }
+
+  replyToReview(reviewId: string, reply: string, professionalId: string): boolean {
+    const rev = this.reviews.find(r => r.id === reviewId && r.professional_id === professionalId);
+    if (rev) {
+      rev.provider_reply = reply;
+      rev.provider_replied_at = new Date().toISOString();
+      return true;
+    }
+    return false;
+  }
+
+  // ==========================================
+  // CONVERSATIONS & CHAT (MODULE 8)
+  // ==========================================
+  getConversations(userId: string): Conversation[] {
+    return this.conversations.filter(c => c.customer_id === userId || c.professional_id === userId);
+  }
+
+  getConversationById(id: string): Conversation | undefined {
+    return this.conversations.find(c => c.id === id);
+  }
+
+  getOrCreateConversationForBooking(bookingId: string): Conversation {
+    const existing = this.conversations.find(c => c.booking_id === bookingId);
+    if (existing) return existing;
+
+    const booking = this.getBookingById(bookingId);
+    const pro = booking ? this.getProfessionalById(booking.professional_id) : undefined;
+
+    const newConv: Conversation = {
+      id: "conv-" + Date.now(),
+      booking_id: bookingId,
+      customer_id: booking?.customer_id || "u0000000-0000-0000-0000-000000000001",
+      professional_id: pro?.id || "pro-001",
+      professional_name: pro?.display_name || "Service Provider",
+      customer_name: booking?.customer_name || "Customer",
+      unread_count_customer: 0,
+      unread_count_professional: 0,
+      created_at: new Date().toISOString(),
+    };
+    this.conversations.push(newConv);
+    return newConv;
+  }
+
+  getChatMessages(conversationId: string): ChatMessage[] {
+    return this.chatMessages.filter(m => m.conversation_id === conversationId);
+  }
+
+  sendChatMessage(conversationId: string, senderId: string, senderName: string, content: string): ChatMessage {
+    const msg: ChatMessage = {
+      id: "msg-" + Date.now(),
+      conversation_id: conversationId,
+      sender_id: senderId,
+      sender_name: senderName,
+      content,
+      created_at: new Date().toISOString(),
+      is_read: false,
+    };
+    this.chatMessages.push(msg);
+
+    const conv = this.conversations.find(c => c.id === conversationId);
+    if (conv) {
+      conv.last_message = content;
+      conv.last_message_at = msg.created_at;
+      if (senderId === conv.customer_id) {
+        conv.unread_count_professional += 1;
+      } else {
+        conv.unread_count_customer += 1;
+      }
+    }
+
+    return msg;
+  }
+
+  // ==========================================
+  // SAVED PROFESSIONALS (MODULE 10)
+  // ==========================================
+  getSavedProfessionals(userId: string): ProfessionalProfile[] {
+    const savedIds = this.savedProfessionals
+      .filter(s => s.user_id === userId)
+      .map(s => s.professional_id);
+    return this.professionals.filter(p => savedIds.includes(p.id));
+  }
+
+  isProfessionalSaved(userId: string, proId: string): boolean {
+    return this.savedProfessionals.some(s => s.user_id === userId && s.professional_id === proId);
+  }
+
+  toggleSaveProfessional(userId: string, proId: string): boolean {
+    const idx = this.savedProfessionals.findIndex(s => s.user_id === userId && s.professional_id === proId);
+    if (idx !== -1) {
+      this.savedProfessionals.splice(idx, 1);
+      return false; // un-saved
+    } else {
+      this.savedProfessionals.push({
+        id: "save-" + Date.now(),
+        user_id: userId,
+        professional_id: proId,
+        saved_at: new Date().toISOString(),
+      });
+      return true; // saved
+    }
+  }
+
+  // ==========================================
+  // IN-APP NOTIFICATIONS (MODULE 11)
+  // ==========================================
+  getNotifications(userId: string): AppNotification[] {
+    return this.notifications
+      .filter(n => n.user_id === userId)
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  }
+
+  markNotificationAsRead(id: string): boolean {
+    const notif = this.notifications.find(n => n.id === id);
+    if (notif) {
+      notif.is_read = true;
+      return true;
+    }
+    return false;
+  }
+
+  markAllNotificationsAsRead(userId: string): number {
+    let count = 0;
+    this.notifications.forEach(n => {
+      if (n.user_id === userId && !n.is_read) {
+        n.is_read = true;
+        count++;
+      }
+    });
+    return count;
+  }
+
+  deleteNotification(id: string): boolean {
+    const idx = this.notifications.findIndex(n => n.id === id);
+    if (idx !== -1) {
+      this.notifications.splice(idx, 1);
+      return true;
+    }
+    return false;
+  }
+
+  clearNotifications(userId: string): number {
+    const before = this.notifications.length;
+    this.notifications = this.notifications.filter(n => n.user_id !== userId);
+    return before - this.notifications.length;
+  }
+
+  private userNotificationPreferences: Record<string, NotificationPreferences> = {};
+
+  getNotificationPreferences(userId: string): NotificationPreferences {
+    if (!this.userNotificationPreferences[userId]) {
+      this.userNotificationPreferences[userId] = {
+        civic_issue_status: true,
+        comment_reply: true,
+        idea_update: true,
+        development_update: true,
+        event_reminder: true,
+        announcement: true,
+        service_bookings: true,
+        email_digest: false,
+      };
+    }
+    return { ...this.userNotificationPreferences[userId] };
+  }
+
+  updateNotificationPreferences(userId: string, prefs: Partial<NotificationPreferences>): NotificationPreferences {
+    const current = this.getNotificationPreferences(userId);
+    this.userNotificationPreferences[userId] = { ...current, ...prefs };
+    return { ...this.userNotificationPreferences[userId] };
+  }
+
+  addNotification(notif: Omit<AppNotification, 'id' | 'created_at' | 'is_read'>): AppNotification {
+    const newNotif: AppNotification = {
+      ...notif,
+      id: "notif-" + Date.now() + Math.random().toString(36).substring(2, 5),
+      is_read: false,
+      created_at: new Date().toISOString(),
+    };
+    this.notifications.unshift(newNotif);
+    return newNotif;
   }
 }
 

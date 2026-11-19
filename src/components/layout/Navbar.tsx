@@ -16,45 +16,93 @@ import {
   Menu, 
   X,
   Sparkles,
-  ShieldCheck
+  ShieldCheck,
+  Bell,
+  Wrench,
+  Calendar,
+  Bookmark,
+  Briefcase,
+  HardHat,
+  AlertTriangle,
+  TrendingUp,
+  Newspaper,
+  ShoppingBag,
+  Store,
+  Layers,
+  Building2,
+  FileText,
+  Info
 } from "lucide-react";
 import { UserRole } from "@/types/database";
+import { store } from "@/lib/data/store";
 
 export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) => void }) {
   const pathname = usePathname();
   const { t, language, toggleLanguage } = useLanguage();
   const { currentCommunity, availableCommunities, setCurrentCommunity } = useCommunity();
-  const { user, role, switchUserRole, logout } = useAuth();
+  const { user, role, logout } = useAuth();
   
   const [isCommunityDropdownOpen, setIsCommunityDropdownOpen] = useState(false);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+  const [isNotifDropdownOpen, setIsNotifDropdownOpen] = useState(false);
+  const [isCivicDropdownOpen, setIsCivicDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
 
-  // Main pill links matching exact header requirements
-  const mainPillLinks = [
-    { href: "/", label: "Home", enLabel: "Home" },
-    { href: "/about", label: "നമ്മുടെ നാട്", enLabel: "About Us" },
-    { href: "/news", label: "വാർത്തകൾ", enLabel: "News" },
-    { href: "/culture", label: "സംസ്കാരം", enLabel: "Culture" },
-    { href: "/education", label: "വിദ്യാഭ്യാസം", enLabel: "Education" },
-    { href: "/events", label: "പരിപാടികൾ", enLabel: "Events" },
-    { href: "/gallery", label: "ഗാലറി", enLabel: "Gallery" },
+  const notifs = user ? store.getNotifications(user.id) : [];
+  const unreadCount = notifs.filter(n => !n.is_read).length;
+
+  // The SIX Primary Core Features
+  const coreSixFeatures = [
+    { href: "/digital-municipality", label: "ഡിജിറ്റൽ നഗരസഭ", enLabel: "Digital Municipality", icon: Building2 },
+    { href: "/civic-connect", label: "സിവിക് കണക്ട്", enLabel: "Civic Connect", icon: AlertTriangle },
+    { href: "/development-tracker", label: "വികസന ട്രാക്കർ", enLabel: "Development Tracker", icon: HardHat },
+    { href: "/public-services", label: "പൊതു സേവനങ്ങൾ", enLabel: "Public Services", icon: Briefcase },
+    { href: "/documents", label: "രേഖകളും ഉത്തരവുകളും", enLabel: "Documents & Notices", icon: FileText },
+    { href: "/peoples-voice", label: "ജനകീയ ശബ്ദം", enLabel: "People's Voice", icon: TrendingUp },
   ];
 
-  // Comprehensive navigation for mobile drawer & dropdown
-  const allNavLinks = [
-    { href: "/", label: "Home", enLabel: "Home" },
-    { href: "/about", label: "നമ്മുടെ നാട്", enLabel: "About Us" },
-    { href: "/news", label: "വാർത്തകൾ", enLabel: "News" },
-    { href: "/culture", label: "സംസ്കാരം", enLabel: "Culture" },
-    { href: "/education", label: "വിദ്യാഭ്യാസം", enLabel: "Education" },
-    { href: "/events", label: "പരിപാടികൾ", enLabel: "Events" },
-    { href: "/gallery", label: "ഗാലറി", enLabel: "Gallery" },
-    { href: "/politics/pk-navas", label: "ജനപ്രതിനിധി (MLA)", enLabel: "MLA Profile" },
-    { href: "/tanur", label: "താനൂർ പ്രൊഫൈൽ", enLabel: "Tanur Profile" },
-    { href: "/contact", label: "ബന്ധപ്പെടുക", enLabel: "Contact" },
-    ...(role === "admin" || role === "moderator" ? [{ href: "/admin", label: "അഡ്മിൻ", enLabel: "Admin" }] : []),
+  // Primary Navigation Links (Home + 6 Core Features)
+  const mainPillLinks = [
+    { href: "/", label: "ഹോം", enLabel: "Home" },
+    { href: "/digital-municipality", label: "നഗരസഭ", enLabel: "Municipality" },
+    { href: "/civic-connect", label: "സിവിക് കണക്ട്", enLabel: "Civic Connect" },
+    { href: "/development-tracker", label: "വികസനം", enLabel: "Development" },
+    { href: "/public-services", label: "സേവനങ്ങൾ", enLabel: "Services" },
+    { href: "/documents", label: "രേഖകൾ", enLabel: "Documents" },
+    { href: "/peoples-voice", label: "ജനകീയ ശബ്ദം", enLabel: "People's Voice" },
+  ];
+
+  // Contextual Civic Modules Dropdown
+  const civicDropdownModules = [
+    { href: "/digital-municipality", label: "ഡിജിറ്റൽ നഗരസഭ ജി.ഐ.എസ്", enLabel: "Digital Municipality Hub", icon: Building2 },
+    { href: "/civic-connect", label: "സിവിക് കണക്ട് (പരാതികൾ & ട്രാക്കിംഗ്)", enLabel: "Civic Connect (Reports)", icon: AlertTriangle },
+    { href: "/development-tracker", label: "വികസന പദ്ധതി ട്രാക്കർ", enLabel: "Development Tracker", icon: HardHat },
+    { href: "/public-services", label: "പൗര സേവന സൂചിക (K-Smart)", enLabel: "Public Services Directory", icon: Briefcase },
+    { href: "/documents", label: "ഔദ്യോഗിക രേഖകളും ഗസറ്റും", enLabel: "Documents & Public Notices", icon: FileText },
+    { href: "/peoples-voice", label: "ജനകീയ ശബ്ദം (പങ്കാളിത്തം)", enLabel: "People's Voice", icon: TrendingUp },
+    { href: "/ai", label: "നാട് AI അസിസ്റ്റന്റ്", enLabel: "Naadu AI Assistant", icon: Sparkles },
+    { href: "/about", label: "ഔർ നേഷൻ ആമുഖം", enLabel: "About OUR NATION", icon: Info },
+  ];
+
+  // Grouped Navigation for Mobile Drawer & Menus
+  const primaryDestinations = [
+    { href: "/", label: "ഹോം", enLabel: "Home" },
+    { href: "/digital-municipality", label: "ഡിജിറ്റൽ നഗരസഭ", enLabel: "Digital Municipality" },
+    { href: "/civic-connect", label: "സിവിക് കണക്ട്", enLabel: "Civic Connect" },
+    { href: "/development-tracker", label: "വികസന ട്രാക്കർ", enLabel: "Development Tracker" },
+    { href: "/public-services", label: "പൊതു സേവനങ്ങൾ", enLabel: "Public Services" },
+    { href: "/documents", label: "രേഖകളും ഉത്തരവുകളും", enLabel: "Documents & Notices" },
+    { href: "/peoples-voice", label: "ജനകീയ ശബ്ദം", enLabel: "People's Voice" },
+    { href: "/profile", label: "പ്രൊഫൈൽ", enLabel: "Profile" },
+  ];
+
+  const exploreSubLinks = [
+    { href: "/ai", label: "നാട് AI അസിസ്റ്റന്റ്", enLabel: "Naadu AI Assistant" },
+    { href: "/about", label: "ഔർ നേഷൻ ആമുഖം", enLabel: "About Platform" },
+    { href: "/contact", label: "ബന്ധപ്പെടുക", enLabel: "Contact Support" },
+    { href: "/notifications", label: "അറിയിപ്പുകൾ", enLabel: "Notifications" },
+    ...(role === "admin" || role === "moderator" ? [{ href: "/admin", label: "അഡ്മിൻ പാനൽ", enLabel: "Admin Panel" }] : []),
   ];
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -64,7 +112,7 @@ export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) =
     if (onOpenSearchAi) {
       onOpenSearchAi(searchInput);
     } else {
-      window.location.href = `/discover?search=${encodeURIComponent(searchInput)}`;
+      window.location.href = `/explore?search=${encodeURIComponent(searchInput)}`;
     }
   };
 
@@ -151,6 +199,56 @@ export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) =
                 </Link>
               );
             })}
+
+            {/* Contextual Modules Dropdown */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setIsCivicDropdownOpen(!isCivicDropdownOpen)}
+                className={`px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1 transition ${
+                  isCivicDropdownOpen
+                    ? "bg-[#1B4D36] text-white shadow-xs"
+                    : "text-[#3D4B44] hover:text-[#1B4D36] hover:bg-[#EDE8DC]"
+                }`}
+              >
+                <Layers className="w-3.5 h-3.5" />
+                <span>{language === "ml" ? "മോഡ്യൂളുകൾ" : "Modules"}</span>
+                <ChevronDown className="w-3 h-3 opacity-70" />
+              </button>
+
+              {isCivicDropdownOpen && (
+                <div className="absolute right-0 sm:left-0 mt-2 w-72 bg-white rounded-2xl shadow-xl border border-[#EAE4D7] py-2 z-50 animate-in fade-in zoom-in-95">
+                  <div className="px-3.5 py-1.5 border-b border-[#F3EFE6] text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                    {language === "ml" ? "ഡിജിറ്റൽ മുൻസിപ്പാലിറ്റി മോഡ്യൂളുകൾ" : "Digital Municipality Modules"}
+                  </div>
+                  <div className="max-h-80 overflow-y-auto divide-y divide-[#F3EFE6]">
+                    {civicDropdownModules.map((mod) => {
+                      const Icon = mod.icon;
+                      return (
+                        <Link
+                          key={mod.href}
+                          href={mod.href}
+                          onClick={() => setIsCivicDropdownOpen(false)}
+                          className="px-3.5 py-2.5 flex items-center gap-2.5 hover:bg-[#FAF7F0] transition group"
+                        >
+                          <div className="w-7 h-7 rounded-lg bg-[#FAF7F0] group-hover:bg-[#194B35] group-hover:text-white text-[#194B35] flex items-center justify-center shrink-0 border border-[#EDE6D8] transition">
+                            <Icon className="w-3.5 h-3.5" />
+                          </div>
+                          <div>
+                            <div className="text-xs font-bold text-gray-800 group-hover:text-[#194B35]">
+                              {language === "ml" ? mod.label : mod.enLabel}
+                            </div>
+                            <div className="text-[10px] text-gray-400">
+                              {language === "ml" ? mod.enLabel : mod.label}
+                            </div>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
           </nav>
 
           {/* Right Section: Search & Profile Avatar (Matching IMAGE 2) */}
@@ -200,6 +298,82 @@ export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) =
                 <span>{language === "ml" ? "English" : "മലയാളം"}</span>
               </button>
 
+              {/* Notification Bell with Unread Badge */}
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setIsNotifDropdownOpen(!isNotifDropdownOpen)}
+                  className="w-8 h-8 rounded-full bg-[#EFE9DC] hover:bg-[#E5DECF] text-[#1B4D36] flex items-center justify-center transition border border-[#DFD7C7] relative"
+                  title="അറിയിപ്പുകൾ (Notifications)"
+                  aria-label="Notifications"
+                >
+                  <Bell className="w-4 h-4" />
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-600 text-white text-[9px] font-bold flex items-center justify-center border border-white">
+                      {unreadCount}
+                    </span>
+                  )}
+                </button>
+
+                {isNotifDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-72 sm:w-80 bg-white rounded-2xl shadow-xl border border-[#EAE4D7] py-2 z-50 animate-in fade-in zoom-in-95">
+                    <div className="px-4 py-2 border-b border-[#F3EFE6] flex items-center justify-between">
+                      <h4 className="text-xs font-bold font-malayalam-serif text-[#1B4D36]">
+                        അറിയിപ്പുകൾ (Notifications)
+                      </h4>
+                      <span className="text-[10px] text-[#7A8880]">{notifs.length} ആകെ</span>
+                    </div>
+
+                    <div className="max-h-64 overflow-y-auto divide-y divide-[#F3EFE6]">
+                      {notifs.length === 0 ? (
+                        <div className="p-4 text-center text-xs text-[#7A8880]">
+                          പുതിയ അറിയിപ്പുകൾ ഒന്നും ലഭിച്ചിട്ടില്ല.
+                        </div>
+                      ) : (
+                        notifs.map((n) => (
+                          <Link
+                            key={n.id}
+                            href={n.link || "/dashboard/bookings"}
+                            onClick={() => {
+                              store.markNotificationAsRead(n.id);
+                              setIsNotifDropdownOpen(false);
+                            }}
+                            className={`p-3 block text-xs hover:bg-[#FAF7F0] transition space-y-1 ${
+                              !n.is_read ? "bg-[#FAF7F0]/80 font-medium" : ""
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-bold text-[#1A2420] text-[11px]">
+                                {language === "ml" ? n.title_ml : n.title}
+                              </span>
+                              {!n.is_read && (
+                                <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                              )}
+                            </div>
+                            <p className="text-[11px] text-[#5C6A64] line-clamp-2">
+                              {language === "ml" ? n.message_ml : n.message}
+                            </p>
+                            <span className="text-[9px] text-[#7A8880] block text-right">
+                              {new Date(n.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                            </span>
+                          </Link>
+                        ))
+                      )}
+                    </div>
+
+                    <div className="p-2 border-t border-[#F3EFE6] text-center">
+                      <Link
+                        href="/notifications"
+                        onClick={() => setIsNotifDropdownOpen(false)}
+                        className="text-[11px] font-bold text-[#1B4D36] hover:underline"
+                      >
+                        {language === "ml" ? "എല്ലാ അറിയിപ്പുകളും കാണുക" : "View All Notifications"}
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               {/* User Profile Avatar in Deep Green Circle */}
               <div className="relative">
                 <button
@@ -220,30 +394,16 @@ export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) =
                       </span>
                     </div>
 
-                    {/* Role Switcher for MVP Testing */}
-                    <div className="px-4 py-2 bg-muted/40 border-b border-border">
-                      <p className="text-[10px] uppercase tracking-wider font-semibold text-muted-foreground mb-1">
-                        Switch Role:
-                      </p>
-                      <div className="grid grid-cols-2 gap-1 text-[11px]">
-                        {(["user", "moderator", "verified_org", "admin"] as UserRole[]).map((r) => (
-                          <button
-                            key={r}
-                            onClick={() => {
-                              switchUserRole(r);
-                              setIsUserDropdownOpen(false);
-                            }}
-                            className={`px-2 py-1 rounded text-center font-medium capitalize ${
-                              role === r ? "bg-[#1B4D36] text-white" : "bg-surface hover:bg-muted text-foreground border border-border"
-                            }`}
-                          >
-                            {r.replace("_", " ")}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
                     <div className="py-1">
+                      <Link
+                        href="/dashboard"
+                        onClick={() => setIsUserDropdownOpen(false)}
+                        className="block px-4 py-2 text-xs font-bold text-[#194B35] hover:bg-muted flex items-center gap-2"
+                      >
+                        <User className="w-3.5 h-3.5" />
+                        <span>{language === "ml" ? "ഡാഷ്‌ബോർഡ് (Dashboard)" : "Dashboard"}</span>
+                      </Link>
+
                       <Link
                         href="/profile"
                         onClick={() => setIsUserDropdownOpen(false)}
@@ -251,11 +411,39 @@ export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) =
                       >
                         {t("navProfile")}
                       </Link>
+
+                      <Link
+                        href="/dashboard/bookings"
+                        onClick={() => setIsUserDropdownOpen(false)}
+                        className="block px-4 py-2 text-xs text-foreground hover:bg-muted flex items-center gap-2 font-medium"
+                      >
+                        <Calendar className="w-3.5 h-3.5 text-[#B87A1E]" />
+                        <span>എന്റെ ബുക്കിംഗുകൾ (Bookings)</span>
+                      </Link>
+
+                      <Link
+                        href="/saved"
+                        onClick={() => setIsUserDropdownOpen(false)}
+                        className="block px-4 py-2 text-xs text-foreground hover:bg-muted flex items-center gap-2"
+                      >
+                        <Bookmark className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>സൂക്ഷിച്ച വിദഗ്ദ്ധർ (Saved Pros)</span>
+                      </Link>
+
+                      <Link
+                        href="/professionals/onboarding"
+                        onClick={() => setIsUserDropdownOpen(false)}
+                        className="block px-4 py-2 text-xs text-[#8C5B0F] hover:bg-amber-50 flex items-center gap-2 font-medium border-t border-border mt-1"
+                      >
+                        <Briefcase className="w-3.5 h-3.5" />
+                        <span>സേവന ദാതാവാകൂ (Become Provider)</span>
+                      </Link>
+
                       {(role === "admin" || role === "moderator") && (
                         <Link
                           href="/admin"
                           onClick={() => setIsUserDropdownOpen(false)}
-                          className="block px-4 py-2 text-xs text-foreground hover:bg-muted font-medium"
+                          className="block px-4 py-2 text-xs text-foreground hover:bg-muted font-medium border-t border-border mt-1"
                         >
                           {t("navAdmin")}
                         </Link>
@@ -265,7 +453,7 @@ export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) =
                           logout();
                           setIsUserDropdownOpen(false);
                         }}
-                        className="w-full text-left px-4 py-2 text-xs text-red-600 hover:bg-red-50"
+                        className="w-full text-left px-4 py-2 text-xs text-red-600 hover:bg-red-50 border-t border-border"
                       >
                         {t("navLogout")}
                       </button>
@@ -335,28 +523,61 @@ export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) =
             </select>
           </div>
 
-          {/* Mobile Nav Links */}
-          <div className="grid grid-cols-2 gap-1.5 pt-1">
-            {allNavLinks.map((link) => {
-              const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href.split("?")[0]));
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`px-3 py-2.5 rounded-xl text-xs font-semibold ${
-                    language === "ml" ? "font-malayalam tracking-normal" : "font-manrope"
-                  } transition flex items-center justify-between ${
-                    isActive 
-                      ? "bg-[#1B4D36] text-white shadow-xs" 
-                      : "bg-white text-[#3D4B44] hover:bg-[#EFE9DD] border border-[#EAE4D7]"
-                  }`}
-                >
-                  <span>{language === "ml" ? link.label : link.enLabel}</span>
-                  {isActive && <div className="w-1.5 h-1.5 rounded-full bg-amber-300" />}
-                </Link>
-              );
-            })}
+          {/* Primary 5-Pillar Destinations */}
+          <div className="space-y-1">
+            <span className="text-[10px] font-bold text-[#7A8880] uppercase tracking-wider px-1">
+              {language === "ml" ? "പ്രധാന വഴികൾ" : "Main Destinations"}
+            </span>
+            <div className="grid grid-cols-2 gap-1.5 pt-1">
+              {primaryDestinations.map((link) => {
+                const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href.split("?")[0]));
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`px-3 py-2.5 rounded-xl text-xs font-semibold ${
+                      language === "ml" ? "font-malayalam tracking-normal" : "font-manrope"
+                    } transition flex items-center justify-between ${
+                      isActive 
+                        ? "bg-[#1B4D36] text-white shadow-xs" 
+                        : "bg-white text-[#1B4D36] font-bold hover:bg-[#EFE9DD] border border-[#DDD5C5]"
+                    }`}
+                  >
+                    <span>{language === "ml" ? link.label : link.enLabel}</span>
+                    {isActive && <div className="w-1.5 h-1.5 rounded-full bg-amber-300" />}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Sub Navigation Links */}
+          <div className="space-y-1 pt-2 border-t border-[#EAE4D7]">
+            <span className="text-[10px] font-bold text-[#7A8880] uppercase tracking-wider px-1">
+              {language === "ml" ? "കൂടുതൽ വിഭാഗങ്ങൾ" : "More Sections"}
+            </span>
+            <div className="grid grid-cols-2 gap-1.5 pt-1">
+              {exploreSubLinks.map((link) => {
+                const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href.split("?")[0]));
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`px-3 py-2 rounded-xl text-[11px] font-medium ${
+                      language === "ml" ? "font-malayalam tracking-normal" : "font-manrope"
+                    } transition flex items-center justify-between ${
+                      isActive 
+                        ? "bg-[#1B4D36]/10 text-[#1B4D36] font-bold border border-[#1B4D36]/30" 
+                        : "bg-[#FAF7F0] text-[#5C6A64] hover:bg-white border border-[#EAE4D7]"
+                    }`}
+                  >
+                    <span>{language === "ml" ? link.label : link.enLabel}</span>
+                  </Link>
+                );
+              })}
+            </div>
           </div>
 
           {/* Profile & Testing Role shortcuts */}

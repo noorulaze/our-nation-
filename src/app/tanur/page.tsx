@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -19,6 +19,10 @@ import {
   TANUR_PHOTO_MANIFEST,
   TANUR_SOURCES,
 } from "@/lib/data/tanurData";
+import {
+  digitalMunicipalityStore,
+  TANUR_MUNICIPAL_WARDS
+} from "@/lib/data/digitalMunicipalityData";
 import {
   Compass,
   MapPin,
@@ -39,6 +43,15 @@ import {
   Clock,
   Phone,
   Search,
+  HardHat,
+  HeartHandshake,
+  TrendingUp,
+  Layers,
+  Filter,
+  ChevronRight,
+  FileCheck2,
+  Activity,
+  AlertCircle
 } from "lucide-react";
 import dynamic from "next/dynamic";
 
@@ -57,6 +70,39 @@ const CommunityMap = dynamic(
 
 export default function TanurOverviewPage() {
   const [activeTab, setActiveTab] = useState<"all" | "places" | "history">("all");
+  
+  // Wards Explorer State
+  const [wardSearch, setWardSearch] = useState("");
+  const [selectedWardFilter, setSelectedWardFilter] = useState<"all" | "coastal" | "town" | "central">("all");
+  
+  // Development Projects & Citizen Voice
+  const [devProjects] = useState(() => digitalMunicipalityStore.getProjects().slice(0, 4));
+  const [proposals] = useState(() => digitalMunicipalityStore.getProposals().slice(0, 3));
+
+  const filteredWards = useMemo(() => {
+    return TANUR_MUNICIPAL_WARDS.filter((w) => {
+      if (selectedWardFilter === "coastal") {
+        if (!w.name.toLowerCase().includes("beach") && !w.name.toLowerCase().includes("theeradesham") && !w.name.toLowerCase().includes("harbour") && !w.name.toLowerCase().includes("fishermen")) {
+          return false;
+        }
+      } else if (selectedWardFilter === "town") {
+        if (!w.name.toLowerCase().includes("town") && !w.name.toLowerCase().includes("market") && !w.name.toLowerCase().includes("puthentheru") && !w.name.toLowerCase().includes("station")) {
+          return false;
+        }
+      }
+      if (wardSearch.trim()) {
+        const q = wardSearch.toLowerCase();
+        return (
+          w.ward_number.toString() === q ||
+          w.name.toLowerCase().includes(q) ||
+          w.name_ml.toLowerCase().includes(q) ||
+          w.key_localities.some(l => l.toLowerCase().includes(q)) ||
+          w.key_localities_ml.some(l => l.toLowerCase().includes(q))
+        );
+      }
+      return true;
+    });
+  }, [wardSearch, selectedWardFilter]);
 
   const mapPlaces = TANUR_PLACES.map((p) => ({
     id: p.id,
@@ -79,10 +125,9 @@ export default function TanurOverviewPage() {
 
       <main className="flex-1 pb-16">
         {/* ========================================================================= */}
-        {/* 1. HERO SECTION (Exact requested headline & subtitle) */}
+        {/* 1. HERO SECTION */}
         {/* ========================================================================= */}
         <section className="relative min-h-[460px] sm:min-h-[520px] md:min-h-[580px] overflow-hidden flex items-end">
-          {/* Authentic High-Res Background Image: Tanur Beach at Sunset (Wikimedia Commons) */}
           <div
             className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 hover:scale-105"
             style={{
@@ -91,78 +136,62 @@ export default function TanurOverviewPage() {
             }}
           />
 
-          {/* Deep Green, Golden Sunset & Vignette Gradient */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#081B12] via-[#0E2C1E]/80 to-black/35" />
 
-          {/* Ornamental subtle background pattern */}
-          <div
-            className="absolute inset-0 opacity-10 pointer-events-none"
-            style={{
-              backgroundImage:
-                "radial-gradient(circle at 2px 2px, rgba(255,255,255,0.4) 1px, transparent 0)",
-              backgroundSize: "28px 28px",
-            }}
-          />
-
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pb-10 sm:pb-14 text-white">
-            {/* Breadcrumb & Official Badges */}
-            <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-amber-200/90 mb-3">
-              <Link href="/" className="hover:underline">
-                ഹോം
-              </Link>
-              <span>/</span>
-              <span className="text-white">മലപ്പുറം ജില്ല</span>
-              <span>/</span>
-              <span className="text-amber-300 font-bold">താനൂർ നഗരസഭ</span>
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20 w-full">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/25 text-amber-300 text-xs font-bold font-malayalam-heading mb-4">
+              <Compass className="w-3.5 h-3.5" />
+              <span>ഡിജിറ്റൽ മുൻസിപ്പാലിറ്റി • താനൂർ നഗരസഭ • 44 വാർഡുകൾ</span>
             </div>
 
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-xs font-bold text-amber-300 mb-4">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>ഡിജിറ്റൽ കമ്മ്യൂണിറ്റി പ്രൊഫൈൽ • Malabar Coast</span>
-            </div>
-
-            {/* Requested Hero Title */}
-            <h1 className="text-3xl sm:text-5xl md:text-6xl font-black font-malayalam-heading tracking-tight leading-tight drop-shadow-md">
-              താനൂർ — കടലിന്റെ കഥ പറയുന്ന നമ്മുടെ നാട്.
+            <h1 className="text-3xl sm:text-5xl md:text-6xl font-black font-malayalam-heading text-white tracking-tight leading-tight max-w-4xl drop-shadow-md">
+              താനൂർ ഡിജിറ്റൽ നഗരസഭ (Digital Tanur)
             </h1>
 
-            {/* Requested Subtitle */}
             <p className="mt-3 text-sm sm:text-lg md:text-xl text-stone-200 font-malayalam-body max-w-3xl leading-relaxed drop-shadow">
-              ചരിത്രവും സംസ്കാരവും കടലോര ജീവിതവും നാട്ടുകാരുടെ വിശേഷങ്ങളും ഒരുമിക്കുന്ന ഇടം.
+              ചരിത്രവും സംസ്കാരവും കടലോര ജീവിതവും നാട്ടുകാരുടെ വിശേഷങ്ങളും വികസന മുന്നേറ്റങ്ങളും ഒരുമിക്കുന്ന ഔദ്യോഗിക ഡിജിറ്റൽ വേദി.
             </p>
 
             {/* Main Action Buttons */}
             <div className="mt-6 flex flex-wrap gap-3 pt-2">
               <Link
-                href="/tanur/places"
+                href="/digital-tanur"
+                className="px-5 py-3 rounded-2xl bg-[#C39A5B] hover:bg-[#b0874a] text-[#143E2C] font-extrabold text-xs sm:text-sm font-malayalam-heading transition shadow-xl active:scale-95 flex items-center gap-2 ring-2 ring-white/30"
+              >
+                <Compass className="w-4 h-4 text-[#143E2C]" />
+                <span>ഡിജിറ്റൽ താനൂർ ജി.ഐ.എസ് (Digital Tanur GIS)</span>
+              </Link>
+
+              <a
+                href="#wards"
                 className="px-5 py-3 rounded-2xl bg-[#1B4D36] hover:bg-[#143d2b] border border-amber-300/40 text-white font-bold text-xs sm:text-sm font-malayalam-heading transition shadow-lg active:scale-95 flex items-center gap-2"
               >
                 <Compass className="w-4 h-4 text-amber-300" />
-                <span>സ്ഥലങ്ങൾ കാണാം (Explore Places)</span>
+                <span>44 വാർഡുകൾ (44 Wards)</span>
+              </a>
+
+              <Link
+                href="/tanur/development"
+                className="px-5 py-3 rounded-2xl bg-amber-400 hover:bg-amber-300 text-[#143E2C] font-bold text-xs sm:text-sm font-malayalam-heading transition shadow-lg active:scale-95 flex items-center gap-2"
+              >
+                <HardHat className="w-4 h-4" />
+                <span>വികസന ട്രാക്കർ (Dev Tracker)</span>
               </Link>
 
               <Link
-                href="/tanur/history"
+                href="/tanur/voice"
                 className="px-5 py-3 rounded-2xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 text-white font-bold text-xs sm:text-sm font-malayalam-heading transition active:scale-95 flex items-center gap-2"
               >
-                <Landmark className="w-4 h-4 text-amber-200" />
-                <span>ചരിത്ര വഴികൾ (History)</span>
+                <HeartHandshake className="w-4 h-4 text-amber-200" />
+                <span>ജനകീയ ശബ്ദം (People&apos;s Voice)</span>
               </Link>
 
               <Link
-                href="/tanur/news"
+                href="/civic"
                 className="px-5 py-3 rounded-2xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 text-white font-bold text-xs sm:text-sm font-malayalam-heading transition active:scale-95 flex items-center gap-2"
               >
-                <Calendar className="w-4 h-4 text-amber-200" />
-                <span>നാട്ടുവിശേഷങ്ങൾ (What&apos;s Happening?)</span>
-              </Link>
-
-              <Link
-                href="/tanur/contribute"
-                className="px-5 py-3 rounded-2xl bg-[#B87A1E] hover:bg-[#9E6A1E] text-white font-bold text-xs sm:text-sm font-malayalam-heading transition shadow-lg active:scale-95 flex items-center gap-2"
-              >
-                <span>നിങ്ങളുടെ കഥ പങ്കുവെക്കാം (Share Story)</span>
-                <ArrowRight className="w-4 h-4" />
+                <AlertCircle className="w-4 h-4 text-amber-200" />
+                <span>സിവിക് കണക്ട് (Civic Connect)</span>
               </Link>
             </div>
 
@@ -178,25 +207,325 @@ export default function TanurOverviewPage() {
         </section>
 
         {/* ========================================================================= */}
-        {/* 2. INTRODUCTION & CORE FACTS (Census 2011 & Administrative Distinction) */}
+        {/* FLAGSHIP BANNER: DIGITAL TANUR GIS EXPERIENCE                             */}
         {/* ========================================================================= */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 sm:mt-14">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            {/* Left Column: Town Introduction */}
-            <div className="lg:col-span-7 space-y-6">
-              <div className="bg-white rounded-3xl border border-[#EDE6D8] p-6 sm:p-9 shadow-card">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[#B87A1E] font-malayalam-body">
-                  നാടറിവ് • താനൂർ നഗരസഭ
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-20">
+          <div className="bg-gradient-to-r from-[#194B35] via-[#123626] to-[#194B35] rounded-3xl p-6 sm:p-7 text-white shadow-xl border border-[#C39A5B]/30 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-[#C39A5B] text-[#194B35] flex items-center justify-center shrink-0 shadow-lg">
+                <Compass className="w-7 h-7" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#C39A5B] text-[#194B35]">
+                    Flagship Feature
+                  </span>
+                  <span className="text-xs text-[#FAF7F0]/80">44 വാർഡുകൾ • 30+ സ്ഥാപനങ്ങൾ • 8 പ്രദേശങ്ങൾ</span>
+                </div>
+                <h3 className="text-lg sm:text-xl font-bold font-malayalam-heading text-white">
+                  ഡിജിറ്റൽ താനൂർ ലൈവ് ജി.ഐ.എസ് ഭൂപടം (Digital Tanur GIS Map)
+                </h3>
+                <p className="text-xs text-[#EDE6D8] mt-0.5 max-w-xl">
+                  നഗരസഭയിലെ ആശുപത്രികൾ, സ്കൂളുകൾ, സർക്കാർ സ്ഥാപനങ്ങൾ, വികസന പദ്ധതികൾ എന്നിവ കണ്ടെത്താൻ ഇന്ററാക്ടീവ് മാപ്പ് തുറക്കൂ.
+                </p>
+              </div>
+            </div>
+
+            <Link
+              href="/digital-tanur"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-[#C39A5B] hover:bg-[#b0874a] text-[#194B35] font-extrabold text-sm transition shadow-md shrink-0 whitespace-nowrap"
+            >
+              <span>മാപ്പ് തുറക്കുക (Open GIS Map)</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 2. THE THREE PILLARS GATEWAY SHOWCASE */}
+        {/* ========================================================================= */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            {/* Pillar A: Connected Tanur */}
+            <div className="bg-white rounded-3xl border border-[#EDE6D8] p-6 shadow-card hover:shadow-lg transition flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-[#E8F2EC] text-[#1B4D36] flex items-center justify-center font-bold">
+                  <Compass className="w-6 h-6" />
+                </div>
+                <div className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#E8F2EC] text-[#1B4D36] uppercase">
+                  പില്ലർ എ • Pillar A
+                </div>
+                <h3 className="text-xl font-bold font-malayalam-serif text-[#1B4D36]">
+                  കണക്റ്റഡ് താനൂർ (Connected Tanur)
+                </h3>
+                <p className="text-xs text-[#5C6A64] font-malayalam-body leading-relaxed">
+                  നാട്ടിലെ ആളുകൾ, വ്യാപാരികൾ, സ്ഥാപനങ്ങൾ, വാർത്തകൾ, പ്രൊഫഷണൽ സേവനങ്ങൾ എന്നിവയെല്ലാം ഒരൊറ്റ വേദിയിൽ സംയോജിപ്പിക്കുന്ന സമ്പൂർണ്ണ ഡിജിറ്റൽ നെറ്റ്വർക്ക്.
+                </p>
+                <div className="flex flex-wrap gap-1.5 pt-2">
+                  <span className="text-[10px] bg-gray-100 text-gray-700 px-2 py-0.5 rounded font-bold">44 വാർഡുകൾ</span>
+                  <span className="text-[10px] bg-gray-100 text-gray-700 px-2 py-0.5 rounded font-bold">സ്മാർട്ട് ന്യൂസ്‌റൂം</span>
+                  <span className="text-[10px] bg-gray-100 text-gray-700 px-2 py-0.5 rounded font-bold">സേവന വിദഗ്ദ്ധർ</span>
+                  <span className="text-[10px] bg-gray-100 text-gray-700 px-2 py-0.5 rounded font-bold">മാപ്പ്</span>
+                </div>
+              </div>
+              <a
+                href="#wards"
+                className="mt-6 inline-flex items-center gap-1.5 text-xs font-bold text-[#1B4D36] hover:underline"
+              >
+                <span>വാർഡുകളും സേവനങ്ങളും പര്യവേക്ഷണം ചെയ്യാം</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </a>
+            </div>
+
+            {/* Pillar B: Transparent Tanur */}
+            <div className="bg-white rounded-3xl border border-[#EDE6D8] p-6 shadow-card hover:shadow-lg transition flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-800 flex items-center justify-center font-bold border border-amber-200">
+                  <HardHat className="w-6 h-6" />
+                </div>
+                <div className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 uppercase">
+                  പില്ലർ ബി • Pillar B
+                </div>
+                <h3 className="text-xl font-bold font-malayalam-serif text-amber-900">
+                  സുതാര്യ താനൂർ (Transparent Tanur)
+                </h3>
+                <p className="text-xs text-[#5C6A64] font-malayalam-body leading-relaxed">
+                  നഗരസഭയിലെ വികസന പദ്ധതികൾ, അനുവദിച്ച ബജറ്റ്, നിർവ്വഹണ ഏജൻസി, ഔദ്യോഗിക ഉത്തരവുകൾ, സിവിക് പ്രശ്ന പരിഹാരങ്ങൾ എന്നിവയെല്ലാം പൂർണ്ണ സുതാര്യതയോടെ പൊതുസമക്ഷം.
+                </p>
+                <div className="flex flex-wrap gap-1.5 pt-2">
+                  <span className="text-[10px] bg-amber-50 text-amber-800 px-2 py-0.5 rounded font-bold">₹86.60 Cr ബജറ്റ് രേഖകൾ</span>
+                  <span className="text-[10px] bg-amber-50 text-amber-800 px-2 py-0.5 rounded font-bold">സിവിക് കണക്ട്</span>
+                  <span className="text-[10px] bg-amber-50 text-amber-800 px-2 py-0.5 rounded font-bold">ഔദ്യോഗിക തെളിവുകൾ</span>
+                </div>
+              </div>
+              <Link
+                href="/tanur/development"
+                className="mt-6 inline-flex items-center gap-1.5 text-xs font-bold text-amber-800 hover:underline"
+              >
+                <span>വികസന പദ്ധതി ട്രാക്കർ പരിശോധിക്കുക</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
+            {/* Pillar C: People-Powered Tanur */}
+            <div className="bg-white rounded-3xl border border-[#EDE6D8] p-6 shadow-card hover:shadow-lg transition flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-800 flex items-center justify-center font-bold border border-blue-200">
+                  <HeartHandshake className="w-6 h-6" />
+                </div>
+                <div className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-900 uppercase">
+                  പില്ലർ സി • Pillar C
+                </div>
+                <h3 className="text-xl font-bold font-malayalam-serif text-blue-900">
+                  ജനകീയ താനൂർ (People-Powered)
+                </h3>
+                <p className="text-xs text-[#5C6A64] font-malayalam-body leading-relaxed">
+                  താനൂരിന്റെ ഭാവി രൂപപ്പെടുത്താൻ പൗരന്മാർക്ക് നേരിട്ട് വോട്ടും നിർദ്ദേശങ്ങളും നൽകാം. വാർഡുകളിലെ ആവശ്യങ്ങൾ നിർദ്ദേശിച്ച് പിന്തുണ നേടാനും ആലോചനകളിൽ പങ്കെടുക്കാനും അവസരം.
+                </p>
+                <div className="flex flex-wrap gap-1.5 pt-2">
+                  <span className="text-[10px] bg-blue-50 text-blue-800 px-2 py-0.5 rounded font-bold">ജനകീയ ശബ്ദം</span>
+                  <span className="text-[10px] bg-blue-50 text-blue-800 px-2 py-0.5 rounded font-bold">കമ്യൂണിറ്റി വോട്ടിംഗ്</span>
+                  <span className="text-[10px] bg-blue-50 text-blue-800 px-2 py-0.5 rounded font-bold">പൗര നിർദ്ദേശങ്ങൾ</span>
+                </div>
+              </div>
+              <Link
+                href="/tanur/voice"
+                className="mt-6 inline-flex items-center gap-1.5 text-xs font-bold text-blue-800 hover:underline"
+              >
+                <span>നിങ്ങളുടെ നിർദ്ദേശങ്ങൾ സമർപ്പിക്കാം</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 3. INTERACTIVE 44 WARDS DIRECTORY & EXPLORER */}
+        {/* ========================================================================= */}
+        <section id="wards" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 sm:mt-20 scroll-mt-24">
+          <div className="bg-white rounded-3xl border border-[#EDE6D8] p-6 sm:p-8 shadow-card space-y-6">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#B87A1E] font-malayalam-body flex items-center gap-1.5">
+                  <Layers className="w-3.5 h-3.5" />
+                  മുനിസിപ്പൽ ഡിവിഷനുകൾ
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-black font-malayalam-heading text-[#1B4D36] mt-1 mb-4 leading-snug">
-                  അറബിക്കടലിന്റെ താളവും വെട്ടത്തുനാടിന്റെ പൈതൃകവും
+                <h2 className="text-2xl sm:text-3xl font-black font-malayalam-heading text-[#1B4D36] mt-1">
+                  താനൂർ നഗരസഭയിലെ 44 വാർഡുകൾ
                 </h2>
-                <div className="space-y-3.5 text-xs sm:text-sm text-[#4A5752] font-malayalam-body leading-relaxed">
+                <p className="text-xs text-[#5C6A64] font-malayalam-body mt-1 max-w-2xl leading-relaxed">
+                  നഗരസഭയുടെ 44 വാർഡുകളിലെയും ഔദ്യോഗിക പേര്, പ്രധാന പ്രദേശങ്ങൾ, വാർഡ് കൗൺസിലർ വിവരങ്ങൾ, നടക്കുന്ന വികസന പദ്ധതികൾ എന്നിവ താഴെ പരിശോധിക്കാം.
+                </p>
+              </div>
+
+              {/* Ward Filter Pills */}
+              <div className="flex items-center gap-1.5 overflow-x-auto text-xs shrink-0">
+                {(["all", "coastal", "town"] as const).map(f => (
+                  <button
+                    key={f}
+                    onClick={() => setSelectedWardFilter(f)}
+                    className={`px-3 py-1.5 rounded-xl font-bold transition whitespace-nowrap ${
+                      selectedWardFilter === f
+                        ? "bg-[#194B35] text-white shadow-xs"
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    }`}
+                  >
+                    {f === "all" ? "എല്ലാ 44 വാർഡുകളും" :
+                     f === "coastal" ? "തീരദേശ വാർഡുകൾ" : "ടൗൺ വാർഡുകൾ"}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Ward Search Input */}
+            <div className="relative">
+              <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={wardSearch}
+                onChange={(e) => setWardSearch(e.target.value)}
+                placeholder="വാർഡ് നമ്പർ, പേര്, പ്രദേശം (ഉദാ: വാർഡ് 4, ഹാർബർ, രായിരിമംഗലം) തിരയുക..."
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-300 text-xs focus:ring-2 focus:ring-[#194B35] outline-none"
+              />
+            </div>
+
+            {/* Wards Grid (Displaying all matched wards) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-h-[500px] overflow-y-auto pr-1">
+              {filteredWards.map((ward) => (
+                <div
+                  key={ward.id}
+                  className="bg-[#FAF7F0] p-4 rounded-2xl border border-[#EDE6D8] hover:border-[#194B35]/40 transition space-y-2.5 shadow-2xs flex flex-col justify-between"
+                >
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="w-7 h-7 rounded-lg bg-[#194B35] text-white text-xs font-black flex items-center justify-center">
+                        {ward.ward_number}
+                      </span>
+                      <span className="text-[10px] font-mono font-bold text-gray-500">
+                        ~{ward.population_approx} residents
+                      </span>
+                    </div>
+
+                    <h4 className="font-bold text-sm text-[#194B35] leading-snug">
+                      {ward.name_ml}
+                    </h4>
+                    <p className="text-[11px] text-gray-500">
+                      {ward.name}
+                    </p>
+
+                    <div className="text-[11px] text-gray-700 pt-1 line-clamp-2">
+                      <strong className="text-gray-900">പ്രധാന മേഖലകൾ: </strong>
+                      {ward.key_localities_ml.join(", ")}
+                    </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-[#EDE6D8] flex items-center justify-between text-[11px]">
+                    <span className="text-amber-800 font-bold flex items-center gap-1">
+                      <HardHat className="w-3 h-3" />
+                      {ward.active_projects_count} പദ്ധതികൾ
+                    </span>
+
+                    <Link
+                      href={`/tanur/development?ward=${ward.ward_number}`}
+                      className="text-[#194B35] font-bold hover:underline flex items-center gap-0.5"
+                    >
+                      <span>പദ്ധതികൾ</span>
+                      <ChevronRight className="w-3 h-3" />
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="text-right text-[11px] text-gray-400">
+              ലഭ്യമായ വാർഡുകൾ: {filteredWards.length} / 44 വാർഡുകൾ
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 4. TRANSPARENT DEVELOPMENT TRACKER SPOTLIGHT */}
+        {/* ========================================================================= */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 sm:mt-20">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6">
+            <div>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-amber-700 font-malayalam-body flex items-center gap-1">
+                <HardHat className="w-3.5 h-3.5" />
+                സുതാര്യ താനൂർ • വികസന മുന്നേറ്റങ്ങൾ
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-black font-malayalam-heading text-[#1B4D36] mt-1">
+                പ്രധാന സർക്കാർ വികസന പദ്ധതികൾ
+              </h2>
+            </div>
+            <Link
+              href="/tanur/development"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1B4D36] hover:text-[#B87A1E] transition"
+            >
+              <span>എല്ലാ വികസന പദ്ധതികളും കാണാം</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {devProjects.map((proj) => (
+              <div
+                key={proj.id}
+                className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-xs hover:shadow-md transition flex flex-col justify-between"
+              >
+                <div>
+                  <div className="relative h-36 w-full bg-gray-100">
+                    <img src={proj.project_image} alt={proj.title} className="w-full h-full object-cover" />
+                    <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#194B35] text-white">
+                      {proj.status}
+                    </div>
+                  </div>
+                  <div className="p-4 space-y-2">
+                    <span className="text-[10px] font-bold text-amber-700 uppercase block">
+                      {proj.budget_sanctioned}
+                    </span>
+                    <h4 className="font-bold text-sm text-gray-900 leading-snug line-clamp-2">
+                      {proj.title_ml}
+                    </h4>
+                    <p className="text-[11px] text-gray-500 line-clamp-2">
+                      {proj.department_ml}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-3 bg-gray-50 border-t border-gray-100 flex items-center justify-between text-xs">
+                  <span className="text-[10px] text-gray-400">Verified</span>
+                  <Link
+                    href={`/tanur/development/${proj.id}`}
+                    className="text-[#194B35] font-bold hover:underline flex items-center gap-0.5"
+                  >
+                    <span>വിശദാംശങ്ങൾ</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 5. CENSUS 2011 & ADMINISTRATIVE DISTINCTION */}
+        {/* ========================================================================= */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 sm:mt-20">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <div className="lg:col-span-7 space-y-6">
+              <div className="bg-white rounded-3xl border border-[#EDE6D8] p-6 sm:p-8 shadow-card">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#B87A1E] font-malayalam-body">
+                  ഭൂമിശാസ്ത്രപരമായ തനിമ
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-bold font-malayalam-serif text-[#1B4D36] mt-1 mb-4">
+                  താനൂർ നഗരസഭ — ചരിത്രവും അതിരുകളും
+                </h2>
+                <div className="space-y-4 text-xs sm:text-sm text-[#3E4D45] font-malayalam-body leading-relaxed">
                   <p>
-                    മലപ്പുറം ജില്ലയിലെ തിരൂർ താലൂക്കിൽ, അറബിക്കടലിന്റെ തീരത്ത് പൂരപ്പുഴയുടെ അഴിമുഖത്തോട് ചേർന്ന് സ്ഥിതിചെയ്യുന്ന ചരിത്രപ്രസിദ്ധമായ നഗരസഭയാണ് <strong>താനൂർ (Tanur)</strong>. വടക്ക് പരപ്പനങ്ങാടിയും തെക്ക് തിരൂരും കിഴക്ക് താനാളൂരും പടിഞ്ഞാറ് അറബിക്കടലും അതിരിടുന്ന ഈ തീരദേശ നഗരം മലബാറിന്റെ പ്രാചീന സമുദ്ര വാണിജ്യത്തിൽ സുപ്രധാന പങ്കുവഹിച്ച തുറമുഖമായിരുന്നു.
-                  </p>
-                  <p>
-                    മധ്യകാലഘട്ടത്തിൽ പ്രസിദ്ധമായ <strong>വെട്ടത്തുനാട് (താനൂർ സ്വരൂപം / പ്രകാശഭൂ)</strong> നാട്ടുരാജ്യത്തിന്റെ തലസ്ഥാനമായിരുന്നു താനൂർ. കുരുമുളകും ഏലവും തടിയും കൊപ്രയും കയറ്റുമതി ചെയ്തിരുന്ന ഈ തീരത്തേക്ക് അറബ്, ചൈനീസ്, പോർച്ചുഗീസ്, ഫ്രഞ്ച് വ്യാപാരികൾ എത്തിച്ചേർന്നു. 1546-ൽ വിശുദ്ധ ഫ്രാൻസിസ് സേവ്യർ സന്ദർശിച്ചതും, 1861-ൽ കേരളത്തിലെ ആദ്യ റെയിൽപാത കമ്മീഷൻ ചെയ്തപ്പോൾ താനൂർ സ്റ്റേഷൻ സ്ഥാപിതമായതും ഇവിടുത്തെ ചരിത്ര പ്രാധാന്യം വ്യക്തമാക്കുന്നു.
+                    മലപ്പുറം ജില്ലയിലെ പ്രധാന തീരദേശ നഗരസഭയാണ് താനൂർ (താനൂർ നഗരസഭ). അറബിക്കടലിന്റെ തീരത്ത് തിരൂരിനും പരപ്പനങ്ങാടിക്കുമിടയിലായി സ്ഥിതി ചെയ്യുന്ന ഈ ചരിത്ര നഗരം, സാമൂതിരി ഭരണകാലം മുതൽക്കേ അറിയപ്പെടുന്ന സുപ്രധാന തുറമുഖവും വ്യാപാര കേന്ദ്രവുമായിരുന്നു.
                   </p>
                   <p>
                     ഇന്ന് മലബാറിലെ പ്രധാന മത്സ്യബന്ധന തുറമുഖങ്ങളിലൊന്നായ താനൂർ, പരമ്പരാഗത മത്സ്യത്തൊഴിലാളി ജീവിതവും, ഇസ്ലാഹുൽ ഉലൂം അറബിക് കോളേജ് അടക്കമുള്ള വിജ്ഞാന കേന്ദ്രങ്ങളും, കേരളാദിത്യപുരം ശ്രീകൃഷ്ണ ക്ഷേത്രവും, ശോഭാപറമ്പ് ഭഗവതി ക്ഷേത്രവും ഒത്തുചേരുന്ന സാംസ്കാരിക കേന്ദ്രമാണ്.
@@ -210,7 +539,7 @@ export default function TanurOverviewPage() {
                     <span>ഭരണപരമായ വ്യത്യാസം (Administrative Distinction):</span>
                   </div>
                   <p className="text-[12px] text-[#2D5A43] leading-relaxed">
-                    <strong>താനൂർ നഗരസഭ (Tanur Municipality)</strong> എന്നത് 19.49 ച.കി.മീ വിസ്തൃതിയും 45 വാർഡുകളുമുള്ള നഗര ഭരണ സംവിധാനമാണ്. ഇത് സമീപത്തെ ഗ്രാമീണ പഞ്ചായത്തുകൾ (ഒഴൂർ, പൊന്മമുണ്ടം, താനാളൂർ, നിറമരുതൂർ, ചെറിയമുണ്ടം) ഉൾപ്പെടുന്ന <strong>താനൂർ ബ്ലോക്ക് പഞ്ചായത്തുമായി (Block Panchayat)</strong> വേറിട്ടുനിൽക്കുന്നു. രണ്ടിന്റെയും കണക്കുകൾ കൂട്ടിക്കലർത്തരുത്.
+                    <strong>താനൂർ നഗരസഭ (Tanur Municipality)</strong> എന്നത് 19.49 ച.കി.മീ വിസ്തൃതിയും 44 വാർഡുകളുമുള്ള നഗര ഭരണ സംവിധാനമാണ്. ഇത് സമീപത്തെ ഗ്രാമീണ പഞ്ചായത്തുകൾ (ഒഴൂർ, പൊന്മമുണ്ടം, താനാളൂർ, നിറമരുതൂർ, ചെറിയമുണ്ടം) ഉൾപ്പെടുന്ന <strong>താനൂർ ബ്ലോക്ക് പഞ്ചായത്തുമായി (Block Panchayat)</strong> വേറിട്ടുനിൽക്കുന്നു. രണ്ടിന്റെയും കണക്കുകൾ കൂട്ടിക്കലർത്തരുത്.
                   </p>
                 </div>
 
@@ -341,7 +670,7 @@ export default function TanurOverviewPage() {
         </section>
 
         {/* ========================================================================= */}
-        {/* 3. IMPORTANT PLACES & LANDMARKS (Visual Cards) */}
+        {/* 6. IMPORTANT PLACES & LANDMARKS */}
         {/* ========================================================================= */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 sm:mt-20">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-8">
@@ -415,7 +744,7 @@ export default function TanurOverviewPage() {
         </section>
 
         {/* ========================================================================= */}
-        {/* 4. TANUR COMMUNITY MAP OVERVIEW */}
+        {/* 7. TANUR COMMUNITY MAP OVERVIEW */}
         {/* ========================================================================= */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 sm:mt-20">
           <div className="bg-white rounded-3xl border border-[#EDE6D8] p-6 sm:p-8 shadow-card">
@@ -448,367 +777,68 @@ export default function TanurOverviewPage() {
         </section>
 
         {/* ========================================================================= */}
-        {/* 5. HISTORY & HERITAGE HIGHLIGHTS */}
+        {/* 8. MUNICIPAL GOVERNANCE & CITIZEN CHARTER */}
         {/* ========================================================================= */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 sm:mt-20">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-8">
-            <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-[#B87A1E] font-malayalam-body">
-                പൈതൃക നാൾവഴി
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-black font-malayalam-heading text-[#1B4D36] mt-1">
-                നൂറ്റാണ്ടുകളുടെ ചരിത്ര ശേഷിപ്പുകൾ
-              </h2>
-            </div>
-            <Link
-              href="/tanur/history"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1B4D36] hover:text-[#B87A1E] transition"
-            >
-              <span>സമ്പൂർണ്ണ ചരിത്ര നാൾവഴി കാണാം</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-            {TANUR_HISTORY_TIMELINE.slice(0, 4).map((item, idx) => (
-              <div
-                key={idx}
-                className="bg-white rounded-3xl border border-[#EDE6D8] p-5 shadow-card hover:border-[#1B4D36] transition flex flex-col justify-between space-y-3"
-              >
-                <div>
-                  <div className="inline-block px-2.5 py-1 rounded-xl bg-[#E8F2EC] text-[#1B4D36] text-[11px] font-bold font-mono">
-                    {item.year}
-                  </div>
-                  <h4 className="text-base font-bold font-malayalam-serif text-[#1A2420] mt-2 mb-1.5">
-                    {item.title_ml}
-                  </h4>
-                  <p className="text-xs text-[#5C6A64] font-malayalam-body leading-relaxed">
-                    {item.description_ml}
-                  </p>
-                </div>
-                <div className="text-[10px] text-[#7A8880] font-medium pt-2 border-t border-[#F5F1E8]">
-                  യുഗം: {item.era}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* 6. CULTURE, CUISINE & TRADITIONS */}
-        {/* ========================================================================= */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 sm:mt-20">
-          <div className="bg-[#FAF7F0] rounded-3xl border border-[#EDE6D8] p-6 sm:p-10 shadow-card">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-8">
-              <div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[#B87A1E] font-malayalam-body">
-                  സാംസ്കാരിക തനിമ
+        <section id="governance" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 sm:mt-20">
+          <div className="bg-gradient-to-r from-[#143E2C] to-[#194B35] rounded-3xl p-6 sm:p-10 text-white shadow-xl">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 border-b border-white/15 pb-8 mb-8">
+              <div className="space-y-1.5 max-w-xl">
+                <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-400 text-[#143E2C]">
+                  മുനിസിപ്പൽ ഭരണസമിതി & പബ്ലിക് ഇൻഫർമേഷൻ
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-black font-malayalam-heading text-[#1B4D36] mt-1">
-                  കലകൾ, ആഘോഷങ്ങൾ & താനൂർ കടലോര രുചികൾ
-                </h2>
-              </div>
-              <Link
-                href="/tanur/culture"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1B4D36] hover:text-[#B87A1E] transition"
-              >
-                <span>സംസ്കാര പേജിലേക്ക്</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {TANUR_CULTURE_ITEMS.map((item) => (
-                <div
-                  key={item.id}
-                  className="bg-white rounded-2xl border border-[#EDE6D8] p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between"
-                >
-                  <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#B87A1E] block mb-1">
-                      {item.category_ml}
-                    </span>
-                    <h3 className="text-base font-bold font-malayalam-serif text-[#1B4D36] mb-2">
-                      {item.title_ml}
-                    </h3>
-                    <p className="text-xs text-[#5C6A64] font-malayalam-body leading-relaxed">
-                      {item.description_ml}
-                    </p>
-                  </div>
-                  <div className="mt-4 pt-3 border-t border-[#F5F1E8] text-[11px] text-[#2D5A43] font-medium font-malayalam-body">
-                    {item.significance}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* 7. PEOPLE & COMMUNITY STORIES */}
-        {/* ========================================================================= */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 sm:mt-20">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-8">
-            <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-[#B87A1E] font-malayalam-body">
-                നാട്ടുകാർ & അനുഭവങ്ങൾ
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-black font-malayalam-heading text-[#1B4D36] mt-1">
-                താനൂരിന്റെ ജനങ്ങളും നാട്ടുഗാഥകളും
-              </h2>
-            </div>
-            <Link
-              href="/tanur/people"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1B4D36] hover:text-[#B87A1E] transition"
-            >
-              <span>എല്ലാ കഥകളും കാണാം</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {TANUR_STORIES.map((story) => (
-              <div
-                key={story.id}
-                className="bg-white rounded-3xl border border-[#EDE6D8] p-6 shadow-card hover:shadow-lg transition flex flex-col justify-between"
-              >
-                <div>
-                  <div className="inline-block px-2.5 py-0.5 rounded-full bg-[#E8F2EC] text-[#1B4D36] text-[10px] font-bold uppercase mb-3">
-                    {story.role}
-                  </div>
-                  <h3 className="text-lg font-bold font-malayalam-serif text-[#1A2420] mb-2 leading-snug">
-                    {story.title_ml}
-                  </h3>
-                  <p className="text-xs text-[#5C6A64] font-malayalam-body leading-relaxed">
-                    {story.excerpt_ml}
-                  </p>
-                </div>
-
-                <div className="mt-5 pt-4 border-t border-[#F0EBE0] flex items-center justify-between text-xs text-[#7A8880]">
-                  <span className="font-medium text-[#1A2420] truncate max-w-[160px]">
-                    {story.authorOrSubject}
-                  </span>
-                  <span className="text-[11px] text-[#1B4D36] font-bold flex items-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    സ്ഥിരീകരിച്ച രേഖ
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* 8. EDUCATION, ECONOMY & PUBLIC SERVICES SNIPPET */}
-        {/* ========================================================================= */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 sm:mt-20">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Education Highlight */}
-            <div className="bg-white rounded-3xl border border-[#EDE6D8] p-6 shadow-card flex flex-col justify-between">
-              <div>
-                <div className="w-10 h-10 rounded-2xl bg-[#E8F2EC] flex items-center justify-center text-[#1B4D36] mb-3">
-                  <GraduationCap className="w-5 h-5" />
-                </div>
-                <h3 className="text-lg font-bold font-malayalam-serif text-[#1B4D36] mb-2">
-                  വിദ്യാഭ്യാസ സ്ഥാപനങ്ങൾ
+                <h3 className="text-2xl sm:text-3xl font-black font-malayalam-heading text-white">
+                  താനൂർ നഗരസഭാ കാര്യാലയം (Municipal Office)
                 </h3>
-                <p className="text-xs text-[#5C6A64] font-malayalam-body mb-4 leading-relaxed">
-                  ഇസ്ലാഹുൽ ഉലൂം അറബിക് കോളേജ്, ദേവധാർ ഗവ. എച്ച്.എസ്.എസ്, ഫിഷറീസ് ടെക്നിക്കൽ സ്കൂൾ, സഞ്ചാര സാഹിത്യ ലൈബ്രറി എന്നിവ താനൂരിന്റെ വിജ്ഞാന ദീപങ്ങളാണ്.
+                <p className="text-xs text-white/80 leading-relaxed font-malayalam-body">
+                  താനൂർ ടൗൺ ബസ് സ്റ്റാൻഡിന് സമീപം സ്ഥിതി ചെയ്യുന്ന നഗരസഭാ കാര്യാലയം 44 വാർഡുകളിലെയും പൗര സേവനങ്ങൾ, സിവിൽ രജിസ്ട്രേഷൻ, ബിൽഡിംഗ് പെർമിറ്റ്, നികുതി പിരിവ് എന്നിവ കൈകാര്യം ചെയ്യുന്നു.
                 </p>
-                <div className="space-y-2 text-xs font-malayalam-body">
-                  {TANUR_INSTITUTIONS.slice(0, 3).map((inst) => (
-                    <div key={inst.id} className="p-2.5 rounded-xl bg-[#FAF7F0] border border-[#EDE6D8]">
-                      <div className="font-bold text-[#1A2420]">{inst.name_ml}</div>
-                      <div className="text-[11px] text-[#7A8880]">സ്ഥാപിതം: {inst.establishedYear}</div>
-                    </div>
-                  ))}
-                </div>
               </div>
-              <Link
-                href="/tanur/education"
-                className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-[#1B4D36] hover:underline"
-              >
-                <span>വിദ്യാഭ്യാസ ഡയറക്ടറി കാണാം</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
 
-            {/* Economy & Businesses Highlight */}
-            <div className="bg-white rounded-3xl border border-[#EDE6D8] p-6 shadow-card flex flex-col justify-between">
-              <div>
-                <div className="w-10 h-10 rounded-2xl bg-[#E8F2EC] flex items-center justify-center text-[#1B4D36] mb-3">
-                  <Briefcase className="w-5 h-5" />
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 shrink-0">
+                <div className="bg-white/10 backdrop-blur-xs p-3.5 rounded-xl border border-white/20">
+                  <span className="text-[10px] text-white/70 block uppercase font-bold">ഹെൽപ്പ്‌ലൈൻ / ഫോൺ</span>
+                  <span className="text-base font-black text-amber-300 font-mono">0494 2440228</span>
                 </div>
-                <h3 className="text-lg font-bold font-malayalam-serif text-[#1B4D36] mb-2">
-                  വ്യാപാരവും സമ്പദ്‌വ്യവസ്ഥയും
-                </h3>
-                <p className="text-xs text-[#5C6A64] font-malayalam-body mb-4 leading-relaxed">
-                  മത്സ്യബന്ധന ഹാർബർ, കൊപ്ര-വെളിച്ചെണ്ണ വ്യാപാരം, ഐസ് പ്ലാന്റുകൾ, മത്സ്യ കയറ്റുമതി, ചെറുകിട വ്യാപാരികൾ എന്നിവയാണ് നഗരത്തിന്റെ പ്രധാന സാമ്പത്തിക സ്രോതസ്സുകൾ.
-                </p>
-                <div className="space-y-2 text-xs font-malayalam-body">
-                  {TANUR_BUSINESSES.slice(0, 3).map((biz) => (
-                    <div key={biz.id} className="p-2.5 rounded-xl bg-[#FAF7F0] border border-[#EDE6D8]">
-                      <div className="font-bold text-[#1A2420]">{biz.name_ml}</div>
-                      <div className="text-[11px] text-[#7A8880]">{biz.category_ml}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <Link
-                href="/tanur/economy"
-                className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-[#1B4D36] hover:underline"
-              >
-                <span>വ്യാപാര വിവരങ്ങൾ കാണാം</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-
-            {/* Public Services & Emergency Directory */}
-            <div className="bg-white rounded-3xl border border-[#EDE6D8] p-6 shadow-card flex flex-col justify-between">
-              <div>
-                <div className="w-10 h-10 rounded-2xl bg-[#E8F2EC] flex items-center justify-center text-[#1B4D36] mb-3">
-                  <Building2 className="w-5 h-5" />
-                </div>
-                <h3 className="text-lg font-bold font-malayalam-serif text-[#1B4D36] mb-2">
-                  പൊതു സേവനങ്ങളും അത്യാഹിത നമ്പറുകളും
-                </h3>
-                <p className="text-xs text-[#5C6A64] font-malayalam-body mb-4 leading-relaxed">
-                  താനൂർ നഗരസഭ, പോലീസ് സ്റ്റേഷൻ, ഫയർ സ്റ്റേഷൻ, താലൂക്ക് ആശുപത്രി തുടങ്ങിയ പ്രധാന സർക്കാർ സ്ഥാപനങ്ങളുടെ വിവരങ്ങൾ.
-                </p>
-                <div className="space-y-2 text-xs font-malayalam-body">
-                  <div className="flex justify-between items-center p-2 rounded-xl bg-[#FAF7F0] border border-[#EDE6D8]">
-                    <span className="font-medium text-[#1A2420]">നഗരസഭാ കാര്യാലയം</span>
-                    <span className="font-mono font-bold text-[#1B4D36]">0494 2440232</span>
-                  </div>
-                  <div className="flex justify-between items-center p-2 rounded-xl bg-[#FAF7F0] border border-[#EDE6D8]">
-                    <span className="font-medium text-[#1A2420]">പോലീസ് സ്റ്റേഷൻ</span>
-                    <span className="font-mono font-bold text-[#1B4D36]">0494 2440244</span>
-                  </div>
-                  <div className="flex justify-between items-center p-2 rounded-xl bg-[#FAF7F0] border border-[#EDE6D8]">
-                    <span className="font-medium text-[#1A2420]">ഫയർ & റെസ്ക്യൂ</span>
-                    <span className="font-mono font-bold text-[#1B4D36]">0494 2440101</span>
-                  </div>
-                  <div className="flex justify-between items-center p-2 rounded-xl bg-[#FAF7F0] border border-[#EDE6D8]">
-                    <span className="font-medium text-[#1A2420]">താലൂക്ക് ആശുപത്രി</span>
-                    <span className="font-mono font-bold text-[#1B4D36]">0494 2440250</span>
-                  </div>
-                </div>
-              </div>
-              <Link
-                href="/tanur/directory"
-                className="mt-5 inline-flex items-center gap-1.5 text-xs font-bold text-[#1B4D36] hover:underline"
-              >
-                <span>പൂർണ്ണ ഡയറക്ടറി കാണാം</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* 9. AUTHENTIC PHOTOGRAPHY GALLERY SNIPPET */}
-        {/* ========================================================================= */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 sm:mt-20">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-8">
-            <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-[#B87A1E] font-malayalam-body">
-                ഫോട്ടോ ഗാലറി
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-black font-malayalam-heading text-[#1B4D36] mt-1">
-                താനൂരിന്റെ യഥാർത്ഥ ചിത്രങ്ങൾ (Verified Wikimedia Commons)
-              </h2>
-            </div>
-            <Link
-              href="/tanur/gallery"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1B4D36] hover:text-[#B87A1E] transition"
-            >
-              <span>മുഴുവൻ ഗാലറിയും ആട്രിബ്യൂഷനും കാണാം</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {TANUR_PHOTO_MANIFEST.slice(0, 4).map((photo) => (
-              <div
-                key={photo.id}
-                className="group relative h-48 sm:h-60 rounded-2xl overflow-hidden shadow-card border border-[#EDE6D8] bg-stone-200"
-              >
-                <img
-                  src={photo.filenameOrUrl}
-                  alt={photo.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                <div className="absolute bottom-2.5 left-2.5 right-2.5 text-white">
-                  <div className="text-xs font-bold drop-shadow leading-tight">{photo.title}</div>
-                  <div className="text-[10px] text-amber-200/90 truncate">{photo.creator} • {photo.license}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* 10. COMMUNITY CONTRIBUTION CTA */}
-        {/* ========================================================================= */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 sm:mt-20">
-          <div className="bg-gradient-to-r from-[#1B4D36] via-[#143D2B] to-[#0A2016] rounded-3xl p-8 sm:p-12 text-white shadow-card relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="relative z-10 max-w-2xl">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-amber-300 text-xs font-bold mb-3">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>താനൂരിന്റെ ഡിജിറ്റൽ കൂട്ടായ്മ</span>
-              </div>
-              <h2 className="text-2xl sm:text-4xl font-black font-malayalam-heading leading-tight">
-                നിങ്ങളുടെ നാട്ടുവിശേഷങ്ങളും പഴയകാല ചിത്രങ്ങളും പങ്കുവെക്കാം
-              </h2>
-              <p className="mt-2 text-xs sm:text-sm text-stone-200 font-malayalam-body leading-relaxed">
-                താനൂരിന്റെ ചരിത്ര ഓർമ്മകൾ, കുടുംബ കഥകൾ, വാർഡുകളിലെ വികസനങ്ങൾ, പുതിയ വ്യാപാര സ്ഥാപനങ്ങൾ, പരിപാടികൾ എന്നിവ Nammude Naadu പ്ലാറ്റ്‌ഫോമിൽ രേഖപ്പെടുത്തൂ.
-              </p>
-            </div>
-            <div className="relative z-10 shrink-0 flex flex-col sm:flex-row gap-3">
-              <Link
-                href="/tanur/contribute"
-                className="px-6 py-3.5 rounded-2xl bg-amber-400 hover:bg-amber-500 text-stone-900 font-black text-xs sm:text-sm font-malayalam-heading transition shadow-lg text-center"
-              >
-                വിവരങ്ങൾ സമർപ്പിക്കൂ
-              </Link>
-              <Link
-                href="/tanur/directory"
-                className="px-6 py-3.5 rounded-2xl bg-white/15 hover:bg-white/25 border border-white/25 text-white font-bold text-xs sm:text-sm font-malayalam-heading transition text-center"
-              >
-                സേവനങ്ങൾ അന്വേഷിക്കാം
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* 11. SOURCES, REFERENCES & RESEARCH DISCLOSURE */}
-        {/* ========================================================================= */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14">
-          <div className="p-6 rounded-2xl bg-white border border-[#EDE6D8] text-xs text-[#5C6A64] font-malayalam-body space-y-2">
-            <div className="font-bold text-[#1B4D36] text-sm flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-[#1B4D36]" />
-              <span>വിവര സ്രോതസ്സുകളും സുതാര്യതയും (Sources & Research Verification):</span>
-            </div>
-            <p className="leading-relaxed">
-              ഈ പ്രൊഫൈലിൽ നൽകിയിരിക്കുന്ന എല്ലാ വിവരങ്ങളും താനൂർ നഗരസഭയുടെ ഔദ്യോഗിക പോർട്ടൽ (LSGD Kerala), സെൻസസ് ഓഫ് ഇന്ത്യ 2011 ഡിസ്ട്രിക്റ്റ് ഹാൻഡ്ബുക്ക്, കേരള ടൂറിസം ഡയറക്ടറി, മലപ്പുറം ജില്ലാ അഡ്മിനിസ്ട്രേഷൻ, ഇസ്ലാഹുൽ ഉലൂം അറബിക് കോളേജ് ആർക്കൈവ്സ് എന്നിവയെ ആസ്പദമാക്കി തയ്യാറാക്കിയതാണ്. ഫോട്ടോഗ്രാഫുകൾ വിക്കിമീഡിയ കോമൺസ് വഴിയുള്ള അംഗീകൃത ക്രിയേറ്റീവ് കോമൺസ് ലൈസൻസുകൾ (CC BY-SA 4.0, CC BY 3.0, CC BY-SA 2.0) പ്രകാരം കൃത്യമായ ആട്രിബ്യൂഷനോടെ പ്രസിദ്ധീകരിച്ചിരിക്കുന്നു.
-            </p>
-            <div className="pt-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] font-medium text-[#1B4D36]">
-              {TANUR_SOURCES.map((s) => (
                 <a
-                  key={s.id}
-                  href={s.url}
+                  href="https://tanurmunicipality.lsgkerala.gov.in/"
                   target="_blank"
-                  rel="noreferrer"
-                  className="hover:underline flex items-center gap-1"
+                  rel="noopener noreferrer"
+                  className="px-4 py-3 bg-amber-400 hover:bg-amber-300 text-[#143E2C] rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm"
                 >
-                  <span>{s.title} ({s.yearOrDate})</span>
-                  <ExternalLink className="w-3 h-3 text-[#7A8880]" />
+                  <span>LSGD ഔദ്യോഗിക പോർട്ടൽ</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
                 </a>
-              ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs font-malayalam-body">
+              <div className="bg-white/10 backdrop-blur-xs p-4 rounded-xl border border-white/10 space-y-1">
+                <span className="text-amber-300 font-bold block text-[11px] uppercase">മുനിസിപ്പൽ സെക്രട്ടറി</span>
+                <p className="text-white font-bold text-sm">സെക്രട്ടറി കാര്യാലയം</p>
+                <p className="text-white/70 text-[11px]">ഭരണപരമായ ചുമതലകൾ & കൗൺസിൽ രേഖകൾ</p>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-xs p-4 rounded-xl border border-white/10 space-y-1">
+                <span className="text-amber-300 font-bold block text-[11px] uppercase">എൻജിനീയറിംഗ് വിഭാഗം</span>
+                <p className="text-white font-bold text-sm">മുനിസിപ്പൽ എൻജിനീയർ</p>
+                <p className="text-white/70 text-[11px]">റോഡുകൾ, പാലങ്ങൾ & പൊതുമരാമത്ത്</p>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-xs p-4 rounded-xl border border-white/10 space-y-1">
+                <span className="text-amber-300 font-bold block text-[11px] uppercase">ആരോഗ്യ വിഭാഗം</span>
+                <p className="text-white font-bold text-sm">ഹെൽത്ത് ഇൻസ്പെക്ടർ</p>
+                <p className="text-white/70 text-[11px]">മാലിന്യ നിർമ്മാർജ്ജനം & പൊതുജനാരോഗ്യം</p>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-xs p-4 rounded-xl border border-white/10 space-y-1">
+                <span className="text-amber-300 font-bold block text-[11px] uppercase">റെവന്യൂ വിഭാഗം</span>
+                <p className="text-white font-bold text-sm">റെവന്യൂ ഓഫീസർ</p>
+                <p className="text-white/70 text-[11px]">കെട്ടിടനികുതി, ലൈസൻസ് & നികുതി സേവനങ്ങൾ</p>
+              </div>
             </div>
           </div>
         </section>
+
       </main>
 
       <Footer />

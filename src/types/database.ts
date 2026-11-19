@@ -8,23 +8,35 @@ export type BusinessStatus = 'pending' | 'approved' | 'rejected' | 'suspended';
 export type AnnouncementStatus = 'pending' | 'approved' | 'rejected' | 'expired';
 export type IssueCategory = 'roads' | 'waste_management' | 'water' | 'public_facilities' | 'environment' | 'other';
 export type IssueStatus = 'submitted' | 'under_review' | 'acknowledged' | 'in_progress' | 'resolved' | 'rejected';
-export type ReportContentType = 'post' | 'comment' | 'event' | 'business' | 'issue';
+export type ReportContentType = 'post' | 'comment' | 'event' | 'business' | 'issue' | 'professional' | 'review';
 export type ReportStatus = 'pending' | 'reviewed' | 'dismissed' | 'actioned';
+
+export interface ProfilePrivacySettings {
+  show_phone: boolean;
+  show_email: boolean;
+  show_address: boolean;
+  public_profile: boolean;
+}
 
 export interface Profile {
   id: string;
   username: string;
   display_name: string;
   email?: string | null;
+  phone?: string | null;
+  locality?: string | null;
   avatar_url?: string | null;
   bio?: string | null;
   preferred_language: PreferredLanguage;
   selected_community_id?: string | null;
   role: UserRole;
   interests?: string[];
+  is_professional?: boolean;
+  privacy_settings?: ProfilePrivacySettings;
   created_at: string;
   updated_at: string;
 }
+
 
 export interface Community {
   id: string;
@@ -361,4 +373,218 @@ export interface AuditLog {
   details?: Record<string, any> | null;
   created_at: string;
   actor?: Profile;
+}
+
+// ==========================================
+// PROFESSIONAL & SERVICE ECOSYSTEM TYPES
+// ==========================================
+
+export type PricingType = 'fixed' | 'hourly' | 'starting_at' | 'quote';
+export type ProfessionalStatus = 'active' | 'busy' | 'away' | 'unavailable';
+export type BadgeType = 'verified_pro' | 'licensed' | 'independent' | 'top_rated';
+export type BookingStatus = 'pending' | 'accepted' | 'declined' | 'rescheduled' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
+export type VerificationDocStatus = 'none' | 'pending' | 'verified' | 'rejected';
+
+export interface ServiceCategory {
+  id: string;
+  slug: string;
+  name: string;
+  name_ml: string;
+  icon: string;
+  description?: string;
+  description_ml?: string;
+  display_order: number;
+}
+
+export interface WorkingHours {
+  enabled: boolean;
+  start: string; // "09:00"
+  end: string;   // "18:00"
+}
+
+export interface AvailabilitySchedule {
+  days: Record<string, WorkingHours>;
+  slotDurationMinutes: number;
+  breakStart?: string;
+  breakEnd?: string;
+  blockedDates: string[]; // "YYYY-MM-DD"
+}
+
+export interface ProfessionalProfile {
+  id: string;
+  user_id: string;
+  username: string;
+  display_name: string;
+  display_name_ml?: string;
+  avatar_url?: string | null;
+  banner_url?: string | null;
+  business_name?: string | null;
+  business_name_ml?: string | null;
+  category_id: string;
+  category_name?: string;
+  category_name_ml?: string;
+  subcategories: string[];
+  bio: string;
+  bio_ml?: string;
+  phone: string;
+  whatsapp?: string;
+  email?: string;
+  locality: string;
+  service_areas: string[];
+  experience_years: number;
+  status: ProfessionalStatus;
+  badges: BadgeType[];
+  is_verified: boolean;
+  verification_document_url?: string | null;
+  verification_status: VerificationDocStatus;
+  rating: number;
+  reviews_count: number;
+  starting_price: number;
+  availability: AvailabilitySchedule;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ProfessionalService {
+  id: string;
+  professional_id: string;
+  title: string;
+  title_ml: string;
+  description: string;
+  description_ml?: string;
+  price: number;
+  pricing_type: PricingType;
+  duration_minutes: number;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface PortfolioItem {
+  id: string;
+  professional_id: string;
+  title: string;
+  title_ml?: string;
+  description?: string;
+  image_url: string;
+  completed_date?: string;
+}
+
+export interface Booking {
+  id: string;
+  booking_number: string;
+  customer_id: string;
+  professional_id: string;
+  service_id: string;
+  service_title: string;
+  service_title_ml?: string;
+  booking_date: string; // YYYY-MM-DD
+  time_slot: string;    // e.g. "09:00 AM - 10:00 AM"
+  status: BookingStatus;
+  customer_name: string;
+  customer_phone: string;
+  customer_address: string;
+  customer_locality: string;
+  special_instructions?: string;
+  estimated_price: number;
+  pricing_type: PricingType;
+  payment_method: 'pay_on_completion' | 'upi' | 'cash';
+  decline_reason?: string;
+  cancellation_reason?: string;
+  rescheduled_date?: string;
+  rescheduled_slot?: string;
+  created_at: string;
+  updated_at: string;
+  customer?: Profile;
+  professional?: ProfessionalProfile;
+}
+
+export interface Review {
+  id: string;
+  booking_id: string;
+  professional_id: string;
+  customer_id: string;
+  customer_name: string;
+  customer_avatar?: string | null;
+  rating_overall: number; // 1 to 5
+  rating_punctuality?: number;
+  rating_quality?: number;
+  rating_value?: number;
+  comment: string;
+  work_photo_url?: string | null;
+  provider_reply?: string | null;
+  provider_replied_at?: string | null;
+  is_verified_booking: boolean;
+  created_at: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  conversation_id: string;
+  sender_id: string;
+  sender_name: string;
+  content: string;
+  created_at: string;
+  is_read: boolean;
+}
+
+export interface Conversation {
+  id: string;
+  booking_id: string;
+  customer_id: string;
+  professional_id: string;
+  professional_name: string;
+  customer_name: string;
+  last_message?: string;
+  last_message_at?: string;
+  unread_count_customer: number;
+  unread_count_professional: number;
+  created_at: string;
+}
+
+export interface SavedProfessional {
+  id: string;
+  user_id: string;
+  professional_id: string;
+  saved_at: string;
+}
+
+export type NotificationType = 
+  | 'civic_issue_status'
+  | 'comment_reply'
+  | 'idea_update'
+  | 'development_update'
+  | 'event_reminder'
+  | 'announcement'
+  | 'booking_request' 
+  | 'booking_accepted' 
+  | 'booking_declined' 
+  | 'booking_rescheduled' 
+  | 'booking_completed' 
+  | 'new_review' 
+  | 'new_message' 
+  | 'system';
+
+export interface NotificationPreferences {
+  civic_issue_status: boolean;
+  comment_reply: boolean;
+  idea_update: boolean;
+  development_update: boolean;
+  event_reminder: boolean;
+  announcement: boolean;
+  service_bookings: boolean;
+  email_digest: boolean;
+}
+
+export interface AppNotification {
+  id: string;
+  user_id: string;
+  title: string;
+  title_ml: string;
+  message: string;
+  message_ml: string;
+  type: NotificationType;
+  category?: 'civic' | 'development' | 'ideas' | 'announcements' | 'bookings' | 'system';
+  link?: string;
+  is_read: boolean;
+  created_at: string;
 }

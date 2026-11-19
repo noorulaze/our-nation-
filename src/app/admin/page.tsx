@@ -40,7 +40,16 @@ import {
   Shield,
   RefreshCw,
   Search,
-  Filter
+  Filter,
+  Wrench,
+  Star,
+  Rss,
+  Cpu,
+  BarChart3,
+  HardHat,
+  HeartHandshake,
+  Compass,
+  Navigation
 } from "lucide-react";
 import { 
   IssueStatus, 
@@ -51,12 +60,29 @@ import {
   PublicService, 
   Event, 
   Business, 
-  IssueReport 
+  IssueReport,
+  ProfessionalProfile,
+  ServiceCategory,
+  Review,
+  UserRole,
+  Profile
 } from "@/types/database";
+import { digitalMunicipalityStore, TANUR_LOCATION_CATEGORIES } from "@/lib/data/digitalMunicipalityData";
+import { 
+  DevelopmentProject, 
+  CitizenProposal, 
+  ProjectStatus, 
+  ProposalStatus,
+  DigitalTanurLocation,
+  LocationCategoryKey
+} from "@/types/digitalMunicipality";
 
 type AdminTab = 
   | "overview" 
   | "submissions" 
+  | "locations"
+  | "projects"
+  | "proposals"
   | "news" 
   | "events" 
   | "businesses" 
@@ -64,11 +90,15 @@ type AdminTab =
   | "services" 
   | "issues" 
   | "posts" 
-  | "audit";
+  | "audit"
+  | "pros"
+  | "categories"
+  | "reviews"
+  | "users";
 
 export default function AdminPage() {
   const { t, language } = useLanguage();
-  const { role, user, switchUserRole } = useAuth();
+  const { role, user } = useAuth();
   const { currentCommunity } = useCommunity();
 
   const [activeTab, setActiveTab] = useState<AdminTab>("overview");
@@ -85,6 +115,212 @@ export default function AdminPage() {
   const [issues, setIssues] = useState(() => store.getIssueReports());
   const [posts, setPosts] = useState(() => store.getPosts());
   const [auditLogs, setAuditLogs] = useState(() => store.getAuditLogs());
+  const [professionals, setProfessionals] = useState(() => store.getProfessionals());
+  const [serviceCategories, setServiceCategories] = useState(() => store.getServiceCategories());
+  const [allReviews, setAllReviews] = useState(() => store.getReviews());
+
+  // RBAC User Management State
+  const [allProfiles, setAllProfiles] = useState(() => store.getProfiles());
+  const [roleChangeTarget, setRoleChangeTarget] = useState<string>("");
+  const [newRoleSelection, setNewRoleSelection] = useState<UserRole>("moderator");
+  const [roleChangeReason, setRoleChangeReason] = useState<string>("");
+
+  const handleAssignRole = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user || role !== "admin") {
+      showFeedback("അനുമതിയില്ല: അഡ്മിനിസ്ട്രേറ്റർമാർക്ക് മാത്രമേ റോൾ മാറ്റാൻ സാധിക്കൂ.");
+      return;
+    }
+    if (!roleChangeTarget) {
+      showFeedback("ദയവായി ഉപയോക്താവിനെ തിരഞ്ഞെടുക്കുക.");
+      return;
+    }
+    const res = store.assignUserRole(user.id, roleChangeTarget, newRoleSelection, roleChangeReason);
+    if (res.success) {
+      setAllProfiles([...store.getProfiles()]);
+      setAuditLogs(store.getAuditLogs());
+      showFeedback(`റോൾ വിജയകരമായി '${newRoleSelection}' ആയി മാറ്റി.`);
+      setRoleChangeReason("");
+    } else {
+      showFeedback(res.error || "റോൾ മാറ്റം പരാജയപ്പെട്ടു.");
+    }
+  };
+
+  // Digital Municipality state
+  const [devProjects, setDevProjects] = useState(() => digitalMunicipalityStore.getProjects());
+  const [citizenProposals, setCitizenProposals] = useState(() => digitalMunicipalityStore.getProposals());
+  const [selectedProjectForMilestone, setSelectedProjectForMilestone] = useState<string | null>(null);
+  const [milestoneForm, setMilestoneForm] = useState({
+    title: "",
+    title_ml: "",
+    description: "",
+    description_ml: "",
+    progress_percentage: 50,
+    evidence_url: "",
+    verifying_authority: "താനൂർ നഗരസഭ എഞ്ചിനീയറിംഗ് വിഭാഗം",
+    inspection_date: new Date().toISOString().split("T")[0],
+  });
+  const [proposalResponseInput, setProposalResponseInput] = useState<{
+    [id: string]: { status: ProposalStatus; response: string; responderName: string; responderRole: string };
+  }>({});
+
+  const handleUpdateProjectStatus = (projectId: string, newStatus: ProjectStatus) => {
+    digitalMunicipalityStore.updateProject(projectId, { status: newStatus });
+    setDevProjects(digitalMunicipalityStore.getProjects());
+    showFeedback(`പദ്ധതിയുടെ സ്ഥിതിവിവരം ${newStatus} ആയി മാറ്റി (Project status updated).`);
+  };
+
+  const handleAddMilestoneSubmit = (e: React.FormEvent, projectId: string) => {
+    e.preventDefault();
+    if (!milestoneForm.title || !milestoneForm.evidence_url) return;
+    digitalMunicipalityStore.addProjectProgressUpdate(projectId, {
+      title: milestoneForm.title,
+      title_ml: milestoneForm.title_ml || milestoneForm.title,
+      note: milestoneForm.description,
+      note_ml: milestoneForm.description_ml || milestoneForm.description,
+      evidence_url: milestoneForm.evidence_url,
+      verified_by: milestoneForm.verifying_authority,
+      date: milestoneForm.inspection_date,
+    });
+    const proj = digitalMunicipalityStore.getProjectById(projectId);
+    if (proj && Number(milestoneForm.progress_percentage) > (proj.progress_percentage ?? 0)) {
+      digitalMunicipalityStore.updateProject(projectId, { progress_percentage: Number(milestoneForm.progress_percentage) });
+    }
+    setDevProjects(digitalMunicipalityStore.getProjects());
+    setSelectedProjectForMilestone(null);
+    setMilestoneForm({
+      title: "",
+      title_ml: "",
+      description: "",
+      description_ml: "",
+      progress_percentage: 50,
+      evidence_url: "",
+      verifying_authority: "താനൂർ നഗരസഭ എഞ്ചിനീയറിംഗ് വിഭാഗം",
+      inspection_date: new Date().toISOString().split("T")[0],
+    });
+    showFeedback("പദ്ധതി പുരോഗതിയും ഔദ്യോഗിക തെളിവുകളും രേഖപ്പെടുത്തി (Milestone recorded).");
+  };
+
+  const handleProposalResponseSubmit = (proposalId: string) => {
+    const input = proposalResponseInput[proposalId];
+    if (!input || !input.response) return;
+    digitalMunicipalityStore.updateProposalStatus(
+      proposalId,
+      input.status || "under_municipal_review",
+      input.response,
+      {
+        name: input.responderName || "താനൂർ നഗരസഭ സെക്രട്ടറി",
+        role: input.responderRole || "താനൂർ നഗരസഭാ കാര്യാലയം"
+      }
+    );
+    setCitizenProposals(digitalMunicipalityStore.getProposals());
+    showFeedback("ജനകീയ നിർദ്ദേശത്തിന് നഗരസഭാ ഔദ്യോഗിക മറുപടി രേഖപ്പെടുത്തി (Official response recorded).");
+  };
+
+  // Digital Tanur GIS Locations state & handlers
+  const [gisLocations, setGisLocations] = useState<DigitalTanurLocation[]>(() => digitalMunicipalityStore.getLocations());
+  const [locationSearchFilter, setLocationSearchFilter] = useState("");
+  const [locationCategoryFilter, setLocationCategoryFilter] = useState<LocationCategoryKey | "all">("all");
+  const [isAddLocationOpen, setIsAddLocationOpen] = useState(false);
+  const [newLocationForm, setNewLocationForm] = useState({
+    name: "",
+    name_ml: "",
+    category: "government" as LocationCategoryKey,
+    category_name: "Government Offices",
+    category_name_ml: "സർക്കാർ ഓഫീസുകൾ",
+    ward_number: 1,
+    locality: "Tanur Town",
+    locality_ml: "താനൂർ ടൗൺ",
+    address: "Tanur, Malappuram - 676302",
+    latitude: 10.9768,
+    longitude: 75.8672,
+    phone: "0494 2440228",
+    opening_hours: "10:00 AM - 5:00 PM (Mon-Sat)",
+    description: "Official public facility in Tanur Municipality.",
+    description_ml: "താനൂർ നഗരസഭയിലെ ഔദ്യോഗിക പൊതു സ്ഥാപനം.",
+    image_url: "https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&w=800&q=80",
+    source_name: "താനൂർ നഗരസഭാ ഔദ്യോഗിക ഗസറ്റ്",
+    source_url: "https://tanurmunicipality.lsgkerala.gov.in/",
+    is_verified: true,
+  });
+
+  const handleToggleLocationVerification = (id: string, currentStatus: boolean) => {
+    digitalMunicipalityStore.verifyLocation(
+      id,
+      !currentStatus,
+      "താനൂർ നഗരസഭാ കാര്യാലയം (അഡ്മിൻ സ്ഥിരീകരണം)",
+      "https://tanurmunicipality.lsgkerala.gov.in/"
+    );
+    setGisLocations(digitalMunicipalityStore.getLocations());
+    showFeedback(`ലൊക്കേഷൻ പരിശോധന നില അപ്‌ഡേറ്റ് ചെയ്തു: ${!currentStatus ? "Verified ✓" : "Unverified"}`);
+  };
+
+  const handleCreateLocationSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newLocationForm.name.trim() || !newLocationForm.name_ml.trim()) return;
+
+    digitalMunicipalityStore.addLocation({
+      ...newLocationForm,
+      last_verified_date: new Date().toISOString().split("T")[0],
+    });
+
+    setGisLocations(digitalMunicipalityStore.getLocations());
+    setIsAddLocationOpen(false);
+    setNewLocationForm({
+      name: "",
+      name_ml: "",
+      category: "government",
+      category_name: "Government Offices",
+      category_name_ml: "സർക്കാർ ഓഫീസുകൾ",
+      ward_number: 1,
+      locality: "Tanur Town",
+      locality_ml: "താനൂർ ടൗൺ",
+      address: "Tanur, Malappuram - 676302",
+      latitude: 10.9768,
+      longitude: 75.8672,
+      phone: "0494 2440228",
+      opening_hours: "10:00 AM - 5:00 PM (Mon-Sat)",
+      description: "Official public facility in Tanur Municipality.",
+      description_ml: "താനൂർ നഗരസഭയിലെ ഔദ്യോഗിക പൊതു സ്ഥാപനം.",
+      image_url: "https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&w=800&q=80",
+      source_name: "താനൂർ നഗരസഭാ ഔദ്യോഗിക ഗസറ്റ്",
+      source_url: "https://tanurmunicipality.lsgkerala.gov.in/",
+      is_verified: true,
+    });
+    showFeedback(`"${newLocationForm.name}" ജി.ഐ.എസ് ഡയറക്ടറിയിലേക്ക് ചേർത്തു.`);
+  };
+
+  // Category creation form
+  const [newCatName, setNewCatName] = useState("");
+  const [newCatNameMl, setNewCatNameMl] = useState("");
+  const [newCatSlug, setNewCatSlug] = useState("");
+  const [newCatDesc, setNewCatDesc] = useState("");
+  const [newCatIcon, setNewCatIcon] = useState("Wrench");
+
+  const handleVerifyPro = (proId: string) => {
+    store.verifyProfessional(proId, user?.id);
+    setProfessionals(store.getProfessionals());
+    showFeedback("പ്രൊഫഷണൽ വെരിഫിക്കേഷൻ പൂർത്തിയായി (Professional verified successfully).");
+  };
+
+  const handleAddCategory = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newCatName || !newCatSlug) return;
+    store.addServiceCategory({
+      name: newCatName,
+      name_ml: newCatNameMl || newCatName,
+      slug: newCatSlug.toLowerCase().trim(),
+      icon: newCatIcon,
+      description: newCatDesc,
+      display_order: serviceCategories.length + 1,
+    });
+    setServiceCategories(store.getServiceCategories());
+    setNewCatName("");
+    setNewCatNameMl("");
+    setNewCatSlug("");
+    setNewCatDesc("");
+    showFeedback("പുതിയ സേവന വിഭാഗം വിജയകരമായി ചേർത്തു (Category created).");
+  };
 
   // Input states
   const [officialResponseInput, setOfficialResponseInput] = useState<{ [id: string]: string }>({});
@@ -269,22 +505,25 @@ export default function AdminPage() {
               അഡ്മിൻ പ്രവേശനം ആവശ്യമാണ്
             </h2>
             <p className="text-xs text-[#5C6A64] mt-2 leading-relaxed">
-              ഈ പേജ് താനൂർ നഗരസഭാ മോഡറേറ്റർമാർക്കും പ്ലാറ്റ്‌ഫോം അഡ്മിനിസ്ട്രേറ്റർമാർക്കും മാത്രമുള്ളതാണ്. ടെസ്റ്റ് ചെയ്യാനായി താഴെ നൽകിയിരിക്കുന്ന ബട്ടൺ ഉപയോഗിച്ച് റോൾ മാറ്റാം:
+              ഈ പേജ് താനൂർ നഗരസഭാ മോഡറേറ്റർമാർക്കും പ്ലാറ്റ്‌ഫോം അഡ്മിനിസ്ട്രേറ്റർമാർക്കും മാത്രമുള്ളതാണ്. ഈ ഭാഗം സന്ദർശിക്കാൻ അധികാരമുള്ള ഒരു അക്കൗണ്ട് വഴി ലോഗിൻ ചെയ്യുക.
             </p>
             <div className="mt-6 flex flex-col gap-2">
-              <button
-                onClick={() => switchUserRole("admin")}
-                className="w-full py-2.5 rounded-xl bg-[#1B4D36] hover:bg-[#133A28] text-white font-bold text-xs transition active:scale-95 shadow-sm"
+              <Link
+                href="/"
+                className="w-full py-2.5 rounded-xl bg-[#1B4D36] hover:bg-[#133A28] text-white font-bold text-xs transition active:scale-95 shadow-sm text-center"
               >
-                അഡ്മിൻ റോൾ സ്വീകരിക്കുക (Switch to Admin)
-              </button>
-              <button
-                onClick={() => switchUserRole("moderator")}
-                className="w-full py-2.5 rounded-xl bg-white hover:bg-[#F3EFE6] text-[#1B4D36] border border-[#DDD5C5] font-bold text-xs transition active:scale-95 shadow-sm"
+                ഹോംപേജിലേക്ക് മടങ്ങുക (Return to Home)
+              </Link>
+              <Link
+                href="/profile"
+                className="w-full py-2.5 rounded-xl bg-white hover:bg-[#F3EFE6] text-[#1B4D36] border border-[#DDD5C5] font-bold text-xs transition active:scale-95 shadow-sm text-center"
               >
-                മോഡറേറ്റർ റോൾ സ്വീകരിക്കുക (Switch to Moderator)
-              </button>
+                പ്രൊഫൈൽ സന്ദർശിക്കുക (View Profile)
+              </Link>
             </div>
+            <p className="text-[11px] text-[#7A8880] mt-4">
+              സുരക്ഷാ പോളിസികൾ പ്രകാരം സാധാരണ ഉപയോക്താക്കൾക്ക് അഡ്മിൻ അനുമതികൾ സ്വയം നൽകാൻ സാധ്യമല്ല.
+            </p>
           </div>
         </main>
         <Footer />
@@ -341,6 +580,12 @@ export default function AdminPage() {
           {[
             { id: "overview", label: "Overview", icon: Activity },
             { id: "submissions", label: `അംഗീകാരത്തിനായുള്ളവ (${totalPending})`, icon: Sparkles },
+            { id: "locations", label: `ഡിജിറ്റൽ താനൂർ ജി.ഐ.എസ് (${gisLocations.length})`, icon: Compass },
+            { id: "projects", label: `വികസന പദ്ധതികൾ (${devProjects.length})`, icon: HardHat },
+            { id: "proposals", label: `ജനകീയ ശബ്ദം (${citizenProposals.length})`, icon: HeartHandshake },
+            { id: "pros", label: `വിദഗ്ദ്ധർ (${professionals.length})`, icon: Wrench },
+            { id: "categories", label: `വിഭാഗങ്ങൾ (${serviceCategories.length})`, icon: Layers },
+            { id: "reviews", label: `അവലോകനങ്ങൾ (${allReviews.length})`, icon: Star },
             { id: "news", label: `വാർത്തകൾ (${news.length})`, icon: FileText },
             { id: "events", label: `പരിപാടികൾ (${events.length})`, icon: Calendar },
             { id: "businesses", label: `സ്ഥാപനങ്ങൾ (${businesses.length})`, icon: Briefcase },
@@ -349,6 +594,7 @@ export default function AdminPage() {
             { id: "issues", label: `പരാതികൾ (${issues.length})`, icon: AlertTriangle },
             { id: "posts", label: `പോസ്റ്റുകൾ (${posts.length})`, icon: Eye },
             { id: "audit", label: `ഓഡിറ്റ് രേഖകൾ (${auditLogs.length})`, icon: Clock },
+            ...(role === "admin" ? [{ id: "users", label: `റോളുകൾ & RBAC (${allProfiles.length})`, icon: ShieldCheck }] : []),
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -413,6 +659,320 @@ export default function AdminPage() {
                 <div className="text-[11px] text-emerald-700 mt-1 font-semibold">
                   100% ഔദ്യോഗിക ഫോൺ നമ്പറുകൾ
                 </div>
+              </div>
+            </div>
+
+            {/* ========================================================================= */}
+            {/* THE SIX CORE MUNICIPAL FEATURES — ADMINISTRATIVE DESKS                    */}
+            {/* ========================================================================= */}
+            <div className="bg-white rounded-3xl border border-[#EAE4D7] p-6 shadow-card space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#EDE6D8] pb-3">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-[#194B35]" />
+                    <h3 className="font-bold text-base text-[#194B35] font-malayalam-heading">
+                      താനൂർ ഡിജിറ്റൽ നഗരസഭ — 6 പ്രധാന വിഭാഗങ്ങൾ
+                    </h3>
+                  </div>
+                  <p className="text-xs text-[#5C6A64] mt-0.5">
+                    The Six Core Municipal Features • Central Administrative Control &amp; Public Portals
+                  </p>
+                </div>
+                <span className="text-[11px] font-bold px-3 py-1 rounded-full bg-[#FAF7F0] text-[#194B35] border border-[#DDD5C5]">
+                  Tanur Municipality, Malappuram
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {/* 1. Digital Municipality */}
+                <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] hover:border-[#194B35] transition space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-9 h-9 rounded-xl bg-[#E0F1E7] text-[#194B35] flex items-center justify-center">
+                      <Building className="w-5 h-5" />
+                    </div>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#194B35] text-white">Feature 01</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-sm text-[#194B35]">Digital Municipality</h4>
+                    <p className="text-[11px] text-[#5C6A64] mt-0.5">44 വാർഡുകൾ, സ്റ്റാൻഡിംഗ് കമ്മിറ്റികൾ, Google Maps GIS</p>
+                  </div>
+                  <div className="flex items-center gap-2 pt-2 border-t border-[#EDE6D8]/60">
+                    <Link
+                      href="/digital-municipality"
+                      className="flex-1 text-center py-1.5 px-2 bg-[#194B35] hover:bg-[#143E2C] text-white rounded-lg text-xs font-bold transition"
+                    >
+                      പൊതു ഹബ്ബ്
+                    </Link>
+                    <button
+                      onClick={() => setActiveTab("locations")}
+                      className="flex-1 text-center py-1.5 px-2 bg-white hover:bg-neutral-100 text-[#194B35] border border-[#DDD5C5] rounded-lg text-xs font-bold transition"
+                    >
+                      GIS മാപ്പ് ({gisLocations.length})
+                    </button>
+                  </div>
+                </div>
+
+                {/* 2. Civic Connect */}
+                <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] hover:border-[#194B35] transition space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-9 h-9 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center">
+                      <AlertTriangle className="w-5 h-5" />
+                    </div>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-600 text-white">Feature 02</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-sm text-[#194B35]">Civic Connect</h4>
+                    <p className="text-[11px] text-[#5C6A64] mt-0.5">പരാതി പരിഹാരം, ഫോട്ടോകൾ, വാർഡ് ട്രാക്കിംഗ് (TNR-XXXX)</p>
+                  </div>
+                  <div className="flex items-center gap-2 pt-2 border-t border-[#EDE6D8]/60">
+                    <Link
+                      href="/admin/civic"
+                      className="flex-1 text-center py-1.5 px-2 bg-[#194B35] hover:bg-[#143E2C] text-white rounded-lg text-xs font-bold transition"
+                    >
+                      മോഡറേഷൻ
+                    </Link>
+                    <Link
+                      href="/civic-connect"
+                      className="flex-1 text-center py-1.5 px-2 bg-white hover:bg-neutral-100 text-[#194B35] border border-[#DDD5C5] rounded-lg text-xs font-bold transition"
+                    >
+                      പബ്ലിക് ഫീഡ്
+                    </Link>
+                  </div>
+                </div>
+
+                {/* 3. Development Tracker */}
+                <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] hover:border-[#194B35] transition space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-9 h-9 rounded-xl bg-orange-100 text-orange-800 flex items-center justify-center">
+                      <HardHat className="w-5 h-5" />
+                    </div>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-orange-600 text-white">Feature 03</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-sm text-[#194B35]">Development Tracker</h4>
+                    <p className="text-[11px] text-[#5C6A64] mt-0.5">₹86.60 Cr ബജറ്റ്, 6 ഔദ്യോഗിക പദ്ധതികൾ, മൈൽസ്റ്റോൺ തെളിവുകൾ</p>
+                  </div>
+                  <div className="flex items-center gap-2 pt-2 border-t border-[#EDE6D8]/60">
+                    <Link
+                      href="/admin/development"
+                      className="flex-1 text-center py-1.5 px-2 bg-[#194B35] hover:bg-[#143E2C] text-white rounded-lg text-xs font-bold transition"
+                    >
+                      അഡ്മിൻ ഡെസ്ക്
+                    </Link>
+                    <Link
+                      href="/development-tracker"
+                      className="flex-1 text-center py-1.5 px-2 bg-white hover:bg-neutral-100 text-[#194B35] border border-[#DDD5C5] rounded-lg text-xs font-bold transition"
+                    >
+                      പബ്ലിക് പോർട്ടൽ
+                    </Link>
+                  </div>
+                </div>
+
+                {/* 4. Public Services */}
+                <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] hover:border-[#194B35] transition space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center">
+                      <Phone className="w-5 h-5" />
+                    </div>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-700 text-white">Feature 04</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-sm text-[#194B35]">Public Services Directory</h4>
+                    <p className="text-[11px] text-[#5C6A64] mt-0.5">കെ-സ്മാർട്ട്, ജനന-മരണ രജിസ്ട്രേഷൻ, നികുതി, പെൻഷൻ</p>
+                  </div>
+                  <div className="flex items-center gap-2 pt-2 border-t border-[#EDE6D8]/60">
+                    <Link
+                      href="/public-services"
+                      className="flex-1 text-center py-1.5 px-2 bg-[#194B35] hover:bg-[#143E2C] text-white rounded-lg text-xs font-bold transition"
+                    >
+                      സേവനങ്ങൾ കാണുക
+                    </Link>
+                    <button
+                      onClick={() => setActiveTab("services")}
+                      className="flex-1 text-center py-1.5 px-2 bg-white hover:bg-neutral-100 text-[#194B35] border border-[#DDD5C5] rounded-lg text-xs font-bold transition"
+                    >
+                      ഡയറക്ടറി എഡിറ്റ്
+                    </button>
+                  </div>
+                </div>
+
+                {/* 5. Documents & Notices */}
+                <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] hover:border-[#194B35] transition space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center">
+                      <FileText className="w-5 h-5" />
+                    </div>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-blue-700 text-white">Feature 05</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-sm text-[#194B35]">Documents &amp; Notices</h4>
+                    <p className="text-[11px] text-[#5C6A64] mt-0.5">കൗൺസിൽ തീരുമാനങ്ങൾ, ബജറ്റ്, ടെൻഡറുകൾ, ഫോമുകൾ</p>
+                  </div>
+                  <div className="flex items-center gap-2 pt-2 border-t border-[#EDE6D8]/60">
+                    <Link
+                      href="/documents"
+                      className="w-full text-center py-1.5 px-2 bg-[#194B35] hover:bg-[#143E2C] text-white rounded-lg text-xs font-bold transition"
+                    >
+                      രേഖാ ശേഖരം സന്ദർശിക്കുക
+                    </Link>
+                  </div>
+                </div>
+
+                {/* 6. People's Voice */}
+                <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] hover:border-[#194B35] transition space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-9 h-9 rounded-xl bg-rose-100 text-rose-800 flex items-center justify-center">
+                      <HeartHandshake className="w-5 h-5" />
+                    </div>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-rose-700 text-white">Feature 06</span>
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-sm text-[#194B35]">People&apos;s Voice</h4>
+                    <p className="text-[11px] text-[#5C6A64] mt-0.5">പൗര നിർദ്ദേശങ്ങൾ, ചർച്ചകൾ, സപ്പോർട്ട് വോട്ടുകൾ (TNR-VOICE)</p>
+                  </div>
+                  <div className="flex items-center gap-2 pt-2 border-t border-[#EDE6D8]/60">
+                    <Link
+                      href="/admin/peoples-voice"
+                      className="flex-1 text-center py-1.5 px-2 bg-[#194B35] hover:bg-[#143E2C] text-white rounded-lg text-xs font-bold transition"
+                    >
+                      മോഡറേഷൻ
+                    </Link>
+                    <Link
+                      href="/peoples-voice"
+                      className="flex-1 text-center py-1.5 px-2 bg-white hover:bg-neutral-100 text-[#194B35] border border-[#DDD5C5] rounded-lg text-xs font-bold transition"
+                    >
+                      പബ്ലിക് പോർട്ടൽ
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Civic Connect Command Center Banner */}
+            <div className="bg-gradient-to-r from-[#143E2C] to-[#194B35] rounded-3xl p-6 text-white shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-6 border border-[#0F3022]">
+              <div className="space-y-1.5 max-w-xl">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-400 text-[#143E2C]">
+                    CIVIC CONNECT PORTAL
+                  </span>
+                  <span className="text-xs text-amber-200 font-medium">താനൂർ നഗരസഭ 44 വാർഡുകൾ</span>
+                </div>
+                <h3 className="text-lg font-bold font-malayalam-serif text-white">
+                  സിവിക് കണക്ട് മോഡറേഷൻ വർക്ക്‌സ്‌പേസ്
+                </h3>
+                <p className="text-xs text-white/80 leading-relaxed">
+                  പൗരന്മാർ റിപ്പോർട്ട് ചെയ്ത റോഡ്, കുടിവെള്ളം, സ്ട്രീറ്റ്‌ലൈറ്റ്, മാലിന്യ പ്രശ്നങ്ങൾ പരിശോധിച്ച് താനൂർ നഗരസഭയിലേക്കും KSEB, KWA ഡിപ്പാർട്ട്മെന്റുകളിലേക്കും കൈമാറാനും പരിഹാര തെളിവുകൾ രേഖപ്പെടുത്താനും പ്രത്യേക വർക്ക്‌സ്‌പേസ് ഉപയോഗിക്കുക.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3 shrink-0">
+                <Link
+                  href="/admin/civic"
+                  className="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-[#143E2C] text-xs font-bold transition shadow-sm inline-flex items-center gap-1.5"
+                >
+                  <ShieldCheck className="w-4 h-4" />
+                  <span>മോഡറേഷൻ ഡാഷ്‌ബോർഡ്</span>
+                </Link>
+                <Link
+                  href="/admin/civic/issues"
+                  className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition inline-flex items-center gap-1.5"
+                >
+                  <span>പരാതികൾ മാനേജ് ചെയ്യുക</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Smart Newsroom Automated Ingestion Command Center */}
+            <div className="bg-gradient-to-r from-[#194B35] via-[#143E2C] to-[#0D281D] rounded-3xl p-6 text-white shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-6 border border-[#235841]">
+              <div className="space-y-1.5 max-w-xl">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-400 text-[#143E2C] flex items-center gap-1">
+                    <Cpu className="w-3 h-3" />
+                    FULLY AUTOMATIC SMART NEWSROOM
+                  </span>
+                  <span className="text-xs text-amber-200 font-medium">താനൂർ, മലപ്പുറം, കേരളം</span>
+                </div>
+                <h3 className="text-lg font-bold font-malayalam-serif text-white">
+                  സ്മാർട്ട് ന്യൂസ്‌റൂം കൺട്രോൾ സെന്റർ
+                </h3>
+                <p className="text-xs text-white/80 leading-relaxed">
+                  അംഗീകൃത സർക്കാർ പോർട്ടലുകൾ, ആകാശവാണി, വാർത്താ ഏജൻസികൾ എന്നിവയിൽ നിന്നുള്ള വിവരങ്ങൾ എഐ സ്വയം ശേഖരിച്ച്, വസ്തുത പരിശോധിച്ച്, 11 വിഭാഗങ്ങളിലായി തത്സമയം പബ്ലിഷ് ചെയ്യുന്ന ഓട്ടോമേറ്റഡ് സംവിധാനം.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+                <Link
+                  href="/admin/newsroom"
+                  className="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-[#143E2C] text-xs font-bold transition shadow-sm inline-flex items-center gap-1.5"
+                >
+                  <Cpu className="w-4 h-4" />
+                  <span>ന്യൂസ്‌റൂം ഡാഷ്‌ബോർഡ്</span>
+                </Link>
+                <Link
+                  href="/admin/newsroom/sources"
+                  className="px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition inline-flex items-center gap-1.5"
+                >
+                  <Rss className="w-3.5 h-3.5 text-amber-300" />
+                  <span>ഉറവിടങ്ങൾ (Feeds)</span>
+                </Link>
+                <Link
+                  href="/admin/newsroom/review"
+                  className="px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition inline-flex items-center gap-1.5"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5 text-amber-300" />
+                  <span>എഡിറ്റോറിയൽ റിവ്യൂ</span>
+                </Link>
+                <Link
+                  href="/admin/newsroom/analytics"
+                  className="px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition inline-flex items-center gap-1.5"
+                >
+                  <BarChart3 className="w-3.5 h-3.5 text-amber-300" />
+                  <span>അനലിറ്റിക്സ്</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Digital Municipality (Tanur 2030) Command Center Banner */}
+            <div className="bg-gradient-to-r from-[#194B35] via-[#16382B] to-[#0E281F] rounded-3xl p-6 text-white shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-6 border border-[#235841]">
+              <div className="space-y-1.5 max-w-xl">
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#C39A5B] text-[#143E2C] flex items-center gap-1">
+                    <Building className="w-3 h-3" />
+                    KERALA&apos;S FIRST DIGITAL MUNICIPALITY
+                  </span>
+                  <span className="text-xs text-[#E3D2B8] font-medium">താനൂർ നഗരസഭ 44 വാർഡുകൾ • Tanur 2030</span>
+                </div>
+                <h3 className="text-lg font-bold font-malayalam-serif text-white">
+                  ഡിജിറ്റൽ മുൻസിപ്പാലിറ്റി കൺട്രോൾ സെന്റർ
+                </h3>
+                <p className="text-xs text-white/80 leading-relaxed">
+                  44 മുൻസിപ്പൽ വാർഡുകളുടെ ഡയറക്ടറി, ₹86.60 കോടിയുടെ 6 ഔദ്യോഗിക അടിസ്ഥാന സൗകര്യ പദ്ധതികളുടെ പുരോഗതി, പൗരന്മാരുടെ ജനകീയ നിർദ്ദേശങ്ങൾ (People&apos;s Voice) എന്നിവ ഒരു കുടക്കീഴിൽ ഏകോപിപ്പിക്കുന്ന ഡിജിറ്റൽ ഭരണ സംവിധാനം.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+                <Link
+                  href="/digital-municipality"
+                  className="px-4 py-2.5 rounded-xl bg-[#C39A5B] hover:bg-[#B3894B] text-[#143E2C] text-xs font-bold transition shadow-sm inline-flex items-center gap-1.5"
+                >
+                  <Globe className="w-4 h-4" />
+                  <span>ഡിജിറ്റൽ നഗരസഭ</span>
+                </Link>
+                <Link
+                  href="/admin/development"
+                  className="px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition inline-flex items-center gap-1.5"
+                >
+                  <HardHat className="w-3.5 h-3.5 text-[#C39A5B]" />
+                  <span>പദ്ധതികൾ ({devProjects.length})</span>
+                </Link>
+                <Link
+                  href="/admin/peoples-voice"
+                  className="px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition inline-flex items-center gap-1.5"
+                >
+                  <HeartHandshake className="w-3.5 h-3.5 text-[#C39A5B]" />
+                  <span>നിർദ്ദേശങ്ങൾ ({citizenProposals.length})</span>
+                </Link>
               </div>
             </div>
 
@@ -1007,6 +1567,1132 @@ export default function AdminPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* TAB: RBAC & USER ROLES MANAGEMENT (ADMIN EXCLUSIVE) */}
+        {/* ========================================================================= */}
+        {activeTab === "users" && role === "admin" && (
+          <div className="space-y-6">
+            <div className="bg-white rounded-3xl border border-[#EAE4D7] p-6 shadow-card">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-[#F3EFE6] pb-4 mb-6">
+                <div>
+                  <h2 className="text-base font-bold font-malayalam-serif text-[#1B4D36] flex items-center gap-2">
+                    <ShieldCheck className="w-5 h-5 text-[#1B4D36]" />
+                    <span>റോൾ അധിഷ്ഠിത ആക്‌സസ്സ് കൺട്രോൾ (RBAC Role Management)</span>
+                  </h2>
+                  <p className="text-xs text-[#7A8880] mt-1">
+                    താനൂർ ഡിജിറ്റൽ മുനിസിപ്പാലിറ്റി പ്ലാറ്റ്‌ഫോം ഉപയോക്താക്കൾക്ക് അനുമതികൾ നൽകാനും നിയന്ത്രിക്കാനുമുള്ള സുരക്ഷിത അഡ്മിൻ കൺസോൾ
+                  </p>
+                </div>
+                <span className="text-xs font-bold px-3 py-1 bg-emerald-50 text-[#1B4D36] rounded-full border border-emerald-200">
+                  {allProfiles.length} ഉപയോക്താക്കൾ
+                </span>
+              </div>
+
+              {/* Secure Role Assignment Form */}
+              <form onSubmit={handleAssignRole} className="bg-[#FAF7F0] rounded-2xl p-4 sm:p-5 border border-[#EAE4D7] mb-6 space-y-4">
+                <h4 className="text-xs font-bold font-malayalam uppercase tracking-wider text-[#1B4D36]">
+                  പുതിയ റോൾ അനുവദിക്കുക (Assign Verified Role)
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label className="text-[11px] font-bold text-[#5C6A64] block mb-1">ഉപയോക്താവ് (Target User)</label>
+                    <select
+                      value={roleChangeTarget}
+                      onChange={(e) => setRoleChangeTarget(e.target.value)}
+                      required
+                      className="w-full px-3 py-2 rounded-xl text-xs bg-white border border-[#DDD5C5] text-[#1A2420]"
+                    >
+                      <option value="">ഉപയോക്താവിനെ തിരഞ്ഞെടുക്കുക...</option>
+                      {allProfiles.map((p) => (
+                        <option key={p.id} value={p.id}>
+                          {p.display_name} (@{p.username}) — [{p.role}]
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="text-[11px] font-bold text-[#5C6A64] block mb-1">അനുവദിക്കേണ്ട റോൾ (New Role)</label>
+                    <select
+                      value={newRoleSelection}
+                      onChange={(e) => setNewRoleSelection(e.target.value as UserRole)}
+                      className="w-full px-3 py-2 rounded-xl text-xs bg-white border border-[#DDD5C5] text-[#1A2420]"
+                    >
+                      <option value="user">User (സാധാരണ പൗരൻ)</option>
+                      <option value="moderator">Moderator (കമ്മ്യൂണിറ്റി മോഡറേറ്റർ)</option>
+                      <option value="verified_org">Verified Org (സ്ഥിരീകരിച്ച സംഘടന)</option>
+                      <option value="admin">Admin (പ്ലാറ്റ്‌ഫോം അഡ്മിനിസ്ട്രേറ്റർ)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="text-[11px] font-bold text-[#5C6A64] block mb-1">മാറ്റത്തിനുള്ള കാരണം (Reason / Justification)</label>
+                    <input
+                      type="text"
+                      value={roleChangeReason}
+                      onChange={(e) => setRoleChangeReason(e.target.value)}
+                      placeholder="ഉദാ: നഗരസഭാ ഐ.ടി ഓഫീസ് ഉത്തരവ്..."
+                      required
+                      className="w-full px-3 py-2 rounded-xl text-xs bg-white border border-[#DDD5C5] text-[#1A2420]"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end pt-2">
+                  <button
+                    type="submit"
+                    className="px-5 py-2 rounded-xl bg-[#1B4D36] hover:bg-[#133A28] text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5"
+                  >
+                    <ShieldCheck className="w-4 h-4 text-amber-300" />
+                    <span>റോൾ മാറ്റം സ്ഥിരീകരിക്കുക (Update Role)</span>
+                  </button>
+                </div>
+              </form>
+
+              {/* Profiles Table */}
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead>
+                    <tr className="border-b border-[#DDD5C5] text-[#5C6A64]">
+                      <th className="py-2.5 font-bold">ഉപയോക്താവ്</th>
+                      <th className="py-2.5 font-bold">യൂസർനെയിം</th>
+                      <th className="py-2.5 font-bold">നിലവിലെ റോൾ</th>
+                      <th className="py-2.5 font-bold">ഭാഷ</th>
+                      <th className="py-2.5 font-bold">അവസാനം പുതുക്കിയത്</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-[#F3EFE6]">
+                    {allProfiles.map((p) => (
+                      <tr key={p.id} className="hover:bg-[#FAF7F0]">
+                        <td className="py-2.5 font-bold text-[#1A2420]">{p.display_name}</td>
+                        <td className="py-2.5 text-[#5C6A64]">@{p.username}</td>
+                        <td className="py-2.5">
+                          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                            p.role === "admin" 
+                              ? "bg-purple-100 text-purple-800 border border-purple-200" 
+                              : p.role === "moderator"
+                              ? "bg-blue-100 text-blue-800 border border-blue-200"
+                              : p.role === "verified_org"
+                              ? "bg-amber-100 text-amber-800 border border-amber-200"
+                              : "bg-stone-100 text-stone-700 border border-stone-200"
+                          }`}>
+                            {p.role}
+                          </span>
+                        </td>
+                        <td className="py-2.5 uppercase font-mono text-[11px] text-[#7A8880]">{p.preferred_language}</td>
+                        <td className="py-2.5 text-[11px] text-[#7A8880]">
+                          {new Date(p.updated_at || p.created_at).toLocaleDateString("en-IN")}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* TAB 11: PROFESSIONALS MANAGEMENT & VERIFICATION (MODULE 13) */}
+        {/* ========================================================================= */}
+        {activeTab === "pros" && (
+          <div className="bg-white rounded-3xl border border-[#EAE4D7] p-6 shadow-card space-y-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-[#F3EFE6] pb-3">
+              <div>
+                <h2 className="text-base font-bold font-malayalam-serif text-[#1B4D36]">
+                  സേവന വിദഗ്ദ്ധരുടെ വെരിഫിക്കേഷൻ & നിയന്ത്രണം (Professionals Directory Management)
+                </h2>
+                <p className="text-xs text-[#7A8880]">
+                  താനൂർ & മലപ്പുറം സേവന ദാതാക്കളുടെ രേഖകളും പദവിയും പരിശോധിക്കുക
+                </p>
+              </div>
+              <span className="text-xs font-bold px-3 py-1 bg-[#E0F1E7] text-[#1B4D36] rounded-full border border-[#BDE3CE]">
+                {professionals.length} രജിസ്റ്റർ ചെയ്തവർ
+              </span>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead>
+                  <tr className="border-b border-[#DDD5C5] text-[#5C6A64]">
+                    <th className="py-2.5 font-bold">പ്രൊഫഷണൽ</th>
+                    <th className="py-2.5 font-bold">വിഭാഗം</th>
+                    <th className="py-2.5 font-bold">പ്രദേശം</th>
+                    <th className="py-2.5 font-bold">തുടക്ക നിരക്ക്</th>
+                    <th className="py-2.5 font-bold">റേറ്റിംഗ്</th>
+                    <th className="py-2.5 font-bold">പദവി</th>
+                    <th className="py-2.5 font-bold text-right">നടപടി (Actions)</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#F3EFE6]">
+                  {professionals.map((p) => (
+                    <tr key={p.id} className="hover:bg-[#FAF7F0]/60 transition">
+                      <td className="py-3">
+                        <div className="flex items-center gap-2.5">
+                          <img
+                            src={p.avatar_url || "https://images.unsplash.com/photo-1540569014015-19a7be504e3a?w=400&auto=format&fit=crop&q=80"}
+                            alt={p.display_name}
+                            className="w-9 h-9 rounded-xl object-cover border border-[#DDD5C5]"
+                          />
+                          <div>
+                            <span className="font-bold text-[#1A2420] block">{p.display_name}</span>
+                            <span className="text-[10px] text-[#7A8880]">@{p.username}</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-3 font-semibold text-[#1B4D36]">{p.category_name}</td>
+                      <td className="py-3 text-[#5C6A64]">{p.locality}</td>
+                      <td className="py-3 font-mono font-bold text-[#1B4D36]">₹{p.starting_price}</td>
+                      <td className="py-3">
+                        <span className="inline-flex items-center gap-1 font-bold text-amber-600">
+                          ⭐ {p.rating} ({p.reviews_count})
+                        </span>
+                      </td>
+                      <td className="py-3">
+                        {p.is_verified ? (
+                          <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold border border-emerald-300">
+                            Verified ✓
+                          </span>
+                        ) : (
+                          <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[10px] font-bold border border-amber-300">
+                            Pending Review
+                          </span>
+                        )}
+                      </td>
+                      <td className="py-3 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          {!p.is_verified && (
+                            <button
+                              type="button"
+                              onClick={() => handleVerifyPro(p.id)}
+                              className="px-3 py-1 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold shadow-xs transition"
+                            >
+                              Verify Badge നൽകുക ✓
+                            </button>
+                          )}
+                          <Link
+                            href={`/professionals/${p.username}`}
+                            target="_blank"
+                            className="p-1.5 rounded-lg bg-[#FAF7F0] hover:bg-[#F3EFE6] border border-[#DDD5C5] text-[#1B4D36]"
+                            title="പ്രൊഫൈൽ കാണുക"
+                          >
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          </Link>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* TAB 12: SERVICE CATEGORIES MANAGEMENT (MODULE 13) */}
+        {/* ========================================================================= */}
+        {activeTab === "categories" && (
+          <div className="space-y-6">
+            {/* Add New Category Form */}
+            <div className="bg-white rounded-3xl border border-[#EAE4D7] p-6 shadow-card space-y-4">
+              <h2 className="text-base font-bold font-malayalam-serif text-[#1B4D36] border-b border-[#F3EFE6] pb-3 flex items-center gap-2">
+                <Plus className="w-4 h-4 text-emerald-600" />
+                <span>പുതിയ സേവന വിഭാഗം ചേർക്കുക (Add Service Category)</span>
+              </h2>
+
+              <form onSubmit={handleAddCategory} className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
+                <div>
+                  <label className="block font-bold text-[#1A2420] mb-1">ഇംഗ്ലീഷ് പേര് (Name) *</label>
+                  <input
+                    type="text"
+                    required
+                    value={newCatName}
+                    onChange={(e) => setNewCatName(e.target.value)}
+                    placeholder="e.g. Solar Technician"
+                    className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#1A2420] mb-1">മലയാളം പേര് (Malayalam) *</label>
+                  <input
+                    type="text"
+                    required
+                    value={newCatNameMl}
+                    onChange={(e) => setNewCatNameMl(e.target.value)}
+                    placeholder="ഉദാ: സോളാർ ടെക്നീഷ്യൻ"
+                    className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#1A2420] mb-1">സ്ലഗ് (Slug URL) *</label>
+                  <input
+                    type="text"
+                    required
+                    value={newCatSlug}
+                    onChange={(e) => setNewCatSlug(e.target.value)}
+                    placeholder="solar-technician"
+                    className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0]"
+                  />
+                </div>
+
+                <div className="flex items-end">
+                  <button
+                    type="submit"
+                    className="w-full py-2.5 rounded-xl bg-[#1B4D36] hover:bg-[#143B29] text-white font-bold transition shadow-xs"
+                  >
+                    വിഭാഗം ചേർക്കുക +
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            {/* Existing Categories Table */}
+            <div className="bg-white rounded-3xl border border-[#EAE4D7] p-6 shadow-card space-y-4">
+              <div className="flex items-center justify-between border-b border-[#F3EFE6] pb-3">
+                <h3 className="font-bold text-sm text-[#1B4D36] font-malayalam-serif">
+                  നിലവിലുള്ള 18 പ്രധാന സേവന വിഭാഗങ്ങൾ (18 Core Service Categories)
+                </h3>
+                <span className="text-xs font-bold text-[#B87A1E]">ആകെ: {serviceCategories.length}</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                {serviceCategories.map((c) => (
+                  <div
+                    key={c.id}
+                    className="p-3.5 rounded-2xl bg-[#FAF7F0] border border-[#EAE4D7] space-y-1"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-xs text-[#1A2420]">{c.name_ml}</span>
+                      <span className="text-[10px] text-[#7A8880] font-mono">#{c.display_order}</span>
+                    </div>
+                    <span className="text-[11px] text-[#1B4D36] block">{c.name}</span>
+                    <span className="text-[10px] text-[#7A8880] block truncate">{c.description}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* TAB 13: REVIEWS & REPUTATION MODERATION (MODULE 13) */}
+        {/* ========================================================================= */}
+        {activeTab === "reviews" && (
+          <div className="bg-white rounded-3xl border border-[#EAE4D7] p-6 shadow-card space-y-4">
+            <div className="flex items-center justify-between border-b border-[#F3EFE6] pb-3">
+              <div>
+                <h2 className="text-base font-bold font-malayalam-serif text-[#1B4D36]">
+                  അവലോകന മോഡറേഷൻ (Customer Reviews Moderation)
+                </h2>
+                <p className="text-xs text-[#7A8880]">
+                  പൂർത്തിയായ സർവീസ് ബുക്കിംഗുകളിൽ സമർപ്പിച്ച റേറ്റിംഗുകൾ നിരീക്ഷിക്കുക
+                </p>
+              </div>
+              <span className="text-xs font-bold px-3 py-1 bg-[#FAF4E6] text-[#8C5B0F] rounded-full border border-[#E8DCBF]">
+                {allReviews.length} അവലോകനങ്ങൾ
+              </span>
+            </div>
+
+            <div className="space-y-3">
+              {allReviews.map((r) => {
+                const pro = store.getProfessionalById(r.professional_id);
+                return (
+                  <div
+                    key={r.id}
+                    className="p-4 rounded-2xl bg-[#FAF7F0] border border-[#EAE4D7] space-y-2 text-xs"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-[#1A2420]">{r.customer_name}</span>
+                        <span className="text-[#7A8880]">→</span>
+                        <span className="font-bold text-[#1B4D36]">{pro?.display_name || "Professional"}</span>
+                      </div>
+                      <div className="flex items-center gap-1 text-amber-500 font-bold">
+                        ⭐ {r.rating_overall} / 5
+                      </div>
+                    </div>
+
+                    <p className="text-[#3E4D45] italic">&ldquo;{r.comment}&rdquo;</p>
+
+                    <div className="flex items-center justify-between text-[10px] text-[#7A8880] pt-1 border-t border-[#EAE4D7]">
+                      <span>ബുക്കിംഗ് ID: {r.booking_id} • തീയതി: {new Date(r.created_at).toLocaleDateString()}</span>
+                      <span className="text-emerald-700 font-semibold">✓ Verified Completion</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* TAB: DEVELOPMENT PROJECTS (TRANSPARENT TANUR) */}
+        {/* ========================================================================= */}
+        {activeTab === "projects" && (
+          <div className="space-y-6">
+            <div className="bg-white rounded-3xl border border-[#EAE4D7] p-6 shadow-card flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#143E2C] text-amber-300">
+                    TRANSPARENT TANUR
+                  </span>
+                  <span className="text-xs text-[#7A8880] font-semibold">ഔദ്യോഗിക ബജറ്റ്: ₹86.60 കോടി</span>
+                </div>
+                <h2 className="text-lg font-bold font-malayalam-serif text-[#1A2420] mt-1">
+                  താനൂർ നഗരസഭാ വികസന പദ്ധതികൾ ({devProjects.length})
+                </h2>
+                <p className="text-xs text-[#5C6A64] mt-0.5">
+                  നഗരസഭ, PWD, ഹാർബർ എഞ്ചിനീയറിംഗ്, KWA എന്നിവയുടെ നേതൃത്വത്തിൽ നടക്കുന്ന വികസന പ്രവർത്തനങ്ങളും പരിശോധനാ രേഖകളും.
+                </p>
+              </div>
+
+              <Link
+                href="/tanur/development"
+                target="_blank"
+                className="px-4 py-2 rounded-xl bg-[#FAF7F0] hover:bg-[#F3EFE6] text-[#143E2C] text-xs font-bold border border-[#DDD5C5] transition flex items-center gap-1.5 self-start sm:self-auto"
+              >
+                <span>പബ്ലിക് ട്രാക്കർ കാണുക</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
+            <div className="space-y-4">
+              {devProjects.map((p) => (
+                <div
+                  key={p.id}
+                  className="bg-white rounded-3xl border border-[#EAE4D7] p-6 shadow-card space-y-4"
+                >
+                  <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                    <div className="space-y-1.5">
+                      <div className="flex flex-wrap items-center gap-2 text-xs">
+                        <span className="px-2 py-0.5 rounded-md font-bold bg-[#FAF7F0] text-[#143E2C] border border-[#DDD5C5]">
+                          {p.category_name_ml || p.category}
+                        </span>
+                        <span className="px-2 py-0.5 rounded-md font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                          {p.budget_sanctioned}
+                        </span>
+                        {p.ward_number ? (
+                          <span className="text-[#5C6A64]">വാർഡ്: {p.ward_number} ({p.ward_name_ml || p.ward_name})</span>
+                        ) : (
+                          <span className="text-[#5C6A64]">മുനിസിപ്പാലിറ്റി വ്യാപകം</span>
+                        )}
+                      </div>
+
+                      <h3 className="font-bold text-base text-[#1A2420] font-malayalam-serif">
+                        {p.title_ml || p.title}
+                      </h3>
+                      <p className="text-xs text-[#5C6A64]">{p.title}</p>
+                      <p className="text-xs text-[#3E4D45] leading-relaxed pt-1">
+                        {p.description_ml || p.description}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col items-end gap-2 shrink-0">
+                      <div className="flex items-center gap-2">
+                        <label className="text-[11px] font-bold text-[#7A8880]">സ്ഥിതി:</label>
+                        <select
+                          value={p.status}
+                          onChange={(e) => handleUpdateProjectStatus(p.id, e.target.value as ProjectStatus)}
+                          className="px-3 py-1.5 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0] text-xs font-bold text-[#143E2C]"
+                        >
+                          <option value="In Progress">In Progress (പുരോഗതിയിൽ)</option>
+                          <option value="Approved">Approved (അംഗീകരിച്ചു)</option>
+                          <option value="Completed">Completed (പൂർത്തിയായി)</option>
+                          <option value="Proposed">Proposed (നിർദ്ദേശിച്ചത്)</option>
+                          <option value="Delayed">Delayed (തടസ്സപ്പെട്ടത്)</option>
+                        </select>
+                      </div>
+
+                      <button
+                        onClick={() => setSelectedProjectForMilestone(selectedProjectForMilestone === p.id ? null : p.id)}
+                        className="px-3.5 py-1.5 rounded-xl bg-[#143E2C] hover:bg-[#0D281D] text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>പുരോഗതി രേഖപ്പെടുത്തുക</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Progress Bar & Source Meta */}
+                  <div className="pt-2 border-t border-[#F3EFE6] space-y-2">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-[#7A8880] font-medium">ഔദ്യോഗിക പുരോഗതി</span>
+                      <span className="font-bold text-[#143E2C]">{p.progress_percentage ?? 0}%</span>
+                    </div>
+                    <div className="w-full bg-[#EAE4D7] rounded-full h-2 overflow-hidden">
+                      <div
+                        className="bg-emerald-600 h-2 rounded-full transition-all"
+                        style={{ width: `${p.progress_percentage ?? 0}%` }}
+                      />
+                    </div>
+                    <div className="flex flex-wrap items-center justify-between text-[11px] text-[#7A8880] pt-1">
+                      <span>ഡിപ്പാർട്ട്മെന്റ്: <strong>{p.department_ml || p.department}</strong></span>
+                      <a
+                        href={p.official_source_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-[#143E2C] hover:underline flex items-center gap-1 font-semibold"
+                      >
+                        <span>ഉറവിടം: {p.official_source_name}</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Milestone Addition Form (Conditional) */}
+                  {selectedProjectForMilestone === p.id && (
+                    <form
+                      onSubmit={(e) => handleAddMilestoneSubmit(e, p.id)}
+                      className="p-4 rounded-2xl bg-[#FAF7F0] border border-[#DDD5C5] space-y-3 animate-in fade-in text-xs"
+                    >
+                      <div className="font-bold text-[#143E2C] flex items-center gap-1.5">
+                        <HardHat className="w-4 h-4 text-emerald-700" />
+                        <span>പുതിയ പുരോഗതി ഘട്ടവും പരിശോധനാ രേഖകളും ചേർക്കുക</span>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                          <label className="font-bold text-[#1A2420] block mb-1">ഘട്ടത്തിന്റെ തലക്കെട്ട് (Title)</label>
+                          <input
+                            type="text"
+                            required
+                            placeholder="ഉദാ: കോൺക്രീറ്റിംഗ് പൂർത്തിയായി / ട്രയൽ റൺ വിജയം"
+                            value={milestoneForm.title}
+                            onChange={(e) => setMilestoneForm({ ...milestoneForm, title: e.target.value })}
+                            className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-white"
+                          />
+                        </div>
+                        <div>
+                          <label className="font-bold text-[#1A2420] block mb-1">പുരോഗതി ശതമാനം (%)</label>
+                          <input
+                            type="number"
+                            min="0"
+                            max="100"
+                            required
+                            value={milestoneForm.progress_percentage}
+                            onChange={(e) => setMilestoneForm({ ...milestoneForm, progress_percentage: Number(e.target.value) })}
+                            className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-white"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="font-bold text-[#1A2420] block mb-1">വിശദാംശങ്ങൾ (Description)</label>
+                        <textarea
+                          rows={2}
+                          required
+                          placeholder="ഘട്ടത്തിന്റെ പുരോഗതി വിശദാംശങ്ങൾ..."
+                          value={milestoneForm.description}
+                          onChange={(e) => setMilestoneForm({ ...milestoneForm, description: e.target.value })}
+                          className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-white"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div>
+                          <label className="font-bold text-[#1A2420] block mb-1">പരിശോധനാ ഏജൻസി (Verifying Authority)</label>
+                          <input
+                            type="text"
+                            required
+                            value={milestoneForm.verifying_authority}
+                            onChange={(e) => setMilestoneForm({ ...milestoneForm, verifying_authority: e.target.value })}
+                            className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-white"
+                          />
+                        </div>
+                        <div>
+                          <label className="font-bold text-[#1A2420] block mb-1">പരിശോധനാ തീയതി (Inspection Date)</label>
+                          <input
+                            type="date"
+                            required
+                            value={milestoneForm.inspection_date}
+                            onChange={(e) => setMilestoneForm({ ...milestoneForm, inspection_date: e.target.value })}
+                            className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-white"
+                          />
+                        </div>
+                        <div>
+                          <label className="font-bold text-[#1A2420] block mb-1">ഔദ്യോഗിക തെളിവ് ലിങ്ക് (Evidence URL)</label>
+                          <input
+                            type="url"
+                            required
+                            placeholder="https://pwd.kerala.gov.in/..."
+                            value={milestoneForm.evidence_url}
+                            onChange={(e) => setMilestoneForm({ ...milestoneForm, evidence_url: e.target.value })}
+                            className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-white"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex justify-end gap-2 pt-1">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedProjectForMilestone(null)}
+                          className="px-3.5 py-1.5 rounded-xl border border-[#DDD5C5] text-[#5C6A64] font-bold"
+                        >
+                          റദ്ദാക്കുക
+                        </button>
+                        <button
+                          type="submit"
+                          className="px-4 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold shadow-xs"
+                        >
+                          രേഖപ്പെടുത്തുക ✓
+                        </button>
+                      </div>
+                    </form>
+                  )}
+
+                  {/* Past Progress Milestones List */}
+                  {p.progress_updates && p.progress_updates.length > 0 && (
+                    <div className="pt-2 border-t border-[#F3EFE6] space-y-2">
+                      <div className="text-[11px] font-bold text-[#7A8880] uppercase">പരിശോധനാ ചരിത്രം ({p.progress_updates.length})</div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                        {p.progress_updates.map((upd) => (
+                          <div key={upd.id} className="p-3 rounded-xl bg-[#FAF7F0] border border-[#EAE4D7] space-y-1">
+                            <div className="flex items-center justify-between font-bold text-[#1A2420]">
+                              <span>{upd.title_ml || upd.title}</span>
+                              <span className="text-emerald-700 font-semibold">{upd.date}</span>
+                            </div>
+                            <p className="text-[11px] text-[#5C6A64]">{upd.note_ml || upd.note}</p>
+                            <div className="flex items-center justify-between text-[10px] text-[#7A8880] pt-1 border-t border-[#EAE4D7]">
+                              <span>{upd.verified_by}</span>
+                              {upd.evidence_url && (
+                                <a
+                                  href={upd.evidence_url}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="text-[#143E2C] hover:underline flex items-center gap-0.5 font-bold"
+                                >
+                                  <span>രേഖ</span>
+                                  <ExternalLink className="w-2.5 h-2.5" />
+                                </a>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* TAB: CITIZEN PROPOSALS / PEOPLE'S VOICE (PEOPLE-POWERED TANUR) */}
+        {/* ========================================================================= */}
+        {activeTab === "proposals" && (
+          <div className="space-y-6">
+            <div className="bg-white rounded-3xl border border-[#EAE4D7] p-6 shadow-card flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#C39A5B] text-[#143E2C]">
+                    PEOPLE-POWERED TANUR
+                  </span>
+                  <span className="text-xs text-[#7A8880] font-semibold">ജനകീയ ശബ്ദം</span>
+                </div>
+                <h2 className="text-lg font-bold font-malayalam-serif text-[#1A2420] mt-1">
+                  പൗരന്മാരുടെ ജനകീയ നിർദ്ദേശങ്ങൾ ({citizenProposals.length})
+                </h2>
+                <p className="text-xs text-[#5C6A64] mt-0.5">
+                  താനൂർ നഗരസഭയിലെ പൗരന്മാർ സമർപ്പിച്ച കമ്മ്യൂണിറ്റി വികസന നിർദ്ദേശങ്ങളും അവയ്ക്കുള്ള ഔദ്യോഗിക ഭരണകൂട മറുപടികളും.
+                </p>
+              </div>
+
+              <Link
+                href="/tanur/voice"
+                target="_blank"
+                className="px-4 py-2 rounded-xl bg-[#FAF7F0] hover:bg-[#F3EFE6] text-[#143E2C] text-xs font-bold border border-[#DDD5C5] transition flex items-center gap-1.5 self-start sm:self-auto"
+              >
+                <span>പബ്ലിക് പോർട്ടൽ കാണുക</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
+            <div className="space-y-4">
+              {citizenProposals.map((prop) => {
+                const currentResp = proposalResponseInput[prop.id] || {
+                  status: prop.status,
+                  response: prop.official_response || "",
+                  responderName: prop.official_responder_name || "താനൂർ നഗരസഭ സെക്രട്ടറി",
+                  responderRole: prop.official_responder_role || "താനൂർ നഗരസഭാ കാര്യാലയം",
+                };
+
+                return (
+                  <div
+                    key={prop.id}
+                    className="bg-white rounded-3xl border border-[#EAE4D7] p-6 shadow-card space-y-4"
+                  >
+                    <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
+                      <div className="space-y-1.5">
+                        <div className="flex flex-wrap items-center gap-2 text-xs">
+                          <span className="px-2 py-0.5 rounded-md font-mono font-bold bg-amber-50 text-amber-900 border border-amber-200">
+                            {prop.tracking_id}
+                          </span>
+                          <span className="px-2 py-0.5 rounded-md font-semibold bg-[#FAF7F0] text-[#143E2C] border border-[#DDD5C5]">
+                            {prop.category}
+                          </span>
+                          <span className="text-[#5C6A64]">
+                            വാർഡ് {prop.ward_number}: {prop.locality_ml || prop.locality}
+                          </span>
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#143E2C] text-white flex items-center gap-1">
+                            ❤️ {prop.support_count} പിന്തുണ
+                          </span>
+                        </div>
+
+                        <h3 className="font-bold text-base text-[#1A2420] font-malayalam-serif">
+                          {prop.title_ml || prop.title}
+                        </h3>
+                        <p className="text-xs text-[#5C6A64]">{prop.title}</p>
+                        <p className="text-xs text-[#3E4D45] leading-relaxed pt-1">
+                          {prop.summary_ml || prop.summary}
+                        </p>
+                        <div className="text-[11px] text-[#7A8880] pt-1">
+                          സമർപ്പിച്ചത്: <strong>{prop.author_name}</strong> • തീയതി: {new Date(prop.created_at).toLocaleDateString()}
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col items-end gap-1 shrink-0">
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                          prop.status === "budget_allocated" ? "bg-emerald-100 text-emerald-800" :
+                          prop.status === "feasibility_study" ? "bg-blue-100 text-blue-800" :
+                          prop.status === "under_municipal_review" ? "bg-purple-100 text-purple-800" :
+                          prop.status === "community_supported" ? "bg-amber-100 text-amber-800" :
+                          "bg-slate-100 text-slate-800"
+                        }`}>
+                          {prop.status}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Official Municipal Response Section */}
+                    <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-[#DDD5C5] space-y-3 text-xs">
+                      <div className="flex items-center justify-between font-bold text-[#143E2C]">
+                        <span className="flex items-center gap-1.5">
+                          <Building className="w-4 h-4 text-emerald-700" />
+                          ഔദ്യോഗിക നഗരസഭാ നടപടി / മറുപടി
+                        </span>
+                        {prop.official_response_date && (
+                          <span className="text-[10px] text-[#7A8880] font-normal">
+                            അവസാനം രേഖപ്പെടുത്തിയത്: {prop.official_response_date}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div>
+                          <label className="font-bold text-[#1A2420] block mb-1">ഘട്ടം (Status)</label>
+                          <select
+                            value={currentResp.status}
+                            onChange={(e) => setProposalResponseInput({
+                              ...proposalResponseInput,
+                              [prop.id]: { ...currentResp, status: e.target.value as ProposalStatus }
+                            })}
+                            className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-white font-semibold"
+                          >
+                            <option value="submitted">submitted (സമർപ്പിച്ചു)</option>
+                            <option value="community_supported">community_supported (50+ പിന്തുണ ലഭിച്ചു)</option>
+                            <option value="under_municipal_review">under_municipal_review (നഗരസഭാ പരിശോധനയിൽ)</option>
+                            <option value="feasibility_study">feasibility_study (സാധ്യതാ പഠനം നടക്കുന്നു)</option>
+                            <option value="budget_allocated">budget_allocated (ബജറ്റ് വകയിരുത്തി)</option>
+                            <option value="closed">closed (തീർപ്പാക്കി)</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="font-bold text-[#1A2420] block mb-1">മറുപടി നൽകുന്ന ഉദ്യോഗസ്ഥൻ</label>
+                          <input
+                            type="text"
+                            value={currentResp.responderName}
+                            onChange={(e) => setProposalResponseInput({
+                              ...proposalResponseInput,
+                              [prop.id]: { ...currentResp, responderName: e.target.value }
+                            })}
+                            className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-white"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="font-bold text-[#1A2420] block mb-1">പദവി (Role/Office)</label>
+                          <input
+                            type="text"
+                            value={currentResp.responderRole}
+                            onChange={(e) => setProposalResponseInput({
+                              ...proposalResponseInput,
+                              [prop.id]: { ...currentResp, responderRole: e.target.value }
+                            })}
+                            className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-white"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="font-bold text-[#1A2420] block mb-1">ഔദ്യോഗിക നഗരസഭാ തീരുമാനം / വിശദീകരണം</label>
+                        <textarea
+                          rows={2}
+                          placeholder="നഗരസഭാ കൗൺസിൽ തീരുമാനം, എഞ്ചിനീയറിംഗ് റിപ്പോർട്ട് അല്ലെങ്കിൽ നടപടിക്രമങ്ങൾ രേഖപ്പെടുത്തുക..."
+                          value={currentResp.response}
+                          onChange={(e) => setProposalResponseInput({
+                            ...proposalResponseInput,
+                            [prop.id]: { ...currentResp, response: e.target.value }
+                          })}
+                          className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-white"
+                        />
+                      </div>
+
+                      <div className="flex justify-end">
+                        <button
+                          type="button"
+                          onClick={() => handleProposalResponseSubmit(prop.id)}
+                          className="px-4 py-2 rounded-xl bg-[#143E2C] hover:bg-[#0D281D] text-white font-bold transition shadow-xs"
+                        >
+                          ഔദ്യോഗിക മറുപടി രേഖപ്പെടുത്തുക ✓
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* TAB: DIGITAL TANUR GIS LOCATIONS & FACILITIES MANAGEMENT */}
+        {/* ========================================================================= */}
+        {activeTab === "locations" && (
+          <div className="space-y-6">
+            <div className="bg-white rounded-3xl border border-[#EAE4D7] p-6 shadow-card flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#1B4D36] text-white">
+                    DIGITAL TANUR GIS
+                  </span>
+                  <span className="text-xs text-[#7A8880] font-semibold">താനൂർ നഗരസഭ ജി.ഐ.എസ് ഭൂപടം</span>
+                </div>
+                <h2 className="text-lg font-bold font-malayalam-serif text-[#1A2420] mt-1">
+                  ഡിജിറ്റൽ താനൂർ പൊതു സ്ഥാപനങ്ങൾ & സേവനങ്ങൾ ({gisLocations.length})
+                </h2>
+                <p className="text-xs text-[#5C6A64] mt-0.5">
+                  താനൂർ നഗരസഭയിലെ ജി.ഐ.എസ് കോർഡിനേറ്റുകൾ, പരിശോധനാ നില, ഔദ്യോഗിക വിവരങ്ങൾ എന്നിവ നിയന്ത്രിക്കുക.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Link
+                  href="/digital-tanur"
+                  target="_blank"
+                  className="px-4 py-2 rounded-xl bg-[#FAF7F0] hover:bg-[#F3EFE6] text-[#143E2C] text-xs font-bold border border-[#DDD5C5] transition flex items-center gap-1.5"
+                >
+                  <span>ലൈവ് മാപ്പ് കാണുക</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => setIsAddLocationOpen(!isAddLocationOpen)}
+                  className="px-4 py-2 rounded-xl bg-[#1B4D36] hover:bg-[#143d2b] text-white text-xs font-bold transition flex items-center gap-1.5 shadow-xs"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>പുതിയ സ്ഥാപനം ചേർക്കുക</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Add Location Form Modal/Card */}
+            {isAddLocationOpen && (
+              <form onSubmit={handleCreateLocationSubmit} className="bg-white rounded-3xl border-2 border-[#1B4D36] p-6 shadow-card space-y-4 animate-in fade-in">
+                <div className="flex items-center justify-between pb-3 border-b border-[#EAE4D7]">
+                  <h3 className="font-bold text-sm text-[#1B4D36] flex items-center gap-2">
+                    <Plus className="w-4 h-4 text-[#C39A5B]" />
+                    <span>പുതിയ ഡിജിറ്റൽ താനൂർ ജി.ഐ.എസ് പോയിന്റ് ചേർക്കുക</span>
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => setIsAddLocationOpen(false)}
+                    className="text-neutral-400 hover:text-neutral-700"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                  <div>
+                    <label className="font-bold text-[#1A2420] block mb-1">സ്ഥാപനത്തിന്റെ പേര് (English) *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Tanur Municipality Office"
+                      value={newLocationForm.name}
+                      onChange={(e) => setNewLocationForm({ ...newLocationForm, name: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0]"
+                    />
+                  </div>
+                  <div>
+                    <label className="font-bold text-[#1A2420] block mb-1">സ്ഥാപനത്തിന്റെ പേര് (മലയാളം) *</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. താനൂർ നഗരസഭാ കാര്യാലയം"
+                      value={newLocationForm.name_ml}
+                      onChange={(e) => setNewLocationForm({ ...newLocationForm, name_ml: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-[#1A2420] block mb-1">വിഭാഗം (Category)</label>
+                    <select
+                      value={newLocationForm.category}
+                      onChange={(e) => {
+                        const catKey = e.target.value as LocationCategoryKey;
+                        const catObj = TANUR_LOCATION_CATEGORIES.find(c => c.key === catKey);
+                        setNewLocationForm({
+                          ...newLocationForm,
+                          category: catKey,
+                          category_name: catObj?.label || "Government Offices",
+                          category_name_ml: catObj?.label_ml || "സർക്കാർ ഓഫീസുകൾ",
+                        });
+                      }}
+                      className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0]"
+                    >
+                      {TANUR_LOCATION_CATEGORIES.map((c) => (
+                        <option key={c.key} value={c.key}>
+                          {c.label_ml} ({c.label})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-[#1A2420] block mb-1">വാർഡ് നമ്പർ (Ward 1-44)</label>
+                    <input
+                      type="number"
+                      min={1}
+                      max={44}
+                      value={newLocationForm.ward_number}
+                      onChange={(e) => setNewLocationForm({ ...newLocationForm, ward_number: Number(e.target.value) })}
+                      className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-[#1A2420] block mb-1">പ്രദേശം (Locality)</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Tanur Town / Harbour"
+                      value={newLocationForm.locality}
+                      onChange={(e) => setNewLocationForm({ ...newLocationForm, locality: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0]"
+                    />
+                  </div>
+                  <div>
+                    <label className="font-bold text-[#1A2420] block mb-1">പ്രദേശം (മലയാളം)</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. താനൂർ ടൗൺ / ഹാർബർ"
+                      value={newLocationForm.locality_ml}
+                      onChange={(e) => setNewLocationForm({ ...newLocationForm, locality_ml: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-[#1A2420] block mb-1">ലാറ്റിറ്റ്യൂഡ് (Latitude: ~10.97)</label>
+                    <input
+                      type="number"
+                      step="0.0001"
+                      value={newLocationForm.latitude}
+                      onChange={(e) => setNewLocationForm({ ...newLocationForm, latitude: parseFloat(e.target.value) })}
+                      className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0]"
+                    />
+                  </div>
+                  <div>
+                    <label className="font-bold text-[#1A2420] block mb-1">ലോഞ്ചിറ്റ്യൂഡ് (Longitude: ~75.86)</label>
+                    <input
+                      type="number"
+                      step="0.0001"
+                      value={newLocationForm.longitude}
+                      onChange={(e) => setNewLocationForm({ ...newLocationForm, longitude: parseFloat(e.target.value) })}
+                      className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="font-bold text-[#1A2420] block mb-1">ഫോൺ നമ്പർ</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 0494 2440228"
+                      value={newLocationForm.phone}
+                      onChange={(e) => setNewLocationForm({ ...newLocationForm, phone: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0]"
+                    />
+                  </div>
+                  <div>
+                    <label className="font-bold text-[#1A2420] block mb-1">പ്രവർത്തന സമയം (Opening Hours)</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 10:00 AM - 5:00 PM"
+                      value={newLocationForm.opening_hours}
+                      onChange={(e) => setNewLocationForm({ ...newLocationForm, opening_hours: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0]"
+                    />
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="font-bold text-[#1A2420] block mb-1">വിവരണം (Description)</label>
+                    <textarea
+                      rows={2}
+                      value={newLocationForm.description}
+                      onChange={(e) => setNewLocationForm({ ...newLocationForm, description: e.target.value, description_ml: e.target.value })}
+                      className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0]"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-2 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsAddLocationOpen(false)}
+                    className="px-4 py-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-[#1A2420] text-xs font-semibold"
+                  >
+                    റദ്ദാക്കുക
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-5 py-2 rounded-xl bg-[#1B4D36] hover:bg-[#143d2b] text-white text-xs font-bold shadow-xs"
+                  >
+                    സ്ഥാപനം സൂചികയിൽ ചേർക്കുക ✓
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* Filter & Search Bar */}
+            <div className="bg-white rounded-3xl border border-[#EAE4D7] p-4 shadow-card flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+              <div className="relative w-full sm:w-72">
+                <Search className="w-4 h-4 text-[#7A8880] absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="സ്ഥാപനമോ പ്രദേശമോ തിരയുക..."
+                  value={locationSearchFilter}
+                  onChange={(e) => setLocationSearchFilter(e.target.value)}
+                  className="w-full pl-9 pr-3 py-2 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0]"
+                />
+              </div>
+
+              <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto scrollbar-none">
+                <button
+                  type="button"
+                  onClick={() => setLocationCategoryFilter("all")}
+                  className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap ${
+                    locationCategoryFilter === "all" ? "bg-[#1B4D36] text-white" : "bg-[#FAF7F0] text-[#5C6A64]"
+                  }`}
+                >
+                  എല്ലാം ({gisLocations.length})
+                </button>
+                {TANUR_LOCATION_CATEGORIES.map((c) => (
+                  <button
+                    key={c.key}
+                    type="button"
+                    onClick={() => setLocationCategoryFilter(c.key as LocationCategoryKey)}
+                    className={`px-3 py-1.5 rounded-xl font-semibold whitespace-nowrap ${
+                      locationCategoryFilter === c.key ? "bg-[#1B4D36] text-white" : "bg-[#FAF7F0] text-[#5C6A64]"
+                    }`}
+                  >
+                    {c.label_ml}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Locations List */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {gisLocations
+                .filter((loc) => {
+                  if (locationCategoryFilter !== "all" && loc.category !== locationCategoryFilter) return false;
+                  if (locationSearchFilter.trim()) {
+                    const q = locationSearchFilter.toLowerCase();
+                    return (
+                      loc.name.toLowerCase().includes(q) ||
+                      loc.name_ml.toLowerCase().includes(q) ||
+                      loc.locality.toLowerCase().includes(q) ||
+                      loc.locality_ml.toLowerCase().includes(q)
+                    );
+                  }
+                  return true;
+                })
+                .map((loc) => {
+                  const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${loc.latitude},${loc.longitude}`;
+
+                  return (
+                    <div
+                      key={loc.id}
+                      className="bg-white rounded-2xl border border-[#EAE4D7] p-5 shadow-card flex flex-col justify-between"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between gap-2 mb-2">
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-[#1B4D36]/10 text-[#1B4D36]">
+                            {loc.category_name_ml}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => handleToggleLocationVerification(loc.id, loc.is_verified)}
+                            className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 transition ${
+                              loc.is_verified
+                                ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
+                                : "bg-neutral-100 text-neutral-600 hover:bg-emerald-50"
+                            }`}
+                          >
+                            <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                            <span>{loc.is_verified ? "Verified ✓" : "Unverified"}</span>
+                          </button>
+                        </div>
+
+                        <h4 className="font-bold text-sm text-[#1A2420] font-malayalam-serif">
+                          {loc.name_ml}
+                        </h4>
+                        <div className="text-[11px] text-[#5C6A64]">{loc.name}</div>
+
+                        <div className="mt-3 space-y-1 text-xs text-[#5C6A64]">
+                          <div>📍 വാർഡ് {loc.ward_number || "-"}: {loc.locality_ml}</div>
+                          <div className="font-mono text-[11px]">🌐 {loc.latitude.toFixed(4)}, {loc.longitude.toFixed(4)}</div>
+                          {loc.phone && <div>📞 {loc.phone}</div>}
+                          {loc.opening_hours && <div>🕒 {loc.opening_hours}</div>}
+                        </div>
+
+                        <div className="mt-2.5 pt-2 border-t border-[#F3EFE6] text-[10px] text-[#7A8880] flex items-center justify-between">
+                          <span>ഉറവിടം: {loc.source_name}</span>
+                          <span>{loc.last_verified_date}</span>
+                        </div>
+                      </div>
+
+                      <div className="mt-4 pt-3 border-t border-[#F3EFE6] flex items-center justify-between gap-2">
+                        <a
+                          href={directionsUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs font-bold text-[#1B4D36] hover:text-[#C39A5B] flex items-center gap-1"
+                        >
+                          <Navigation className="w-3.5 h-3.5" />
+                          <span>റൂട്ട് പരിശോധിക്കുക</span>
+                        </a>
+
+                        <button
+                          type="button"
+                          onClick={() => handleToggleLocationVerification(loc.id, loc.is_verified)}
+                          className="text-xs font-semibold px-2.5 py-1 rounded-lg bg-[#FAF7F0] hover:bg-[#F3EFE6] text-[#143E2C] border border-[#DDD5C5]"
+                        >
+                          {loc.is_verified ? "പരിശോധന റദ്ദാക്കുക" : "പരിശോധിച്ചുറപ്പിക്കുക"}
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
           </div>
         )}
 

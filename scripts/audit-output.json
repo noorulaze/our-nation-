@@ -1,0 +1,259 @@
+{
+  "wards": [
+    {
+      "id": "01",
+      "number": 1,
+      "name": "Rayirimangalam East",
+      "name_ml": "രായിരിമംഗലം ഈസ്റ്റ്",
+      "councillor": "Ward Councillor",
+      "councillor_ml": "വാർഡ് കൗൺസിലർ",
+      "contact": "0494 2440228 (Municipality Office)",
+      "population": 1620,
+      "lat": 10.9782,
+      "lng": 75.8742
+    },
+    {
+      "id": "02",
+      "number": 2,
+      "name": "Rayirimangalam West",
+      "name_ml": "രായിരിമംഗലം വെസ്റ്റ്",
+      "councillor": "Ward Councillor",
+      "councillor_ml": "വാർഡ് കൗൺസിലർ",
+      "contact": "0494 2440228",
+      "population": 1540,
+      "lat": 10.9765,
+      "lng": 75.871
+    },
+    {
+      "id": "03",
+      "number": 3,
+      "name": "Theeradesham (Beach Road North)",
+      "name_ml": "തീരദേശം (ബീച്ച് റോഡ് നോർത്ത്)",
+      "councillor": "Ward Councillor",
+      "councillor_ml": "വാർഡ് കൗൺസിലർ",
+      "contact": "0494 2440228",
+      "population": 1850,
+      "lat": 10.973,
+      "lng": 75.856
+    },
+    {
+      "id": "04",
+      "number": 4,
+      "name": "Harbour Central",
+      "name_ml": "ഹാർബർ സെൻട്രൽ",
+      "councillor": "Ward Councillor",
+      "councillor_ml": "വാർഡ് കൗൺസിലർ",
+      "contact": "0494 2440228",
+      "population": 1980,
+      "lat": 10.9715,
+      "lng": 75.8545
+    },
+    {
+      "id": "05",
+      "number": 5,
+      "name": "Tanur Town Central",
+      "name_ml": "താനൂർ ടൗൺ സെൻട്രൽ",
+      "councillor": "Ward Councillor",
+      "councillor_ml": "വാർഡ് കൗൺസിലർ",
+      "contact": "0494 2440228",
+      "population": 1720,
+      "lat": 10.976,
+      "lng": 75.867
+    },
+    {
+      "id": "06",
+      "number": 6,
+      "name": "Valiya Kulangara",
+      "name_ml": "വലിയ കുളങ്ങര",
+      "councillor": "Ward Councillor",
+      "councillor_ml": "വാർഡ് കൗൺസിലർ",
+      "contact": "0494 2440228",
+      "population": 1610,
+      "lat": 10.979,
+      "lng": 75.8695
+    },
+    {
+      "id": "07",
+      "number": 7,
+      "name": "Kettungal",
+      "name_ml": "കെട്ടുങ്ങൽ",
+      "councillor": "Ward Councillor",
+      "councillor_ml": "വാർഡ് കൗൺസിലർ",
+      "contact": "0494 2440228",
+      "population": 1750,
+      "lat": 10.982,
+      "lng": 75.8715
+    },
+    {
+      "id": "08",
+      "number": 8,
+      "name": "Moolakkal",
+      "name_ml": "മൂലക്കൽ",
+      "councillor": "Ward Councillor",
+      "councillor_ml": "വാർഡ് കൗൺസിലർ",
+      "contact": "0494 2440228",
+      "population": 1590,
+      "lat": 10.985,
+      "lng": 75.868
+    },
+    {
+      "id": "09",
+      "number": 9,
+      "name": "Pandiyashala",
+      "name_ml": "പാണ്ഡ്യശാല",
+      "councillor": "Ward Councillor",
+      "councillor_ml": "വാർഡ് കൗൺസിലർ",
+      "contact": "0494 2440228",
+      "population": 1680,
+      "lat": 10.981,
+      "lng": 75.864
+    },
+    {
+      "id": "10",
+      "number": 10,
+      "name": "Puthentheru",
+      "name_ml": "പുത്തൻതെരു",
+      "councillor": "Ward Councillor",
+      "councillor_ml": "വാർഡ് കൗൺസിലർ",
+      "contact": "0494 2440228",
+      "population": 1740,
+      "lat": 10.974,
+      "lng": 75.865
+    },
+    {
+      "id": "11",
+      "number": 11,
+      "name": "Meenadathur",
+      "name_ml": "മീനടത്തൂർ",
+      "councillor": "Ward Councillor",
+      "councillor_ml": "വാർഡ് കൗൺസിലർ",
+      "contact": "0494 2440228",
+      "population": 1530,
+      "lat": 10.969,
+      "lng": 75.8685
+    },
+    {
+      "id": "12",
+      "number": 12,
+      "name": "Thavalakkulam",
+      "name_ml": "തവളക്കുളം",
+      "councillor": "Ward Councillor",
+      "councillor_ml": "വാർഡ് കൗൺസിലർ",
+      "contact": "0494 2440228",
+      "population": 1480,
+      "lat": 10.971,
+      "lng": 75.872
+    },
+    {
+      "id": "13",
+      "number": 13,
+      "name": "Keraladheeshwarapuram East",
+      "name_ml": "കേരളാധീശ്വരപുരം ഈസ്റ്റ്",
+      "councillor": "Ward Councillor",
+      "councillor_ml": "വാർഡ് കൗൺസിലർ",
+      "contact": "0494 2440228",
+      "population": 1590,
+      "lat": 10.965,
+      "lng": 75.874
+    },
+    {
+      "id": "14",
+      "number": 14,
+      "name": "Keraladheeshwarapuram West",
+      "name_ml": "കേരളാധീശ്വരപുരം വെസ്റ്റ്",
+      "councillor": "Ward Councillor",
+      "councillor_ml": "വാർഡ് കൗൺസിലർ",
+      "contact": "0494 2440228",
+      "population": 1520,
+      "lat": 10.9635,
+      "lng": 75.87
+    },
+    {
+      "id": "15",
+      "number": 15,
+      "name": "Chiramangalam",
+      "name_ml": "ചിറമംഗലം",
+      "councillor": "Ward Councillor",
+      "councillor_ml": "വാർഡ് കൗൺസിലർ",
+      "contact": "0494 2440228",
+      "population": 1640,
+      "lat": 10.961,
+      "lng": 75.867
+    }
+  ],
+  "locations": [],
+  "projects": [],
+  "services": [],
+  "docs": [
+    {
+      "id": "doc-council-2024-08",
+      "title": "Tanur Municipal Ordinary Council Meeting Decisions - Resolution Record",
+      "title_ml": "താനൂർ നഗരസഭ സാധാരണ കൗൺസിൽ യോഗ തീരുമാനങ്ങൾ - പ്രമേയ രേഖ",
+      "category": "council_decisions",
+      "authority": "Council Secretariat, Tanur Municipality",
+      "date": "2024-10-18",
+      "ref": "TNR/C1/2024-RES-42",
+      "url": "https://tanurmunicipality.lsgkerala.gov.in/"
+    },
+    {
+      "id": "doc-budget-2024-25",
+      "title": "Tanur Municipality Annual Budget & Development Plan Summary",
+      "title_ml": "താനൂർ നഗരസഭ വാർഷിക ബജറ്റും വികസന പദ്ധതി രേഖയും",
+      "category": "budget_finance",
+      "authority": "Standing Committee for Finance, Tanur Municipality",
+      "date": "2024-03-26",
+      "ref": "TNR/FIN/2024-25/BUD-01",
+      "url": "https://tanurmunicipality.lsgkerala.gov.in/"
+    },
+    {
+      "id": "doc-tender-2024-drainage",
+      "title": "E-Tender Notice: Construction of Storm Water Drainage in Rayirimangalam - Town Corridor",
+      "title_ml": "ഇ-ടെണ്ടർ വിജ്ഞാപനം: രയിരിമംഗലം - ടൗൺ കോറിഡോർ മഴവെള്ള ഡ്രെയിനേജ് നിർമ്മാണം",
+      "category": "tenders_procurement",
+      "authority": "Assistant Executive Engineer, LID & EW Wing, Tanur Municipality",
+      "date": "2024-11-04",
+      "ref": "TNR/EW/TEND/2024/09",
+      "url": "https://etenders.kerala.gov.in/"
+    },
+    {
+      "id": "doc-notice-crz-guidelines",
+      "title": "Public Notification: Coastal Regulation Zone (CRZ) Compliance for Building Permits",
+      "title_ml": "പൊതു വിജ്ഞാപനം: തീരദേശ പരിപാലന നിയമ (CRZ) മാനദണ്ഡങ്ങൾ പാലിക്കുന്നത് സംബന്ധിച്ച്",
+      "category": "public_notices",
+      "authority": "Secretary, Tanur Municipality",
+      "date": "2024-09-12",
+      "ref": "TNR/PW/CRZ/2024-11",
+      "url": "https://tanurmunicipality.lsgkerala.gov.in/"
+    },
+    {
+      "id": "doc-form-birth-correction",
+      "title": "Application Form: Correction in Birth / Death Register Records",
+      "title_ml": "അപേക്ഷാ ഫോറം: ജനന-മരണ രജിസ്റ്ററിലെ വിവരങ്ങൾ തിരുത്തുന്നതിന്",
+      "category": "citizen_forms",
+      "authority": "Chief Registrar of Births and Deaths, Kerala & Tanur Municipality",
+      "date": "2024-01-15",
+      "ref": "K-SMART-CR-FORM-08",
+      "url": "https://ksmart.lsgkerala.gov.in/"
+    },
+    {
+      "id": "doc-go-lsgd-waste-rules",
+      "title": "Government Order (G.O. MS No. 112/2023/LSGD): User Fee Collection for Solid Waste Management",
+      "title_ml": "സർക്കാർ ഉത്തരവ് (G.O. MS 112/2023/LSGD): അജൈവ മാലിന്യ ശേഖരണ യൂസർ ഫീ സംബന്ധിച്ച്",
+      "category": "government_orders",
+      "authority": "Local Self Government Department, Government of Kerala",
+      "date": "2023-08-14",
+      "ref": "G.O.(Ms) No.112/2023/LSGD",
+      "url": "https://lsgkerala.gov.in/"
+    },
+    {
+      "id": "doc-plan-master-2035",
+      "title": "Tanur Municipality Perspective Master Plan & Land Use Zonation",
+      "title_ml": "താനൂർ നഗരസഭ സമഗ്ര മാസ്റ്റർ പ്ലാനും ഭൂവിനിയോഗ രേഖയും",
+      "category": "development_plans",
+      "authority": "Department of Town and Country Planning, Government of Kerala",
+      "date": "2023-12-20",
+      "ref": "TCP/MLP/TNR/MP-2035",
+      "url": "https://tanurmunicipality.lsgkerala.gov.in/"
+    }
+  ]
+}

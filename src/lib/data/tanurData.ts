@@ -346,7 +346,7 @@ export const TANUR_CORE_FACTS = {
   census2011: {
     censusYear: "2011",
     areaKm2: "19.49 sq. km",
-    electoralWards: "45",
+    electoralWards: "44",
     totalPopulation: "69,534",
     malePopulation: "33,301",
     femalePopulation: "36,233",
@@ -356,7 +356,7 @@ export const TANUR_CORE_FACTS = {
     note: "All figures represent official 2011 Census of India records published by Tanur Municipality and the Directorate of Census Operations, Kerala. They should not be conflated with current-day population projections.",
   },
   administrativeDistinction: {
-    municipality: "Tanur Municipality (താനൂർ നഗരസഭ) - Formed on 1 November 2015. Covers 19.49 sq. km across 45 municipal wards.",
+    municipality: "Tanur Municipality (താനൂർ നഗരസഭ) - Formed on 1 November 2015. Covers 19.49 sq. km across 44 municipal wards.",
     blockPanchayat: "Tanur Block Panchayat (താനൂർ ബ്ലോക്ക് പഞ്ചായത്ത്) - A separate rural development jurisdiction governing surrounding panchayats including Ozhur, Ponmundam, Thanalur, Niramaruthur, and Cheriyamundam. Do not combine their population or geographical information.",
   },
   etymology: {

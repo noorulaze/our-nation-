@@ -4,6 +4,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { Profile, UserRole, PreferredLanguage } from "@/types/database";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 import { initialProfiles } from "@/lib/data/initialData";
+import { store } from "@/lib/data/store";
 
 interface AuthContextType {
   user: Profile | null;
@@ -13,15 +14,16 @@ interface AuthContextType {
   login: (email: string, password?: string) => Promise<{ success: boolean; error?: string }>;
   register: (data: { email: string; password?: string; username: string; displayName: string; preferredLanguage?: PreferredLanguage }) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
-  switchUserRole: (role: UserRole) => void;
   updateProfile: (updates: Partial<Profile>) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  // Default to demo admin profile for seamless inspection and full administrative access out of the box
-  const [user, setUser] = useState<Profile | null>(initialProfiles[0]);
+  // SECURITY: Default session operates under Principle of Least Privilege:
+  // Standard citizen profile ("fathima_tanur", role: "user").
+  // Admin permissions require authenticating with administrative credentials.
+  const [user, setUser] = useState<Profile | null>(initialProfiles[2] || initialProfiles[0]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -31,7 +33,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         try {
           const parsed = JSON.parse(savedUser);
           if (parsed && parsed.id) {
-            setUser(parsed);
+            // SECURITY: Cross-check role against authoritative store to prevent client-side localStorage tampering
+            const authoritative = store.getProfileById(parsed.id);
+            if (authoritative) {
+              setUser({
+                ...parsed,
+                role: authoritative.role, // Enforce role from backend/store
+              });
+            } else {
+              setUser({
+                ...parsed,
+                role: parsed.role || "user",
+              });
+            }
           }
         } catch {
           // ignore
@@ -68,17 +82,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return { success: true };
       }
 
-      // Offline / Local Mode: Match profile by username or create demo profile
-      const found = initialProfiles.find(p => p.username.toLowerCase() === email.split("@")[0].toLowerCase());
+      // Offline / Local Mode: Match profile by username or email prefix
+      const usernameQuery = email.split("@")[0].toLowerCase();
+      const found = store.getProfiles().find(p => p.username.toLowerCase() === usernameQuery);
+      
       const selected = found || {
         id: "u-" + Date.now(),
         username: email.split("@")[0],
         display_name: email.split("@")[0],
         preferred_language: "ml" as PreferredLanguage,
-        role: "user" as UserRole,
+        role: "user" as UserRole, // Regular user by default
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       };
+      
       setUser(selected);
       localStorage.setItem("nammude_naadu_user", JSON.stringify(selected));
       setIsLoading(false);
@@ -111,6 +128,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       }
 
+      // All newly registered accounts strictly receive standard 'user' role
       const newProfile: Profile = {
         id: "u-" + Date.now(),
         username: data.username,
@@ -135,21 +153,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const supabase = createClient();
       await supabase.auth.signOut();
     }
-    setUser(null);
+    // Return to default unprivileged citizen profile
+    setUser(initialProfiles[2] || null);
     localStorage.removeItem("nammude_naadu_user");
-  };
-
-  const switchUserRole = (newRole: UserRole) => {
-    if (user) {
-      const updated = { ...user, role: newRole };
-      setUser(updated);
-      localStorage.setItem("nammude_naadu_user", JSON.stringify(updated));
-    }
   };
 
   const updateProfile = async (updates: Partial<Profile>) => {
     if (user) {
-      const updated = { ...user, ...updates, updated_at: new Date().toISOString() };
+      // SECURITY: Strip and disallow any attempt to self-modify the 'role' field
+      const { role: _forbiddenRole, ...safeUpdates } = updates as any;
+      store.updateProfile(user.id, safeUpdates);
+      const updated = { 
+        ...user, 
+        ...safeUpdates, 
+        role: user.role, // Guarantee immutable role retention
+        updated_at: new Date().toISOString() 
+      };
       setUser(updated);
       localStorage.setItem("nammude_naadu_user", JSON.stringify(updated));
     }
@@ -165,7 +184,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         login,
         register,
         logout,
-        switchUserRole,
         updateProfile,
       }}
     >

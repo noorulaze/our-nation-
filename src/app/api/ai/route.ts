@@ -10,6 +10,9 @@ import {
   TANUR_INSTITUTIONS, 
   TANUR_CULTURE_ITEMS 
 } from "@/lib/data/tanurData";
+import { digitalMunicipalityStore } from "@/lib/data/digitalMunicipalityData";
+import { jobStore } from "@/lib/data/jobsData";
+import { marketplaceStore } from "@/lib/data/marketplaceData";
 
 export async function POST(req: NextRequest) {
   try {
@@ -96,7 +99,55 @@ export async function POST(req: NextRequest) {
       });
     });
 
-    // 2b. Add Tanur Comprehensive Grounded Profile Records
+    // 2a. Add Tanur Municipal Development Projects
+    digitalMunicipalityStore.getProjects().forEach(p => {
+      contextItems.push({
+        type: "announcement",
+        id: p.id,
+        title: `${p.title} (${p.title_ml})`,
+        details: `Category: ${p.category_name}, Locality: ${p.locality || 'Tanur'}, Ward: ${p.ward_number || 'Municipality Wide'}, Status: ${p.status}, Sanctioned Budget: ${p.budget_sanctioned}, Progress: ${p.progress_percentage ?? p.completion_percentage ?? 0}%, Department: ${p.department}, Description: ${p.description}`,
+        link: `/development/projects/${p.id}`,
+        isVerified: true,
+      });
+    });
+
+    // 2b. Add People's Voice Citizen Proposals
+    digitalMunicipalityStore.getProposals().forEach(pr => {
+      contextItems.push({
+        type: "announcement",
+        id: pr.id,
+        title: `${pr.title} (${pr.title_ml})`,
+        details: `Category: ${pr.category_name_ml || pr.category_ml || pr.category}, Ward: ${pr.ward_number || 'Tanur'}, Status: ${pr.status}, Supporters: ${pr.support_count}, Benefit: ${pr.expected_benefit || pr.summary}, Description: ${pr.description || pr.details}`,
+        link: `/peoples-voice/ideas/${pr.id}`,
+        isVerified: true,
+      });
+    });
+
+    // 2c. Add Verified Local Jobs & Opportunities
+    jobStore.getJobs().forEach(j => {
+      contextItems.push({
+        type: "business",
+        id: j.id,
+        title: `${j.title} (${j.title_ml}) - ${j.company}`,
+        details: `Category: ${j.category_ml}, Locality: ${j.locality}, Salary: ${j.salary_range}, Type: ${j.job_type_ml}, Phone: ${j.contact_phone}`,
+        link: `/jobs`,
+        isVerified: j.is_verified_employer,
+      });
+    });
+
+    // 2d. Add Buy & Sell Marketplace Items
+    marketplaceStore.getItems().forEach(m => {
+      contextItems.push({
+        type: "business",
+        id: m.id,
+        title: `${m.title} (${m.title_ml}) - ${m.price}`,
+        details: `Category: ${m.category_ml}, Locality: ${m.locality}, Condition: ${m.condition_ml}, Phone: ${m.seller_phone}`,
+        link: `/marketplace`,
+        isVerified: m.is_verified_seller,
+      });
+    });
+
+    // 2e. Add Tanur Comprehensive Grounded Profile Records
     TANUR_PLACES.forEach(p => {
       contextItems.push({
         type: "place",

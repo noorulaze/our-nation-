@@ -25,83 +25,94 @@ export function Footer() {
           <div className="lg:col-span-2 space-y-4">
             <KeralaLogo variant="dark" showSubtext={true} />
             <p className="text-xs text-[#98A8A0] leading-relaxed max-w-sm mt-3">
-              കേരളത്തിന്റെ സാംസ്കാരിക പൈതൃകവും, പ്രാദേശിക കൂട്ടായ്മകളും, തദ്ദേശീയ സേവനങ്ങളും ഒരുമിപ്പിക്കുന്ന സമഗ്ര ജനകീയ ഡിജിറ്റൽ വേദി.
+              താനൂർ നഗരസഭയിലെ പൗരന്മാർക്കായി വികസിപ്പിച്ച സമഗ്ര ഡിജിറ്റൽ മുൻസിപ്പാലിറ്റി പ്ലാറ്റ്‌ഫോം. വാർഡുകൾ, പൗര സേവനങ്ങൾ, വികസന പദ്ധതികൾ, പരാതി പരിഹാരം എന്നിവ ഒരൊറ്റ കുടക്കീഴിൽ.
             </p>
+            <div className="p-3 rounded-2xl bg-white/5 border border-white/10 text-[11px] text-[#A2B2AA] space-y-1 max-w-sm">
+              <span className="font-bold text-amber-300 block">സ്വതന്ത്ര സിവിക് പ്ലാറ്റ്‌ഫോം (Independent Platform)</span>
+              <p className="leading-relaxed">
+                ഔർ നേഷൻ (OUR NATION) താനൂർ നഗരസഭയിലെ പൗരന്മാർക്കായുള്ള സ്വതന്ത്ര സിവിക് ടെക്നോളജി പ്ലാറ്റ്‌ഫോമാണ്. ഇത് സർക്കാരിന്റെ ഔദ്യോഗിക പോർട്ടലല്ല. ഔദ്യോഗിക നടപടികൾക്ക് K-Smart പോർട്ടൽ സന്ദർശിക്കുക.
+              </p>
+            </div>
           </div>
 
-          {/* Column 1: പ്രധാന ലിങ്കുകൾ */}
+          {/* Column 1: ആറ് പ്രധാന സേവനങ്ങൾ (Six Core Features) */}
           <div>
             <h4 className="text-sm font-bold text-white mb-4 font-malayalam-serif tracking-wide">
-              പ്രധാന ലിങ്കുകൾ
+              പ്രധാന സേവനങ്ങൾ
             </h4>
             <ul className="space-y-2.5 text-xs text-[#A2B2AA]">
               <li>
-                <Link href="/" className="hover:text-amber-300 transition">
-                  മുഖ്യ പേജ് (Home)
+                <Link href="/digital-municipality" className="hover:text-amber-300 transition">
+                  ഡിജിറ്റൽ നഗരസഭ (Digital Municipality)
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="hover:text-amber-300 transition">
-                  നമ്മുടെ നാട് (About Us)
+                <Link href="/civic-connect" className="hover:text-amber-300 transition">
+                  സിവിക് കണക്ട് (Civic Connect)
                 </Link>
               </li>
               <li>
-                <Link href="/news" className="hover:text-amber-300 transition">
-                  വാർത്തകൾ (News)
+                <Link href="/development-tracker" className="hover:text-amber-300 transition">
+                  വികസന ട്രാക്കർ (Development Tracker)
                 </Link>
               </li>
               <li>
-                <Link href="/culture" className="hover:text-amber-300 transition">
-                  സംസ്കാരം (Culture)
+                <Link href="/public-services" className="hover:text-amber-300 transition">
+                  പൗര സേവനങ്ങൾ (Public Services)
                 </Link>
               </li>
               <li>
-                <Link href="/education" className="hover:text-amber-300 transition">
-                  വിദ്യാഭ്യാസം (Education)
+                <Link href="/documents" className="hover:text-amber-300 transition">
+                  രേഖകളും ഉത്തരവുകളും (Documents)
+                </Link>
+              </li>
+              <li>
+                <Link href="/peoples-voice" className="hover:text-amber-300 transition">
+                  ജനകീയ ശബ്ദം (People&apos;s Voice)
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 2: കൂടുതൽ */}
+          {/* Column 2: നഗരസഭ വിവരങ്ങൾ & സഹായം */}
           <div>
             <h4 className="text-sm font-bold text-white mb-4 font-malayalam-serif tracking-wide">
-              കൂടുതൽ
+              വിവരങ്ങൾ &amp; ലിങ്കുകൾ
             </h4>
             <ul className="space-y-2.5 text-xs text-[#A2B2AA]">
               <li>
-                <Link href="/events" className="hover:text-amber-300 transition">
-                  പരിപാടികൾ (Events)
+                <Link href="/about" className="hover:text-amber-300 transition">
+                  പ്ലാറ്റ്‌ഫോമിനെക്കുറിച്ച് (About Us)
                 </Link>
               </li>
               <li>
-                <Link href="/gallery" className="hover:text-amber-300 transition">
-                  ഗാലറി (Gallery)
-                </Link>
+                <a 
+                  href="https://ksmart.lsgkerala.gov.in" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="hover:text-amber-300 transition flex items-center gap-1 text-amber-200/90 font-medium"
+                >
+                  <span>K-Smart കേരള പോർട്ടൽ</span>
+                </a>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-amber-300 transition">
-                  ബന്ധപ്പെടുക (Contact)
-                </Link>
-              </li>
-              <li>
-                <Link href="/community" className="hover:text-amber-300 transition">
-                  കമ്മ്യൂണിറ്റി ഫോറം
-                </Link>
-              </li>
-              <li>
-                <Link href="/profile" className="hover:text-amber-300 transition">
-                  ഉപയോഗ നിബന്ധനകൾ
-                </Link>
-              </li>
-              <li>
-                <Link href="/politics/pk-navas" className="hover:text-amber-300 transition text-amber-200/90 font-medium">
-                  ജനപ്രതിനിധികൾ (MLA Profile)
-                </Link>
+                <a 
+                  href="https://tanurmunicipality.lsgkerala.gov.in" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="hover:text-amber-300 transition flex items-center gap-1"
+                >
+                  <span>താനൂർ നഗരസഭാ പോർട്ടൽ</span>
+                </a>
               </li>
               <li>
                 <Link href="/ai" className="hover:text-amber-300 transition text-amber-300">
-                  നാട് AI സഹായി
+                  നാട് AI സഹായി (Naadu AI)
+                </Link>
+              </li>
+              <li>
+                <Link href="/admin" className="hover:text-amber-300 transition">
+                  അഡ്മിൻ പോർട്ടൽ (Admin Desk)
                 </Link>
               </li>
             </ul>

@@ -1,0 +1,408 @@
+/**
+ * Digital Municipality Data Types
+ * Prepared for multi-municipality architecture (starting with Tanur Municipality)
+ */
+
+export type ProjectCategory = 
+  | 'roads_transport'
+  | 'water_drainage'
+  | 'waste_management'
+  | 'education'
+  | 'healthcare'
+  | 'public_facilities'
+  | 'environment'
+  | 'streetlights'
+  | 'community_infrastructure'
+  | 'other'
+  // Backward compatibility keys
+  | 'infrastructure'
+  | 'fisheries_harbour'
+  | 'water_sanitation'
+  | 'sports_youth'
+  | 'tourism_culture'
+  | 'environment_coastal'
+  | 'facilities';
+
+export type ProjectStatus = 
+  | 'Proposed' 
+  | 'Announced' 
+  | 'Approved' 
+  | 'In Progress' 
+  | 'Completed' 
+  | 'Delayed' 
+  | 'On Hold';
+
+export type InformationSourceType = 
+  | 'official_published' 
+  | 'admin_entered' 
+  | 'community_submitted';
+
+export type MilestoneType = 
+  | 'announcement' 
+  | 'approval' 
+  | 'commencement' 
+  | 'progress' 
+  | 'inspection' 
+  | 'completion';
+
+export interface DevelopmentProgressUpdate {
+  id: string;
+  project_id: string;
+  date: string;
+  title: string;
+  title_ml: string;
+  note: string;
+  note_ml: string;
+  update_type?: MilestoneType;
+  evidence_url?: string;
+  source_name?: string;
+  source_url?: string;
+  photographs?: string[];
+  verified_by: string;
+  created_at: string;
+}
+
+export interface ProjectSourceDocument {
+  id: string;
+  title: string;
+  title_ml?: string;
+  url: string;
+  document_type: 'gazette' | 'order' | 'tender' | 'press_release' | 'inspection_report' | 'other';
+  published_date: string;
+  publisher: string;
+}
+
+export interface DevelopmentProject {
+  id: string;
+  municipality_id: string;
+  municipality_name: string;
+  municipality_name_ml: string;
+  ward_number?: number;
+  ward_name?: string;
+  ward_name_ml?: string;
+  locality?: string;
+  locality_ml?: string;
+  title: string;
+  title_ml: string;
+  description: string;
+  description_ml: string;
+  category: ProjectCategory;
+  category_name: string;
+  category_name_ml: string;
+  department: string;
+  department_ml: string;
+  official_source_name: string;
+  official_source_url: string;
+  source_type?: InformationSourceType;
+  budget_sanctioned: string; // e.g. "₹42.50 Cr" or "Information not available"
+  announcement_date: string;
+  approval_date?: string;
+  start_date?: string;
+  expected_completion_date?: string;
+  status: ProjectStatus;
+  progress_percentage?: number; // Strictly when verified/supported by recorded data
+  completion_percentage?: number; // Compatibility alias
+  project_image: string;
+  project_images?: string[];
+  latitude?: number;
+  longitude?: number;
+  contractor_name?: string;
+  is_verified: boolean;
+  last_verified_date: string;
+  source_documents?: ProjectSourceDocument[];
+  progress_updates: DevelopmentProgressUpdate[];
+  is_archived?: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export type ContributionType = 
+  | 'suggest_project' 
+  | 'submit_info' 
+  | 'submit_photo' 
+  | 'report_outdated' 
+  | 'ask_question';
+
+export type ContributionStatus = 'pending' | 'approved' | 'rejected';
+
+export interface ProjectContribution {
+  id: string;
+  project_id?: string;
+  project_title?: string;
+  type: ContributionType;
+  author_name: string;
+  author_phone?: string;
+  author_email?: string;
+  title: string;
+  details: string;
+  evidence_url?: string;
+  photo_url?: string;
+  locality?: string;
+  ward_number?: number;
+  status: ContributionStatus;
+  admin_notes?: string;
+  reviewed_by?: string;
+  reviewed_at?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ProjectAuditLog {
+  id: string;
+  project_id: string;
+  action: 'created' | 'updated' | 'status_changed' | 'milestone_added' | 'verified' | 'archived';
+  actor_name: string;
+  actor_role: string;
+  previous_value?: string;
+  new_value?: string;
+  note?: string;
+  timestamp: string;
+}
+
+export type ProposalCategory = 
+  | 'infrastructure'
+  | 'roads_traffic'
+  | 'waste_cleanliness'
+  | 'youth_sports'
+  | 'women_welfare'
+  | 'heritage_tourism'
+  | 'fisheries_coastal'
+  | 'education_skills';
+
+export type ProposalStatus = 
+  | 'submitted'
+  | 'community_supported'
+  | 'under_municipal_review'
+  | 'feasibility_study'
+  | 'budget_allocated'
+  | 'closed'
+  | 'Under Review'
+  | 'Submitted'
+  | 'In Progress'
+  | 'Completed';
+
+export interface ProposalComment {
+  id: string;
+  proposal_id: string;
+  author_id: string;
+  author_name: string;
+  content: string;
+  is_official: boolean;
+  official_designation?: string;
+  created_at: string;
+}
+
+export interface CitizenProposal {
+  id: string;
+  tracking_id: string;
+  municipality_id: string;
+  author_id: string;
+  author_name: string;
+  author_avatar?: string;
+  ward_number?: number;
+  locality: string;
+  locality_ml: string;
+  title: string;
+  title_ml: string;
+  summary: string;
+  summary_ml: string;
+  details: string;
+  details_ml: string;
+  description?: string;
+  expected_benefit?: string;
+  category: ProposalCategory;
+  category_name: string;
+  category_name_ml: string;
+  category_ml?: string;
+  status: ProposalStatus;
+  support_count: number;
+  supported_by_user?: boolean;
+  comments_count: number;
+  comments: ProposalComment[];
+  official_response?: string;
+  official_response_date?: string;
+  official_responder_name?: string;
+  official_responder_role?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MunicipalWard {
+  id: string;
+  ward_number: number;
+  name: string;
+  name_ml: string;
+  ward_name?: string;
+  ward_name_ml?: string;
+  municipality_id: string;
+  councillor_name: string;
+  councillor_name_ml: string;
+  councillor_contact?: string;
+  key_localities: string[];
+  key_localities_ml: string[];
+  population_approx: number;
+  active_issues_count: number;
+  active_projects_count: number;
+  latitude: number;
+  longitude: number;
+}
+
+export type LocationCategoryKey = 
+  | 'government'
+  | 'education'
+  | 'health'
+  | 'facilities'
+  | 'religious_cultural'
+  | 'tourism'
+  | 'transport'
+  | 'business';
+
+export type FacilityCategoryKey = 
+  | 'health'
+  | 'education'
+  | 'harbour'
+  | 'akshaya'
+  | 'mcf'
+  | 'emergency'
+  | 'civic';
+
+export interface DigitalTanurLocation {
+  id: string;
+  name: string;
+  name_ml: string;
+  category: LocationCategoryKey;
+  category_name: string;
+  category_name_ml: string;
+  facility_category?: FacilityCategoryKey;
+  ward_number?: number;
+  ward_name?: string;
+  ward_name_ml?: string;
+  locality: string;
+  locality_ml: string;
+  address: string;
+  address_ml?: string;
+  latitude: number;
+  longitude: number;
+  phone?: string;
+  emergency_phone?: string;
+  website?: string;
+  opening_hours?: string;
+  opening_hours_ml?: string;
+  description: string;
+  description_ml: string;
+  image_url: string;
+  is_verified: boolean;
+  is_community_submitted?: boolean;
+  source_name: string;
+  source_url?: string;
+  last_verified_date: string;
+  featured?: boolean;
+}
+
+export interface LocalityItem {
+  id: string;
+  name: string;
+  name_ml: string;
+  ward_numbers: number[];
+  tagline: string;
+  tagline_ml: string;
+  description: string;
+  description_ml: string;
+  latitude: number;
+  longitude: number;
+  landmarks: string[];
+  landmarks_ml: string[];
+  nearby_facilities: string[];
+  nearby_facilities_ml: string[];
+  services_available: string[];
+  services_available_ml: string[];
+  image_url: string;
+}
+
+// -------------------------------------------------------------
+// FEATURE 04: PUBLIC SERVICES DATA MODEL
+// -------------------------------------------------------------
+export type ServiceCategoryKey = 
+  | 'civil_registration'
+  | 'permits_licensing'
+  | 'taxes_revenue'
+  | 'welfare_pensions'
+  | 'sanitation_health'
+  | 'utilities_infrastructure'
+  | 'certificates_land';
+
+export interface PublicServiceProcedureStep {
+  step_number: number;
+  title: string;
+  title_ml: string;
+  description: string;
+  description_ml: string;
+}
+
+export interface PublicServiceDetail {
+  id: string;
+  title: string;
+  title_ml: string;
+  category: ServiceCategoryKey;
+  category_name: string;
+  category_name_ml: string;
+  department: string;
+  department_ml: string;
+  summary: string;
+  summary_ml: string;
+  required_documents: string[];
+  required_documents_ml: string[];
+  procedure_steps: PublicServiceProcedureStep[];
+  official_portal_url?: string;
+  official_portal_name?: string;
+  processing_time_days?: number;
+  processing_time_text: string;
+  processing_time_text_ml: string;
+  fee_structure: string;
+  fee_structure_ml: string;
+  office_location: string;
+  office_location_ml: string;
+  contact_phone: string;
+  contact_email?: string;
+  working_hours: string;
+  working_hours_ml: string;
+  is_online_available: boolean;
+  online_system_name?: string; // e.g. "K-Smart Kerala", "Sevana Civil Registrations", "e-District Kerala", "Sanchitha"
+  last_verified_date: string;
+  source_reference: string;
+  faqs?: Array<{ question: string; question_ml: string; answer: string; answer_ml: string }>;
+}
+
+// -------------------------------------------------------------
+// FEATURE 05: DOCUMENTS & NOTICES DATA MODEL
+// -------------------------------------------------------------
+export type DocumentCategoryKey = 
+  | 'council_decisions'
+  | 'public_notices'
+  | 'budget_finance'
+  | 'tenders_procurement'
+  | 'government_orders'
+  | 'citizen_forms'
+  | 'development_plans';
+
+export interface MunicipalPublicDocument {
+  id: string;
+  title: string;
+  title_ml: string;
+  category: DocumentCategoryKey;
+  category_name: string;
+  category_name_ml: string;
+  publishing_authority: string;
+  publishing_authority_ml: string;
+  publication_date: string;
+  year: number;
+  reference_number?: string;
+  file_size?: string;
+  file_format?: 'PDF' | 'DOC' | 'XLS';
+  download_url: string;
+  description: string;
+  description_ml: string;
+  is_official: boolean;
+  source: string;
+  last_verified_date: string;
+}

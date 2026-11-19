@@ -16,22 +16,29 @@ import {
   Newspaper, 
   Building2, 
   PenTool,
-  Sparkles
+  Sparkles,
+  HardHat,
+  HeartHandshake,
+  AlertCircle
 } from "lucide-react";
 
 const tanurNavItems = [
-  { name: "അവലോകനം", name_en: "Overview", href: "/tanur", icon: Compass },
+  { name: "ഡിജിറ്റൽ താനൂർ (GIS)", name_en: "Digital Tanur", href: "/digital-tanur", icon: Compass },
+  { name: "താനൂർ പ്രൊഫൈൽ", name_en: "Overview", href: "/tanur", icon: Landmark },
+  { name: "വികസന ട്രാക്കർ", name_en: "Dev Tracker", href: "/tanur/development", icon: HardHat },
+  { name: "ജനകീയ ശബ്ദം", name_en: "People's Voice", href: "/peoples-voice", icon: HeartHandshake },
+  { name: "സിവിക് കണക്ട്", name_en: "Civic Connect", href: "/civic", icon: AlertCircle },
+  { name: "സ്ഥലങ്ങൾ & മാപ്പ്", name_en: "Places & Map", href: "/tanur/places", icon: MapPin },
+  { name: "സേവനങ്ങൾ", name_en: "Directory", href: "/tanur/directory", icon: Building2 },
   { name: "ചരിത്രം", name_en: "History", href: "/tanur/history", icon: Landmark },
-  { name: "സ്ഥലങ്ങൾ", name_en: "Places", href: "/tanur/places", icon: MapPin },
   { name: "സംസ്കാരം", name_en: "Culture", href: "/tanur/culture", icon: Palette },
-  { name: "ജനങ്ങൾ & കഥകൾ", name_en: "People", href: "/tanur/people", icon: Users },
+  { name: "ജനങ്ങൾ", name_en: "People", href: "/tanur/people", icon: Users },
   { name: "വിദ്യാഭ്യാസം", name_en: "Education", href: "/tanur/education", icon: GraduationCap },
   { name: "സമ്പദ്‌വ്യവസ്ഥ", name_en: "Economy", href: "/tanur/economy", icon: Briefcase },
   { name: "പ്രകൃതി", name_en: "Nature", href: "/tanur/nature", icon: Waves },
   { name: "ഗാലറി", name_en: "Gallery", href: "/tanur/gallery", icon: ImageIcon },
-  { name: "വാർത്തകൾ", name_en: "News & Events", href: "/tanur/news", icon: Newspaper },
-  { name: "സേവനങ്ങൾ", name_en: "Directory", href: "/tanur/directory", icon: Building2 },
-  { name: "എം.എൽ.എ പ്രൊഫൈൽ", name_en: "MLA Profile", href: "/politics/pk-navas", icon: Landmark },
+  { name: "വാർത്തകൾ", name_en: "News", href: "/tanur/news", icon: Newspaper },
+  { name: "ജനപ്രതിനിധി (MLA)", name_en: "MLA Profile", href: "/politics/pk-navas", icon: Landmark },
   { name: "പങ്കുവെക്കാം", name_en: "Contribute", href: "/tanur/contribute", icon: PenTool },
 ];
 

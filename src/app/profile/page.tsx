@@ -51,7 +51,7 @@ import {
 
 export default function ProfilePage() {
   const { t, language, setLanguage } = useLanguage();
-  const { user, role, updateProfile, logout } = useAuth();
+  const { user, role, updateProfile, updatePassword, deleteAccount, resendVerificationEmail, logout } = useAuth();
   const { availableCommunities, currentCommunity, setCurrentCommunity } = useCommunity();
 
   const [activeTab, setActiveTab] = useState<"info" | "privacy" | "saved_articles" | "saved_events" | "civic" | "settings">("info");
@@ -59,23 +59,23 @@ export default function ProfilePage() {
   const [savedEvents, setSavedEvents] = useState(KERALA_EVENTS_DATA.slice(0, 2));
 
   // Form Fields
-  const [displayName, setDisplayName] = useState(user?.display_name || "വിഷ്ണു പ്രസാദ് (Vishnu Prasad)");
-  const [bio, setBio] = useState(user?.bio || "കേരളത്തിന്റെ പാരമ്പര്യത്തിലും പ്രാദേശിക വികസനത്തിലും താൽപ്പര്യമുള്ള ഒരു സജീവ നാട്ടുവാസി.");
-  const [phone, setPhone] = useState(user?.phone || "+91 98470 11223");
+  const [displayName, setDisplayName] = useState(user?.display_name || "Citizen");
+  const [bio, setBio] = useState(user?.bio || "Resident of Tanur Municipality.");
+  const [phone, setPhone] = useState(user?.phone || "");
   const [locality, setLocality] = useState(user?.locality || "Tanur Municipality");
-  const [preferredLang, setPreferredLang] = useState<"ml" | "en">(user?.preferred_language || "ml");
+  const [preferredLang, setPreferredLang] = useState<"ml" | "en">(user?.preferred_language || "en");
   const [selectedCommId, setSelectedCommId] = useState(user?.selected_community_id || "40000000-0000-0000-0000-000000000007");
-  const [interests, setInterests] = useState<string[]>(user?.interests || ["Civic Tech", "Kerala History", "Environment", "സാഹിത്യം", "കൃഷി"]);
+  const [interests, setInterests] = useState<string[]>(user?.interests || ["Civic Tech", "Tanur History", "Environment"]);
   const [newInterestInput, setNewInterestInput] = useState("");
   const [isSaved, setIsSaved] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
 
-  // Privacy Settings
+  // Privacy Settings (Default Private)
   const [privacySettings, setPrivacySettings] = useState(user?.privacy_settings || {
-    public_profile: true,
+    public_profile: false,
     show_phone: false,
     show_email: false,
-    show_address: true,
+    show_address: false,
   });
 
   // Avatar Management & Crop Modal
@@ -83,9 +83,23 @@ export default function ProfilePage() {
   const [cropModalOpen, setCropModalOpen] = useState(false);
   const [tempImageSrc, setTempImageSrc] = useState<string | null>(null);
   const [zoomLevel, setZoomLevel] = useState(1);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Security / Password Change State
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordStatus, setPasswordStatus] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+
+  // Resend verification state
+  const [verifyNotice, setVerifyNotice] = useState<string | null>(null);
+
+  // Account Deletion State
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteReason, setDeleteReason] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Check if current user is also registered as a professional
   const existingPro = user ? store.getProfessionalByUserId(user.id) : undefined;
@@ -998,22 +1012,73 @@ export default function ProfilePage() {
             {/* TAB 6: Settings */}
             {activeTab === "settings" && (
               <div className="bg-white rounded-3xl border border-[#EAE4D7] p-6 sm:p-8 shadow-card space-y-6">
-                <h2 className="text-base font-bold font-malayalam-serif text-[#1B4D36] border-b border-[#F3EFE6] pb-3">
-                  അക്കൗണ്ട് സെറ്റിംഗ്സ് (Account Settings)
+                <h2 className="text-base font-bold text-[#194B35] border-b border-[#F3EFE6] pb-3">
+                  Account Settings & Security
                 </h2>
 
-                <div className="space-y-4">
+                <div className="space-y-6">
+                  {/* Account Information Section */}
+                  <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-[#EAE4D7] space-y-3">
+                    <h4 className="font-bold text-xs sm:text-sm text-[#1A2420] flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4 text-[#194B35]" />
+                      <span>Account Information</span>
+                    </h4>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                      <div className="p-2.5 bg-white rounded-xl border border-[#EDE6D8]">
+                        <span className="text-[10px] text-[#5C6A64] block font-bold uppercase tracking-wider">User ID</span>
+                        <code className="text-[11px] font-mono text-[#194B35] font-semibold break-all">{user?.id || "N/A"}</code>
+                      </div>
+                      <div className="p-2.5 bg-white rounded-xl border border-[#EDE6D8]">
+                        <span className="text-[10px] text-[#5C6A64] block font-bold uppercase tracking-wider">Assigned Role</span>
+                        <span className="font-bold text-[#194B35] uppercase">{user?.role || "citizen"}</span>
+                      </div>
+                      <div className="p-2.5 bg-white rounded-xl border border-[#EDE6D8]">
+                        <span className="text-[10px] text-[#5C6A64] block font-bold uppercase tracking-wider">Account Status</span>
+                        <span className={`inline-flex items-center gap-1 font-bold ${user?.account_status === "suspended" ? "text-red-600" : "text-emerald-700"}`}>
+                          <CheckCircle2 className="w-3 h-3" />
+                          <span>{user?.account_status === "suspended" ? "Suspended" : "Active Citizen"}</span>
+                        </span>
+                      </div>
+                      <div className="p-2.5 bg-white rounded-xl border border-[#EDE6D8]">
+                        <span className="text-[10px] text-[#5C6A64] block font-bold uppercase tracking-wider">Email Verification</span>
+                        <div className="flex items-center justify-between gap-1 mt-0.5">
+                          <span className={user?.email_verified ? "text-emerald-700 font-bold" : "text-amber-700 font-bold"}>
+                            {user?.email_verified ? "Verified" : "Pending Verification"}
+                          </span>
+                          {!user?.email_verified && (
+                            <button
+                              type="button"
+                              onClick={async () => {
+                                const res = await resendVerificationEmail();
+                                setVerifyNotice(res.message || res.error || "Sent");
+                                setTimeout(() => setVerifyNotice(null), 4000);
+                              }}
+                              className="text-[10px] text-[#194B35] font-bold underline hover:no-underline"
+                            >
+                              Resend Email
+                            </button>
+                          )}
+                        </div>
+                        {verifyNotice && (
+                          <span className="text-[10px] text-emerald-800 block mt-1">{verifyNotice}</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Notification Toggles */}
                   <div className="flex items-center justify-between p-4 rounded-2xl bg-[#FAF7F0] border border-[#EAE4D7]">
                     <div>
-                      <h4 className="font-bold text-xs sm:text-sm text-[#1A2420]">അറിയിപ്പുകൾ (Notifications)</h4>
-                      <p className="text-[11px] text-[#7A8880]">പ്രാദേശിക വാർത്തകളും അടിയന്തിര അറിയിപ്പുകളും ലഭ്യമാക്കുക</p>
+                      <h4 className="font-bold text-xs sm:text-sm text-[#1A2420]">Municipal Notifications</h4>
+                      <p className="text-[11px] text-[#5C6A64]">Receive immediate notifications for local announcements, emergency alerts, and issue status changes.</p>
                     </div>
                     <button
                       type="button"
                       onClick={() => setNotificationsEnabled(!notificationsEnabled)}
                       className={`w-12 h-6 rounded-full transition relative p-0.5 ${
-                        notificationsEnabled ? "bg-[#1B4D36]" : "bg-neutral-300"
+                        notificationsEnabled ? "bg-[#194B35]" : "bg-neutral-300"
                       }`}
+                      aria-label="Toggle notifications"
                     >
                       <div className={`w-5 h-5 rounded-full bg-white transition shadow-sm transform ${
                         notificationsEnabled ? "translate-x-6" : "translate-x-0"
@@ -1021,33 +1086,147 @@ export default function ProfilePage() {
                     </button>
                   </div>
 
-                  <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-[#EAE4D7] space-y-2">
-                    <h4 className="font-bold text-xs sm:text-sm text-[#1A2420]">സുരക്ഷയും പാസ്‌വേഡും</h4>
-                    <p className="text-[11px] text-[#7A8880]">അവസാനം മാറ്റിയത്: 1 മാസം മുൻപ്</p>
+                  {/* Change Password Form */}
+                  <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-[#EAE4D7] space-y-3">
+                    <h4 className="font-bold text-xs sm:text-sm text-[#1A2420] flex items-center gap-2">
+                      <Lock className="w-4 h-4 text-[#194B35]" />
+                      <span>Change Account Password</span>
+                    </h4>
+                    <p className="text-[11px] text-[#5C6A64]">
+                      Update your account password with at least 8 characters.
+                    </p>
+
+                    {passwordStatus && (
+                      <div className={`p-2.5 rounded-xl text-xs ${passwordStatus.type === "success" ? "bg-emerald-50 text-emerald-800 border border-emerald-200" : "bg-red-50 text-red-700 border border-red-200"}`}>
+                        {passwordStatus.text}
+                      </div>
+                    )}
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                      <div>
+                        <label className="block text-[11px] font-bold text-[#1A2420] mb-1">New Password</label>
+                        <input
+                          type="password"
+                          value={newPassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
+                          placeholder="Min 8 characters"
+                          className="w-full px-3 py-2 text-xs bg-white border border-[#EDE6D8] rounded-xl focus:outline-hidden focus:ring-2 focus:ring-[#194B35]"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-bold text-[#1A2420] mb-1">Confirm New Password</label>
+                        <input
+                          type="password"
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          placeholder="Re-enter password"
+                          className="w-full px-3 py-2 text-xs bg-white border border-[#EDE6D8] rounded-xl focus:outline-hidden focus:ring-2 focus:ring-[#194B35]"
+                        />
+                      </div>
+                    </div>
+
                     <button
                       type="button"
-                      className="px-4 py-2 rounded-xl bg-white border border-[#DDD5C5] text-xs font-bold text-[#1B4D36] hover:bg-[#F3EFE6] transition"
+                      disabled={isUpdatingPassword}
+                      onClick={async () => {
+                        setPasswordStatus(null);
+                        if (newPassword.length < 8) {
+                          setPasswordStatus({ type: "error", text: "Password must be at least 8 characters in length." });
+                          return;
+                        }
+                        if (newPassword !== confirmPassword) {
+                          setPasswordStatus({ type: "error", text: "Passwords do not match." });
+                          return;
+                        }
+                        setIsUpdatingPassword(true);
+                        const res = await updatePassword(newPassword);
+                        setIsUpdatingPassword(false);
+                        if (res.success) {
+                          setPasswordStatus({ type: "success", text: "Password successfully updated!" });
+                          setNewPassword("");
+                          setConfirmPassword("");
+                        } else {
+                          setPasswordStatus({ type: "error", text: res.error || "Failed to update password." });
+                        }
+                      }}
+                      className="px-4 py-2 rounded-xl bg-[#194B35] text-white text-xs font-bold hover:bg-[#133A29] transition active:scale-98 disabled:opacity-50"
                     >
-                      പാസ്‌വേഡ് മാറ്റുക
+                      {isUpdatingPassword ? "Updating..." : "Update Password"}
                     </button>
                   </div>
 
+                  {/* Danger Zone: Account Deletion */}
                   <div className="p-4 rounded-2xl bg-red-50 border border-red-200 space-y-2">
-                    <h4 className="font-bold text-xs sm:text-sm text-red-900">ഡെയ്ഞ്ചർ സോൺ</h4>
-                    <p className="text-[11px] text-red-700">അക്കൗണ്ട് നിർജ്ജീവമാക്കുകയോ പൂർണ്ണമായി ഒഴിവാക്കുകയോ ചെയ്യാം.</p>
+                    <h4 className="font-bold text-xs sm:text-sm text-red-900 flex items-center gap-1.5">
+                      <AlertTriangle className="w-4 h-4 text-red-600" />
+                      <span>Danger Zone: Account Deletion</span>
+                    </h4>
+                    <p className="text-[11px] text-red-700 leading-relaxed">
+                      Deactivating your account will anonymize your personal credentials (name, email, phone). In accordance with statutory transparency standards, past submitted public civic reports and project notes remain preserved in the municipal record.
+                    </p>
                     <button
                       type="button"
-                      onClick={() => {
-                        if (confirm("അക്കൗണ്ട് ഒഴിവാക്കാൻ നിങ്ങൾ ആഗ്രഹിക്കുന്നുണ്ടോ?")) {
-                          logout();
-                        }
-                      }}
-                      className="px-4 py-2 rounded-xl bg-red-600 text-white text-xs font-bold hover:bg-red-700 transition"
+                      onClick={() => setDeleteModalOpen(true)}
+                      className="px-4 py-2 rounded-xl bg-red-600 text-white text-xs font-bold hover:bg-red-700 transition active:scale-98"
                     >
-                      അക്കൗണ്ട് ഒഴിവാക്കുക (Delete Account)
+                      Request Account Deletion
                     </button>
                   </div>
                 </div>
+
+                {/* Account Deletion Modal */}
+                {deleteModalOpen && (
+                  <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+                    <div className="bg-white rounded-3xl max-w-md w-full p-6 border border-[#EDE6D8] shadow-2xl space-y-4">
+                      <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600">
+                        <Trash2 className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-base font-bold text-[#1A2420]">Confirm Account Deletion</h3>
+                        <p className="text-xs text-[#5C6A64] mt-1 leading-relaxed">
+                          Are you sure you want to delete your citizen account? Your personal identity will be anonymized. Your public civic submissions will remain archived for municipal continuity.
+                        </p>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-[#1A2420] mb-1">
+                          Reason for leaving (Optional)
+                        </label>
+                        <textarea
+                          rows={2}
+                          value={deleteReason}
+                          onChange={(e) => setDeleteReason(e.target.value)}
+                          placeholder="Let us know how we can improve municipal services..."
+                          className="w-full p-2.5 text-xs bg-[#FAF7F0] border border-[#EDE6D8] rounded-xl focus:outline-hidden focus:ring-2 focus:ring-red-500"
+                        />
+                      </div>
+
+                      <div className="flex items-center justify-end gap-2 pt-2">
+                        <button
+                          type="button"
+                          onClick={() => setDeleteModalOpen(false)}
+                          className="px-4 py-2 rounded-xl border border-[#EDE6D8] text-xs font-bold text-[#5C6A64] hover:bg-[#FAF7F0]"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="button"
+                          disabled={isDeleting}
+                          onClick={async () => {
+                            setIsDeleting(true);
+                            await deleteAccount(deleteReason);
+                            setIsDeleting(false);
+                            setDeleteModalOpen(false);
+                            window.location.href = "/";
+                          }}
+                          className="px-4 py-2 rounded-xl bg-red-600 text-white text-xs font-bold hover:bg-red-700"
+                        >
+                          {isDeleting ? "Deleting..." : "Permanently Deactivate Account"}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 

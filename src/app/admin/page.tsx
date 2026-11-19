@@ -69,6 +69,7 @@ import {
   Profile
 } from "@/types/database";
 import { digitalMunicipalityStore, TANUR_LOCATION_CATEGORIES } from "@/lib/data/digitalMunicipalityData";
+import { civicStore } from "@/lib/data/civicConnectData";
 import { 
   DevelopmentProject, 
   CitizenProposal, 
@@ -125,25 +126,56 @@ export default function AdminPage() {
   const [roleChangeTarget, setRoleChangeTarget] = useState<string>("");
   const [newRoleSelection, setNewRoleSelection] = useState<UserRole>("moderator");
   const [roleChangeReason, setRoleChangeReason] = useState<string>("");
+  const [userSearchQuery, setUserSearchQuery] = useState<string>("");
+  const [userRoleFilter, setUserRoleFilter] = useState<string>("all");
+  const [userStatusFilter, setUserStatusFilter] = useState<string>("all");
 
   const handleAssignRole = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user || role !== "admin") {
-      showFeedback("അനുമതിയില്ല: അഡ്മിനിസ്ട്രേറ്റർമാർക്ക് മാത്രമേ റോൾ മാറ്റാൻ സാധിക്കൂ.");
+    if (!user || (role !== "admin" && (role as any) !== "super_admin")) {
+      showFeedback("Access Denied: Only administrators can assign or modify user roles.");
       return;
     }
     if (!roleChangeTarget) {
-      showFeedback("ദയവായി ഉപയോക്താവിനെ തിരഞ്ഞെടുക്കുക.");
+      showFeedback("Please select a target user.");
       return;
     }
-    const res = store.assignUserRole(user.id, roleChangeTarget, newRoleSelection, roleChangeReason);
+
+    // Super Admin privilege barrier
+    if ((newRoleSelection === "admin" || newRoleSelection === "super_admin") && (role as any) !== "super_admin") {
+      showFeedback("Access Denied: Only a Super Administrator can assign administrator or super administrator privileges.");
+      return;
+    }
+
+    const res = store.assignUserRole(user.id, roleChangeTarget, newRoleSelection, roleChangeReason || "Administrative update");
     if (res.success) {
       setAllProfiles([...store.getProfiles()]);
       setAuditLogs(store.getAuditLogs());
-      showFeedback(`റോൾ വിജയകരമായി '${newRoleSelection}' ആയി മാറ്റി.`);
+      showFeedback(`Role successfully updated to '${newRoleSelection}'.`);
       setRoleChangeReason("");
     } else {
-      showFeedback(res.error || "റോൾ മാറ്റം പരാജയപ്പെട്ടു.");
+      showFeedback(res.error || "Role update failed.");
+    }
+  };
+
+  const handleSetUserStatus = (targetId: string, targetUsername: string, newStatus: "active" | "suspended") => {
+    if (!user || (role !== "admin" && (role as any) !== "super_admin")) {
+      showFeedback("Access Denied: Only administrators can modify account status.");
+      return;
+    }
+    const promptMsg = newStatus === "suspended"
+      ? `Enter reason for suspending user @${targetUsername}:`
+      : `Enter reason for reactivating user @${targetUsername}:`;
+    const reason = window.prompt(promptMsg, newStatus === "suspended" ? "Policy violation / identity review" : "Administrative review completed");
+    if (reason === null) return; // Cancelled
+
+    const res = store.setUserAccountStatus(user.id, targetId, newStatus, reason || "Administrative update");
+    if (res.success) {
+      setAllProfiles([...store.getProfiles()]);
+      setAuditLogs(store.getAuditLogs());
+      showFeedback(`Account status updated to '${newStatus}' for user @${targetUsername}.`);
+    } else {
+      showFeedback(res.error || "Failed to update account status.");
     }
   };
 
@@ -1602,121 +1634,246 @@ export default function AdminPage() {
         {/* ========================================================================= */}
         {/* TAB: RBAC & USER ROLES MANAGEMENT (ADMIN EXCLUSIVE) */}
         {/* ========================================================================= */}
-        {activeTab === "users" && role === "admin" && (
+        {((activeTab === "users" && role === "admin") || (activeTab === "users" && (role as any) === "super_admin")) && (
           <div className="space-y-6">
             <div className="bg-white rounded-3xl border border-[#EAE4D7] p-6 shadow-card">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-[#F3EFE6] pb-4 mb-6">
                 <div>
-                  <h2 className="text-base font-bold font-malayalam-serif text-[#1B4D36] flex items-center gap-2">
-                    <ShieldCheck className="w-5 h-5 text-[#1B4D36]" />
-                    <span>റോൾ അധിഷ്ഠിത ആക്‌സസ്സ് കൺട്രോൾ (RBAC Role Management)</span>
+                  <h2 className="text-base font-bold text-[#194B35] flex items-center gap-2">
+                    <ShieldCheck className="w-5 h-5 text-[#194B35]" />
+                    <span>Citizen Accounts & RBAC Role Management</span>
                   </h2>
-                  <p className="text-xs text-[#7A8880] mt-1">
-                    താനൂർ ഡിജിറ്റൽ മുനിസിപ്പാലിറ്റി പ്ലാറ്റ്‌ഫോം ഉപയോക്താക്കൾക്ക് അനുമതികൾ നൽകാനും നിയന്ത്രിക്കാനുമുള്ള സുരക്ഷിത അഡ്മിൻ കൺസോൾ
+                  <p className="text-xs text-[#5C6A64] mt-1">
+                    Manage municipal user identities, verify credentials, assign role privileges, and control account statuses with an immutable statutory audit trail.
                   </p>
                 </div>
-                <span className="text-xs font-bold px-3 py-1 bg-emerald-50 text-[#1B4D36] rounded-full border border-emerald-200">
-                  {allProfiles.length} ഉപയോക്താക്കൾ
-                </span>
+                <div className="flex items-center gap-2">
+                  {(role as any) === "super_admin" && (
+                    <span className="text-xs font-bold px-3 py-1 bg-purple-100 text-purple-900 rounded-full border border-purple-300">
+                      Super Administrator
+                    </span>
+                  )}
+                  <span className="text-xs font-bold px-3 py-1 bg-emerald-50 text-[#194B35] rounded-full border border-emerald-200">
+                    {allProfiles.length} Registered Accounts
+                  </span>
+                </div>
               </div>
 
               {/* Secure Role Assignment Form */}
               <form onSubmit={handleAssignRole} className="bg-[#FAF7F0] rounded-2xl p-4 sm:p-5 border border-[#EAE4D7] mb-6 space-y-4">
-                <h4 className="text-xs font-bold font-malayalam uppercase tracking-wider text-[#1B4D36]">
-                  പുതിയ റോൾ അനുവദിക്കുക (Assign Verified Role)
-                </h4>
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-[#194B35]">
+                    Assign Verified Role & Privileges
+                  </h4>
+                  {(role as any) !== "super_admin" && (
+                    <span className="text-[10px] text-[#5C6A64] bg-white px-2 py-0.5 rounded-md border border-[#EDE6D8]">
+                      Note: Only a Super Administrator can assign Admin or Super Admin privileges.
+                    </span>
+                  )}
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
-                    <label className="text-[11px] font-bold text-[#5C6A64] block mb-1">ഉപയോക്താവ് (Target User)</label>
+                    <label className="text-[11px] font-bold text-[#5C6A64] block mb-1">Target Citizen / Account</label>
                     <select
                       value={roleChangeTarget}
                       onChange={(e) => setRoleChangeTarget(e.target.value)}
                       required
-                      className="w-full px-3 py-2 rounded-xl text-xs bg-white border border-[#DDD5C5] text-[#1A2420]"
+                      className="w-full px-3 py-2 rounded-xl text-xs bg-white border border-[#DDD5C5] text-[#1A2420] focus:ring-2 focus:ring-[#194B35]"
                     >
-                      <option value="">ഉപയോക്താവിനെ തിരഞ്ഞെടുക്കുക...</option>
+                      <option value="">Select account...</option>
                       {allProfiles.map((p) => (
                         <option key={p.id} value={p.id}>
-                          {p.display_name} (@{p.username}) — [{p.role}]
+                          {p.display_name} (@{p.username}) — [{p.role}] {p.account_status === "suspended" ? "(Suspended)" : ""}
                         </option>
                       ))}
                     </select>
                   </div>
 
                   <div>
-                    <label className="text-[11px] font-bold text-[#5C6A64] block mb-1">അനുവദിക്കേണ്ട റോൾ (New Role)</label>
+                    <label className="text-[11px] font-bold text-[#5C6A64] block mb-1">New Role Assignment</label>
                     <select
                       value={newRoleSelection}
                       onChange={(e) => setNewRoleSelection(e.target.value as UserRole)}
-                      className="w-full px-3 py-2 rounded-xl text-xs bg-white border border-[#DDD5C5] text-[#1A2420]"
+                      className="w-full px-3 py-2 rounded-xl text-xs bg-white border border-[#DDD5C5] text-[#1A2420] focus:ring-2 focus:ring-[#194B35]"
                     >
-                      <option value="user">User (സാധാരണ പൗരൻ)</option>
-                      <option value="moderator">Moderator (കമ്മ്യൂണിറ്റി മോഡറേറ്റർ)</option>
-                      <option value="verified_org">Verified Org (സ്ഥിരീകരിച്ച സംഘടന)</option>
-                      <option value="admin">Admin (പ്ലാറ്റ്‌ഫോം അഡ്മിനിസ്ട്രേറ്റർ)</option>
+                      <option value="citizen">Citizen (Standard Resident)</option>
+                      <option value="user">User (Legacy Citizen)</option>
+                      <option value="moderator">Moderator (Civic Desk)</option>
+                      <option value="verified_org">Verified Org (Municipal Institution)</option>
+                      {(role as any) === "super_admin" && (
+                        <>
+                          <option value="admin">Administrator (Platform Admin)</option>
+                          <option value="super_admin">Super Administrator (Chief Custodian)</option>
+                        </>
+                      )}
                     </select>
                   </div>
 
                   <div>
-                    <label className="text-[11px] font-bold text-[#5C6A64] block mb-1">മാറ്റത്തിനുള്ള കാരണം (Reason / Justification)</label>
+                    <label className="text-[11px] font-bold text-[#5C6A64] block mb-1">Statutory Reason / Audit Note</label>
                     <input
                       type="text"
                       value={roleChangeReason}
                       onChange={(e) => setRoleChangeReason(e.target.value)}
-                      placeholder="ഉദാ: നഗരസഭാ ഐ.ടി ഓഫീസ് ഉത്തരവ്..."
+                      placeholder="e.g. Municipal IT Order No. 2026/04..."
                       required
-                      className="w-full px-3 py-2 rounded-xl text-xs bg-white border border-[#DDD5C5] text-[#1A2420]"
+                      className="w-full px-3 py-2 rounded-xl text-xs bg-white border border-[#DDD5C5] text-[#1A2420] focus:ring-2 focus:ring-[#194B35]"
                     />
                   </div>
                 </div>
 
-                <div className="flex justify-end pt-2">
+                <div className="flex justify-end pt-1">
                   <button
                     type="submit"
-                    className="px-5 py-2 rounded-xl bg-[#1B4D36] hover:bg-[#133A28] text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5"
+                    className="px-5 py-2 rounded-xl bg-[#194B35] hover:bg-[#133A28] text-white text-xs font-bold transition shadow-xs flex items-center gap-1.5 active:scale-98"
                   >
                     <ShieldCheck className="w-4 h-4 text-amber-300" />
-                    <span>റോൾ മാറ്റം സ്ഥിരീകരിക്കുക (Update Role)</span>
+                    <span>Authorize Role Transition</span>
                   </button>
                 </div>
               </form>
+
+              {/* User Search & Filter Bar */}
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mb-4">
+                <div className="w-full sm:w-72 relative">
+                  <Search className="w-3.5 h-3.5 text-[#5C6A64] absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={userSearchQuery}
+                    onChange={(e) => setUserSearchQuery(e.target.value)}
+                    placeholder="Search by name, username, or email..."
+                    className="w-full pl-9 pr-3 py-2 bg-[#FAF7F0] border border-[#EDE6D8] rounded-xl text-xs text-[#1A2420] focus:outline-hidden focus:ring-2 focus:ring-[#194B35]"
+                  />
+                </div>
+
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                  <select
+                    value={userRoleFilter}
+                    onChange={(e) => setUserRoleFilter(e.target.value)}
+                    className="px-3 py-2 bg-[#FAF7F0] border border-[#EDE6D8] rounded-xl text-xs text-[#1A2420]"
+                    aria-label="Filter users by role"
+                  >
+                    <option value="all">All Roles</option>
+                    <option value="citizen">Citizen</option>
+                    <option value="user">User</option>
+                    <option value="moderator">Moderator</option>
+                    <option value="verified_org">Verified Org</option>
+                    <option value="admin">Administrator</option>
+                    <option value="super_admin">Super Admin</option>
+                  </select>
+
+                  <select
+                    value={userStatusFilter}
+                    onChange={(e) => setUserStatusFilter(e.target.value)}
+                    className="px-3 py-2 bg-[#FAF7F0] border border-[#EDE6D8] rounded-xl text-xs text-[#1A2420]"
+                    aria-label="Filter users by account status"
+                  >
+                    <option value="all">All Statuses</option>
+                    <option value="active">Active</option>
+                    <option value="suspended">Suspended</option>
+                    <option value="deactivated">Deactivated</option>
+                  </select>
+                </div>
+              </div>
 
               {/* Profiles Table */}
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs">
                   <thead>
                     <tr className="border-b border-[#DDD5C5] text-[#5C6A64]">
-                      <th className="py-2.5 font-bold">ഉപയോക്താവ്</th>
-                      <th className="py-2.5 font-bold">യൂസർനെയിം</th>
-                      <th className="py-2.5 font-bold">നിലവിലെ റോൾ</th>
-                      <th className="py-2.5 font-bold">ഭാഷ</th>
-                      <th className="py-2.5 font-bold">അവസാനം പുതുക്കിയത്</th>
+                      <th className="py-2.5 font-bold">User Identity</th>
+                      <th className="py-2.5 font-bold">Username & Email</th>
+                      <th className="py-2.5 font-bold">Assigned Role</th>
+                      <th className="py-2.5 font-bold">Account Status</th>
+                      <th className="py-2.5 font-bold">Email Verified</th>
+                      <th className="py-2.5 font-bold">Reports</th>
+                      <th className="py-2.5 font-bold">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#F3EFE6]">
-                    {allProfiles.map((p) => (
-                      <tr key={p.id} className="hover:bg-[#FAF7F0]">
-                        <td className="py-2.5 font-bold text-[#1A2420]">{p.display_name}</td>
-                        <td className="py-2.5 text-[#5C6A64]">@{p.username}</td>
-                        <td className="py-2.5">
-                          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                            p.role === "admin" 
-                              ? "bg-purple-100 text-purple-800 border border-purple-200" 
-                              : p.role === "moderator"
-                              ? "bg-blue-100 text-blue-800 border border-blue-200"
-                              : p.role === "verified_org"
-                              ? "bg-amber-100 text-amber-800 border border-amber-200"
-                              : "bg-stone-100 text-stone-700 border border-stone-200"
-                          }`}>
-                            {p.role}
-                          </span>
-                        </td>
-                        <td className="py-2.5 uppercase font-mono text-[11px] text-[#7A8880]">{p.preferred_language}</td>
-                        <td className="py-2.5 text-[11px] text-[#7A8880]">
-                          {new Date(p.updated_at || p.created_at).toLocaleDateString("en-IN")}
-                        </td>
-                      </tr>
-                    ))}
+                    {allProfiles
+                      .filter((p) => {
+                        if (userRoleFilter !== "all" && p.role !== userRoleFilter) return false;
+                        if (userStatusFilter !== "all" && (p.account_status || "active") !== userStatusFilter) return false;
+                        if (userSearchQuery.trim()) {
+                          const q = userSearchQuery.toLowerCase();
+                          const mName = p.display_name?.toLowerCase().includes(q);
+                          const mUser = p.username?.toLowerCase().includes(q);
+                          const mEmail = p.email?.toLowerCase().includes(q);
+                          return mName || mUser || mEmail;
+                        }
+                        return true;
+                      })
+                      .map((p) => {
+                        const issuesCount = civicStore.getIssues().filter((i: any) => i.reporter_id === p.id || i.reporter_name === p.display_name).length;
+                        const isSuspended = p.account_status === "suspended";
+
+                        return (
+                          <tr key={p.id} className="hover:bg-[#FAF7F0] transition">
+                            <td className="py-3">
+                              <div className="font-bold text-[#1A2420]">{p.display_name}</div>
+                              <div className="text-[10px] text-[#5C6A64] font-mono">{p.id.slice(0, 18)}...</div>
+                            </td>
+                            <td className="py-3 text-[#5C6A64]">
+                              <div>@{p.username}</div>
+                              <div className="text-[10px] text-gray-400">{p.email || "No email linked"}</div>
+                            </td>
+                            <td className="py-3">
+                              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                                p.role === "super_admin"
+                                  ? "bg-purple-200 text-purple-900 border border-purple-400"
+                                  : p.role === "admin" 
+                                  ? "bg-purple-100 text-purple-800 border border-purple-200" 
+                                  : p.role === "moderator"
+                                  ? "bg-blue-100 text-blue-800 border border-blue-200"
+                                  : p.role === "verified_org"
+                                  ? "bg-amber-100 text-amber-800 border border-amber-200"
+                                  : "bg-[#E0F1E7] text-[#194B35] border border-[#BDE3CE]"
+                              }`}>
+                                {p.role}
+                              </span>
+                            </td>
+                            <td className="py-3">
+                              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold flex items-center gap-1 w-fit ${
+                                isSuspended
+                                  ? "bg-red-100 text-red-800 border border-red-200"
+                                  : "bg-emerald-100 text-emerald-800 border border-emerald-200"
+                              }`}>
+                                <span className={`w-1.5 h-1.5 rounded-full ${isSuspended ? "bg-red-600" : "bg-emerald-600"}`} />
+                                <span>{isSuspended ? "Suspended" : "Active"}</span>
+                              </span>
+                            </td>
+                            <td className="py-3">
+                              <span className={`text-[10px] font-bold ${p.email_verified ? "text-emerald-700" : "text-amber-700"}`}>
+                                {p.email_verified ? "✓ Verified" : "⏳ Pending"}
+                              </span>
+                            </td>
+                            <td className="py-3 font-semibold text-[#194B35]">
+                              {issuesCount}
+                            </td>
+                            <td className="py-3">
+                              <div className="flex items-center gap-2">
+                                <button
+                                  type="button"
+                                  onClick={() => setRoleChangeTarget(p.id)}
+                                  className="text-[10px] font-bold text-[#194B35] hover:underline"
+                                >
+                                  Edit Role
+                                </button>
+                                <span>•</span>
+                                <button
+                                  type="button"
+                                  onClick={() => handleSetUserStatus(p.id, p.username, isSuspended ? "active" : "suspended")}
+                                  className={`text-[10px] font-bold hover:underline ${isSuspended ? "text-emerald-700" : "text-red-600"}`}
+                                >
+                                  {isSuspended ? "Reactivate" : "Suspend"}
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
                   </tbody>
                 </table>
               </div>

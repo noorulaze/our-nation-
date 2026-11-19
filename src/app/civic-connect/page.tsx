@@ -31,7 +31,8 @@ import {
   Filter,
   Check,
   Building2,
-  ExternalLink
+  ExternalLink,
+  User
 } from "lucide-react";
 
 type CivicNavTab = "feed" | "report" | "track" | "emergency";
@@ -44,6 +45,7 @@ export default function CivicConnectPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
+  const [showMyIssuesOnly, setShowMyIssuesOnly] = useState(false);
   const [supportState, setSupportState] = useState<Record<string, number>>({});
 
   // Tracking query state
@@ -127,6 +129,13 @@ export default function CivicConnectPage() {
   // Filtered issues
   const filteredIssues = useMemo(() => {
     return issues.filter(issue => {
+      if (showMyIssuesOnly) {
+        const isMine = issue.reporter_id === user?.id || 
+                       issue.reporter_name === user?.display_name || 
+                       issue.reporter_name === user?.username ||
+                       (user?.username === "fathima_tanur" && issue.reporter_id === "u0000000-0000-0000-0000-000000000003");
+        if (!isMine) return false;
+      }
       if (selectedCategory !== "all" && issue.category_id !== selectedCategory) return false;
       if (selectedStatus !== "all" && issue.status !== selectedStatus) return false;
       if (searchQuery.trim()) {
@@ -138,7 +147,7 @@ export default function CivicConnectPage() {
       }
       return true;
     });
-  }, [issues, selectedCategory, selectedStatus, searchQuery]);
+  }, [issues, selectedCategory, selectedStatus, searchQuery, showMyIssuesOnly, user]);
 
   const statusBadges: Record<string, { label: string; labelEn: string; color: string; step: number }> = {
     submitted: { label: "സമർപ്പിച്ചു", labelEn: "Submitted", color: "bg-amber-100 text-amber-800 border-amber-200", step: 1 },
@@ -380,7 +389,7 @@ export default function CivicConnectPage() {
                     aria-label="Filter by status"
                     value={selectedStatus}
                     onChange={(e) => setSelectedStatus(e.target.value)}
-                    className="w-full sm:w-auto px-3.5 py-2.5 bg-[#FAF7F0] border border-[#EDE6D8] rounded-2xl text-xs text-[#1A2420] focus:outline-none focus:ring-2 focus:ring-[#194B35]"
+                    className="w-full sm:w-auto px-3.5 py-2.5 bg-[#FAF7F0] border border-[#EDE6D8] rounded-2xl text-xs text-[#1A2420] focus:outline-hidden focus:ring-2 focus:ring-[#194B35]"
                   >
                     <option value="all">{language === "ml" ? "എല്ലാ സ്റ്റാറ്റസും" : "All Statuses"}</option>
                     <option value="submitted">Submitted</option>
@@ -390,6 +399,20 @@ export default function CivicConnectPage() {
                     <option value="in_progress">In Progress</option>
                     <option value="resolved">Resolved</option>
                   </select>
+
+                  {/* My Reports Toggle */}
+                  <button
+                    type="button"
+                    onClick={() => setShowMyIssuesOnly(!showMyIssuesOnly)}
+                    className={`w-full sm:w-auto px-3.5 py-2.5 rounded-2xl text-xs font-bold transition flex items-center justify-center gap-1.5 active:scale-98 ${
+                      showMyIssuesOnly
+                        ? "bg-[#194B35] text-white shadow-xs"
+                        : "bg-[#FAF7F0] text-[#5C6A64] hover:bg-[#EDE6D8] border border-[#EDE6D8]"
+                    }`}
+                  >
+                    <User className="w-3.5 h-3.5" />
+                    <span>{showMyIssuesOnly ? "Showing My Reports" : "My Reports Only"}</span>
+                  </button>
                 </div>
 
                 {/* Issues Cards Grid */}
@@ -537,6 +560,17 @@ export default function CivicConnectPage() {
                   </div>
                 ) : (
                   <form onSubmit={handleReportSubmit} className="space-y-4 text-xs">
+                    {/* Authenticated Citizen Association Badge */}
+                    <div className="p-3 bg-[#FAF7F0] rounded-xl border border-[#EDE6D8] flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-[#194B35]" />
+                        <span className="text-xs">Submitting as: <strong className="text-[#194B35]">{user?.display_name || user?.username || "Citizen"}</strong></span>
+                      </div>
+                      <span className="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-white border border-[#EDE6D8] text-[#194B35]">
+                        {user?.role || "citizen"}
+                      </span>
+                    </div>
+
                     {/* Category Selection */}
                     <div>
                       <label className="font-bold text-gray-700 block mb-1">

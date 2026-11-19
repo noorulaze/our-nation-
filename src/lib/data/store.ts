@@ -805,6 +805,7 @@ class DataStore {
    * Secure Administrative Role Assignment
    * Enforces that only verified administrators can modify a user's role.
    * Generates immutable audit logs for all attempts (both authorized and rejected).
+   * Strict Super Admin rule: Only super_admin can assign 'admin' or 'super_admin'.
    */
   assignUserRole(
     adminUserId: string,
@@ -812,9 +813,9 @@ class DataStore {
     newRole: UserRole,
     reason: string
   ): { success: boolean; error?: string; profile?: Profile } {
-    // 1. Verify caller exists and holds the admin role
+    // 1. Verify caller exists and holds the admin or super_admin role
     const caller = this.profiles.find(p => p.id === adminUserId);
-    if (!caller || caller.role !== "admin") {
+    if (!caller || (caller.role !== "admin" && caller.role !== "super_admin")) {
       this.addAuditLog(
         adminUserId || "unauthenticated",
         "UNAUTHORIZED_ROLE_CHANGE_ATTEMPT",
@@ -834,7 +835,7 @@ class DataStore {
     }
 
     // 2. Validate target role
-    const validRoles: UserRole[] = ["user", "moderator", "verified_org", "admin"];
+    const validRoles: UserRole[] = ["citizen", "user", "moderator", "verified_org", "admin", "super_admin"];
     if (!validRoles.includes(newRole)) {
       return { 
         success: false, 
@@ -842,7 +843,28 @@ class DataStore {
       };
     }
 
-    // 3. Find target user
+    // 3. Super Admin privilege boundary:
+    // Only a super_admin can assign 'admin' or 'super_admin' roles. Ordinary 'admin' cannot elevate anyone to admin/super_admin.
+    if ((newRole === "admin" || newRole === "super_admin") && caller.role !== "super_admin") {
+      this.addAuditLog(
+        adminUserId,
+        "UNAUTHORIZED_SUPER_ADMIN_ELEVATION_ATTEMPT",
+        "profile",
+        targetUserId,
+        {
+          attempted_role: newRole,
+          caller_role: caller.role,
+          caller_username: caller.username,
+          reason: reason || "Ordinary admin attempted to elevate to admin/super_admin"
+        }
+      );
+      return {
+        success: false,
+        error: "Access Denied: Only a Super Administrator can assign administrative or super administrator privileges."
+      };
+    }
+
+    // 4. Find target user
     const target = this.profiles.find(p => p.id === targetUserId);
     if (!target) {
       return { success: false, error: "Target user not found." };
@@ -852,7 +874,7 @@ class DataStore {
     target.role = newRole;
     target.updated_at = new Date().toISOString();
 
-    // 4. Log role change event in immutable audit log
+    // 5. Log role change event in immutable audit log
     this.addAuditLog(
       adminUserId,
       "ASSIGN_USER_ROLE",
@@ -868,6 +890,104 @@ class DataStore {
     );
 
     return { success: true, profile: target };
+  }
+
+  /**
+   * Secure User Account Status Management (Suspend / Reactivate)
+   * Only administrators and super_admins can change account status.
+   */
+  setUserAccountStatus(
+    adminUserId: string,
+    targetUserId: string,
+    status: "active" | "suspended" | "deactivated",
+    reason: string
+  ): { success: boolean; error?: string; profile?: Profile } {
+    const caller = this.profiles.find(p => p.id === adminUserId);
+    if (!caller || (caller.role !== "admin" && caller.role !== "super_admin")) {
+      return {
+        success: false,
+        error: "Access Denied: Only administrators can modify user account status."
+      };
+    }
+
+    const target = this.profiles.find(p => p.id === targetUserId);
+    if (!target) {
+      return { success: false, error: "Target user not found." };
+    }
+
+    // Admins cannot suspend a super_admin unless they are a super_admin themselves
+    if (target.role === "super_admin" && caller.role !== "super_admin") {
+      return {
+        success: false,
+        error: "Access Denied: Ordinary administrators cannot suspend a Super Administrator."
+      };
+    }
+
+    const previousStatus = target.account_status || "active";
+    target.account_status = status;
+    target.updated_at = new Date().toISOString();
+
+    this.addAuditLog(
+      adminUserId,
+      status === "suspended" ? "SUSPEND_USER_ACCOUNT" : "REACTIVATE_USER_ACCOUNT",
+      "profile",
+      targetUserId,
+      {
+        target_username: target.username,
+        previous_status: previousStatus,
+        new_status: status,
+        reason: reason || "Administrative status update",
+        admin_username: caller.username
+      }
+    );
+
+    return { success: true, profile: target };
+  }
+
+  /**
+   * Request Account Deletion (GDPR / Civic Data Anonymization)
+   * Anonymizes citizen personal profile while retaining submitted civic reports
+   * for statutory public record continuity.
+   */
+  deleteUserAccount(
+    userId: string,
+    reason?: string
+  ): { success: boolean; error?: string } {
+    const target = this.profiles.find(p => p.id === userId);
+    if (!target) {
+      return { success: false, error: "User profile not found." };
+    }
+
+    // Anonymize personal details
+    target.display_name = "Deleted Citizen Account";
+    target.bio = "This user account has been deactivated upon citizen request.";
+    target.email = null;
+    target.phone = null;
+    target.avatar_url = null;
+    target.account_status = "deactivated";
+    target.deletion_requested_at = new Date().toISOString();
+    target.deletion_reason = reason || "Citizen self-requested deletion";
+    target.privacy_settings = {
+      show_phone: false,
+      show_email: false,
+      show_address: false,
+      public_profile: false
+    };
+    target.updated_at = new Date().toISOString();
+
+    this.addAuditLog(
+      userId,
+      "DELETE_USER_ACCOUNT",
+      "profile",
+      userId,
+      {
+        reason: reason || "Citizen requested deletion",
+        anonymized: true,
+        timestamp: new Date().toISOString()
+      }
+    );
+
+    return { success: true };
   }
 
   // AUDIT LOGS

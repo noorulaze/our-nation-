@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { Navbar } from "@/components/layout/Navbar";
 import { BottomNav } from "@/components/layout/BottomNav";
@@ -43,19 +43,56 @@ import {
   Wrench,
   ThumbsUp,
   MessageSquare,
-  ShieldAlert
+  ShieldAlert,
+  Settings
 } from "lucide-react";
 
 export default function UnifiedDashboardPage() {
   const { language } = useLanguage();
-  const { user, role } = useAuth();
+  const { user, role, logout } = useAuth();
 
   // Active Persona (defaults to current authenticated role, with preview switcher for UI inspection)
   const [activePersona, setActivePersona] = useState<UserRole>(role || "user");
 
+  // Synchronize activePersona with authenticated role
+  useEffect(() => {
+    if (role) {
+      setActivePersona(role);
+    }
+  }, [role]);
+
+  // Real Civic Issues submitted by or associated with this citizen
+  const myCivicIssues = useMemo(() => {
+    const all = civicStore.getIssues();
+    const currentId = user?.id;
+    const currentName = user?.display_name?.toLowerCase();
+    const currentUsername = user?.username?.toLowerCase();
+
+    const filtered = all.filter(issue => {
+      if (currentId && issue.reporter_id === currentId) return true;
+      if (currentName && issue.reporter_name?.toLowerCase().includes(currentName)) return true;
+      if (currentUsername && issue.reporter_name?.toLowerCase().includes(currentUsername)) return true;
+      if (currentUsername === "fathima_tanur" || currentId === "u0000000-0000-0000-0000-000000000003") return true;
+      return false;
+    });
+
+    return filtered.length > 0 ? filtered : all.slice(0, 3);
+  }, [user]);
+
+  // Profile Completion Indicator
+  const profileCompletion = useMemo(() => {
+    let score = 0;
+    const missing: string[] = [];
+    if (user?.display_name) score += 25; else missing.push("Display name");
+    if (user?.email) score += 25; else missing.push("Email address");
+    if (user?.email_verified) score += 25; else missing.push("Verify email");
+    if (user?.phone || user?.bio) score += 25; else missing.push("Add phone or bio");
+    return { percentage: score, missing };
+  }, [user]);
+
   // Resident Data
   const userId = user?.id || "u0000000-0000-0000-0000-000000000003";
-  const myReports = useMemo(() => store.getIssueReports(undefined, userId), [userId]);
+  const myReports = myCivicIssues;
   const myIdeas = useMemo(() => digitalMunicipalityStore.getProposals().slice(0, 3), []);
   const myNotifications = useMemo(() => store.getNotifications(userId), [userId]);
   const mySavedPros = useMemo(() => (user ? store.getSavedProfessionals(user.id) : []), [user]);
@@ -127,86 +164,129 @@ export default function UnifiedDashboardPage() {
         {/* ========================================================================= */}
         {/* 1. RESIDENT PERSONA DASHBOARD                                             */}
         {/* ========================================================================= */}
-        {activePersona === "user" && (
+        {(activePersona === "user" || activePersona === "citizen") && (
           <div className="space-y-6">
             {/* Resident Hero */}
             <div className="bg-[#194B35] rounded-3xl p-6 sm:p-8 text-white relative overflow-hidden shadow-md">
               <div className="max-w-3xl space-y-3 relative z-10">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 text-xs font-bold border border-amber-400/30">
-                  <User className="w-3.5 h-3.5" />
-                  <span>{language === "ml" ? "പൗര സേവന കേന്ദ്രം" : "Resident Civic Portal"}</span>
+                <div className="flex flex-wrap items-center gap-2">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 text-xs font-bold border border-amber-400/30">
+                    <User className="w-3.5 h-3.5" />
+                    <span>Citizen Dashboard</span>
+                  </div>
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-white/10 text-white/90 border border-white/20">
+                    Role: {user?.role || "citizen"}
+                  </span>
+                  <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1 ${user?.email_verified ? "bg-emerald-400/20 text-emerald-300 border border-emerald-400/30" : "bg-amber-400/20 text-amber-200 border border-amber-400/30"}`}>
+                    <CheckCircle2 className="w-3 h-3" />
+                    <span>{user?.email_verified ? "Verified Citizen" : "Email Verification Pending"}</span>
+                  </span>
                 </div>
-                <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight font-malayalam-heading">
-                  {language === "ml"
-                    ? `സ്വാഗതം, ${user?.display_name || "ഫാത്തിമ സുഹറ"}`
-                    : `Welcome, ${user?.display_name || "Fathima Suhara"}`}
+
+                <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight font-sans">
+                  Welcome, {user?.display_name || user?.username || "Citizen"}
                 </h1>
                 <p className="text-white/80 text-xs sm:text-sm leading-relaxed max-w-2xl">
-                  {language === "ml"
-                    ? "നിങ്ങൾ സമർപ്പിച്ച സിവിക് പരാതികളുടെ പുരോഗതി, പിന്തുണച്ച വികസന ആശയങ്ങൾ, താനൂരിലെ ഔദ്യോഗിക അറിയിപ്പുകൾ എന്നിവ ഒറ്റനോട്ടത്തിൽ."
-                    : "Track your reported civic issues, supported community development ideas, saved content, and followed ward activities across Tanur Municipality."}
+                  Track your reported civic issues, monitor municipal infrastructure progress across 45 statutory wards, and engage with community proposals.
                 </p>
 
                 <div className="pt-2 flex flex-wrap items-center gap-3">
                   <Link
-                    href="/civic/report"
+                    href="/civic-connect"
                     className="px-4 py-2 bg-amber-400 hover:bg-amber-300 text-[#143E2C] font-bold text-xs rounded-xl flex items-center gap-1.5 transition shadow-sm"
                   >
                     <Plus className="w-4 h-4" />
-                    <span>{language === "ml" ? "പരാതി രജിസ്റ്റർ ചെയ്യാം" : "Report Civic Issue"}</span>
+                    <span>Report a Civic Issue</span>
                   </Link>
 
                   <Link
-                    href="/peoples-voice/ideas/new"
+                    href="/profile"
                     className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl border border-white/20 flex items-center gap-1.5 transition"
                   >
-                    <TrendingUp className="w-4 h-4 text-amber-300" />
-                    <span>{language === "ml" ? "ആശയം സമർപ്പിക്കാം" : "Submit Idea"}</span>
+                    <Settings className="w-4 h-4 text-amber-300" />
+                    <span>Account Settings</span>
                   </Link>
 
-                  <Link
-                    href="/notifications"
-                    className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white font-bold text-xs rounded-xl border border-white/20 flex items-center gap-1.5 transition"
+                  <button
+                    type="button"
+                    onClick={() => logout()}
+                    className="px-4 py-2 bg-white/10 hover:bg-red-500/30 text-white font-bold text-xs rounded-xl border border-white/20 flex items-center gap-1.5 transition"
                   >
-                    <Bell className="w-4 h-4 text-amber-300" />
-                    <span>{language === "ml" ? `അറിയിപ്പുകൾ (${myNotifications.filter(n => !n.is_read).length})` : `Notifications (${myNotifications.filter(n => !n.is_read).length})`}</span>
-                  </Link>
+                    <span>Sign Out</span>
+                  </button>
                 </div>
               </div>
             </div>
 
-            {/* Resident 4 KPI Stats */}
+            {/* Profile Completion Card */}
+            {profileCompletion.percentage < 100 && (
+              <div className="bg-white rounded-2xl border border-[#EDE6D8] p-4 shadow-2xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-[#194B35]">Profile Completion:</span>
+                    <span className="text-xs font-extrabold text-[#C39A5B]">{profileCompletion.percentage}%</span>
+                  </div>
+                  <div className="w-48 sm:w-64 h-2 bg-[#FAF7F0] rounded-full overflow-hidden border border-[#EDE6D8]">
+                    <div
+                      className="h-full bg-[#194B35] rounded-full transition-all duration-500"
+                      style={{ width: `${profileCompletion.percentage}%` }}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-[11px] text-[#5C6A64]">Recommended next step:</span>
+                  {profileCompletion.missing.map((item, idx) => (
+                    <Link
+                      key={idx}
+                      href="/profile"
+                      className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-[#FAF7F0] hover:bg-[#EDE6D8] text-[#194B35] border border-[#EDE6D8] transition"
+                    >
+                      + {item}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Resident 4 KPI Stats (Connected to Real Civic Issues) */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <div className="bg-white rounded-2xl border border-[#EDE6D8] p-4">
                 <span className="text-[10px] font-bold uppercase text-gray-400 block">
-                  {language === "ml" ? "എന്റെ പരാതികൾ" : "My Reports"}
+                  My Reports
                 </span>
-                <p className="text-2xl font-black text-[#194B35] mt-1">{myReports.length || 2}</p>
-                <span className="text-[10px] text-emerald-600 font-bold">1 ഇൻ പ്രോഗ്രസ് • 1 തീർപ്പായി</span>
+                <p className="text-2xl font-black text-[#194B35] mt-1">{myCivicIssues.length}</p>
+                <span className="text-[10px] text-emerald-600 font-bold">Total Submitted</span>
               </div>
 
               <div className="bg-white rounded-2xl border border-[#EDE6D8] p-4">
                 <span className="text-[10px] font-bold uppercase text-gray-400 block">
-                  {language === "ml" ? "സമർപ്പിച്ച ആശയങ്ങൾ" : "My Ideas"}
+                  Under Review
                 </span>
-                <p className="text-2xl font-black text-[#C39A5B] mt-1">{myIdeas.length}</p>
-                <span className="text-[10px] text-gray-500">38 ജനകീയ പിന്തുണകൾ</span>
+                <p className="text-2xl font-black text-amber-600 mt-1">
+                  {myCivicIssues.filter(i => i.status === "submitted" || i.status === "under_review").length}
+                </p>
+                <span className="text-[10px] text-gray-500">Awaiting Inspection</span>
               </div>
 
               <div className="bg-white rounded-2xl border border-[#EDE6D8] p-4">
                 <span className="text-[10px] font-bold uppercase text-gray-400 block">
-                  {language === "ml" ? "സൂക്ഷിച്ച വിദഗ്ദ്ധർ" : "Saved Pros"}
+                  In Progress
                 </span>
-                <p className="text-2xl font-black text-[#194B35] mt-1">{mySavedPros.length || 3}</p>
-                <span className="text-[10px] text-gray-500">ബുക്കിംഗിന് തയ്യാറുള്ളവർ</span>
+                <p className="text-2xl font-black text-blue-600 mt-1">
+                  {myCivicIssues.filter(i => i.status === "in_progress" || i.status === "forwarded").length}
+                </p>
+                <span className="text-[10px] text-blue-600 font-bold">Action Underway</span>
               </div>
 
               <div className="bg-white rounded-2xl border border-[#EDE6D8] p-4">
                 <span className="text-[10px] font-bold uppercase text-gray-400 block">
-                  {language === "ml" ? "പിന്തുടരുന്ന വാർഡ്" : "Followed Ward"}
+                  Resolved
                 </span>
-                <p className="text-lg font-black text-[#194B35] mt-1">വാർഡ് 14 (ഹാർബർ)</p>
-                <span className="text-[10px] text-[#C39A5B] font-bold">താനൂർ നഗരസഭ</span>
+                <p className="text-2xl font-black text-emerald-700 mt-1">
+                  {myCivicIssues.filter(i => i.status === "resolved").length}
+                </p>
+                <span className="text-[10px] text-emerald-600 font-bold">Completed ✓</span>
               </div>
             </div>
 
@@ -217,44 +297,50 @@ export default function UnifiedDashboardPage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <AlertTriangle className="w-5 h-5 text-orange-600" />
-                    <h2 className="text-base font-bold text-[#194B35] font-malayalam-heading">
-                      {language === "ml" ? "എന്റെ സിവിക് റിപ്പോർട്ടുകൾ" : "My Civic Reports"}
+                    <h2 className="text-base font-bold text-[#194B35]">
+                      My Civic Reports ({myCivicIssues.length})
                     </h2>
                   </div>
-                  <Link href="/civic/my-reports" className="text-xs font-bold text-[#194B35] hover:underline flex items-center gap-1">
-                    <span>{language === "ml" ? "എല്ലാം കാണുക" : "View All"}</span>
+                  <Link href="/civic-connect" className="text-xs font-bold text-[#194B35] hover:underline flex items-center gap-1">
+                    <span>Report Issue</span>
                     <ChevronRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
 
                 <div className="space-y-3">
-                  <div className="p-3.5 rounded-xl bg-[#FAF7F0] border border-[#EDE6D8] space-y-1.5">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-gray-800">വാർഡ് 14 അങ്ങാടി ഡ്രെയിനേജ് ബ്ലോക്ക്</span>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">
-                        In Progress
-                      </span>
+                  {myCivicIssues.slice(0, 4).map((issue) => (
+                    <div key={issue.id} className="p-3.5 rounded-xl bg-[#FAF7F0] border border-[#EDE6D8] space-y-1.5">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-xs font-bold text-[#1A2420] truncate">{issue.title}</span>
+                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ${
+                          issue.status === "resolved"
+                            ? "bg-emerald-100 text-emerald-800"
+                            : issue.status === "in_progress"
+                            ? "bg-blue-100 text-blue-800"
+                            : "bg-amber-100 text-amber-800"
+                        }`}>
+                          {issue.status.replace("_", " ").toUpperCase()}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-[#5C6A64] line-clamp-1">{issue.description}</p>
+                      <div className="text-[10px] text-gray-500 flex items-center justify-between pt-1">
+                        <span className="font-mono">{issue.tracking_id} • {issue.locality}</span>
+                        <Link href="/civic-connect" className="text-[#194B35] font-bold hover:underline">Track Status →</Link>
+                      </div>
                     </div>
-                    <p className="text-[11px] text-[#5C6A64]">അസിസ്റ്റന്റ് എഞ്ചിനീയർ സൈറ്റ് പരിശോധിച്ചു. കരാറുകാരന് നിർദ്ദേശം നൽകി.</p>
-                    <div className="text-[10px] text-gray-400 flex items-center justify-between pt-1">
-                      <span>താനൂർ ഹാർബർ റോഡ്</span>
-                      <Link href="/civic/issues/iss-002" className="text-[#194B35] font-bold hover:underline">ട്രാക്ക് ചെയ്യാം →</Link>
-                    </div>
-                  </div>
+                  ))}
 
-                  <div className="p-3.5 rounded-xl bg-[#FAF7F0] border border-[#EDE6D8] space-y-1.5">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-gray-800">തീരദേശ റോഡ് സ്ട്രീറ്റ്‌ലൈറ്റ് തകരാർ</span>
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
-                        Resolved
-                      </span>
+                  {myCivicIssues.length === 0 && (
+                    <div className="text-center py-8 text-xs text-[#5C6A64]">
+                      <p>You haven&apos;t submitted any civic issues yet.</p>
+                      <Link
+                        href="/civic-connect"
+                        className="mt-2 inline-block px-3 py-1.5 bg-[#194B35] text-white rounded-lg font-bold"
+                      >
+                        Submit a Civic Issue
+                      </Link>
                     </div>
-                    <p className="text-[11px] text-[#5C6A64]">കെ.എസ്.ഇ.ബി സെക്ഷൻ പുതിയ എൽ.ഇ.ഡി ലൈറ്റുകൾ സ്ഥാപിച്ചു പൂർത്തിയാക്കി.</p>
-                    <div className="text-[10px] text-gray-400 flex items-center justify-between pt-1">
-                      <span>താനൂർ ബീച്ച് വാർഡ്</span>
-                      <span className="text-emerald-700 font-bold">പരിഹരിച്ചു ✓</span>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
 

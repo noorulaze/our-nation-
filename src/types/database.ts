@@ -1,4 +1,4 @@
-export type UserRole = 'user' | 'moderator' | 'verified_org' | 'admin';
+export type UserRole = 'citizen' | 'user' | 'moderator' | 'verified_org' | 'admin' | 'super_admin';
 export type PreferredLanguage = 'ml' | 'en';
 export type CommunityType = 'country' | 'state' | 'district' | 'locality' | 'panchayath' | 'municipality' | 'corporation';
 export type MembershipRole = 'member' | 'moderator' | 'admin';
@@ -10,6 +10,7 @@ export type IssueCategory = 'roads' | 'waste_management' | 'water' | 'public_fac
 export type IssueStatus = 'submitted' | 'under_review' | 'acknowledged' | 'in_progress' | 'resolved' | 'rejected';
 export type ReportContentType = 'post' | 'comment' | 'event' | 'business' | 'issue' | 'professional' | 'review';
 export type ReportStatus = 'pending' | 'reviewed' | 'dismissed' | 'actioned';
+export type AccountStatus = 'active' | 'suspended' | 'deactivated';
 
 export interface ProfilePrivacySettings {
   show_phone: boolean;
@@ -33,6 +34,10 @@ export interface Profile {
   interests?: string[];
   is_professional?: boolean;
   privacy_settings?: ProfilePrivacySettings;
+  account_status?: AccountStatus;
+  email_verified?: boolean;
+  deletion_requested_at?: string | null;
+  deletion_reason?: string | null;
   created_at: string;
   updated_at: string;
 }

@@ -74,7 +74,7 @@ export function KeralaLogo({
         </div>
         {showSubtext && (
           <span className={`text-[10px] sm:text-[11px] font-medium tracking-normal leading-tight mt-0.5 ${subtextColor}`}>
-            {isEn ? "Digital Municipality Platform" : "ഡിജിറ്റൽ നഗരസഭാ വേദി"}
+            Digital Municipality Platform
           </span>
         )}
       </div>

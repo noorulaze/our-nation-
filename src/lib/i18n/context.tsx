@@ -14,18 +14,15 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<PreferredLanguage>("ml");
+  const [language, setLanguageState] = useState<PreferredLanguage>("en");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Check saved preference or browser setting
-    const saved = localStorage.getItem("nammude_naadu_lang") as PreferredLanguage | null;
-    const initial = saved === "en" || saved === "ml" ? saved : "ml";
-    setLanguageState(initial);
+    setLanguageState("en");
     if (typeof document !== "undefined") {
-      document.documentElement.lang = initial;
-      document.documentElement.classList.toggle("lang-ml", initial === "ml");
-      document.documentElement.classList.toggle("lang-en", initial === "en");
+      document.documentElement.lang = "en";
+      document.documentElement.classList.add("lang-en");
+      document.documentElement.classList.remove("lang-ml");
     }
     setMounted(true);
   }, []);

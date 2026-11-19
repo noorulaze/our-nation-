@@ -13,37 +13,37 @@ export function BottomNav() {
   const tabs = [
     { 
       href: "/", 
-      label: language === "ml" ? "ഹോം" : "Home", 
+      label: "Home", 
       icon: Home,
       isActive: pathname === "/" 
     },
     { 
       href: "/digital-municipality", 
-      label: language === "ml" ? "നഗരസഭ" : "Municipality", 
+      label: "Municipality", 
       icon: Building2,
       isActive: pathname.startsWith("/digital-municipality") || pathname.startsWith("/digital-tanur")
     },
     { 
       href: "/civic-connect", 
-      label: language === "ml" ? "പരാതികൾ" : "Civic", 
+      label: "Report", 
       icon: AlertTriangle,
       isActive: pathname.startsWith("/civic-connect") || pathname.startsWith("/civic")
     },
     { 
       href: "/development-tracker", 
-      label: language === "ml" ? "വികസനം" : "Projects", 
+      label: "Projects", 
       icon: HardHat,
       isActive: pathname.startsWith("/development-tracker") || pathname.startsWith("/development")
     },
     { 
       href: "/public-services", 
-      label: language === "ml" ? "സേവനങ്ങൾ" : "Services", 
+      label: "Services", 
       icon: Briefcase,
       isActive: pathname.startsWith("/public-services")
     },
     { 
       href: "/profile", 
-      label: language === "ml" ? "പ്രൊഫൈൽ" : "Profile", 
+      label: "Profile", 
       icon: User,
       isActive: pathname.startsWith("/profile") || pathname.startsWith("/dashboard") || pathname.startsWith("/admin")
     },
@@ -70,7 +70,7 @@ export function BottomNav() {
               <div className={`p-1 rounded-full transition-colors ${tab.isActive ? "bg-[#E0F1E7]" : ""}`}>
                 <Icon className={`w-5 h-5 ${tab.isActive ? "stroke-[2.5]" : "stroke-[1.8]"}`} />
               </div>
-              <span className={`text-[10px] mt-0.5 whitespace-nowrap ${language === "ml" ? "font-malayalam tracking-normal" : "font-manrope tracking-tight"} ${tab.isActive ? "font-bold text-[#1B4D36]" : "font-medium"}`}>
+              <span className={`text-[10px] mt-0.5 whitespace-nowrap font-sans ${tab.isActive ? "font-bold text-[#1B4D36]" : "font-medium"}`}>
                 {tab.label}
               </span>
             </Link>

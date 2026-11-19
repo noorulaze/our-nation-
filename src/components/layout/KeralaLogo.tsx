@@ -4,9 +4,9 @@ import React from "react";
 import { useLanguage } from "@/lib/i18n/context";
 
 export function KeralaLogo({ 
-  className = "h-10", 
+  className = "", 
   variant = "light",
-  showSubtext = false 
+  showSubtext = true 
 }: { 
   className?: string; 
   variant?: "light" | "dark";
@@ -14,72 +14,68 @@ export function KeralaLogo({
 }) {
   const { language } = useLanguage();
   const isDark = variant === "dark";
-  const strokeColor = isDark ? "#FFFFFF" : "#1B4D36";
-  const textColor = isDark ? "text-white" : "text-[#1B4D36]";
-  const subtextColor = isDark ? "text-amber-200/90" : "text-[#9E6A1E]";
+  const strokeColor = isDark ? "#FFFFFF" : "#194B35";
+  const textColor = isDark ? "text-white" : "text-[#194B35]";
+  const subtextColor = isDark ? "text-amber-200/90" : "text-[#5C6A64]";
 
   const isEn = language === "en";
 
   return (
-    <div className={`flex items-center gap-3 ${className}`}>
-      {/* Coconut Tree & Wave Emblem */}
-      <svg 
-        viewBox="0 0 64 64" 
-        className="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0" 
-        fill="none" 
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-      >
-        {/* Palm Fronds */}
-        <path 
-          d="M32 10C34 16 38 20 48 20M32 10C30 16 26 20 16 20M32 10C36 14 42 16 46 26M32 10C28 14 22 16 18 26M32 10C34 8 40 10 44 14M32 10C30 8 24 10 20 14" 
-          stroke={strokeColor} 
-          strokeWidth="2.5" 
-          strokeLinecap="round" 
-        />
-        {/* Curved Trunk */}
-        <path 
-          d="M32 10C31 22 28 36 24 48" 
-          stroke={strokeColor} 
-          strokeWidth="3" 
-          strokeLinecap="round" 
-        />
-        {/* Island & Water Waves */}
-        <path 
-          d="M12 48C18 45 28 45 36 48M8 53C16 51 28 50 42 53M14 58C22 56 34 56 50 58" 
-          stroke={strokeColor} 
-          strokeWidth="2" 
-          strokeLinecap="round" 
-        />
-        {/* Birds in flight */}
-        <path 
-          d="M48 10C49 8 51 9 52 10C53 9 55 8 56 10" 
-          stroke={strokeColor} 
-          strokeWidth="1.5" 
-          strokeLinecap="round" 
-        />
-      </svg>
+    <div className={`flex items-center gap-2.5 sm:gap-3 flex-shrink-0 whitespace-nowrap ${className}`}>
+      {/* Traditional Kerala Heritage & Coastal Emblem */}
+      <div className="relative w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-[#194B35]/10 border border-[#194B35]/20 flex items-center justify-center p-1.5 flex-shrink-0">
+        <svg 
+          viewBox="0 0 64 64" 
+          className="w-full h-full" 
+          fill="none" 
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+        >
+          {/* Traditional Kerala Roof Gable */}
+          <path 
+            d="M32 6L14 22H50L32 6Z" 
+            stroke={strokeColor} 
+            strokeWidth="2.5" 
+            strokeLinejoin="round" 
+            fill={isDark ? "rgba(255,255,255,0.12)" : "rgba(25,75,53,0.08)"}
+          />
+          {/* Gable finial */}
+          <path d="M32 3V6" stroke="#C39A5B" strokeWidth="2.5" strokeLinecap="round" />
+          {/* Palm Fronds on sides */}
+          <path 
+            d="M14 22C10 16 6 18 4 22M14 22C8 24 6 28 8 32M50 22C54 16 58 18 60 22M50 22C56 24 58 28 56 32" 
+            stroke={strokeColor} 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+          />
+          {/* Pillars */}
+          <path d="M20 22V42M28 22V42M36 22V42M44 22V42" stroke={strokeColor} strokeWidth="2" />
+          {/* Plinth */}
+          <path d="M10 42H54V48H10V42Z" stroke={strokeColor} strokeWidth="2" fill={isDark ? "rgba(255,255,255,0.05)" : "rgba(25,75,53,0.05)"} />
+          {/* Water waves */}
+          <path 
+            d="M8 54C16 51 28 51 40 54M24 59C34 57 44 57 56 59" 
+            stroke="#C39A5B" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+          />
+        </svg>
+      </div>
 
       {/* Brand Wordmark Typography Hierarchy */}
-      <div className="flex flex-col">
-        {isEn ? (
-          <>
-            <span className={`text-lg sm:text-2xl font-extrabold font-brand tracking-tight leading-none ${textColor}`}>
-              OUR NATION
-            </span>
-            <span className={`text-[10px] sm:text-[11px] font-medium font-malayalam tracking-normal mt-0.5 ${subtextColor}`}>
-              നമ്മുടെ നാട് • Malappuram & Tanur
-            </span>
-          </>
-        ) : (
-          <>
-            <span className={`text-xl sm:text-2xl font-bold font-malayalam leading-none tracking-normal ${textColor}`}>
-              നമ്മുടെ നാട്
-            </span>
-            <span className={`text-[10px] sm:text-[11px] font-semibold font-brand tracking-wider uppercase mt-0.5 ${subtextColor}`}>
-              OUR NATION • താനൂർ & മലപ്പുറം
-            </span>
-          </>
+      <div className="flex flex-col flex-shrink-0 text-left">
+        <div className="flex items-center gap-1.5 leading-none">
+          <span className={`text-base sm:text-xl font-black font-brand tracking-tight ${textColor}`}>
+            OUR NATION
+          </span>
+          <span className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[9px] font-bold bg-[#C39A5B]/15 text-[#C39A5B] border border-[#C39A5B]/30 uppercase">
+            Tanur
+          </span>
+        </div>
+        {showSubtext && (
+          <span className={`text-[10px] sm:text-[11px] font-medium tracking-normal mt-0.5 ${subtextColor}`}>
+            {isEn ? "Digital Municipality Platform • താനൂർ" : "ഡിജിറ്റൽ നഗരസഭാ വേദി • താനൂർ"}
+          </span>
         )}
       </div>
     </div>

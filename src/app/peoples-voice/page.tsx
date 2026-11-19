@@ -104,8 +104,8 @@ export default function PeoplesVoiceHomePage() {
         <div className="relative rounded-3xl sm:rounded-[36px] bg-gradient-to-br from-[#FAF7F0] via-[#F5F1E7] to-[#EDE6D8] border border-[#EDE6D8] p-6 sm:p-10 shadow-xs overflow-hidden">
           <div className="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#194B35_1px,transparent_1px)] [background-size:16px_16px]" />
 
-          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6 sm:gap-8">
-            <div className="space-y-3 sm:space-y-4 max-w-2xl">
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            <div className="md:col-span-7 space-y-4 text-left">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#194B35]/10 text-[#194B35] text-xs font-bold border border-[#194B35]/20">
                 <Heart className="w-4 h-4 text-[#194B35]" />
                 <span>{language === "ml" ? "പൗര പങ്കാളിത്ത വേദി • ഫീച്ചർ 06" : "Citizen Participation • Feature 06"}</span>
@@ -115,7 +115,7 @@ export default function PeoplesVoiceHomePage() {
                 {language === "ml" ? "ജനകീയ ശബ്ദം താനൂർ" : "People's Voice"}
               </h1>
 
-              <p className="text-xs sm:text-sm text-[#5C6A64] leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#5C6A64] leading-relaxed max-w-xl">
                 {language === "ml"
                   ? "നിങ്ങളുടെ ആശയങ്ങൾ. നമ്മുടെ സമൂഹം. മെച്ചപ്പെട്ട താനൂർ. താനൂർ നഗരസഭയിലെ പ്രദേശവാസികൾക്ക് സ്വന്തം നാടിന്റെ നവീകരണത്തിനായുള്ള നിർദ്ദേശങ്ങൾ പങ്കുവെക്കാനും, പൊതുവിഷയങ്ങൾ ചർച്ച ചെയ്യാനും, സന്നദ്ധ കൂട്ടായ്മകളിൽ പങ്കാളികളാകാനുമുള്ള സ്വതന്ത്ര പൊതുവേദി."
                   : "Your Ideas. Our Community. A Better Tanur. An open civic platform for residents of Tanur Municipality to propose constructive improvement ideas, engage in neighborhood discussions, and spearhead voluntary drives."}
@@ -125,7 +125,7 @@ export default function PeoplesVoiceHomePage() {
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <Link
                   href="/peoples-voice/ideas/new"
-                  className="px-5 py-2.5 rounded-2xl bg-[#194B35] hover:bg-[#123626] text-white text-xs sm:text-sm font-bold shadow-sm hover:shadow transition flex items-center gap-2"
+                  className="px-5 py-3 rounded-2xl bg-[#194B35] hover:bg-[#123626] text-white text-xs sm:text-sm font-bold shadow-sm hover:shadow transition flex items-center gap-2 min-h-[44px]"
                 >
                   <PlusCircle className="w-4 h-4 text-amber-300" />
                   <span>{language === "ml" ? "പുതിയ ആശയം സമർപ്പിക്കാം" : "Submit Community Idea"}</span>
@@ -133,7 +133,7 @@ export default function PeoplesVoiceHomePage() {
 
                 <Link
                   href="/peoples-voice/ideas"
-                  className="px-5 py-2.5 rounded-2xl bg-white hover:bg-[#FAF7F0] text-[#194B35] border border-[#EDE6D8] text-xs sm:text-sm font-bold shadow-2xs transition flex items-center gap-2"
+                  className="px-5 py-3 rounded-2xl bg-white hover:bg-[#FAF7F0] text-[#194B35] border border-[#EDE6D8] text-xs sm:text-sm font-bold shadow-2xs transition flex items-center gap-2 min-h-[44px]"
                 >
                   <Lightbulb className="w-4 h-4 text-[#C39A5B]" />
                   <span>{language === "ml" ? "ആശയങ്ങൾ കാണുക" : "Browse Ideas Register"}</span>
@@ -141,7 +141,7 @@ export default function PeoplesVoiceHomePage() {
 
                 <Link
                   href="/peoples-voice/discussions"
-                  className="px-5 py-2.5 rounded-2xl bg-[#FAF7F0] hover:bg-[#EDE6D8] text-[#194B35] border border-[#EDE6D8] text-xs sm:text-sm font-bold shadow-2xs transition flex items-center gap-2"
+                  className="px-5 py-3 rounded-2xl bg-[#FAF7F0] hover:bg-[#EDE6D8] text-[#194B35] border border-[#EDE6D8] text-xs sm:text-sm font-bold shadow-2xs transition flex items-center gap-2 min-h-[44px]"
                 >
                   <MessageSquare className="w-4 h-4 text-[#194B35]" />
                   <span>{language === "ml" ? "ചർച്ചകൾ" : "Civic Discussions"}</span>
@@ -150,26 +150,28 @@ export default function PeoplesVoiceHomePage() {
             </div>
 
             {/* Quick Metrics Strip */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-3 w-full lg:w-80 shrink-0">
-              <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1">
-                <span className="text-[10px] uppercase font-bold text-[#C39A5B] block">Community Ideas</span>
-                <span className="text-xl sm:text-2xl font-black text-[#194B35]">{analytics.totalIdeas}</span>
-                <span className="text-[11px] text-[#5C6A64] block">Proposed</span>
-              </div>
-              <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1">
-                <span className="text-[10px] uppercase font-bold text-emerald-700 block">Endorsements</span>
-                <span className="text-xl sm:text-2xl font-black text-emerald-800">{analytics.totalSupporters}</span>
-                <span className="text-[11px] text-[#5C6A64] block">Resident Supports</span>
-              </div>
-              <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1">
-                <span className="text-[10px] uppercase font-bold text-blue-700 block">Civic Debates</span>
-                <span className="text-xl sm:text-2xl font-black text-blue-900">{analytics.totalDiscussions}</span>
-                <span className="text-[11px] text-[#5C6A64] block">Active Threads</span>
-              </div>
-              <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1">
-                <span className="text-[10px] uppercase font-bold text-purple-700 block">Local Drives</span>
-                <span className="text-xl sm:text-2xl font-black text-purple-900">{analytics.totalInitiatives}</span>
-                <span className="text-[11px] text-[#5C6A64] block">Volunteer Actions</span>
+            <div className="md:col-span-5 flex justify-center md:justify-end w-full">
+              <div className="grid grid-cols-2 gap-3 w-full max-w-md">
+                <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1 text-left">
+                  <span className="text-[10px] uppercase font-bold text-[#C39A5B] block">Community Ideas</span>
+                  <span className="text-xl sm:text-2xl font-black text-[#194B35]">{analytics.totalIdeas}</span>
+                  <span className="text-[11px] text-[#5C6A64] block">Proposed</span>
+                </div>
+                <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1 text-left">
+                  <span className="text-[10px] uppercase font-bold text-emerald-700 block">Endorsements</span>
+                  <span className="text-xl sm:text-2xl font-black text-emerald-800">{analytics.totalSupporters}</span>
+                  <span className="text-[11px] text-[#5C6A64] block">Resident Supports</span>
+                </div>
+                <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1 text-left">
+                  <span className="text-[10px] uppercase font-bold text-blue-700 block">Civic Debates</span>
+                  <span className="text-xl sm:text-2xl font-black text-blue-900">{analytics.totalDiscussions}</span>
+                  <span className="text-[11px] text-[#5C6A64] block">Active Threads</span>
+                </div>
+                <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1 text-left">
+                  <span className="text-[10px] uppercase font-bold text-purple-700 block">Local Drives</span>
+                  <span className="text-xl sm:text-2xl font-black text-purple-900">{analytics.totalInitiatives}</span>
+                  <span className="text-[11px] text-[#5C6A64] block">Volunteer Actions</span>
+                </div>
               </div>
             </div>
           </div>

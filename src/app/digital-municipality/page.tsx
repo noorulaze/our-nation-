@@ -311,9 +311,9 @@ export default function DigitalMunicipalityPage() {
           />
 
           <div className="relative z-10 p-5 sm:p-8 lg:p-12">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
               {/* Left Column: Feature Badge, Bilingual Title, Description & CTAs */}
-              <div className="lg:col-span-7 space-y-5 text-left">
+              <div className="md:col-span-7 space-y-5 text-left">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/85 backdrop-blur-xs border border-[#EDE6D8] text-[#194B35] text-xs font-bold shadow-2xs">
                   <Building2 className="w-3.5 h-3.5 text-[#C39A5B]" />
                   <span>{language === "ml" ? "ഫീച്ചർ 01: ഔദ്യോഗിക വിവര കേന്ദ്രം" : "Feature 01: Municipal Information Hub"}</span>
@@ -328,7 +328,7 @@ export default function DigitalMunicipalityPage() {
                   </h1>
                 </div>
 
-                <p className="text-[#5C6A64] text-sm sm:text-base leading-relaxed max-w-2xl">
+                <p className="text-[#5C6A64] text-xs sm:text-sm lg:text-base leading-relaxed max-w-2xl">
                   {language === "ml"
                     ? "മലപ്പുറം ജില്ലയിലെ ചരിത്രപ്രസിദ്ധമായ തീരദേശ നഗരസഭ. 44 വാർഡുകളിലായി വ്യാപിച്ചുകിടക്കുന്ന ഭരണസംവിധാനം, പൊതുസേവനങ്ങൾ, വികസന പദ്ധതികൾ, പൗരസമ്പർക്ക വിവരങ്ങൾ എന്നിവ ഇവിടെ സമഗ്രമായി ലഭ്യമാക്കിയിരിക്കുന്നു."
                     : "A transparent, connected, and progressive coastal local body. Explore official ward governance across 44 divisions, municipal departments, statutory leadership, public facilities, and interactive GIS mapping."}
@@ -338,14 +338,14 @@ export default function DigitalMunicipalityPage() {
                 <div className="pt-2 flex flex-wrap items-center gap-3">
                   <button
                     onClick={() => setActiveTab("wards")}
-                    className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-[#C39A5B] hover:bg-[#b0874a] text-white font-bold text-xs sm:text-sm shadow-sm transition-all"
+                    className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-[#C39A5B] hover:bg-[#b0874a] text-white font-bold text-xs sm:text-sm shadow-sm transition-all min-h-[44px]"
                   >
                     <span>{language === "ml" ? "44 വാർഡുകൾ കാണുക" : "Explore Our Wards"}</span>
                     <ChevronRight className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => setActiveTab("facilities")}
-                    className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-white hover:bg-[#FAF7F0] text-[#194B35] border border-[#EDE6D8] font-bold text-xs sm:text-sm shadow-2xs transition-all"
+                    className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-white hover:bg-[#FAF7F0] text-[#194B35] border border-[#EDE6D8] font-bold text-xs sm:text-sm shadow-2xs transition-all min-h-[44px]"
                   >
                     <Layers className="w-4 h-4 text-[#C39A5B]" />
                     <span>{language === "ml" ? "പൊതു സൗകര്യങ്ങൾ" : "Public Facilities"}</span>
@@ -354,12 +354,12 @@ export default function DigitalMunicipalityPage() {
               </div>
 
               {/* Right Column: Floating Municipal Seal Card */}
-              <div className="lg:col-span-5 flex justify-center lg:justify-end">
+              <div className="md:col-span-5 flex justify-center md:justify-end">
                 <div className="w-full max-w-sm bg-white/95 backdrop-blur-md rounded-3xl border border-[#EDE6D8] p-6 sm:p-7 shadow-card text-center space-y-4 relative overflow-hidden transition hover:shadow-elevated">
                   <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#194B35] via-[#C39A5B] to-[#194B35]" />
                   
                   {/* Kerala Government & Municipal Emblem SVG */}
-                  <div className="w-20 h-20 mx-auto rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] flex items-center justify-center p-3 text-[#194B35] shadow-xs">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] flex items-center justify-center p-3 text-[#194B35] shadow-xs">
                     <svg viewBox="0 0 64 64" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M32 6C34 14 40 18 50 18M32 6C30 14 24 18 14 18M32 6C36 12 44 14 48 24M32 6C28 12 20 14 16 24" stroke="#194B35" strokeWidth="2.5" strokeLinecap="round" />
                       <path d="M32 6C31 22 28 38 24 50" stroke="#194B35" strokeWidth="3" strokeLinecap="round" />
@@ -400,7 +400,7 @@ export default function DigitalMunicipalityPage() {
             </div>
 
             {/* 6-metric Key Facts Bar */}
-            <div className="mt-8 pt-6 border-t border-[#EDE6D8] grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            <div className="mt-8 pt-6 border-t border-[#EDE6D8] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
               {[
                 { labelEn: "Municipal Wards", labelMl: "വാർഡുകൾ", val: "44", subEn: "Divisions", subMl: "ഡിവിഷനുകൾ" },
                 { labelEn: "Total Area", labelMl: "വിസ്തൃതി", val: "19.59", subEn: "Sq. Km", subMl: "ച.കി.മീറ്റർ" },
@@ -409,11 +409,11 @@ export default function DigitalMunicipalityPage() {
                 { labelEn: "Waste Coverage", labelMl: "മാലിന്യ ശേഖരണം", val: "100%", subEn: "Haritha Karma Sena", subMl: "ഹരിത കർമ്മസേന" },
                 { labelEn: "ULB Grade", labelMl: "പദവി", val: "Grade II", subEn: "Urban Local Body", subMl: "നഗരസഭ (2015)" },
               ].map((fact, idx) => (
-                <div key={idx} className="p-3 bg-white rounded-2xl border border-[#EDE6D8] text-center shadow-2xs hover:border-[#C39A5B] transition-colors">
+                <div key={idx} className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] text-left shadow-2xs hover:border-[#C39A5B] transition-colors">
                   <span className="text-[10px] uppercase font-bold text-[#C39A5B] block truncate">
                     {language === "ml" ? fact.labelMl : fact.labelEn}
                   </span>
-                  <span className="text-xl sm:text-2xl font-black text-[#194B35] block my-0.5">{fact.val}</span>
+                  <span className="text-xl sm:text-2xl font-black text-[#194B35] block my-0.5 font-mono">{fact.val}</span>
                   <span className="text-[10px] text-[#5C6A64] block truncate">
                     {language === "ml" ? fact.subMl : fact.subEn}
                   </span>

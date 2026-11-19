@@ -219,10 +219,10 @@ export default function HomePage() {
 
           {/* Hero Content Container */}
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 lg:gap-12 items-center">
               
               {/* Left Column: Confident Editorial Typography & Primary CTAs */}
-              <div className="lg:col-span-7 space-y-6 text-white text-left">
+              <div className="md:col-span-7 space-y-6 text-white text-left">
                 
                 {/* Statutory Citizen-Centric Pill */}
                 <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md text-[#F5E2B8] text-xs font-bold border border-white/20 shadow-sm">
@@ -236,7 +236,7 @@ export default function HomePage() {
 
                 {/* Confident Headline */}
                 <div className="space-y-3">
-                  <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.08] font-malayalam-heading">
+                  <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-black tracking-tight leading-[1.08] font-malayalam-heading">
                     <span>{language === "ml" ? "ഒരുമിച്ച്, കൂടുതൽ" : "Together for a"}</span>
                     <br />
                     <span className="text-[#F3CE7A] drop-shadow-sm">
@@ -244,13 +244,13 @@ export default function HomePage() {
                     </span>
                   </h1>
 
-                  <p className="text-lg sm:text-xl font-bold text-[#F5E2B8] font-malayalam-heading">
+                  <p className="text-base sm:text-lg lg:text-xl font-bold text-[#F5E2B8] font-malayalam-heading">
                     {language === "ml" 
                       ? "ഡിജിറ്റൽ സേവനങ്ങൾ. സുതാര്യ ഭരണം. പുരോഗമന നഗരസഭ." 
                       : "Digital Services. Transparent Governance. A Progressive Municipality."}
                   </p>
 
-                  <p className="text-white/85 text-sm sm:text-base leading-relaxed max-w-xl font-normal">
+                  <p className="text-white/85 text-xs sm:text-sm lg:text-base leading-relaxed max-w-xl font-normal">
                     {language === "ml"
                       ? "താനൂർ നിവാസികൾക്കായി ഔദ്യോഗിക സേവനങ്ങൾ, 44 വാർഡ് വിവരങ്ങൾ, വികസന പദ്ധതി നിരീക്ഷണം, പരാതി പരിഹാരം എന്നിവ ഒരു കുടക്കീഴിൽ ലഭ്യമാക്കുന്ന ആധികാരിക ഡിജിറ്റൽ സംവിധാനം."
                       : "A modern digital municipality platform where residents can access statutory services, monitor ward infrastructure, verify development milestones, and actively participate in civic governance."}
@@ -261,7 +261,7 @@ export default function HomePage() {
                 <div className="pt-2 flex flex-wrap items-center gap-3">
                   <Link
                     href="/public-services"
-                    className="px-6 py-3.5 bg-[#C39A5B] hover:bg-[#b08849] text-[#194B35] font-black text-xs sm:text-sm rounded-2xl shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 group"
+                    className="px-6 py-3.5 bg-[#C39A5B] hover:bg-[#b08849] text-[#194B35] font-black text-xs sm:text-sm rounded-2xl shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 group min-h-[48px]"
                   >
                     <span>{language === "ml" ? "സേവനങ്ങൾ അറിയുക" : "Explore Services"}</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -269,7 +269,7 @@ export default function HomePage() {
 
                   <Link
                     href="/civic-connect"
-                    className="px-5 py-3.5 bg-white/15 hover:bg-white/25 backdrop-blur-md text-white font-bold text-xs sm:text-sm rounded-2xl border border-white/25 transition flex items-center gap-2 shadow-sm"
+                    className="px-5 py-3.5 bg-white/15 hover:bg-white/25 backdrop-blur-md text-white font-bold text-xs sm:text-sm rounded-2xl border border-white/25 transition flex items-center gap-2 shadow-sm min-h-[48px]"
                   >
                     <AlertTriangle className="w-4 h-4 text-[#F3CE7A]" />
                     <span>{language === "ml" ? "പരാതി രജിസ്റ്റർ" : "Report a Civic Issue"}</span>
@@ -277,7 +277,7 @@ export default function HomePage() {
 
                   <button
                     onClick={() => setIsAiModalOpen(true)}
-                    className="px-4 py-3.5 bg-black/20 hover:bg-black/30 backdrop-blur-md text-[#F5E2B8] font-bold text-xs sm:text-sm rounded-2xl border border-[#C39A5B]/30 transition flex items-center gap-2"
+                    className="px-4 py-3.5 bg-black/20 hover:bg-black/30 backdrop-blur-md text-[#F5E2B8] font-bold text-xs sm:text-sm rounded-2xl border border-[#C39A5B]/30 transition flex items-center gap-2 min-h-[48px]"
                   >
                     <Sparkles className="w-4 h-4 text-[#F3CE7A]" />
                     <span>{language === "ml" ? "നാട് AI" : "Ask Naadu AI"}</span>
@@ -303,8 +303,8 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* Right Column: Floating Frosted Quick Cards (Desktop/Tablet) */}
-              <div className="lg:col-span-5 hidden sm:block space-y-3.5">
+              {/* Right Column: Floating Frosted Quick Cards (Desktop & Tablet) */}
+              <div className="md:col-span-5 hidden md:block space-y-3.5">
                 {[
                   {
                     title: "Citizen Services",
@@ -345,7 +345,7 @@ export default function HomePage() {
                         <div className={`w-11 h-11 rounded-xl flex items-center justify-center border shrink-0 ${card.color} group-hover:scale-105 transition-transform`}>
                           <Icon className="w-5 h-5" />
                         </div>
-                        <div>
+                        <div className="text-left">
                           <h3 className="text-white font-bold text-sm font-malayalam-heading group-hover:text-[#F3CE7A] transition-colors">
                             {language === "ml" ? card.title_ml : card.title}
                           </h3>
@@ -355,7 +355,7 @@ export default function HomePage() {
                         </div>
                       </div>
 
-                      <ChevronRight className="w-4 h-4 text-white/50 group-hover:text-[#F3CE7A] group-hover:translate-x-1 transition-all" />
+                      <ChevronRight className="w-4 h-4 text-white/50 group-hover:text-[#F3CE7A] group-hover:translate-x-1 transition-all shrink-0" />
                     </Link>
                   );
                 })}
@@ -368,28 +368,29 @@ export default function HomePage() {
         {/* ========================================================================= */}
         {/* 2. OVERLAPPING QUICK ACCESS BAR                                           */}
         {/* ========================================================================= */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 sm:-mt-20 relative z-20">
-          <div className="bg-white rounded-3xl border border-[#EDE6D8] p-3 sm:p-4 shadow-xl">
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-14 sm:-mt-18 lg:-mt-20 relative z-20">
+          <div className="bg-white rounded-2xl sm:rounded-3xl border border-[#EDE6D8] p-3 sm:p-4 shadow-xl">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3">
               {quickActions.map((qa) => {
                 const Icon = qa.icon;
                 return (
                   <Link
                     key={qa.id}
                     href={qa.href}
-                    className="p-3.5 sm:p-4 rounded-2xl bg-[#FAF7F0] hover:bg-white border border-[#EDE6D8] hover:border-[#194B35] hover:shadow-md transition-all flex flex-col items-center text-center gap-2.5 group"
+                    className="p-3 sm:p-3.5 rounded-xl sm:rounded-2xl bg-[#FAF7F0] hover:bg-white border border-[#EDE6D8] hover:border-[#194B35] hover:shadow-md transition-all flex items-center gap-3 text-left group min-h-[56px]"
                   >
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center border shrink-0 group-hover:scale-110 transition-transform ${qa.color}`}>
-                      <Icon className="w-5 h-5" />
+                    <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center border shrink-0 group-hover:scale-105 transition-transform ${qa.color}`}>
+                      <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                     </div>
-                    <div>
-                      <h4 className="text-xs sm:text-sm font-bold text-[#194B35] font-malayalam-heading group-hover:text-[#123626]">
+                    <div className="min-w-0 flex-1">
+                      <h4 className="text-xs sm:text-sm font-bold text-[#194B35] font-malayalam-heading truncate group-hover:text-[#123626]">
                         {language === "ml" ? qa.title_ml : qa.title}
                       </h4>
-                      <p className="text-[11px] text-[#5C6A64] mt-0.5 hidden sm:block">
+                      <p className="text-[10px] sm:text-[11px] text-[#5C6A64] truncate">
                         {language === "ml" ? qa.sub_ml : qa.sub}
                       </p>
                     </div>
+                    <ChevronRight className="w-3.5 h-3.5 text-[#C39A5B] opacity-40 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all shrink-0 hidden sm:block" />
                   </Link>
                 );
               })}
@@ -449,22 +450,22 @@ export default function HomePage() {
 
                 {/* Key Facts Metric Grid */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 border-t border-[#EDE6D8]">
-                  <div className="p-3 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8]">
+                  <div className="p-3.5 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] text-left">
                     <div className="text-xl sm:text-2xl font-black text-[#194B35] font-mono">44</div>
                     <div className="text-[11px] text-[#5C6A64] font-medium">{language === "ml" ? "വാർഡുകൾ" : "Statutory Wards"}</div>
                   </div>
 
-                  <div className="p-3 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8]">
+                  <div className="p-3.5 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] text-left">
                     <div className="text-xl sm:text-2xl font-black text-[#194B35] font-mono">19.59</div>
                     <div className="text-[11px] text-[#5C6A64] font-medium">{language === "ml" ? "ചതുരശ്ര കി.മീ" : "Area (km²)"}</div>
                   </div>
 
-                  <div className="p-3 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8]">
+                  <div className="p-3.5 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] text-left">
                     <div className="text-xl sm:text-2xl font-black text-[#194B35] font-mono">69,864</div>
                     <div className="text-[11px] text-[#5C6A64] font-medium">{language === "ml" ? "ജനസംഖ്യ (2011)" : "Population (2011)"}</div>
                   </div>
 
-                  <div className="p-3 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8]">
+                  <div className="p-3.5 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] text-left">
                     <div className="text-xl sm:text-2xl font-black text-[#194B35] font-mono">48+</div>
                     <div className="text-[11px] text-[#5C6A64] font-medium">{language === "ml" ? "മാപ്പ് ചെയ്ത സ്ഥാപനങ്ങൾ" : "Mapped Facilities"}</div>
                   </div>

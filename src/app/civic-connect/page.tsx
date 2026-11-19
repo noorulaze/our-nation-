@@ -171,8 +171,8 @@ export default function CivicConnectPage() {
           {/* Subtle Organic Background Texture */}
           <div className="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#194B35_1px,transparent_1px)] [background-size:16px_16px]" />
           
-          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6 sm:gap-8">
-            <div className="space-y-3 sm:space-y-4 max-w-2xl">
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            <div className="md:col-span-7 space-y-4 text-left">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#194B35]/10 text-[#194B35] text-xs font-bold border border-[#194B35]/20">
                 <ShieldAlert className="w-4 h-4 text-[#194B35]" />
                 <span>{language === "ml" ? "സുതാര്യമായ സിവിക് പരിഹാര സംവിധാനം" : "Public Grievance Redressal • Feature 02"}</span>
@@ -182,7 +182,7 @@ export default function CivicConnectPage() {
                 {language === "ml" ? "സിവിക് കണക്ട് താനൂർ" : "Civic Connect"}
               </h1>
 
-              <p className="text-xs sm:text-sm text-[#5C6A64] leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#5C6A64] leading-relaxed max-w-xl">
                 {language === "ml"
                   ? "നിങ്ങളുടെ ശബ്ദം, ഞങ്ങളുടെ മുൻഗണന. താനൂർ നഗരസഭയിലെ റോഡുകൾ, മാലിന്യ സംസ്കരണം, തെരുവ് വിളക്കുകൾ, ഡ്രെയിനേജ് തുടങ്ങിയ പ്രാദേശിക പ്രശ്നങ്ങൾ സുതാര്യമായി അറിയിക്കാനും തത്സമയം നിരീക്ഷിക്കാനുമുള്ള വേദി."
                   : "Your Voice, Our Priority. Transparent civic grievance reporting and progress tracking for roads, streetlights, sanitation, and municipal utilities across Tanur Municipality."}
@@ -192,7 +192,7 @@ export default function CivicConnectPage() {
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <button
                   onClick={() => setActiveTab("report")}
-                  className="px-5 py-2.5 rounded-2xl bg-[#194B35] hover:bg-[#123626] text-white text-xs sm:text-sm font-bold shadow-sm hover:shadow transition flex items-center gap-2"
+                  className="px-5 py-3 rounded-2xl bg-[#194B35] hover:bg-[#123626] text-white text-xs sm:text-sm font-bold shadow-sm hover:shadow transition flex items-center gap-2 min-h-[44px]"
                 >
                   <PlusCircle className="w-4 h-4 text-amber-300" />
                   <span>{language === "ml" ? "പരാതി രജിസ്റ്റർ ചെയ്യുക" : "Submit Grievance"}</span>
@@ -200,7 +200,7 @@ export default function CivicConnectPage() {
 
                 <button
                   onClick={() => setActiveTab("track")}
-                  className="px-5 py-2.5 rounded-2xl bg-white hover:bg-[#FAF7F0] text-[#194B35] border border-[#EDE6D8] text-xs sm:text-sm font-bold shadow-2xs transition flex items-center gap-2"
+                  className="px-5 py-3 rounded-2xl bg-white hover:bg-[#FAF7F0] text-[#194B35] border border-[#EDE6D8] text-xs sm:text-sm font-bold shadow-2xs transition flex items-center gap-2 min-h-[44px]"
                 >
                   <Search className="w-4 h-4 text-[#C39A5B]" />
                   <span>{language === "ml" ? "സ്റ്റാറ്റസ് പരിശോധിക്കുക" : "Track by ID"}</span>
@@ -209,26 +209,28 @@ export default function CivicConnectPage() {
             </div>
 
             {/* Quick Metrics Strip */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-3 w-full lg:w-80 shrink-0">
-              <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1">
-                <span className="text-[10px] uppercase font-bold text-[#C39A5B] block">Total Issues</span>
-                <span className="text-xl sm:text-2xl font-black text-[#194B35]">{analytics.total}</span>
-                <span className="text-[11px] text-[#5C6A64] block">Logged into Queue</span>
-              </div>
-              <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1">
-                <span className="text-[10px] uppercase font-bold text-emerald-700 block">Resolved</span>
-                <span className="text-xl sm:text-2xl font-black text-emerald-800">{analytics.resolved}</span>
-                <span className="text-[11px] text-[#5C6A64] block">{analytics.resolutionRate}% Success Rate</span>
-              </div>
-              <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1">
-                <span className="text-[10px] uppercase font-bold text-blue-700 block">Forwarded</span>
-                <span className="text-xl sm:text-2xl font-black text-blue-900">{analytics.forwarded}</span>
-                <span className="text-[11px] text-[#5C6A64] block">To LSGD / KSEB</span>
-              </div>
-              <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1">
-                <span className="text-[10px] uppercase font-bold text-purple-700 block">Response Window</span>
-                <span className="text-xl sm:text-2xl font-black text-purple-900">48 Hrs</span>
-                <span className="text-[11px] text-[#5C6A64] block">Verified Triage</span>
+            <div className="md:col-span-5 flex justify-center md:justify-end w-full">
+              <div className="grid grid-cols-2 gap-3 w-full max-w-md">
+                <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1 text-left">
+                  <span className="text-[10px] uppercase font-bold text-[#C39A5B] block">Total Issues</span>
+                  <span className="text-xl sm:text-2xl font-black text-[#194B35]">{analytics.total}</span>
+                  <span className="text-[11px] text-[#5C6A64] block">Logged into Queue</span>
+                </div>
+                <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1 text-left">
+                  <span className="text-[10px] uppercase font-bold text-emerald-700 block">Resolved</span>
+                  <span className="text-xl sm:text-2xl font-black text-emerald-800">{analytics.resolved}</span>
+                  <span className="text-[11px] text-[#5C6A64] block">{analytics.resolutionRate}% Success Rate</span>
+                </div>
+                <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1 text-left">
+                  <span className="text-[10px] uppercase font-bold text-blue-700 block">Forwarded</span>
+                  <span className="text-xl sm:text-2xl font-black text-blue-900">{analytics.forwarded}</span>
+                  <span className="text-[11px] text-[#5C6A64] block">To LSGD / KSEB</span>
+                </div>
+                <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1 text-left">
+                  <span className="text-[10px] uppercase font-bold text-purple-700 block">Response Window</span>
+                  <span className="text-xl sm:text-2xl font-black text-purple-900">48 Hrs</span>
+                  <span className="text-[11px] text-[#5C6A64] block">Verified Triage</span>
+                </div>
               </div>
             </div>
           </div>

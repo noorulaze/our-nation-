@@ -105,8 +105,8 @@ export default function DevelopmentTrackerPage() {
         <div className="relative rounded-3xl sm:rounded-[36px] bg-gradient-to-br from-[#FAF7F0] via-[#F5F1E7] to-[#EDE6D8] border border-[#EDE6D8] p-6 sm:p-10 shadow-xs overflow-hidden">
           <div className="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#194B35_1px,transparent_1px)] [background-size:16px_16px]" />
 
-          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6 sm:gap-8">
-            <div className="space-y-3 sm:space-y-4 max-w-2xl">
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            <div className="md:col-span-7 space-y-4 text-left">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#194B35]/10 text-[#194B35] text-xs font-bold border border-[#194B35]/20">
                 <HardHat className="w-4 h-4 text-[#194B35]" />
                 <span>{language === "ml" ? "സുതാര്യമായ താനൂർ വികസന നിരീക്ഷണം" : "Development Project Monitoring • Feature 03"}</span>
@@ -116,7 +116,7 @@ export default function DevelopmentTrackerPage() {
                 {language === "ml" ? "വികസന പദ്ധതി ട്രാക്കർ" : "Development Tracker"}
               </h1>
 
-              <p className="text-xs sm:text-sm text-[#5C6A64] leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#5C6A64] leading-relaxed max-w-xl">
                 {language === "ml"
                   ? "താനൂർ നഗരസഭയിലെ ഔദ്യോഗിക വികസന പദ്ധതികൾ, അനുവദിച്ച ബജറ്റ്, സമയക്രമം, നിർമ്മാണ പുരോഗതി, ഗസറ്റ് രേഖകൾ എന്നിവ സുതാര്യമായി പരിശോധിക്കുക. അനുമാനങ്ങളില്ലാതെ അളവുപുസ്തകം (MB) അടിസ്ഥാനമാക്കിയുള്ള വിവരങ്ങൾ."
                   : "A transparent public monitoring directory for Tanur Municipality development projects. Follow sanctioned budgets, milestones, contractors, verified progress updates, and completion evidence."}
@@ -126,7 +126,7 @@ export default function DevelopmentTrackerPage() {
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <Link
                   href="/documents"
-                  className="px-5 py-2.5 rounded-2xl bg-[#194B35] hover:bg-[#123626] text-white text-xs sm:text-sm font-bold shadow-sm hover:shadow transition flex items-center gap-2"
+                  className="px-5 py-3 rounded-2xl bg-[#194B35] hover:bg-[#123626] text-white text-xs sm:text-sm font-bold shadow-sm hover:shadow transition flex items-center gap-2 min-h-[44px]"
                 >
                   <FileText className="w-4 h-4 text-amber-300" />
                   <span>{language === "ml" ? "ടെൻഡർ & ബജറ്റ് രേഖകൾ" : "Tender & Budget Records"}</span>
@@ -134,7 +134,7 @@ export default function DevelopmentTrackerPage() {
 
                 <Link
                   href="/digital-municipality"
-                  className="px-5 py-2.5 rounded-2xl bg-white hover:bg-[#FAF7F0] text-[#194B35] border border-[#EDE6D8] text-xs sm:text-sm font-bold shadow-2xs transition flex items-center gap-2"
+                  className="px-5 py-3 rounded-2xl bg-white hover:bg-[#FAF7F0] text-[#194B35] border border-[#EDE6D8] text-xs sm:text-sm font-bold shadow-2xs transition flex items-center gap-2 min-h-[44px]"
                 >
                   <Building2 className="w-4 h-4 text-[#C39A5B]" />
                   <span>{language === "ml" ? "നഗരസഭാ ഭൂപടത്തിൽ കാണുക" : "View on GIS Map"}</span>
@@ -143,26 +143,28 @@ export default function DevelopmentTrackerPage() {
             </div>
 
             {/* Quick Metrics Strip */}
-            <div className="grid grid-cols-2 sm:grid-cols-5 lg:grid-cols-2 gap-3 w-full lg:w-80 shrink-0">
-              <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1">
-                <span className="text-[10px] uppercase font-bold text-[#C39A5B] block">Total Registered</span>
-                <span className="text-xl sm:text-2xl font-black text-[#194B35]">{stats.total}</span>
-                <span className="text-[11px] text-[#5C6A64] block">Official Projects</span>
-              </div>
-              <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1">
-                <span className="text-[10px] uppercase font-bold text-teal-700 block">Approved</span>
-                <span className="text-xl sm:text-2xl font-black text-teal-800">{stats.approved}</span>
-                <span className="text-[11px] text-[#5C6A64] block">Admin Sanction</span>
-              </div>
-              <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1">
-                <span className="text-[10px] uppercase font-bold text-amber-700 block">In Progress</span>
-                <span className="text-xl sm:text-2xl font-black text-amber-800">{stats.inProgress}</span>
-                <span className="text-[11px] text-[#5C6A64] block">Active Execution</span>
-              </div>
-              <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1">
-                <span className="text-[10px] uppercase font-bold text-emerald-700 block">Completed</span>
-                <span className="text-xl sm:text-2xl font-black text-emerald-800">{stats.completed}</span>
-                <span className="text-[11px] text-[#5C6A64] block">Commissioned</span>
+            <div className="md:col-span-5 flex justify-center md:justify-end w-full">
+              <div className="grid grid-cols-2 gap-3 w-full max-w-md">
+                <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1 text-left">
+                  <span className="text-[10px] uppercase font-bold text-[#C39A5B] block">Total Registered</span>
+                  <span className="text-xl sm:text-2xl font-black text-[#194B35]">{stats.total}</span>
+                  <span className="text-[11px] text-[#5C6A64] block">Official Projects</span>
+                </div>
+                <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1 text-left">
+                  <span className="text-[10px] uppercase font-bold text-teal-700 block">Approved</span>
+                  <span className="text-xl sm:text-2xl font-black text-teal-800">{stats.approved}</span>
+                  <span className="text-[11px] text-[#5C6A64] block">Admin Sanction</span>
+                </div>
+                <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1 text-left">
+                  <span className="text-[10px] uppercase font-bold text-amber-700 block">In Progress</span>
+                  <span className="text-xl sm:text-2xl font-black text-amber-800">{stats.inProgress}</span>
+                  <span className="text-[11px] text-[#5C6A64] block">Active Execution</span>
+                </div>
+                <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1 text-left">
+                  <span className="text-[10px] uppercase font-bold text-emerald-700 block">Completed</span>
+                  <span className="text-xl sm:text-2xl font-black text-emerald-800">{stats.completed}</span>
+                  <span className="text-[11px] text-[#5C6A64] block">Commissioned</span>
+                </div>
               </div>
             </div>
           </div>

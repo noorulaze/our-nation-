@@ -79,8 +79,8 @@ export default function PublicServicesPage() {
         <div className="relative rounded-3xl sm:rounded-[36px] bg-gradient-to-br from-[#FAF7F0] via-[#F5F1E7] to-[#EDE6D8] border border-[#EDE6D8] p-6 sm:p-10 shadow-xs overflow-hidden">
           <div className="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#194B35_1px,transparent_1px)] [background-size:16px_16px]" />
 
-          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6 sm:gap-8">
-            <div className="space-y-3 sm:space-y-4 max-w-2xl">
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            <div className="md:col-span-7 space-y-4 text-left">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#194B35]/10 text-[#194B35] text-xs font-bold border border-[#194B35]/20">
                 <Briefcase className="w-4 h-4 text-[#194B35]" />
                 <span>{language === "ml" ? "നഗരസഭാ പൗര സേവന വിവരങ്ങൾ" : "Citizen Public Services • Feature 04"}</span>
@@ -90,7 +90,7 @@ export default function PublicServicesPage() {
                 {language === "ml" ? "പൊതു സേവന സൂചിക" : "Our Digital Services"}
               </h1>
 
-              <p className="text-xs sm:text-sm text-[#5C6A64] leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#5C6A64] leading-relaxed max-w-xl">
                 {language === "ml"
                   ? "താനൂർ നഗരസഭയിൽ ലഭ്യമായ പൗരസേവനങ്ങൾ, അപേക്ഷിക്കേണ്ട നടപടിക്രമങ്ങൾ, ആവശ്യമായ രേഖകളുടെ ചെക്ക്‌ലിസ്റ്റ്, ഓഫീസ് സമയങ്ങൾ, കെ-സ്മാർട്ട് ഔദ്യോഗിക ഓൺലൈൻ ലിങ്കുകൾ എന്നിവ ഇവിടെ പരിശോധിക്കാം."
                   : "Access verified municipal services online, anytime, anywhere. Understand exact statutory procedures, required document checklists, fees, and direct links to official Kerala Government portals."}
@@ -98,15 +98,15 @@ export default function PublicServicesPage() {
 
               {/* Badges strip */}
               <div className="pt-1 flex flex-wrap items-center gap-2.5 text-xs">
-                <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/80 text-[#194B35] border border-[#EDE6D8] shadow-2xs font-bold">
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/80 text-[#194B35] border border-[#EDE6D8] shadow-2xs font-bold">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
                   <span>K-Smart Integrated</span>
                 </div>
-                <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/80 text-[#194B35] border border-[#EDE6D8] shadow-2xs font-bold">
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/80 text-[#194B35] border border-[#EDE6D8] shadow-2xs font-bold">
                   <ShieldCheck className="w-3.5 h-3.5 text-[#C39A5B]" />
                   <span>Statutory Fees Only</span>
                 </div>
-                <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/80 text-[#194B35] border border-[#EDE6D8] shadow-2xs font-bold">
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/80 text-[#194B35] border border-[#EDE6D8] shadow-2xs font-bold">
                   <Clock className="w-3.5 h-3.5 text-blue-700" />
                   <span>Citizen Charter SLAs</span>
                 </div>
@@ -114,30 +114,32 @@ export default function PublicServicesPage() {
             </div>
 
             {/* Switchboard Callout Card */}
-            <div className="bg-white rounded-3xl border border-[#EDE6D8] p-5 sm:p-6 shadow-2xs space-y-3 w-full lg:w-80 shrink-0">
-              <div className="flex items-center gap-2.5">
-                <div className="w-10 h-10 rounded-2xl bg-[#194B35] text-white flex items-center justify-center font-bold text-lg">
-                  🏛️
+            <div className="md:col-span-5 flex justify-center md:justify-end w-full">
+              <div className="bg-white rounded-3xl border border-[#EDE6D8] p-5 sm:p-6 shadow-2xs space-y-3 w-full max-w-sm text-left">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-10 h-10 rounded-2xl bg-[#194B35] text-white flex items-center justify-center font-bold text-lg">
+                    🏛️
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-[#194B35] font-malayalam-heading">
+                      {language === "ml" ? "ഫ്രണ്ട് ഓഫീസ് ഹെൽപ്പ്‌ഡെസ്ക്" : "Front Office Helpdesk"}
+                    </h4>
+                    <span className="text-[10px] text-[#5C6A64]">Tanur Municipal Office</span>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="text-xs font-bold text-[#194B35] font-malayalam-heading">
-                    {language === "ml" ? "ഫ്രണ്ട് ഓഫീസ് ഹെൽപ്പ്‌ഡെസ്ക്" : "Front Office Helpdesk"}
-                  </h4>
-                  <span className="text-[10px] text-[#5C6A64]">Tanur Municipal Office</span>
-                </div>
+                <p className="text-[11px] text-[#5C6A64] leading-relaxed">
+                  {language === "ml"
+                    ? "സേവനങ്ങളെക്കുറിച്ചുള്ള അന്വേഷണങ്ങൾക്കും അക്ഷയ സേവന സംശയങ്ങൾക്കും കേന്ദ്ര ഓഫീസിലേക്ക് വിളിക്കുക."
+                    : "For offline token guidance, Akshaya liaison, or procedural queries, contact the central switchboard."}
+                </p>
+                <a
+                  href="tel:04942440228"
+                  className="w-full py-2.5 bg-[#FAF7F0] hover:bg-[#EDE6D8] text-[#194B35] border border-[#EDE6D8] rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition"
+                >
+                  <Phone className="w-3.5 h-3.5 text-[#C39A5B]" />
+                  <span>0494 2440228</span>
+                </a>
               </div>
-              <p className="text-[11px] text-[#5C6A64] leading-relaxed">
-                {language === "ml"
-                  ? "സേവനങ്ങളെക്കുറിച്ചുള്ള അന്വേഷണങ്ങൾക്കും അക്ഷയ സേവന സംശയങ്ങൾക്കും കേന്ദ്ര ഓഫീസിലേക്ക് വിളിക്കുക."
-                  : "For offline token guidance, Akshaya liaison, or procedural queries, contact the central switchboard."}
-              </p>
-              <a
-                href="tel:04942440228"
-                className="w-full py-2.5 bg-[#FAF7F0] hover:bg-[#EDE6D8] text-[#194B35] border border-[#EDE6D8] rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition"
-              >
-                <Phone className="w-3.5 h-3.5 text-[#C39A5B]" />
-                <span>0494 2440228</span>
-              </a>
             </div>
           </div>
         </div>

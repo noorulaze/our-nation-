@@ -86,8 +86,8 @@ export default function DocumentsPage() {
         <div className="relative rounded-3xl sm:rounded-[36px] bg-gradient-to-br from-[#FAF7F0] via-[#F5F1E7] to-[#EDE6D8] border border-[#EDE6D8] p-6 sm:p-10 shadow-xs overflow-hidden">
           <div className="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#194B35_1px,transparent_1px)] [background-size:16px_16px]" />
 
-          <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6 sm:gap-8">
-            <div className="space-y-3 sm:space-y-4 max-w-2xl">
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            <div className="md:col-span-7 space-y-4 text-left">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#194B35]/10 text-[#194B35] text-xs font-bold border border-[#194B35]/20">
                 <FileText className="w-4 h-4 text-[#194B35]" />
                 <span>{language === "ml" ? "ഔദ്യോഗിക ഗസറ്റ് & രേഖാ സൂചിക" : "Documents & Public Notices • Feature 05"}</span>
@@ -97,7 +97,7 @@ export default function DocumentsPage() {
                 {language === "ml" ? "ഔദ്യോഗിക രേഖകളും അറിയിപ്പുകളും" : "Documents & Notices"}
               </h1>
 
-              <p className="text-xs sm:text-sm text-[#5C6A64] leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#5C6A64] leading-relaxed max-w-xl">
                 {language === "ml"
                   ? "താനൂർ നഗരസഭയുടെ കൗൺസിൽ പ്രമേയങ്ങൾ, വികസന പദ്ധതി രേഖകൾ, ബജറ്റ് വിഹിതങ്ങൾ, ടെണ്ടർ വിജ്ഞാപനങ്ങൾ, സർക്കാർ ഉത്തരവുകൾ (G.O.), ഡൗൺലോഡ് ചെയ്യാവുന്ന പൗര അപേക്ഷാ ഫോറങ്ങൾ എന്നിവ ഇവിടെ സുതാര്യമായി ലഭ്യമാണ്."
                   : "A searchable public document repository for Tanur Municipality. Access authentic municipal council resolutions, annual budgets, e-tender notifications, government gazettes, and downloadable citizen forms."}
@@ -105,11 +105,11 @@ export default function DocumentsPage() {
 
               {/* Badges */}
               <div className="pt-1 flex flex-wrap items-center gap-2.5 text-xs">
-                <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/80 text-[#194B35] border border-[#EDE6D8] shadow-2xs font-bold">
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/80 text-[#194B35] border border-[#EDE6D8] shadow-2xs font-bold">
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
                   <span>Statutory Reference Numbers</span>
                 </div>
-                <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/80 text-[#194B35] border border-[#EDE6D8] shadow-2xs font-bold">
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/80 text-[#194B35] border border-[#EDE6D8] shadow-2xs font-bold">
                   <Calendar className="w-3.5 h-3.5 text-[#C39A5B]" />
                   <span>Updated for 2024–2026 Fiscal Year</span>
                 </div>
@@ -117,26 +117,28 @@ export default function DocumentsPage() {
             </div>
 
             {/* Quick Metrics Strip */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-3 w-full lg:w-80 shrink-0">
-              <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1">
-                <span className="text-[10px] uppercase font-bold text-[#C39A5B] block">Total Documents</span>
-                <span className="text-xl sm:text-2xl font-black text-[#194B35]">{stats.total}</span>
-                <span className="text-[11px] text-[#5C6A64] block">Archived Records</span>
-              </div>
-              <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1">
-                <span className="text-[10px] uppercase font-bold text-teal-700 block">Council Minutes</span>
-                <span className="text-xl sm:text-2xl font-black text-teal-800">{stats.resolutions}</span>
-                <span className="text-[11px] text-[#5C6A64] block">Resolutions</span>
-              </div>
-              <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1">
-                <span className="text-[10px] uppercase font-bold text-amber-700 block">E-Tenders</span>
-                <span className="text-xl sm:text-2xl font-black text-amber-800">{stats.tenders}</span>
-                <span className="text-[11px] text-[#5C6A64] block">Procurement</span>
-              </div>
-              <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1">
-                <span className="text-[10px] uppercase font-bold text-purple-700 block">Citizen Forms</span>
-                <span className="text-xl sm:text-2xl font-black text-purple-900">{stats.forms}</span>
-                <span className="text-[11px] text-[#5C6A64] block">Downloadable</span>
+            <div className="md:col-span-5 flex justify-center md:justify-end w-full">
+              <div className="grid grid-cols-2 gap-3 w-full max-w-md">
+                <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1 text-left">
+                  <span className="text-[10px] uppercase font-bold text-[#C39A5B] block">Total Documents</span>
+                  <span className="text-xl sm:text-2xl font-black text-[#194B35]">{stats.total}</span>
+                  <span className="text-[11px] text-[#5C6A64] block">Archived Records</span>
+                </div>
+                <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1 text-left">
+                  <span className="text-[10px] uppercase font-bold text-teal-700 block">Council Minutes</span>
+                  <span className="text-xl sm:text-2xl font-black text-teal-800">{stats.resolutions}</span>
+                  <span className="text-[11px] text-[#5C6A64] block">Resolutions</span>
+                </div>
+                <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1 text-left">
+                  <span className="text-[10px] uppercase font-bold text-amber-700 block">E-Tenders</span>
+                  <span className="text-xl sm:text-2xl font-black text-amber-800">{stats.tenders}</span>
+                  <span className="text-[11px] text-[#5C6A64] block">Procurement</span>
+                </div>
+                <div className="p-3.5 bg-white rounded-2xl border border-[#EDE6D8] shadow-2xs space-y-1 text-left">
+                  <span className="text-[10px] uppercase font-bold text-purple-700 block">Citizen Forms</span>
+                  <span className="text-xl sm:text-2xl font-black text-purple-900">{stats.forms}</span>
+                  <span className="text-[11px] text-[#5C6A64] block">Downloadable</span>
+                </div>
               </div>
             </div>
           </div>

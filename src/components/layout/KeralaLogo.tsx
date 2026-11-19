@@ -63,8 +63,8 @@ export function KeralaLogo({
       </div>
 
       {/* Brand Wordmark Typography Hierarchy */}
-      <div className="flex flex-col flex-shrink-0 text-left">
-        <div className="flex items-center gap-1.5 leading-none">
+      <div className="flex flex-col flex-shrink-0 text-left justify-center">
+        <div className="flex items-center gap-1.5 leading-tight">
           <span className={`text-base sm:text-xl font-black font-brand tracking-tight ${textColor}`}>
             OUR NATION
           </span>
@@ -73,8 +73,8 @@ export function KeralaLogo({
           </span>
         </div>
         {showSubtext && (
-          <span className={`text-[10px] sm:text-[11px] font-medium tracking-normal mt-0.5 ${subtextColor}`}>
-            {isEn ? "Digital Municipality Platform • താനൂർ" : "ഡിജിറ്റൽ നഗരസഭാ വേദി • താനൂർ"}
+          <span className={`text-[10px] sm:text-[11px] font-medium tracking-normal leading-tight mt-0.5 ${subtextColor}`}>
+            {isEn ? "Digital Municipality Platform" : "ഡിജിറ്റൽ നഗരസഭാ വേദി"}
           </span>
         )}
       </div>

@@ -229,17 +229,45 @@ export default function LocalBodyDetailPage() {
             </h2>
           </div>
 
+          {/* Leadership Discrepancy Notice if present */}
+          {localBody.leadership_discrepancy && (
+            <div className="p-4 bg-amber-50 rounded-2xl border border-amber-200 text-xs space-y-2">
+              <div className="flex items-center gap-2 text-amber-900 font-bold">
+                <Info className="w-4 h-4 text-amber-700 shrink-0" />
+                <span>Official Leadership Verification Notice (Discrepancy Preserved)</span>
+              </div>
+              <p className="text-amber-950 leading-relaxed">
+                {localBody.leadership_discrepancy.note}
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 font-mono text-[11px]">
+                <div className="p-2.5 bg-white/90 rounded-xl border border-amber-200">
+                  <span className="text-gray-500 block text-[10px] uppercase font-sans font-bold">Official Homepage Listing:</span>
+                  <span className="font-bold text-[#194B35]">{localBody.leadership_discrepancy.official_homepage_value}</span>
+                </div>
+                <div className="p-2.5 bg-white/90 rounded-xl border border-amber-200">
+                  <span className="text-gray-500 block text-[10px] uppercase font-sans font-bold">Elected Members Directory Listing:</span>
+                  <span className="font-bold text-[#194B35]">{localBody.leadership_discrepancy.members_directory_value}</span>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {/* Chairperson or President */}
             <div className="bg-white rounded-3xl border border-[#EDE6D8] p-5 shadow-xs flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center shrink-0">
-                <Image
-                  src={localBody.leadership.chair_or_president.photo_url || "/placeholder-leader.svg"}
-                  alt={localBody.leadership.chair_or_president.name}
-                  width={48}
-                  height={48}
-                  className="rounded-xl object-cover"
-                />
+              <div className="flex flex-col items-center shrink-0">
+                <div className="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center">
+                  <Image
+                    src={localBody.leadership.chair_or_president.photo_url || "/placeholder-leader.svg"}
+                    alt={localBody.leadership.chair_or_president.name}
+                    width={48}
+                    height={48}
+                    className="rounded-xl object-cover"
+                  />
+                </div>
+                <span className="text-[9px] text-gray-500 font-medium mt-1">
+                  {localBody.leadership.chair_or_president.photo_type === "official" ? "Official Photo" : "Awaiting Photo"}
+                </span>
               </div>
               <div className="space-y-0.5">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md">
@@ -258,14 +286,19 @@ export default function LocalBodyDetailPage() {
 
             {/* Vice Leader */}
             <div className="bg-white rounded-3xl border border-[#EDE6D8] p-5 shadow-xs flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center shrink-0">
-                <Image
-                  src={localBody.leadership.vice_chair_or_vice_president.photo_url || "/placeholder-leader.svg"}
-                  alt={localBody.leadership.vice_chair_or_vice_president.name}
-                  width={48}
-                  height={48}
-                  className="rounded-xl object-cover"
-                />
+              <div className="flex flex-col items-center shrink-0">
+                <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center">
+                  <Image
+                    src={localBody.leadership.vice_chair_or_vice_president.photo_url || "/placeholder-leader.svg"}
+                    alt={localBody.leadership.vice_chair_or_vice_president.name}
+                    width={48}
+                    height={48}
+                    className="rounded-xl object-cover"
+                  />
+                </div>
+                <span className="text-[9px] text-gray-500 font-medium mt-1">
+                  {localBody.leadership.vice_chair_or_vice_president.photo_type === "official" ? "Official Photo" : "Awaiting Photo"}
+                </span>
               </div>
               <div className="space-y-0.5">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800 bg-amber-50 px-2 py-0.5 rounded-md">
@@ -384,14 +417,19 @@ export default function LocalBodyDetailPage() {
 
                     {/* Representative Card */}
                     <div className="pt-2 border-t border-gray-100 flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-[#FAF7F0] border border-[#EDE6D8] flex items-center justify-center shrink-0">
-                        <Image
-                          src={w.photo_url || "/placeholder-representative.svg"}
-                          alt={w.representative_name}
-                          width={36}
-                          height={36}
-                          className="rounded-lg object-cover"
-                        />
+                      <div className="flex flex-col items-center shrink-0">
+                        <div className="w-10 h-10 rounded-xl bg-[#FAF7F0] border border-[#EDE6D8] flex items-center justify-center">
+                          <Image
+                            src={w.photo_url || "/placeholder-representative.svg"}
+                            alt={w.representative_name}
+                            width={36}
+                            height={36}
+                            className="rounded-lg object-cover"
+                          />
+                        </div>
+                        <span className="text-[8px] text-gray-500 font-medium mt-0.5">
+                          {w.photo_type === "official" ? "Official Photo" : "Awaiting Photo"}
+                        </span>
                       </div>
                       <div className="space-y-0.5 flex-1 min-w-0">
                         <span className="text-[10px] text-gray-400 uppercase tracking-wider block">
@@ -400,9 +438,18 @@ export default function LocalBodyDetailPage() {
                         <h4 className="font-bold text-xs text-[#194B35] truncate">
                           {w.representative_name}
                         </h4>
-                        {w.party && (
+                        {w.committee_designation ? (
+                          <span className="text-[10px] text-emerald-800 font-medium block truncate">
+                            {w.committee_designation}
+                          </span>
+                        ) : w.party ? (
                           <span className="text-[10px] font-mono text-gray-500 block truncate">
                             {w.party}
+                          </span>
+                        ) : null}
+                        {w.discrepancy_note && (
+                          <span className="text-[9px] text-amber-700 bg-amber-50 px-1 py-0.5 rounded font-medium block truncate" title={w.discrepancy_note}>
+                            ⚠️ Verification Discrepancy Flag
                           </span>
                         )}
                       </div>
@@ -496,14 +543,19 @@ export default function LocalBodyDetailPage() {
 
             {/* Profile Header */}
             <div className="flex items-start gap-4">
-              <div className="w-20 h-20 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] p-1 flex items-center justify-center shrink-0">
-                <Image
-                  src={selectedRep.photo_url || "/placeholder-representative.svg"}
-                  alt={selectedRep.name}
-                  width={72}
-                  height={72}
-                  className="rounded-xl object-cover"
-                />
+              <div className="flex flex-col items-center shrink-0">
+                <div className="w-20 h-20 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] p-1 flex items-center justify-center">
+                  <Image
+                    src={selectedRep.photo_url || "/placeholder-representative.svg"}
+                    alt={selectedRep.name}
+                    width={72}
+                    height={72}
+                    className="rounded-xl object-cover"
+                  />
+                </div>
+                <span className="text-[9px] font-medium text-gray-500 mt-1.5 px-2 py-0.5 rounded-full bg-gray-100 border border-gray-200">
+                  {selectedRep.photo_type === "official" ? "Official Photo" : "Awaiting Official Photo"}
+                </span>
               </div>
 
               <div className="space-y-1">
@@ -526,8 +578,31 @@ export default function LocalBodyDetailPage() {
               </div>
             </div>
 
+            {/* Discrepancy Alert in Modal */}
+            {selectedRep.discrepancy_note && (
+              <div className="p-3 bg-amber-50 rounded-2xl border border-amber-200 text-xs text-amber-900 space-y-1">
+                <span className="font-bold flex items-center gap-1 text-amber-800 uppercase text-[10px]">
+                  <Info className="w-3.5 h-3.5 text-amber-700" />
+                  Verification Discrepancy Flag
+                </span>
+                <p className="leading-relaxed text-[11.5px]">
+                  {selectedRep.discrepancy_note}
+                </p>
+              </div>
+            )}
+
             {/* Profile Attribute Details */}
             <div className="grid grid-cols-2 gap-3 text-xs">
+              {selectedRep.committee_designation && (
+                <div className="p-3 bg-[#FAF7F0] rounded-2xl border border-[#EDE6D8] col-span-2">
+                  <span className="text-[10px] text-gray-400 uppercase tracking-wider block">
+                    Official Committee Designation
+                  </span>
+                  <span className="font-bold text-[#194B35]">
+                    {selectedRep.committee_designation}
+                  </span>
+                </div>
+              )}
               <div className="p-3 bg-[#FAF7F0] rounded-2xl border border-[#EDE6D8]">
                 <span className="text-[10px] text-gray-400 uppercase tracking-wider block">
                   Electoral {wardTerm}

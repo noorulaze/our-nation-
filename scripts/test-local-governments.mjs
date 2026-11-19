@@ -78,11 +78,34 @@ runTest("localGovernmentData.ts exists", () => {
 
 const dataContent = fs.readFileSync(dataFile, "utf8");
 
-runTest("Includes Urban Local Government: Tanur Municipality with 44 wards", () => {
+runTest("Includes Urban Local Government: Tanur Municipality with 45 wards", () => {
   assert(dataContent.includes("tanur-municipality"));
-  assert(dataContent.includes("total_wards: 44"));
-  assert(dataContent.includes("P. P. Shamseer") || dataContent.includes("Shamseer"));
-  assert(dataContent.includes("Mallika Teacher"));
+  assert(dataContent.includes("total_wards: 45"));
+  assert(dataContent.includes("Nasla Basheer"));
+  assert(dataContent.includes("Ashraf M P") || dataContent.includes("Ashraf M. P."));
+  assert(dataContent.includes("Hazeena K P") || dataContent.includes("Hazeena K. P."));
+});
+
+runTest("Tanur Municipality contains exact 45 official members from LSGD members directory", () => {
+  assert(dataContent.includes("Ummuhan M K"), "Ward 1: Ummuhan M K (Ottumpuram)");
+  assert(dataContent.includes("Nasila Thejas N K"), "Ward 35: Nasila Thejas N K (Civil Station)");
+  assert(dataContent.includes("Ashraf M P"), "Ward 40: Ashraf M P (Albazar)");
+  assert(dataContent.includes("Shaharban P P"), "Ward 45: Shaharban P P (Companippadi)");
+});
+
+runTest("Preserves Chairperson leadership discrepancy between Homepage and Members Directory", () => {
+  assert(dataContent.includes("leadership_discrepancy"));
+  assert(dataContent.includes("discrepancy_flagged"));
+  assert(dataContent.includes("Nasla Basheer"));
+  assert(dataContent.includes("Nasila Thejas N K"));
+});
+
+runTest("All 45 official representative photographs are mapped and downloaded", () => {
+  for (let w = 1; w <= 45; w++) {
+    const pad = String(w).padStart(2, "0");
+    const photoPath = path.join(rootDir, `public/representatives/tanur-municipality/ward-${pad}.jpeg`);
+    assert(fs.existsSync(photoPath), `Photo for Ward ${w} exists at ${photoPath}`);
+  }
 });
 
 runTest("Includes Rural Local Government: Tanur Block Panchayat with 17 divisions", () => {

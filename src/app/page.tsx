@@ -218,7 +218,7 @@ export default function HomePage() {
                   </h1>
 
                   <p className="text-base sm:text-lg lg:text-xl font-bold text-[#F5E2B8] font-sans">
-                    Easy Services. Transparent Governance. A Better Community.
+                    Digital Services. Transparent Governance. A Progressive Municipality.
                   </p>
 
                   <p className="text-white/85 text-xs sm:text-sm lg:text-base leading-relaxed max-w-xl font-normal">
@@ -232,7 +232,7 @@ export default function HomePage() {
                     href="/public-services"
                     className="px-6 py-3.5 bg-[#C39A5B] hover:bg-[#b08849] text-[#194B35] font-black text-xs sm:text-sm rounded-2xl shadow-xl transition-all transform hover:-translate-y-0.5 flex items-center gap-2 group min-h-[48px]"
                   >
-                    <span>View Services</span>
+                    <span>Explore Services</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </Link>
 
@@ -267,32 +267,32 @@ export default function HomePage() {
                   <span className="hidden sm:inline">•</span>
                   <div className="hidden sm:flex items-center gap-1.5">
                     <MapPin className="w-3.5 h-3.5 text-[#F3CE7A]" />
-                    <span>44 Mapped Wards</span>
+                    <span>45 Mapped Wards</span>
                   </div>
                 </div>
               </div>
 
-              {/* Right Column: Floating Frosted Quick Cards (Desktop & Tablet) */}
+              {/* Right Column: Floating Frosted Quick Cards (Desktop & Tablet Matching Design Reference) */}
               <div className="md:col-span-5 hidden md:block space-y-3.5">
                 {[
                   {
-                    title: "Municipal Services",
-                    sub: "Online certificate and tax services",
+                    title: "Citizen Services",
+                    sub: "Online & Easy",
                     href: "/public-services",
                     icon: Briefcase,
                     color: "text-[#C39A5B] bg-[#C39A5B]/15 border-[#C39A5B]/30"
                   },
                   {
-                    title: "Report an Issue",
-                    sub: "Roads, lights and waste with live tracking",
+                    title: "Grievance Redressal",
+                    sub: "Quick Resolution",
                     href: "/civic-connect",
                     icon: AlertTriangle,
                     color: "text-orange-400 bg-orange-500/15 border-orange-500/30"
                   },
                   {
-                    title: "Notices & Updates",
-                    sub: "Council decisions and official notices",
-                    href: "/digital-municipality",
+                    title: "Municipal Updates",
+                    sub: "Stay Informed",
+                    href: "/news",
                     icon: Building2,
                     color: "text-emerald-400 bg-emerald-500/15 border-emerald-500/30"
                   }
@@ -333,14 +333,16 @@ export default function HomePage() {
         {/* ========================================================================= */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-14 sm:-mt-18 lg:-mt-20 relative z-20">
           <div className="bg-white rounded-2xl sm:rounded-3xl border border-[#EDE6D8] p-3 sm:p-4 shadow-xl">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3">
-              {quickActions.map((qa) => {
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3">
+              {quickActions.map((qa, index) => {
                 const Icon = qa.icon;
                 return (
                   <Link
                     key={qa.id}
                     href={qa.href}
-                    className="p-3 sm:p-3.5 rounded-xl sm:rounded-2xl bg-[#FAF7F0] hover:bg-white border border-[#EDE6D8] hover:border-[#194B35] hover:shadow-md transition-all flex items-center gap-3 text-left group min-h-[56px]"
+                    className={`p-3 sm:p-3.5 rounded-xl sm:rounded-2xl bg-[#FAF7F0] hover:bg-white border border-[#EDE6D8] hover:border-[#194B35] hover:shadow-md transition-all flex items-center gap-2.5 sm:gap-3 text-left group min-h-[56px] ${
+                      index === 4 ? "col-span-2 sm:col-span-1" : ""
+                    }`}
                   >
                     <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center border shrink-0 group-hover:scale-105 transition-transform ${qa.color}`}>
                       <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -362,7 +364,7 @@ export default function HomePage() {
         </section>
 
         {/* ========================================================================= */}
-        {/* 3. ABOUT TANUR: OUR HISTORY, OUR PRIDE (EDITORIAL COMPOSITION)            */}
+        {/* 3. OUR MUNICIPALITY: A VIBRANT COMMUNITY, A PROGRESSIVE TANUR             */}
         {/* ========================================================================= */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-3xl border border-[#EDE6D8] overflow-hidden shadow-sm">
@@ -401,18 +403,22 @@ export default function HomePage() {
                   </div>
 
                   <h2 className="text-2xl sm:text-3xl font-black text-[#194B35] font-sans">
-                    Our History, Our Pride
+                    Our Municipality
                   </h2>
 
+                  <p className="text-sm font-bold text-[#C39A5B]">
+                    A vibrant community, a progressive Tanur
+                  </p>
+
                   <p className="text-xs sm:text-sm text-[#5C6A64] leading-relaxed">
-                    Tanur is a historic coastal urban local body in Malappuram district, Kerala. Covering 19.59 km² across 44 statutory wards, it blends centuries of maritime trade, renowned fisheries heritage, and rapid modern civic progress.
+                    Tanur is a historic coastal urban local body in Malappuram district, Kerala. Covering 19.59 km² across 45 statutory wards, it blends centuries of maritime trade, renowned fisheries heritage, and rapid modern civic progress.
                   </p>
                 </div>
 
                 {/* Key Facts Metric Grid */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 border-t border-[#EDE6D8]">
                   <div className="p-3.5 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] text-left">
-                    <div className="text-xl sm:text-2xl font-black text-[#194B35] font-mono">44</div>
+                    <div className="text-xl sm:text-2xl font-black text-[#194B35] font-mono">45</div>
                     <div className="text-[11px] text-[#5C6A64] font-medium">Statutory Wards</div>
                   </div>
 

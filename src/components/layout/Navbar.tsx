@@ -24,7 +24,8 @@ import {
   FileText,
   Phone,
   Layers,
-  Info
+  Info,
+  Users
 } from "lucide-react";
 import { store } from "@/lib/data/store";
 
@@ -42,41 +43,42 @@ export function Navbar({ onOpenSearchAi }: { onOpenSearchAi?: (query?: string) =
   const notifs = user ? store.getNotifications(user.id) : [];
   const unreadCount = notifs.filter(n => !n.is_read).length;
 
-  // Primary Navigation Links (Simple, Accessible English)
+  // Primary Navigation Links matching Official OUR NATION Design Reference
   const mainPillLinks = [
     { href: "/", label: "Home" },
-    { href: "/digital-municipality", label: "Municipality" },
-    { href: "/local-governments", label: "Local Governments" },
     { href: "/public-services", label: "Services" },
-    { href: "/civic-connect", label: "Report Issue" },
-    { href: "/development-tracker", label: "Projects" },
-    { href: "/documents", label: "Documents" },
-    { href: "/peoples-voice", label: "Ideas" },
+    { href: "/tanur", label: "About Tanur" },
+    { href: "/civic-connect", label: "Civic Connect" },
+    { href: "/news", label: "News & Updates" },
+    { href: "/contact", label: "Contact" },
   ];
 
   // Contextual Civic Modules Dropdown
   const civicDropdownModules = [
     { href: "/local-governments", label: "Local Governments", sub: "Municipality, Block & 7 Panchayats", icon: Landmark },
-    { href: "/digital-municipality", label: "Tanur Municipality", sub: "Wards, leaders & town map", icon: Building2 },
-    { href: "/public-services", label: "Municipal Services", sub: "Certificates, tax & licenses", icon: Briefcase },
-    { href: "/civic-connect", label: "Report an Issue", sub: "Roads, streetlights & waste", icon: AlertTriangle },
+    { href: "/digital-municipality", label: "Tanur Municipality", sub: "45 Wards, Councillors & GIS Map", icon: Building2 },
     { href: "/development-tracker", label: "Track Projects", sub: "Budgets & work progress", icon: HardHat },
     { href: "/documents", label: "Notices & Documents", sub: "Council orders & tenders", icon: FileText },
-    { href: "/peoples-voice", label: "Share Your Ideas", sub: "Community proposals & discussions", icon: TrendingUp },
+    { href: "/peoples-voice", label: "People's Voice", sub: "Community proposals & discussions", icon: TrendingUp },
+    { href: "/leadership", label: "Leadership & Guidance", sub: "Civic mentors & verified profiles", icon: Users },
     { href: "/ai", label: "Ask Naadu AI", sub: "24/7 Citizen Assistant", icon: Sparkles },
-    { href: "/about", label: "About OUR NATION", sub: "Civic platform guide", icon: Info },
+    { href: "/about", label: "About OUR NATION", sub: "Platform architecture & sources", icon: Info },
   ];
 
   // Grouped Navigation for Mobile Drawer
   const primaryDestinations = [
     { href: "/", label: "Home" },
-    { href: "/local-governments", label: "Local Governments" },
-    { href: "/digital-municipality", label: "Municipality" },
     { href: "/public-services", label: "Services" },
-    { href: "/civic-connect", label: "Report Issue" },
-    { href: "/development-tracker", label: "Projects" },
-    { href: "/documents", label: "Documents" },
-    { href: "/peoples-voice", label: "Ideas" },
+    { href: "/tanur", label: "About Tanur" },
+    { href: "/civic-connect", label: "Civic Connect" },
+    { href: "/news", label: "News & Updates" },
+    { href: "/contact", label: "Contact" },
+    { href: "/local-governments", label: "Local Governments" },
+    { href: "/digital-municipality", label: "Tanur Municipality" },
+    { href: "/development-tracker", label: "Track Projects" },
+    { href: "/documents", label: "Notices & Documents" },
+    { href: "/peoples-voice", label: "People's Voice" },
+    { href: "/leadership", label: "Leadership & Guidance" },
     { href: "/profile", label: "Citizen Profile" },
   ];
 

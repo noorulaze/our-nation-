@@ -292,12 +292,23 @@ export default function LocalGovernmentsPage() {
                 </div>
               </div>
 
+              {/* Leadership Discrepancy Note if present */}
+              {municipality.leadership_discrepancy && (
+                <div className="text-[11px] text-amber-900 bg-amber-50 px-3 py-2 rounded-xl border border-amber-200 flex items-start gap-2">
+                  <Info className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold">Official Verification Discrepancy Flag: </span>
+                    <span>The elected members directory designates Nasila Thejas N K (Ward 35) as Chairperson, while the municipal homepage showcases Nasla Basheer. Both official records are preserved for review.</span>
+                  </div>
+                </div>
+              )}
+
               {/* Leadership & Actions */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-1">
                 <div className="flex flex-wrap items-center gap-4 text-xs">
                   <div className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center font-bold text-[#194B35] text-xs">
-                      PS
+                      {municipality.leadership.chair_or_president.name.split(" ").map((p: string) => p[0]).filter(Boolean).slice(0, 2).join("") || "CP"}
                     </div>
                     <div>
                       <span className="text-[10px] text-gray-400 block uppercase">Chairperson</span>
@@ -307,7 +318,7 @@ export default function LocalGovernmentsPage() {
 
                   <div className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center font-bold text-[#194B35] text-xs">
-                      MT
+                      {municipality.leadership.vice_chair_or_vice_president.name.split(" ").map((p: string) => p[0]).filter(Boolean).slice(0, 2).join("") || "VC"}
                     </div>
                     <div>
                       <span className="text-[10px] text-gray-400 block uppercase">Vice Chairperson</span>
@@ -321,7 +332,7 @@ export default function LocalGovernmentsPage() {
                     href="/local-governments/tanur-municipality"
                     className="px-5 py-2.5 bg-[#194B35] hover:bg-[#123626] text-white text-xs font-bold rounded-xl transition shadow-sm flex items-center gap-1.5"
                   >
-                    <span>Explore All 44 Wards &amp; Councillors</span>
+                    <span>Explore All {municipality.total_wards} Wards &amp; Councillors</span>
                     <ChevronRight className="w-4 h-4" />
                   </Link>
 
@@ -604,14 +615,19 @@ export default function LocalGovernmentsPage() {
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] p-1 flex items-center justify-center shrink-0">
-                      <Image
-                        src={ldr.photo_url || "/placeholder-leader.svg"}
-                        alt={ldr.name}
-                        width={44}
-                        height={44}
-                        className="rounded-xl object-cover"
-                      />
+                    <div className="flex flex-col items-center shrink-0">
+                      <div className="w-12 h-12 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] p-1 flex items-center justify-center">
+                        <Image
+                          src={ldr.photo_url || "/placeholder-leader.svg"}
+                          alt={ldr.name}
+                          width={44}
+                          height={44}
+                          className="rounded-xl object-cover"
+                        />
+                      </div>
+                      <span className="text-[8px] text-gray-500 font-medium mt-0.5">
+                        {ldr.photo_type === "official" ? "Official Photo" : "Awaiting Photo"}
+                      </span>
                     </div>
                     <div>
                       <h4 className="font-bold text-sm text-[#194B35] font-sans">

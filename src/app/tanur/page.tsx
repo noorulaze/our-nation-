@@ -125,73 +125,68 @@ export default function TanurOverviewPage() {
 
       <main className="flex-1 pb-16">
         {/* ========================================================================= */}
-        {/* 1. HERO SECTION */}
+        {/* 1. HERO SECTION (Matching Image Reference: About Tanur / Our History)     */}
         {/* ========================================================================= */}
         <section className="relative min-h-[460px] sm:min-h-[520px] md:min-h-[580px] overflow-hidden flex items-end">
           <div
             className="absolute inset-0 bg-cover bg-center transition-transform duration-1000 hover:scale-105"
             style={{
-              backgroundImage:
-                "url('https://upload.wikimedia.org/wikipedia/commons/d/d1/Tanur_beach%2C_Malappuram_%289%29.jpg')",
+              backgroundImage: "url('/images/tanur-coastal-pride.jpg')",
             }}
           />
 
           <div className="absolute inset-0 bg-gradient-to-t from-[#081B12] via-[#0E2C1E]/80 to-black/35" />
 
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20 w-full">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/25 text-amber-300 text-xs font-bold font-malayalam-heading mb-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/25 text-amber-300 text-xs font-bold font-sans mb-4">
               <Compass className="w-3.5 h-3.5" />
-              <span>ഡിജിറ്റൽ മുൻസിപ്പാലിറ്റി • താനൂർ നഗരസഭ • 44 വാർഡുകൾ</span>
+              <span>Tanur Municipality • 45 Statutory Wards • Grade II ULB</span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl md:text-6xl font-black font-malayalam-heading text-white tracking-tight leading-tight max-w-4xl drop-shadow-md">
-              താനൂർ ഡിജിറ്റൽ നഗരസഭ (Digital Tanur)
+            <h1 className="text-3xl sm:text-5xl md:text-6xl font-black font-sans text-white tracking-tight leading-tight max-w-4xl drop-shadow-md">
+              About Tanur
             </h1>
 
-            <p className="mt-3 text-sm sm:text-lg md:text-xl text-stone-200 font-malayalam-body max-w-3xl leading-relaxed drop-shadow">
-              ചരിത്രവും സംസ്കാരവും കടലോര ജീവിതവും നാട്ടുകാരുടെ വിശേഷങ്ങളും വികസന മുന്നേറ്റങ്ങളും ഒരുമിക്കുന്ന ഔദ്യോഗിക ഡിജിറ്റൽ വേദി.
+            <p className="mt-2 text-xl sm:text-2xl font-bold text-[#F3CE7A] font-sans drop-shadow">
+              Our History, Our Pride
+            </p>
+
+            <p className="mt-3 text-sm sm:text-base md:text-lg text-stone-200 font-sans max-w-3xl leading-relaxed drop-shadow">
+              A historic coastal urban local body in Malappuram district, Kerala. Covering 19.59 km² across 45 statutory wards, Tanur blends centuries of maritime trade, cultural heritage, renowned fisheries traditions, and dynamic modern civic governance.
             </p>
 
             {/* Main Action Buttons */}
             <div className="mt-6 flex flex-wrap gap-3 pt-2">
-              <Link
-                href="/digital-tanur"
-                className="px-5 py-3 rounded-2xl bg-[#C39A5B] hover:bg-[#b0874a] text-[#143E2C] font-extrabold text-xs sm:text-sm font-malayalam-heading transition shadow-xl active:scale-95 flex items-center gap-2 ring-2 ring-white/30"
-              >
-                <Compass className="w-4 h-4 text-[#143E2C]" />
-                <span>ഡിജിറ്റൽ താനൂർ ജി.ഐ.എസ് (Digital Tanur GIS)</span>
-              </Link>
-
               <a
                 href="#wards"
-                className="px-5 py-3 rounded-2xl bg-[#1B4D36] hover:bg-[#143d2b] border border-amber-300/40 text-white font-bold text-xs sm:text-sm font-malayalam-heading transition shadow-lg active:scale-95 flex items-center gap-2"
+                className="px-5 py-3 rounded-2xl bg-[#C39A5B] hover:bg-[#b0874a] text-[#143E2C] font-extrabold text-xs sm:text-sm font-sans transition shadow-xl active:scale-95 flex items-center gap-2 ring-2 ring-white/30"
               >
-                <Compass className="w-4 h-4 text-amber-300" />
-                <span>44 വാർഡുകൾ (44 Wards)</span>
+                <Compass className="w-4 h-4 text-[#143E2C]" />
+                <span>Explore 45 Wards</span>
               </a>
 
               <Link
-                href="/tanur/development"
-                className="px-5 py-3 rounded-2xl bg-amber-400 hover:bg-amber-300 text-[#143E2C] font-bold text-xs sm:text-sm font-malayalam-heading transition shadow-lg active:scale-95 flex items-center gap-2"
+                href="/digital-tanur"
+                className="px-5 py-3 rounded-2xl bg-[#1B4D36] hover:bg-[#143d2b] border border-amber-300/40 text-white font-bold text-xs sm:text-sm font-sans transition shadow-lg active:scale-95 flex items-center gap-2"
+              >
+                <MapPin className="w-4 h-4 text-amber-300" />
+                <span>Digital Tanur GIS</span>
+              </Link>
+
+              <Link
+                href="/development-tracker"
+                className="px-5 py-3 rounded-2xl bg-amber-400 hover:bg-amber-300 text-[#143E2C] font-bold text-xs sm:text-sm font-sans transition shadow-lg active:scale-95 flex items-center gap-2"
               >
                 <HardHat className="w-4 h-4" />
-                <span>വികസന ട്രാക്കർ (Dev Tracker)</span>
+                <span>Track Projects</span>
               </Link>
 
               <Link
-                href="/tanur/voice"
-                className="px-5 py-3 rounded-2xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 text-white font-bold text-xs sm:text-sm font-malayalam-heading transition active:scale-95 flex items-center gap-2"
-              >
-                <HeartHandshake className="w-4 h-4 text-amber-200" />
-                <span>ജനകീയ ശബ്ദം (People&apos;s Voice)</span>
-              </Link>
-
-              <Link
-                href="/civic"
-                className="px-5 py-3 rounded-2xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 text-white font-bold text-xs sm:text-sm font-malayalam-heading transition active:scale-95 flex items-center gap-2"
+                href="/civic-connect"
+                className="px-5 py-3 rounded-2xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 text-white font-bold text-xs sm:text-sm font-sans transition active:scale-95 flex items-center gap-2"
               >
                 <AlertCircle className="w-4 h-4 text-amber-200" />
-                <span>സിവിക് കണക്ട് (Civic Connect)</span>
+                <span>Civic Connect</span>
               </Link>
             </div>
 
@@ -199,9 +194,9 @@ export default function TanurOverviewPage() {
             <div className="mt-6 pt-3 border-t border-white/15 flex items-center justify-between text-[11px] text-stone-300">
               <span className="flex items-center gap-1.5">
                 <Info className="w-3.5 h-3.5 text-amber-300" />
-                ചിത്രം: താനൂർ ബീച്ച് സൂര്യാസ്തമയം (Photo: Manu Sankerms, CC BY-SA 2.0 via Wikimedia Commons)
+                Photo: Tanur Coastal Waterfront & Heritage (OUR NATION Verified Archive)
               </span>
-              <span className="hidden sm:inline-block font-mono">PIN: 676302 • STD: 0494</span>
+              <span className="hidden sm:inline-block font-mono">PIN: 676302 • Central Switchboard: 0494 2440228</span>
             </div>
           </div>
         </section>
@@ -218,15 +213,15 @@ export default function TanurOverviewPage() {
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-[#C39A5B] text-[#194B35]">
-                    Flagship Feature
+                    Interactive Map
                   </span>
-                  <span className="text-xs text-[#FAF7F0]/80">44 വാർഡുകൾ • 30+ സ്ഥാപനങ്ങൾ • 8 പ്രദേശങ്ങൾ</span>
+                  <span className="text-xs text-[#FAF7F0]/80">45 Statutory Wards • 48+ Mapped Facilities • 19.59 km²</span>
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold font-malayalam-heading text-white">
-                  ഡിജിറ്റൽ താനൂർ ലൈവ് ജി.ഐ.എസ് ഭൂപടം (Digital Tanur GIS Map)
+                <h3 className="text-lg sm:text-xl font-bold font-sans text-white">
+                  Digital Tanur Live GIS Map
                 </h3>
                 <p className="text-xs text-[#EDE6D8] mt-0.5 max-w-xl">
-                  നഗരസഭയിലെ ആശുപത്രികൾ, സ്കൂളുകൾ, സർക്കാർ സ്ഥാപനങ്ങൾ, വികസന പദ്ധതികൾ എന്നിവ കണ്ടെത്താൻ ഇന്ററാക്ടീവ് മാപ്പ് തുറക്കൂ.
+                  Explore healthcare centres, schools, government offices, developmental projects, and all 45 municipal ward boundaries.
                 </p>
               </div>
             </div>
@@ -235,7 +230,7 @@ export default function TanurOverviewPage() {
               href="/digital-tanur"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-[#C39A5B] hover:bg-[#b0874a] text-[#194B35] font-extrabold text-sm transition shadow-md shrink-0 whitespace-nowrap"
             >
-              <span>മാപ്പ് തുറക്കുക (Open GIS Map)</span>
+              <span>Open GIS Map</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

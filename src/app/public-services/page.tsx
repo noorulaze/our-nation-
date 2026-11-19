@@ -83,17 +83,19 @@ export default function PublicServicesPage() {
             <div className="md:col-span-7 space-y-4 text-left">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#194B35]/10 text-[#194B35] text-xs font-bold border border-[#194B35]/20">
                 <Briefcase className="w-4 h-4 text-[#194B35]" />
-                <span>{language === "ml" ? "നഗരസഭാ പൗര സേവന വിവരങ്ങൾ" : "Citizen Public Services • Feature 04"}</span>
+                <span>Tanur Municipality — Citizen Services</span>
               </div>
 
-              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-[#194B35] tracking-tight font-malayalam-heading leading-tight">
-                {language === "ml" ? "പൊതു സേവന സൂചിക" : "Our Digital Services"}
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#194B35] tracking-tight font-sans leading-tight">
+                Our Services
               </h1>
 
+              <p className="text-base sm:text-lg font-bold text-[#C39A5B] font-sans">
+                Digital. Simple. For You.
+              </p>
+
               <p className="text-xs sm:text-sm text-[#5C6A64] leading-relaxed max-w-xl">
-                {language === "ml"
-                  ? "താനൂർ നഗരസഭയിൽ ലഭ്യമായ പൗരസേവനങ്ങൾ, അപേക്ഷിക്കേണ്ട നടപടിക്രമങ്ങൾ, ആവശ്യമായ രേഖകളുടെ ചെക്ക്‌ലിസ്റ്റ്, ഓഫീസ് സമയങ്ങൾ, കെ-സ്മാർട്ട് ഔദ്യോഗിക ഓൺലൈൻ ലിങ്കുകൾ എന്നിവ ഇവിടെ പരിശോധിക്കാം."
-                  : "Access verified municipal services online, anytime, anywhere. Understand exact statutory procedures, required document checklists, fees, and direct links to official Kerala Government portals."}
+                Access verified municipal services online, anytime, anywhere. Understand exact statutory procedures, required document checklists, fees, and direct links to official Kerala Government portals.
               </p>
 
               {/* Badges strip */}

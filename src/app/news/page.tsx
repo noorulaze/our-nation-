@@ -68,6 +68,27 @@ export default function NewsHomePage() {
       <NewsNav />
 
       {/* ========================================================================= */}
+      {/* 1. HEADER BANNER (Matching Design Reference: News & Updates / Stay Informed) */}
+      {/* ========================================================================= */}
+      <section className="relative overflow-hidden bg-gradient-to-r from-[#194B35] via-[#143E2C] to-[#194B35] text-white py-10 sm:py-14 border-b border-[#C39A5B]/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-left">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-[#F3CE7A] text-xs font-bold border border-white/20 mb-3">
+            <Newspaper className="w-3.5 h-3.5" />
+            <span>Tanur Municipality — Official Bulletin</span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black font-sans tracking-tight">
+            News & Updates
+          </h1>
+          <p className="mt-1 text-base sm:text-lg font-bold text-[#F3CE7A]">
+            Stay Informed
+          </p>
+          <p className="mt-2 text-xs sm:text-sm text-stone-200 max-w-xl leading-relaxed">
+            Verified local news, statutory municipal announcements, council orders, and public notices across Tanur.
+          </p>
+        </div>
+      </section>
+
+      {/* ========================================================================= */}
       {/* 2. BREAKING NEWS LIVE STRIP */}
       {/* ========================================================================= */}
       {breakingNews.length > 0 && (

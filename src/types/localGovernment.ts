@@ -20,8 +20,20 @@ export interface LeadershipOfficer {
   ward_number?: number;
   party?: string;
   photo_url?: string;
+  photo_type?: "official" | "placeholder";
+  photo_status?: "verified_photo" | "awaiting_photo";
   phone?: string;
   verification_status: VerificationStatus;
+  discrepancy_note?: string;
+  source_note?: string;
+}
+
+export interface LeadershipDiscrepancy {
+  field: string;
+  official_homepage_value: string;
+  members_directory_value: string;
+  status: "discrepancy_flagged";
+  note: string;
 }
 
 export interface LocalGovernmentBody {
@@ -55,6 +67,7 @@ export interface LocalGovernmentBody {
   last_verified: string;
   verification_status: VerificationStatus;
   administrative_note?: string;
+  leadership_discrepancy?: LeadershipDiscrepancy;
 }
 
 export interface LocalGovernmentWard {
@@ -67,8 +80,13 @@ export interface LocalGovernmentWard {
   representative_id?: string;
   representative_name: string;
   representative_name_ml?: string;
+  committee_designation?: string;
+  discrepancy_note?: string;
   party?: string;
   photo_url?: string;
+  photo_type?: "official" | "placeholder";
+  photo_status?: "verified_photo" | "awaiting_photo";
+  photo_source_url?: string;
   phone?: string;
   verification_status: VerificationStatus;
   source_url?: string;
@@ -88,6 +106,8 @@ export interface LocalRepresentative {
   name: string;
   name_ml?: string;
   photo_url?: string;
+  photo_type?: "official" | "placeholder";
+  photo_status?: "verified_photo" | "awaiting_photo";
   photo_source?: string;
   local_body_id: string;
   local_body_name: string;
@@ -99,6 +119,9 @@ export interface LocalRepresentative {
   ward_id: string;
   role: ElectedRole;
   role_title: string;
+  committee_designation?: string;
+  discrepancy_note?: string;
+  photo_source_url?: string;
   is_head: boolean;
   is_deputy: boolean;
   standing_committees?: string[];

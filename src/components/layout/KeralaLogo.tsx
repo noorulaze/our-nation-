@@ -16,14 +16,13 @@ export function KeralaLogo({
   const isDark = variant === "dark";
   const strokeColor = isDark ? "#FFFFFF" : "#194B35";
   const textColor = isDark ? "text-white" : "text-[#194B35]";
-  const subtextColor = isDark ? "text-amber-200/90" : "text-[#5C6A64]";
-
-  const isEn = language === "en";
+  const subtextColor = isDark ? "text-amber-200/90" : "text-[#3D4B44]";
+  const municipalityColor = isDark ? "text-amber-300/80" : "text-[#C39A5B]";
 
   return (
     <div className={`flex items-center gap-2.5 sm:gap-3 flex-shrink-0 whitespace-nowrap ${className}`}>
-      {/* Traditional Kerala Heritage & Coastal Emblem */}
-      <div className="relative w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-[#194B35]/10 border border-[#194B35]/20 flex items-center justify-center p-1.5 flex-shrink-0">
+      {/* Traditional Kerala Heritage & Coastal Architectural Emblem */}
+      <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#194B35]/10 border border-[#194B35]/20 flex items-center justify-center p-1.5 flex-shrink-0 shadow-xs">
         <svg 
           viewBox="0 0 64 64" 
           className="w-full h-full" 
@@ -62,20 +61,20 @@ export function KeralaLogo({
         </svg>
       </div>
 
-      {/* Brand Wordmark Typography Hierarchy */}
-      <div className="flex flex-col flex-shrink-0 text-left justify-center">
-        <div className="flex items-center gap-1.5 leading-tight">
-          <span className={`text-base sm:text-xl font-black font-brand tracking-tight ${textColor}`}>
-            OUR NATION
-          </span>
-          <span className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[9px] font-bold bg-[#C39A5B]/15 text-[#C39A5B] border border-[#C39A5B]/30 uppercase">
-            Tanur
-          </span>
-        </div>
+      {/* Brand Wordmark Typography Hierarchy Matching Design Reference */}
+      <div className="flex flex-col flex-shrink-0 text-left justify-center leading-none">
+        <span className={`text-base sm:text-lg lg:text-xl font-black font-brand tracking-tight ${textColor}`}>
+          OUR NATION
+        </span>
         {showSubtext && (
-          <span className={`text-[10px] sm:text-[11px] font-medium tracking-normal leading-tight mt-0.5 ${subtextColor}`}>
-            Digital Municipality Platform
-          </span>
+          <>
+            <span className={`text-[10px] sm:text-[11px] font-semibold tracking-normal mt-0.5 ${subtextColor}`}>
+              Digital Municipality Platform
+            </span>
+            <span className={`text-[9px] sm:text-[10px] font-bold tracking-wide mt-0.5 ${municipalityColor}`}>
+              Tanur Municipality
+            </span>
+          </>
         )}
       </div>
     </div>

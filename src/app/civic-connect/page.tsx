@@ -175,17 +175,19 @@ export default function CivicConnectPage() {
             <div className="md:col-span-7 space-y-4 text-left">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#194B35]/10 text-[#194B35] text-xs font-bold border border-[#194B35]/20">
                 <ShieldAlert className="w-4 h-4 text-[#194B35]" />
-                <span>{language === "ml" ? "സുതാര്യമായ സിവിക് പരിഹാര സംവിധാനം" : "Public Grievance Redressal • Feature 02"}</span>
+                <span>Tanur Municipality — Grievance Redressal</span>
               </div>
 
-              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-[#194B35] tracking-tight font-malayalam-heading leading-tight">
-                {language === "ml" ? "സിവിക് കണക്ട് താനൂർ" : "Civic Connect"}
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#194B35] tracking-tight font-sans leading-tight">
+                Civic Connect
               </h1>
 
+              <p className="text-base sm:text-lg font-bold text-[#C39A5B] font-sans">
+                Your Voice, Our Priority
+              </p>
+
               <p className="text-xs sm:text-sm text-[#5C6A64] leading-relaxed max-w-xl">
-                {language === "ml"
-                  ? "നിങ്ങളുടെ ശബ്ദം, ഞങ്ങളുടെ മുൻഗണന. താനൂർ നഗരസഭയിലെ റോഡുകൾ, മാലിന്യ സംസ്കരണം, തെരുവ് വിളക്കുകൾ, ഡ്രെയിനേജ് തുടങ്ങിയ പ്രാദേശിക പ്രശ്നങ്ങൾ സുതാര്യമായി അറിയിക്കാനും തത്സമയം നിരീക്ഷിക്കാനുമുള്ള വേദി."
-                  : "Your Voice, Our Priority. Transparent civic grievance reporting and progress tracking for roads, streetlights, sanitation, and municipal utilities across Tanur Municipality."}
+                Transparent civic grievance reporting and progress tracking for roads, streetlights, sanitation, and municipal utilities across all 45 statutory wards of Tanur Municipality.
               </p>
 
               {/* Action Buttons */}
@@ -194,8 +196,8 @@ export default function CivicConnectPage() {
                   onClick={() => setActiveTab("report")}
                   className="px-5 py-3 rounded-2xl bg-[#194B35] hover:bg-[#123626] text-white text-xs sm:text-sm font-bold shadow-sm hover:shadow transition flex items-center gap-2 min-h-[44px]"
                 >
-                  <PlusCircle className="w-4 h-4 text-amber-300" />
-                  <span>{language === "ml" ? "പരാതി രജിസ്റ്റർ ചെയ്യുക" : "Submit Grievance"}</span>
+                  <PlusCircle className="w-4 h-4 text-[#F3CE7A]" />
+                  <span>Submit Feedback</span>
                 </button>
 
                 <button
@@ -203,7 +205,7 @@ export default function CivicConnectPage() {
                   className="px-5 py-3 rounded-2xl bg-white hover:bg-[#FAF7F0] text-[#194B35] border border-[#EDE6D8] text-xs sm:text-sm font-bold shadow-2xs transition flex items-center gap-2 min-h-[44px]"
                 >
                   <Search className="w-4 h-4 text-[#C39A5B]" />
-                  <span>{language === "ml" ? "സ്റ്റാറ്റസ് പരിശോധിക്കുക" : "Track by ID"}</span>
+                  <span>Track by ID</span>
                 </button>
               </div>
             </div>

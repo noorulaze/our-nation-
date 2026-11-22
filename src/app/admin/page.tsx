@@ -2661,11 +2661,11 @@ export default function AdminPage() {
                   </div>
 
                   <div>
-                    <label className="font-bold text-[#1A2420] block mb-1">വാർഡ് നമ്പർ (Ward 1-44)</label>
+                    <label className="font-bold text-[#1A2420] block mb-1">വാർഡ് നമ്പർ (Ward 1-45)</label>
                     <input
                       type="number"
                       min={1}
-                      max={44}
+                      max={45}
                       value={newLocationForm.ward_number}
                       onChange={(e) => setNewLocationForm({ ...newLocationForm, ward_number: Number(e.target.value) })}
                       className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0]"

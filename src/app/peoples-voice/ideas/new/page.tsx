@@ -258,14 +258,14 @@ export default function SubmitIdeaPage() {
 
             <div>
               <label className="block text-xs font-bold text-[#194B35] uppercase tracking-wider mb-1.5">
-                {language === "ml" ? "വാർഡ് (1-44)" : "Ward (1-44)"}
+                {language === "ml" ? "വാർഡ് (1-45)" : "Ward (1-45)"}
               </label>
               <select
                 value={wardNumber}
                 onChange={(e) => setWardNumber(Number(e.target.value))}
                 className="w-full px-3 py-3 rounded-xl bg-[#FAF7F0] border border-[#DDD3BF] text-xs font-semibold text-[#194B35] focus:outline-none focus:ring-2 focus:ring-[#194B35]"
               >
-                {Array.from({ length: 44 }, (_, i) => i + 1).map((w) => (
+                {Array.from({ length: 45 }, (_, i) => i + 1).map((w) => (
                   <option key={w} value={w}>
                     Ward {w} ({language === "ml" ? `വാർഡ് ${w}` : `Ward ${w}`})
                   </option>

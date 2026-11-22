@@ -330,8 +330,8 @@ export default function DigitalMunicipalityPage() {
 
                 <p className="text-[#5C6A64] text-xs sm:text-sm lg:text-base leading-relaxed max-w-2xl">
                   {language === "ml"
-                    ? "മലപ്പുറം ജില്ലയിലെ ചരിത്രപ്രസിദ്ധമായ തീരദേശ നഗരസഭ. 44 വാർഡുകളിലായി വ്യാപിച്ചുകിടക്കുന്ന ഭരണസംവിധാനം, പൊതുസേവനങ്ങൾ, വികസന പദ്ധതികൾ, പൗരസമ്പർക്ക വിവരങ്ങൾ എന്നിവ ഇവിടെ സമഗ്രമായി ലഭ്യമാക്കിയിരിക്കുന്നു."
-                    : "A transparent, connected, and progressive coastal local body. Explore official ward governance across 44 divisions, municipal departments, statutory leadership, public facilities, and interactive GIS mapping."}
+                    ? "മലപ്പുറം ജില്ലയിലെ ചരിത്രപ്രസിദ്ധമായ തീരദേശ നഗരസഭ. 45 വാർഡുകളിലായി വ്യാപിച്ചുകിടക്കുന്ന ഭരണസംവിധാനം, പൊതുസേവനങ്ങൾ, വികസന പദ്ധതികൾ, പൗരസമ്പർക്ക വിവരങ്ങൾ എന്നിവ ഇവിടെ സമഗ്രമായി ലഭ്യമാക്കിയിരിക്കുന്നു."
+                    : "A transparent, connected, and progressive coastal local body. Explore official ward governance across 45 divisions, municipal departments, statutory leadership, public facilities, and interactive GIS mapping."}
                 </p>
 
                 {/* Hero Action Buttons */}
@@ -340,7 +340,7 @@ export default function DigitalMunicipalityPage() {
                     onClick={() => setActiveTab("wards")}
                     className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-[#C39A5B] hover:bg-[#b0874a] text-white font-bold text-xs sm:text-sm shadow-sm transition-all min-h-[44px]"
                   >
-                    <span>{language === "ml" ? "44 വാർഡുകൾ കാണുക" : "Explore Our Wards"}</span>
+                    <span>{language === "ml" ? "45 വാർഡുകൾ കാണുക" : "Explore Our Wards"}</span>
                     <ChevronRight className="w-4 h-4" />
                   </button>
                   <button
@@ -433,7 +433,7 @@ export default function DigitalMunicipalityPage() {
         >
           {[
             { key: "overview", label: "Overview & Leadership", label_ml: "ഭരണ നേതൃത്വം", icon: Building2 },
-            { key: "wards", label: "44 Wards Directory", label_ml: "44 വാർഡുകൾ", icon: MapPin },
+            { key: "wards", label: "45 Wards Directory", label_ml: "45 വാർഡുകൾ", icon: MapPin },
             { key: "facilities", label: "Public Facilities & Directory", label_ml: "പൊതു സൗകര്യങ്ങൾ", icon: Layers },
             { key: "departments", label: "Departments & Wings", label_ml: "വകുപ്പുകളും ചുമതലകളും", icon: Briefcase },
             { key: "gis", label: "Interactive GIS Map", label_ml: "ഡിജിറ്റൽ മാപ്പ് (GIS)", icon: Globe2 },
@@ -606,7 +606,7 @@ export default function DigitalMunicipalityPage() {
         )}
 
         {/* ========================================================================= */}
-        {/* TAB 2: ALL 44 WARDS DIRECTORY (POLISHED WARD CARDS)                       */}
+        {/* TAB 2: ALL 45 WARDS DIRECTORY (POLISHED WARD CARDS)                       */}
         {/* ========================================================================= */}
         {activeTab === "wards" && (
           <div className="space-y-6 animate-in fade-in duration-200" id="tabpanel-wards" role="tabpanel" aria-labelledby="tab-wards">
@@ -614,7 +614,7 @@ export default function DigitalMunicipalityPage() {
               <div>
                 <div className="flex items-center gap-2 flex-wrap mb-1">
                   <h2 className="text-xl sm:text-2xl font-extrabold text-[#194B35] font-malayalam-heading">
-                    {language === "ml" ? "44 നഗരസഭാ വാർഡുകൾ" : "All 44 Municipal Wards of Tanur"}
+                    {language === "ml" ? "45 നഗരസഭാ വാർഡുകൾ" : "All 45 Municipal Wards of Tanur"}
                   </h2>
                   <VerificationBadge 
                     level="verified" 
@@ -624,7 +624,7 @@ export default function DigitalMunicipalityPage() {
                 </div>
                 <p className="text-xs text-[#5C6A64]">
                   {language === "ml"
-                    ? "താനൂർ നഗരസഭയിലെ 44 ഡിവിഷനുകൾ, കേന്ദ്ര സ്വിച്ച്ബോർഡ് സമ്പർക്കം, പ്രധാന പ്രദേശങ്ങൾ, ഏകദേശ ജിയോ-കോർഡിനേറ്റുകൾ."
+                    ? "താനൂർ നഗരസഭയിലെ 45 ഡിവിഷനുകൾ, കേന്ദ്ര സ്വിച്ച്ബോർഡ് സമ്പർക്കം, പ്രധാന പ്രദേശങ്ങൾ, ഏകദേശ ജിയോ-കോർഡിനേറ്റുകൾ."
                     : "Delimited electoral divisions, central switchboard communications, key localities, and approximate locality centroids."}
                 </p>
               </div>
@@ -656,11 +656,11 @@ export default function DigitalMunicipalityPage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-[11px] text-amber-900/90 leading-relaxed pt-1">
                 <div className="p-2.5 rounded-xl bg-white/70 border border-amber-200/60">
                   <span className="font-bold block text-[#194B35] mb-0.5">
-                    1. {language === "ml" ? "സ്ഥിരീകരിച്ച ഡിവിഷനുകൾ" : "Verified Divisions (1–44)"}
+                    1. {language === "ml" ? "സ്ഥിരീകരിച്ച ഡിവിഷനുകൾ" : "Verified Divisions (1–45)"}
                   </span>
                   {language === "ml"
-                    ? "എല്ലാ 44 വാർഡ് പേരുകളും നമ്പറുകളും കേരള തദ്ദേശ സ്വയംഭരണ വകുപ്പിന്റെ ഡീലിമിറ്റേഷൻ ഉത്തരവ് പ്രകാരം സ്ഥിരീകരിച്ചതാണ്."
-                    : "All 44 ward numbers and official Malayalam/English names are verified via the official LSGD Delimitation Order."}
+                    ? "എല്ലാ 45 വാർഡ് പേരുകളും നമ്പറുകളും കേരള തദ്ദേശ സ്വയംഭരണ വകുപ്പിന്റെ ഡീലിമിറ്റേഷൻ ഉത്തരവ് പ്രകാരം സ്ഥിരീകരിച്ചതാണ്."
+                    : "All 45 ward numbers and official Malayalam/English names are verified via the official LSGD Delimitation Order."}
                 </div>
                 <div className="p-2.5 rounded-xl bg-white/70 border border-amber-200/60">
                   <span className="font-bold block text-[#194B35] mb-0.5">
@@ -681,7 +681,7 @@ export default function DigitalMunicipalityPage() {
               </div>
             </div>
 
-            {/* Wards Grid: 44 Polish Cards */}
+            {/* Wards Grid: 45 Polish Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {filteredWards.map((w) => {
                 const isSelected = selectedWardNumber === w.ward_number;
@@ -829,7 +829,7 @@ export default function DigitalMunicipalityPage() {
                   <p className="text-xs text-[#5C6A64] max-w-md mx-auto">
                     {language === "ml"
                       ? `"${wardSearch}" എന്ന തിരയലിന് അനുയോജ്യമായ വാർഡുകൾ ലഭ്യമല്ല. മറ്റൊരു പേരോ നമ്പറോ നൽകി വീണ്ടും ശ്രമിക്കുക.`
-                      : `No ward matched your search query "${wardSearch}". Try searching by ward number (1-44) or locality name.`}
+                      : `No ward matched your search query "${wardSearch}". Try searching by ward number (1-45) or locality name.`}
                   </p>
                   <button
                     onClick={() => setWardSearch("")}

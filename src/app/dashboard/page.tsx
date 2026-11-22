@@ -1302,7 +1302,7 @@ export default function CitizenDashboardPage() {
 
                   <div className="pt-2 text-center">
                     <Link
-                      href="/peoples-voice/submit"
+                      href="/peoples-voice/ideas/new"
                       className="inline-flex items-center gap-1.5 text-xs font-bold text-[#194B35] hover:underline"
                     >
                       <Plus className="w-3.5 h-3.5" />

@@ -179,8 +179,8 @@ export default function DigitalTanurPage() {
 
                 <p className="mt-4 text-base sm:text-lg text-[#EDE6D8] max-w-2xl leading-relaxed">
                   {language === "ml"
-                    ? "താനൂർ നഗരസഭയിലെ 44 വാർഡുകളിലെയും പ്രധാന സ്ഥാപനങ്ങൾ, പൊതു സൗകര്യങ്ങൾ, റോഡുകൾ, വികസന പദ്ധതികൾ എന്നിവ വിരൽത്തുമ്പിൽ എത്തിക്കുന്ന സമ്പൂർണ്ണ ഇന്ററാക്ടീവ് ഡിജിറ്റൽ സംവിധാനം."
-                    : "The comprehensive GIS-enabled digital representation of Tanur Municipality covering all 44 wards, verified public institutions, development projects, and civic infrastructure."}
+                    ? "താനൂർ നഗരസഭയിലെ 45 വാർഡുകളിലെയും പ്രധാന സ്ഥാപനങ്ങൾ, പൊതു സൗകര്യങ്ങൾ, റോഡുകൾ, വികസന പദ്ധതികൾ എന്നിവ വിരൽത്തുമ്പിൽ എത്തിക്കുന്ന സമ്പൂർണ്ണ ഇന്ററാക്ടീവ് ഡിജിറ്റൽ സംവിധാനം."
+                    : "The comprehensive GIS-enabled digital representation of Tanur Municipality covering all 45 wards, verified public institutions, development projects, and civic infrastructure."}
                 </p>
 
                 {/* Quick CTA Actions */}
@@ -232,7 +232,7 @@ export default function DigitalTanurPage() {
                   </div>
                   <div className="flex items-center justify-between pb-2 border-b border-white/10">
                     <span className="text-white/70">{language === "ml" ? "നഗരസഭാ വിസ്തൃതി" : "Total Area"}</span>
-                    <span className="font-bold">44.4 sq.km (44 Wards)</span>
+                    <span className="font-bold">19.59 sq.km (45 Wards)</span>
                   </div>
                   <div className="flex items-center justify-between pb-2 border-b border-white/10">
                     <span className="text-white/70">{language === "ml" ? "ജനസംഖ്യ (ഏകദേശം)" : "Population"}</span>
@@ -271,7 +271,7 @@ export default function DigitalTanurPage() {
                 <span className="text-xs font-semibold">{language === "ml" ? "വാർഡുകൾ" : "Wards"}</span>
                 <Landmark className="w-4 h-4 text-[#194B35]" />
               </div>
-              <div className="text-2xl font-extrabold text-[#194B35]">44</div>
+              <div className="text-2xl font-extrabold text-[#194B35]">45</div>
               <div className="text-[11px] text-[#5C6A64] mt-0.5">{language === "ml" ? "100% മാപ്പ് ചെയ്തത്" : "Fully Mapped"}</div>
             </div>
 

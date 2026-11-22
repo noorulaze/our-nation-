@@ -864,7 +864,7 @@ export default function ProjectDetailPage() {
                   </Link>
 
                   <Link
-                    href="/services"
+                    href="/public-services"
                     className="block p-2.5 rounded-xl bg-white border border-[#EDE6D8] hover:border-[#194B35] text-[#194B35] font-bold transition flex items-center justify-between"
                   >
                     <span>Online Public Services</span>

@@ -102,7 +102,7 @@ export default function DevelopmentTrackerPage() {
               </h1>
               <p className="text-white/80 text-sm sm:text-base leading-relaxed">
                 {language === "ml"
-                  ? "താനൂർ നഗരസഭയിലെ 44 വാർഡുകളിലുമായി പുരോഗമിക്കുന്ന പ്രധാന സർക്കാർ വികസന പദ്ധതികൾ, അനുവദിച്ച ബജറ്റ്, നിർവ്വഹണ ഏജൻസി, ഔദ്യോഗിക വിവരങ്ങൾ എന്നിവ സുതാര്യമായി അറിയാം."
+                  ? "താനൂർ നഗരസഭയിലെ 45 വാർഡുകളിലുമായി പുരോഗമിക്കുന്ന പ്രധാന സർക്കാർ വികസന പദ്ധതികൾ, അനുവദിച്ച ബജറ്റ്, നിർവ്വഹണ ഏജൻസി, ഔദ്യോഗിക വിവരങ്ങൾ എന്നിവ സുതാര്യമായി അറിയാം."
                   : "Track verified public development projects across Tanur Municipality with sanctioned budgets, responsible departments, verified sources, and real-time milestones."}
               </p>
             </div>
@@ -161,7 +161,7 @@ export default function DevelopmentTrackerPage() {
               <span className="text-[11px] text-white/70 block uppercase font-bold tracking-wider">
                 {language === "ml" ? "വാർഡുകളുടെ പരിധി" : "Municipal Wards"}
               </span>
-              <p className="text-xl sm:text-2xl font-black text-white mt-1">44 {language === "ml" ? "വാർഡുകൾ" : "Wards"}</p>
+              <p className="text-xl sm:text-2xl font-black text-white mt-1">45 {language === "ml" ? "വാർഡുകൾ" : "Wards"}</p>
             </div>
           </div>
         </div>
@@ -206,7 +206,7 @@ export default function DevelopmentTrackerPage() {
               onChange={(e) => setSelectedWard(Number(e.target.value))}
               className="px-3.5 py-2.5 rounded-xl border border-gray-300 text-xs bg-white focus:ring-2 focus:ring-[#194B35] outline-none"
             >
-              <option value={0}>{language === "ml" ? "എല്ലാ വാർഡുകളും (44 Wards)" : "All 44 Municipal Wards"}</option>
+              <option value={0}>{language === "ml" ? "എല്ലാ വാർഡുകളും (45 Wards)" : "All 45 Municipal Wards"}</option>
               {TANUR_MUNICIPAL_WARDS.map((w) => (
                 <option key={w.id} value={w.ward_number}>
                   {language === "ml" ? `വാർഡ് ${w.ward_number}: ${w.name_ml}` : `Ward ${w.ward_number}: ${w.name}`}

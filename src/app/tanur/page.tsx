@@ -258,7 +258,7 @@ export default function TanurOverviewPage() {
                   നാട്ടിലെ ആളുകൾ, വ്യാപാരികൾ, സ്ഥാപനങ്ങൾ, വാർത്തകൾ, പ്രൊഫഷണൽ സേവനങ്ങൾ എന്നിവയെല്ലാം ഒരൊറ്റ വേദിയിൽ സംയോജിപ്പിക്കുന്ന സമ്പൂർണ്ണ ഡിജിറ്റൽ നെറ്റ്വർക്ക്.
                 </p>
                 <div className="flex flex-wrap gap-1.5 pt-2">
-                  <span className="text-[10px] bg-gray-100 text-gray-700 px-2 py-0.5 rounded font-bold">44 വാർഡുകൾ</span>
+                  <span className="text-[10px] bg-gray-100 text-gray-700 px-2 py-0.5 rounded font-bold">45 വാർഡുകൾ</span>
                   <span className="text-[10px] bg-gray-100 text-gray-700 px-2 py-0.5 rounded font-bold">സ്മാർട്ട് ന്യൂസ്‌റൂം</span>
                   <span className="text-[10px] bg-gray-100 text-gray-700 px-2 py-0.5 rounded font-bold">സേവന വിദഗ്ദ്ധർ</span>
                   <span className="text-[10px] bg-gray-100 text-gray-700 px-2 py-0.5 rounded font-bold">മാപ്പ്</span>
@@ -337,7 +337,7 @@ export default function TanurOverviewPage() {
         </section>
 
         {/* ========================================================================= */}
-        {/* 3. INTERACTIVE 44 WARDS DIRECTORY & EXPLORER */}
+        {/* 3. INTERACTIVE 45 WARDS DIRECTORY & EXPLORER */}
         {/* ========================================================================= */}
         <section id="wards" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 sm:mt-20 scroll-mt-24">
           <div className="bg-white rounded-3xl border border-[#EDE6D8] p-6 sm:p-8 shadow-card space-y-6">
@@ -348,10 +348,10 @@ export default function TanurOverviewPage() {
                   മുനിസിപ്പൽ ഡിവിഷനുകൾ
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-black font-malayalam-heading text-[#1B4D36] mt-1">
-                  താനൂർ നഗരസഭയിലെ 44 വാർഡുകൾ
+                  താനൂർ നഗരസഭയിലെ 45 വാർഡുകൾ
                 </h2>
                 <p className="text-xs text-[#5C6A64] font-malayalam-body mt-1 max-w-2xl leading-relaxed">
-                  നഗരസഭയുടെ 44 വാർഡുകളിലെയും ഔദ്യോഗിക പേര്, പ്രധാന പ്രദേശങ്ങൾ, വാർഡ് കൗൺസിലർ വിവരങ്ങൾ, നടക്കുന്ന വികസന പദ്ധതികൾ എന്നിവ താഴെ പരിശോധിക്കാം.
+                  നഗരസഭയുടെ 45 വാർഡുകളിലെയും ഔദ്യോഗിക പേര്, പ്രധാന പ്രദേശങ്ങൾ, വാർഡ് കൗൺസിലർ വിവരങ്ങൾ, നടക്കുന്ന വികസന പദ്ധതികൾ എന്നിവ താഴെ പരിശോധിക്കാം.
                 </p>
               </div>
 
@@ -367,7 +367,7 @@ export default function TanurOverviewPage() {
                         : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                     }`}
                   >
-                    {f === "all" ? "എല്ലാ 44 വാർഡുകളും" :
+                    {f === "all" ? "എല്ലാ 45 വാർഡുകളും" :
                      f === "coastal" ? "തീരദേശ വാർഡുകൾ" : "ടൗൺ വാർഡുകൾ"}
                   </button>
                 ))}
@@ -435,7 +435,7 @@ export default function TanurOverviewPage() {
             </div>
 
             <div className="text-right text-[11px] text-gray-400">
-              ലഭ്യമായ വാർഡുകൾ: {filteredWards.length} / 44 വാർഡുകൾ
+              ലഭ്യമായ വാർഡുകൾ: {filteredWards.length} / 45 വാർഡുകൾ
             </div>
           </div>
         </section>
@@ -534,7 +534,7 @@ export default function TanurOverviewPage() {
                     <span>ഭരണപരമായ വ്യത്യാസം (Administrative Distinction):</span>
                   </div>
                   <p className="text-[12px] text-[#2D5A43] leading-relaxed">
-                    <strong>താനൂർ നഗരസഭ (Tanur Municipality)</strong> എന്നത് 19.49 ച.കി.മീ വിസ്തൃതിയും 44 വാർഡുകളുമുള്ള നഗര ഭരണ സംവിധാനമാണ്. ഇത് സമീപത്തെ ഗ്രാമീണ പഞ്ചായത്തുകൾ (ഒഴൂർ, പൊന്മമുണ്ടം, താനാളൂർ, നിറമരുതൂർ, ചെറിയമുണ്ടം) ഉൾപ്പെടുന്ന <strong>താനൂർ ബ്ലോക്ക് പഞ്ചായത്തുമായി (Block Panchayat)</strong> വേറിട്ടുനിൽക്കുന്നു. രണ്ടിന്റെയും കണക്കുകൾ കൂട്ടിക്കലർത്തരുത്.
+                    <strong>താനൂർ നഗരസഭ (Tanur Municipality)</strong> എന്നത് 19.59 ച.കി.മീ വിസ്തൃതിയും 45 വാർഡുകളുമുള്ള നഗര ഭരണ സംവിധാനമാണ്. ഇത് സമീപത്തെ ഗ്രാമീണ പഞ്ചായത്തുകൾ (ഒഴൂർ, പൊന്മമുണ്ടം, താനാളൂർ, നിറമരുതൂർ, ചെറിയമുണ്ടം) ഉൾപ്പെടുന്ന <strong>താനൂർ ബ്ലോക്ക് പഞ്ചായത്തുമായി (Block Panchayat)</strong> വേറിട്ടുനിൽക്കുന്നു. രണ്ടിന്റെയും കണക്കുകൾ കൂട്ടിക്കലർത്തരുത്.
                   </p>
                 </div>
 
@@ -785,7 +785,7 @@ export default function TanurOverviewPage() {
                   താനൂർ നഗരസഭാ കാര്യാലയം (Municipal Office)
                 </h3>
                 <p className="text-xs text-white/80 leading-relaxed font-malayalam-body">
-                  താനൂർ ടൗൺ ബസ് സ്റ്റാൻഡിന് സമീപം സ്ഥിതി ചെയ്യുന്ന നഗരസഭാ കാര്യാലയം 44 വാർഡുകളിലെയും പൗര സേവനങ്ങൾ, സിവിൽ രജിസ്ട്രേഷൻ, ബിൽഡിംഗ് പെർമിറ്റ്, നികുതി പിരിവ് എന്നിവ കൈകാര്യം ചെയ്യുന്നു.
+                  താനൂർ ടൗൺ ബസ് സ്റ്റാൻഡിന് സമീപം സ്ഥിതി ചെയ്യുന്ന നഗരസഭാ കാര്യാലയം 45 വാർഡുകളിലെയും പൗര സേവനങ്ങൾ, സിവിൽ രജിസ്ട്രേഷൻ, ബിൽഡിംഗ് പെർമിറ്റ്, നികുതി പിരിവ് എന്നിവ കൈകാര്യം ചെയ്യുന്നു.
                 </p>
               </div>
 

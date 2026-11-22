@@ -245,8 +245,8 @@ function BrowseIdeasContent() {
               aria-label={language === "ml" ? "വാർഡ് തിരഞ്ഞെടുക്കുക" : "Select Ward"}
               className="px-3 py-2 rounded-xl bg-white border border-[#DDD3BF] text-xs font-semibold text-[#194B35] focus:outline-none focus:ring-2 focus:ring-[#194B35]"
             >
-              <option value={0}>{language === "ml" ? "എല്ലാ വാർഡുകളും (1-44)" : "All Wards (1-44)"}</option>
-              {Array.from({ length: 44 }, (_, i) => i + 1).map((w) => (
+              <option value={0}>{language === "ml" ? "എല്ലാ വാർഡുകളും (1-45)" : "All Wards (1-45)"}</option>
+              {Array.from({ length: 45 }, (_, i) => i + 1).map((w) => (
                 <option key={w} value={w}>
                   Ward {w} ({language === "ml" ? `വാർഡ് ${w}` : `Ward ${w}`})
                 </option>

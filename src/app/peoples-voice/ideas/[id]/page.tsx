@@ -591,7 +591,7 @@ export default function IdeaDetailPage() {
               </p>
               <div className="pt-2 border-t border-[#DDD3BF] flex items-center justify-between text-[11px] text-[#194B35] font-bold">
                 <span>{language === "ml" ? "താനൂർ നഗരസഭ" : "Tanur Municipality"}</span>
-                <span>44 Wards</span>
+                <span>45 Wards</span>
               </div>
             </div>
           </div>

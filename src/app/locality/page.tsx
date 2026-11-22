@@ -102,7 +102,7 @@ export default function LocalityPage() {
           </div>
           <div className="bg-white rounded-2xl border border-[#EAE4D7] p-4 text-center">
             <span className="text-[10px] font-bold text-[#7A8880] uppercase tracking-wider">ഭരണവിഭാഗം</span>
-            <p className="text-lg sm:text-xl font-bold text-[#1B4D36] mt-1">44 വാർഡുകൾ</p>
+            <p className="text-lg sm:text-xl font-bold text-[#1B4D36] mt-1">45 വാർഡുകൾ</p>
             <span className="text-[11px] text-[#5C6A64]">താനൂർ നഗരസഭ</span>
           </div>
           <div className="bg-white rounded-2xl border border-[#EAE4D7] p-4 text-center">
@@ -151,7 +151,7 @@ export default function LocalityPage() {
                 {language === "ml" ? "വികസന ട്രാക്കർ" : "Development Tracker"}
               </h3>
               <p className="text-xs text-[#5C6A64] mt-1">
-                {language === "ml" ? "44 വാർഡുകളിലെ ₹86.60 കോടിയുടെ വികസന പദ്ധതികൾ ട്രാക്ക് ചെയ്യാം." : "Track ₹86.60 Cr verified municipal works across 44 wards."}
+                {language === "ml" ? "45 വാർഡുകളിലെ ₹86.60 കോടിയുടെ വികസന പദ്ധതികൾ ട്രാക്ക് ചെയ്യാം." : "Track ₹86.60 Cr verified municipal works across 45 wards."}
               </p>
             </div>
             <span className="text-[11px] font-bold text-[#C39A5B] mt-3 inline-flex items-center gap-1">

@@ -186,7 +186,7 @@ export default function AdminNewsroomAnalyticsPage() {
             <p className="text-xs text-gray-600 mb-6">
               {language === "ml"
                 ? "നമ്മുടെ നാട് താനൂർ നഗരസഭയ്ക്കും മലപ്പുറം ജില്ലയ്ക്കും ഏറ്റവും ഉയർന്ന പരിഗണന നൽകുന്നു."
-                : "Newsroom pipeline automatically ranks local stories from Tanur's 44 wards and Malappuram district."}
+                : "Newsroom pipeline automatically ranks local stories from Tanur's 45 wards and Malappuram district."}
             </p>
 
             <div className="space-y-4">

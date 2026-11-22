@@ -352,7 +352,7 @@ export default function PeoplesVoicePage() {
               onChange={(e) => setSelectedWard(Number(e.target.value))}
               className="px-3.5 py-2.5 rounded-xl border border-gray-300 text-xs bg-white focus:ring-2 focus:ring-[#194B35] outline-none"
             >
-              <option value={0}>{language === "ml" ? "എല്ലാ വാർഡുകളും (44 Wards)" : "All 44 Municipal Wards"}</option>
+              <option value={0}>{language === "ml" ? "എല്ലാ വാർഡുകളും (45 Wards)" : "All 45 Municipal Wards"}</option>
               {TANUR_MUNICIPAL_WARDS.map((w) => (
                 <option key={w.id} value={w.ward_number}>
                   {language === "ml" ? `വാർഡ് ${w.ward_number}: ${w.name_ml}` : `Ward ${w.ward_number}: ${w.name}`}
@@ -655,7 +655,7 @@ export default function PeoplesVoicePage() {
 
                 <div>
                   <label className="font-bold text-gray-700 block mb-1">
-                    {language === "ml" ? "വാർഡ് (44 വാർഡുകളിൽ ഒന്ന്):" : "Select Ward (1-44):"}
+                    {language === "ml" ? "വാർഡ് (45 വാർഡുകളിൽ ഒന്ന്):" : "Select Ward (1-45):"}
                   </label>
                   <select
                     value={formWard}

@@ -152,7 +152,7 @@ function CivicIssuesContent() {
               <p className="text-xs sm:text-sm text-[#5C6A64] mt-1 max-w-2xl">
                 {language === "ml"
                   ? "താനൂർ നഗരസഭയിലെയും സമീപ മലപ്പുറം പ്രദേശങ്ങളിലെയും റോഡ്, ഡ്രെയിനേജ്, ശുചിത്വം തുടങ്ങിയ പൊതു പ്രശ്നങ്ങൾ നിരീക്ഷിക്കുക, പിന്തുണ നൽകുക."
-                  : "Track, support, and inspect transparent civic issues across Tanur Municipality (44 wards) and Malappuram."}
+                  : "Track, support, and inspect transparent civic issues across Tanur Municipality (45 wards) and Malappuram."}
               </p>
             </div>
 

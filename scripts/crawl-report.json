@@ -1,0 +1,36 @@
+{
+  "totalLinksTested": 91,
+  "validLinksCount": 107,
+  "brokenLinksCount": 3,
+  "brokenLinks": [
+    {
+      "url": "/privacy",
+      "status": 404
+    },
+    {
+      "url": "/terms",
+      "status": 404
+    },
+    {
+      "url": "/people/fathima_tanur",
+      "status": 500
+    }
+  ],
+  "totalImagesTested": 4,
+  "validImagesCount": 1,
+  "brokenImagesCount": 3,
+  "brokenImages": [
+    {
+      "url": "/_next/image?url=%2Fimages%2Ftanur-heritage-hero.jpg",
+      "status": 400
+    },
+    {
+      "url": "/_next/image?url=%2Fimages%2Ftanur-coastal-pride.jpg",
+      "status": 400
+    },
+    {
+      "url": "/_next/image?url=%2Frepresentatives%2Ftanur-municipality%2Fward-40.jpeg",
+      "status": 400
+    }
+  ]
+}

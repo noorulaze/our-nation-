@@ -1,6 +1,7 @@
 "use client";
 
-import React, { use } from "react";
+import React from "react";
+import { useParams } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Footer } from "@/components/layout/Footer";
@@ -24,12 +25,10 @@ import {
   MessageSquare
 } from "lucide-react";
 
-interface PageProps {
-  params: Promise<{ username: string }>;
-}
-
-export default function PublicProfilePage({ params }: PageProps) {
-  const { username } = use(params);
+export default function PublicProfilePage({ params }: { params?: { username?: string } }) {
+  const routerParams = useParams();
+  const rawUsername = params?.username || (routerParams?.username as string) || "";
+  const username = decodeURIComponent(rawUsername);
   const { t, language } = useLanguage();
 
   const allProfiles = store.getProfiles();

@@ -200,7 +200,7 @@ export default function ProfilePage() {
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
         
         {/* Breadcrumbs */}
-        <Breadcrumbs items={[{ label: "പ്രൊഫൈൽ (Profile)" }]} className="mb-4" />
+        <Breadcrumbs items={[{ label: "Profile" }]} className="mb-4" />
 
         {/* CONTEXT-AWARE PERSONA SELECTOR (SECTION 4) */}
         <div className="bg-[#FAF4E6] rounded-2xl border border-[#E8DCBF] p-3 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
@@ -210,23 +210,23 @@ export default function ProfilePage() {
             </span>
             <div>
               <span className="text-[10px] font-bold text-[#8C5B0F] uppercase tracking-wider block">
-                {language === "ml" ? "സന്ദർഭോചിത ഡാഷ്‌ബോർഡ് (Context-Aware Dashboard)" : "Context-Aware Dashboard"}
+                Context-Aware Dashboard
               </span>
               <p className="text-xs font-bold text-[#1B4D36]">
-                {dashboardPersona === "resident" && "റസിഡന്റ് ഡാഷ്‌ബോർഡ് — നാട്ടുവാസി വ്യക്തിഗത കേന്ദ്രം"}
-                {dashboardPersona === "professional" && "പ്രൊഫഷണൽ സർവീസ് ഡാഷ്‌ബോർഡ് — സേവന ദാതാവ്"}
-                {dashboardPersona === "moderator" && "മോഡറേഷൻ വർക്ക്‌സ്‌പേസ് — റിപ്പോർട്ടുകൾ & പരിശോധന"}
-                {dashboardPersona === "admin" && "അഡ്മിനിസ്ട്രേറ്റർ കൺസോൾ — പ്ലാറ്റ്‌ഫോം അവലോകനം"}
+                {dashboardPersona === "resident" && "Resident Dashboard — Citizen Activity Center"}
+                {dashboardPersona === "professional" && "Professional Service Dashboard — Local Provider"}
+                {dashboardPersona === "moderator" && "Moderation Workspace — Issue Review"}
+                {dashboardPersona === "admin" && "Administrator Console — Municipal Overview"}
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 shrink-0">
             {[
-              { id: "resident", label: "റസിഡന്റ് (Resident)", icon: User },
-              { id: "professional", label: "പ്രൊഫഷണൽ (Pro)", icon: Wrench },
-              { id: "moderator", label: "മോഡറേറ്റർ (Mod)", icon: ShieldCheck },
-              { id: "admin", label: "അഡ്മിൻ (Admin)", icon: Settings },
+              { id: "resident", label: "Resident", icon: User },
+              { id: "professional", label: "Professional", icon: Wrench },
+              { id: "moderator", label: "Moderator", icon: ShieldCheck },
+              { id: "admin", label: "Admin", icon: Settings },
             ].map((p) => {
               const Icon = p.icon;
               const isSelected = dashboardPersona === p.id;
@@ -268,8 +268,8 @@ export default function ProfilePage() {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                title="ചിത്രം മാറ്റുക (Change Photo)"
-                aria-label="ചിത്രം മാറ്റുക (Change Photo)"
+                title="Change Photo"
+                aria-label="Change Photo"
                 className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-200 text-white cursor-pointer"
               >
                 <Camera className="w-6 h-6" />
@@ -280,7 +280,7 @@ export default function ProfilePage() {
             
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <h1 className="text-xl sm:text-2xl font-bold font-malayalam-serif text-[#1B4D36]">
+                <h1 className="text-xl sm:text-2xl font-bold font-sans text-[#1B4D36]">
                   {displayName}
                 </h1>
                 <span className={`text-[10px] uppercase font-bold px-2.5 py-0.5 rounded-full ${
@@ -298,7 +298,7 @@ export default function ProfilePage() {
                 {existingPro && (
                   <span className="text-[10px] uppercase font-bold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-300 flex items-center gap-1">
                     <Wrench className="w-3 h-3 text-[#B87A1E]" />
-                    <span>സർവീസ് പ്രൊവൈഡർ</span>
+                    <span>Service Provider</span>
                   </span>
                 )}
               </div>
@@ -317,17 +317,17 @@ export default function ProfilePage() {
 
           <div className="flex items-center gap-2.5 w-full sm:w-auto justify-end flex-wrap">
             <Link
-              href={`/people/${user?.username || "admin_nammude"}`}
+              href={`/people/${user?.username || "fathima_tanur"}`}
               className="px-4 py-2 rounded-xl text-xs font-bold text-[#1B4D36] bg-[#FAF7F0] hover:bg-[#F3EFE6] transition border border-[#DDD5C5] shadow-xs flex items-center gap-1.5"
             >
               <Eye className="w-3.5 h-3.5" />
-              <span>പബ്ലിക് പ്രൊഫൈൽ കാണുക</span>
+              <span>View Public Profile</span>
             </Link>
             <button
               onClick={() => logout()}
               className="px-4 py-2 rounded-xl text-xs font-bold text-red-700 bg-red-50 hover:bg-red-100 transition border border-red-200 shadow-xs active:scale-95"
             >
-              {t("navLogout")}
+              Sign Out
             </button>
           </div>
         </div>
@@ -346,8 +346,8 @@ export default function ProfilePage() {
           <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
             <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-[#EAE4D7] space-y-4 animate-in fade-in zoom-in-95">
               <div className="flex items-center justify-between border-b border-[#F3EFE6] pb-3">
-                <h3 className="font-bold text-sm text-[#1B4D36] font-malayalam-serif">
-                  പ്രൊഫൈൽ ചിത്രം ക്രമീകരിക്കുക (Adjust Photo)
+                <h3 className="font-bold text-sm text-[#1B4D36] font-sans">
+                  Adjust Profile Photo
                 </h3>
                 <button
                   onClick={() => setCropModalOpen(false)}
@@ -404,7 +404,7 @@ export default function ProfilePage() {
                   onClick={() => setCropModalOpen(false)}
                   className="px-4 py-2 rounded-xl text-xs font-semibold text-[#5C6A64] hover:bg-neutral-100"
                 >
-                  റദ്ദാക്കുക
+                  Cancel
                 </button>
                 <button
                   type="button"
@@ -412,7 +412,7 @@ export default function ProfilePage() {
                   className="px-5 py-2 rounded-xl text-xs font-bold text-white bg-[#1B4D36] hover:bg-[#143B29] transition shadow-xs flex items-center gap-1.5"
                 >
                   <Check className="w-4 h-4" />
-                  <span>ചിത്രം സേവ് ചെയ്യുക</span>
+                  <span>Save Photo</span>
                 </button>
               </div>
             </div>
@@ -429,17 +429,17 @@ export default function ProfilePage() {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5 relative z-10">
             <div className="space-y-1.5 max-w-xl">
               <span className="inline-block px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 text-[11px] font-bold uppercase tracking-wider border border-amber-400/30">
-                {existingPro ? "പ്രൊഫഷണൽ സർവീസ് പാർട്ണർ" : "പ്രാദേശിക സേവന ദാതാവാകൂ (Become a Provider)"}
+                {existingPro ? "Professional Service Partner" : "Become a Local Service Provider"}
               </span>
-              <h2 className="text-lg sm:text-xl font-bold font-malayalam-serif">
+              <h2 className="text-lg sm:text-xl font-bold font-sans">
                 {existingPro 
-                  ? `${existingPro.business_name || existingPro.display_name} — സേവന അക്കൗണ്ട് സജീവമാണ്`
-                  : "താനൂരിലും മലപ്പുറത്തും നിങ്ങളുടെ തൊഴിൽ വൈദഗ്ധ്യം സേവനമാക്കൂ"}
+                  ? `${existingPro.business_name || existingPro.display_name} — Service Account Active`
+                  : "Offer your professional services across Tanur Municipality"}
               </h2>
               <p className="text-xs text-white/80 leading-relaxed">
                 {existingPro
-                  ? `വിഭാഗം: ${existingPro.category_name_ml || existingPro.category_name} • റേറ്റിംഗ്: ⭐ ${existingPro.rating} (${existingPro.reviews_count} അവലോകനങ്ങൾ)`
-                  : "ഇലക്ട്രീഷ്യൻ, പ്ലംബർ, തച്ചൻ, എസി റിപ്പയർ, ഹോം നഴ്സിംഗ് തുടങ്ങി 18 വിഭാഗങ്ങളിൽ നാട്ടുകാർക്ക് നിങ്ങളുടെ സേവനം ലഭ്യമാക്കാം."}
+                  ? `Category: ${existingPro.category_name} • Rating: ⭐ ${existingPro.rating} (${existingPro.reviews_count} reviews)`
+                  : "Connect with local residents across 18 trade categories including plumbing, electrical, carpentry, AC repair, and maintenance."}
               </p>
             </div>
 
@@ -450,14 +450,14 @@ export default function ProfilePage() {
                     href={`/professionals/${existingPro.username}`}
                     className="px-4 py-2.5 rounded-xl bg-white text-[#1B4D36] text-xs font-bold hover:bg-neutral-100 transition shadow-md flex items-center gap-1.5"
                   >
-                    <span>പ്രൊഫൈൽ പേജ്</span>
+                    <span>Public Listing</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </Link>
                   <Link
                     href="/dashboard/bookings"
                     className="px-4 py-2.5 rounded-xl bg-amber-400 text-[#1B4D36] text-xs font-bold hover:bg-amber-300 transition shadow-md flex items-center gap-1.5"
                   >
-                    <span>ബുക്കിംഗ് ഡാഷ്‌ബോർഡ്</span>
+                    <span>Bookings Dashboard</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
@@ -467,7 +467,7 @@ export default function ProfilePage() {
                   className="px-5 py-3 rounded-2xl bg-amber-400 hover:bg-amber-300 text-[#1B4D36] text-xs sm:text-sm font-bold transition shadow-md flex items-center gap-2 active:scale-95"
                 >
                   <Briefcase className="w-4 h-4" />
-                  <span>ഇപ്പോൾ രജിസ്റ്റർ ചെയ്യുക (Register Free)</span>
+                  <span>Register Free</span>
                 </Link>
               )}
             </div>

@@ -54,7 +54,7 @@ export default function CivicConnectPage() {
   const [trackError, setTrackError] = useState(false);
 
   // New Issue Form State
-  const [formCategory, setFormCategory] = useState("roads_transport");
+  const [formCategory, setFormCategory] = useState("cat-roads");
   const [formTitle, setFormTitle] = useState("");
   const [formTitleMl, setFormTitleMl] = useState("");
   const [formDescription, setFormDescription] = useState("");
@@ -150,14 +150,16 @@ export default function CivicConnectPage() {
   }, [issues, selectedCategory, selectedStatus, searchQuery, showMyIssuesOnly, user]);
 
   const statusBadges: Record<string, { label: string; labelEn: string; color: string; step: number }> = {
-    submitted: { label: "സമർപ്പിച്ചു", labelEn: "Submitted", color: "bg-amber-100 text-amber-800 border-amber-200", step: 1 },
-    under_review: { label: "അവലോകനത്തിൽ", labelEn: "Under Review", color: "bg-blue-100 text-blue-800 border-blue-200", step: 2 },
-    verified: { label: "വെരിഫൈഡ്", labelEn: "Verified", color: "bg-teal-100 text-teal-800 border-teal-200", step: 3 },
-    forwarded: { label: "അധികൃതർക്ക് കൈമാറി", labelEn: "Forwarded to Authority", color: "bg-purple-100 text-purple-800 border-purple-200", step: 4 },
-    in_progress: { label: "നടപടിയിൽ", labelEn: "In Progress", color: "bg-indigo-100 text-indigo-800 border-indigo-200", step: 5 },
-    resolved: { label: "പരിഹരിച്ചു", labelEn: "Resolved", color: "bg-emerald-100 text-emerald-800 border-emerald-200", step: 6 },
-    rejected: { label: "തള്ളി", labelEn: "Rejected", color: "bg-rose-100 text-rose-800 border-rose-200", step: 0 },
-    reopened: { label: "തുറന്നു", labelEn: "Reopened", color: "bg-orange-100 text-orange-800 border-orange-200", step: 5 },
+    submitted: { label: "Submitted", labelEn: "Submitted", color: "bg-neutral-100 text-neutral-800 border-neutral-300", step: 1 },
+    under_review: { label: "Under Review", labelEn: "Under Review", color: "bg-blue-100 text-blue-800 border-blue-200", step: 2 },
+    verified: { label: "Verified", labelEn: "Verified", color: "bg-teal-100 text-teal-800 border-teal-200", step: 3 },
+    assigned: { label: "Assigned", labelEn: "Assigned", color: "bg-purple-100 text-purple-800 border-purple-200", step: 4 },
+    forwarded: { label: "Assigned", labelEn: "Assigned", color: "bg-purple-100 text-purple-800 border-purple-200", step: 4 },
+    in_progress: { label: "In Progress", labelEn: "In Progress", color: "bg-indigo-100 text-indigo-800 border-indigo-200", step: 5 },
+    resolved: { label: "Resolved", labelEn: "Resolved", color: "bg-emerald-100 text-emerald-800 border-emerald-200", step: 6 },
+    closed: { label: "Closed", labelEn: "Closed", color: "bg-teal-100 text-teal-800 border-teal-200", step: 7 },
+    rejected: { label: "Rejected", labelEn: "Rejected", color: "bg-rose-100 text-rose-800 border-rose-200", step: 0 },
+    reopened: { label: "Reopened", labelEn: "Reopened", color: "bg-orange-100 text-orange-800 border-orange-200", step: 2 },
   };
 
   return (

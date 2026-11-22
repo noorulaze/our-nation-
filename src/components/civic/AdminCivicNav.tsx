@@ -3,7 +3,6 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useLanguage } from "@/lib/i18n/context";
 import { 
   ShieldCheck, 
   LayoutDashboard, 
@@ -17,14 +16,13 @@ import {
 
 export function AdminCivicNav() {
   const pathname = usePathname();
-  const { language } = useLanguage();
 
   const links = [
-    { href: "/admin/civic", label: "ഡാഷ്‌ബോർഡ്", enLabel: "Dashboard", icon: LayoutDashboard },
-    { href: "/admin/civic/issues", label: "പരാതികൾ കൈകാര്യം ചെയ്യുക", enLabel: "Manage Issues", icon: FileSpreadsheet },
-    { href: "/admin/civic/categories", label: "വിഭാഗങ്ങൾ (Categories)", enLabel: "Categories", icon: FolderTree },
-    { href: "/admin/civic/authorities", label: "അധികൃതർ (Authorities)", enLabel: "Authorities", icon: Building2 },
-    { href: "/admin/civic/analytics", label: "അനലിറ്റിക്സ്", enLabel: "Analytics", icon: BarChart3 },
+    { href: "/admin/civic", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/admin/civic/issues", label: "Manage Issues", icon: FileSpreadsheet },
+    { href: "/admin/civic/categories", label: "Categories", icon: FolderTree },
+    { href: "/admin/civic/authorities", label: "Authorities", icon: Building2 },
+    { href: "/admin/civic/analytics", label: "Analytics", icon: BarChart3 },
   ];
 
   return (
@@ -38,27 +36,27 @@ export function AdminCivicNav() {
               ADM
             </span>
             <span className="font-bold tracking-wide text-amber-300">
-              സിവിക് കണക്ട് മോഡറേഷൻ വർക്ക്‌സ്‌പേസ്
+              Civic Connect Moderation Workspace
             </span>
             <span className="hidden md:inline-block text-[11px] text-white/60 border-l border-white/20 pl-2">
-              താനൂർ നഗരസഭ & മലപ്പുറം ജില്ലാ അഡ്മിൻ
+              Tanur Municipality & Administrative Desk
             </span>
           </div>
 
           <div className="flex items-center gap-3">
             <Link
-              href="/civic"
+              href="/civic-connect"
               className="text-[11px] text-white/80 hover:text-white flex items-center gap-1 transition"
             >
               <Eye className="w-3.5 h-3.5 text-amber-300" />
-              <span>പബ്ലിക് പോർട്ടൽ കാണുക</span>
+              <span>View Public Portal</span>
             </Link>
             <Link
               href="/admin"
               className="text-[11px] text-white/80 hover:text-white flex items-center gap-1 border-l border-white/20 pl-3 transition"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
-              <span>പ്രധാന അഡ്മിൻ പാനൽ</span>
+              <span>Main Admin Panel</span>
             </Link>
           </div>
         </div>
@@ -79,7 +77,7 @@ export function AdminCivicNav() {
                 }`}
               >
                 <Icon className={`w-3.5 h-3.5 ${isActive ? "text-[#143E2C]" : "text-amber-300"}`} />
-                <span>{language === "ml" ? link.label : link.enLabel}</span>
+                <span>{link.label}</span>
               </Link>
             );
           })}

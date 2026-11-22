@@ -7,12 +7,15 @@ import { Navbar } from "@/components/layout/Navbar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Footer } from "@/components/layout/Footer";
 import { AdminCivicNav } from "@/components/civic/AdminCivicNav";
-import { useLanguage } from "@/lib/i18n/context";
+import { useAuth } from "@/lib/auth/context";
 import { 
   civicStore, 
   CIVIC_CATEGORIES, 
   CIVIC_AUTHORITIES, 
-  CivicIssue 
+  CivicIssue,
+  CivicStatus,
+  getCategoryById,
+  getTanurWardName
 } from "@/lib/data/civicConnectData";
 import { 
   ArrowLeft, 
@@ -29,28 +32,37 @@ import {
   Check, 
   User, 
   FileText,
-  Calendar
+  Calendar,
+  CheckCheck,
+  X,
+  Phone,
+  Mail,
+  Lock
 } from "lucide-react";
 
 export default function AdminCivicIssueDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const { language } = useLanguage();
+  const { user, role } = useAuth();
   const issueId = params?.id as string;
 
   const [issue, setIssue] = useState<CivicIssue | null>(null);
   const [loading, setLoading] = useState(true);
   const [savedSuccess, setSavedSuccess] = useState(false);
+  const [activeImagePreview, setActiveImagePreview] = useState<string | null>(null);
 
-  // Status form fields
-  const [selectedStatus, setSelectedStatus] = useState<CivicIssue['status']>("under_review");
+  // Status form fields (8 statuses)
+  const [selectedStatus, setSelectedStatus] = useState<CivicStatus>("under_review");
   const [moderatorNote, setModeratorNote] = useState("");
 
-  // Authority forwarding fields
-  const [selectedAuthorityId, setSelectedAuthorityId] = useState("auth-tanur-municipality");
-  const [forwardingDepartment, setForwardingDepartment] = useState("Municipal Engineering Division");
-  const [forwardingRefNo, setForwardingRefNo] = useState("TNR-MUN-2026-" + Math.floor(1000 + Math.random() * 9000));
-  const [forwardingNotes, setForwardingNotes] = useState("");
+  // Department assignment fields
+  const [selectedDepartment, setSelectedDepartment] = useState("Municipal Engineering Wing");
+  const [assignedStaff, setAssignedStaff] = useState("Assistant Engineer Desk");
+  const [assignmentRefNo, setAssignmentRefNo] = useState("TNR-PW-2026-9812");
+  const [assignmentNotes, setAssignmentNotes] = useState("");
+
+  // Rejection fields
+  const [rejectionReason, setRejectionReason] = useState("");
 
   // Resolution evidence fields
   const [resolutionNotes, setResolutionNotes] = useState("");
@@ -64,11 +76,18 @@ export default function AdminCivicIssueDetailPage() {
         setIssue({ ...found });
         setSelectedStatus(found.status);
         setModeratorNote(found.moderator_notes || "");
-        if (found.authority_forwarding) {
-          setSelectedAuthorityId(found.authority_forwarding.authority_id);
-          setForwardingDepartment(found.authority_forwarding.department);
-          setForwardingRefNo(found.authority_forwarding.reference_no);
-          setForwardingNotes(found.authority_forwarding.notes || "");
+        if (found.assigned_to) {
+          setSelectedDepartment(found.assigned_to.department);
+          setAssignedStaff(found.assigned_to.staff_name || "Assistant Engineer Desk");
+          setAssignmentRefNo(found.assigned_to.reference_no || `TNR-MUN-2026-${Math.floor(1000 + Math.random() * 9000)}`);
+          setAssignmentNotes(found.assigned_to.notes || "");
+        } else if (found.authority_forwarding) {
+          setSelectedDepartment(found.authority_forwarding.department);
+          setAssignmentRefNo(found.authority_forwarding.reference_no);
+          setAssignmentNotes(found.authority_forwarding.notes || "");
+        }
+        if (found.rejection_reason) {
+          setRejectionReason(found.rejection_reason);
         }
         if (found.resolution_evidence) {
           setResolutionNotes(found.resolution_evidence.resolution_notes);
@@ -87,7 +106,7 @@ export default function AdminCivicIssueDetailPage() {
       <div className="min-h-screen bg-[#FAF7F0] flex items-center justify-center p-8 text-[#194B35]">
         <div className="text-center">
           <div className="w-10 h-10 border-3 border-[#194B35] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-          <p className="text-xs font-bold font-malayalam">മോഡറേഷൻ ഡാറ്റ ലോഡ് ചെയ്യുന്നു...</p>
+          <p className="text-xs font-bold">Loading municipal desk record...</p>
         </div>
       </div>
     );
@@ -99,9 +118,9 @@ export default function AdminCivicIssueDetailPage() {
         <Navbar />
         <AdminCivicNav />
         <div className="max-w-xl mx-auto px-4 py-20 text-center">
-          <h2 className="text-xl font-bold text-[#194B35] mb-2 font-serif">പരാതി കണ്ടെത്താനായില്ല</h2>
+          <h2 className="text-xl font-bold text-[#194B35] mb-2 font-serif">Complaint Record Not Found</h2>
           <Link href="/admin/civic/issues" className="text-xs font-bold text-[#194B35] underline">
-            പരാതികളുടെ ലിസ്റ്റിലേക്ക് മടങ്ങുക
+            Back to Complaint Queue
           </Link>
         </div>
         <Footer />
@@ -110,29 +129,44 @@ export default function AdminCivicIssueDetailPage() {
     );
   }
 
-  const category = CIVIC_CATEGORIES.find(c => c.id === issue.category_id);
+  const category = getCategoryById(issue.category_id);
+  const wardName = issue.ward_name || (issue.ward_number ? getTanurWardName(issue.ward_number) : "Tanur Ward");
 
   const handleSaveChanges = (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (selectedStatus === "rejected" && !rejectionReason.trim()) {
+      alert("Please provide a mandatory statutory reason for rejection.");
+      return;
+    }
+
+    const actor = user?.display_name || user?.email || "Tanur Municipal Desk Officer";
+
+    let assignedToObj = undefined;
     let authForwarding = undefined;
-    if (selectedStatus === "forwarded" || selectedStatus === "in_progress" || issue.authority_forwarding) {
-      const auth = CIVIC_AUTHORITIES.find(a => a.id === selectedAuthorityId);
+    if (selectedStatus === "assigned" || selectedStatus === "forwarded" || selectedStatus === "in_progress") {
+      assignedToObj = {
+        department: selectedDepartment,
+        staff_name: assignedStaff,
+        assigned_at: issue.assigned_to?.assigned_at || new Date().toISOString(),
+        reference_no: assignmentRefNo,
+        notes: assignmentNotes,
+      };
       authForwarding = {
-        authority_id: selectedAuthorityId,
-        authority_name: auth ? auth.name : "Tanur Municipality Office",
-        department: forwardingDepartment,
+        authority_id: "auth-tanur-municipality",
+        authority_name: "Tanur Municipality Office",
+        department: selectedDepartment,
         forwarded_at: issue.authority_forwarding?.forwarded_at || new Date().toISOString(),
-        reference_no: forwardingRefNo,
-        notes: forwardingNotes,
+        reference_no: assignmentRefNo,
+        notes: assignmentNotes,
       };
     }
 
     let resEvidence = undefined;
-    if (selectedStatus === "resolved") {
+    if (selectedStatus === "resolved" || selectedStatus === "closed") {
       resEvidence = {
-        resolved_at: new Date().toISOString(),
-        resolution_notes: resolutionNotes || "പ്രശ്നം നഗരസഭാ അധികൃതർ പരിശോധിച്ച് പരിഹരിച്ചു.",
+        resolved_at: issue.resolution_evidence?.resolved_at || new Date().toISOString(),
+        resolution_notes: resolutionNotes || "Field repair completed and verified by municipal staff.",
         resolution_images: resolutionImage ? [resolutionImage] : (issue.resolution_evidence?.resolution_images || []),
         verified_by_moderator: isResolutionVerified,
       };
@@ -141,10 +175,12 @@ export default function AdminCivicIssueDetailPage() {
     civicStore.updateIssueStatus(
       issue.id,
       selectedStatus,
-      "താനൂർ സിവിക് മോഡറേറ്റർ (Admin)",
-      moderatorNote || `സ്റ്റാറ്റസ് ${selectedStatus} ആയി രേഖപ്പെടുത്തി.`,
+      actor,
+      moderatorNote || `Status updated to ${selectedStatus.replace('_', ' ')}.`,
       authForwarding,
-      resEvidence
+      resEvidence,
+      assignedToObj,
+      selectedStatus === "rejected" ? rejectionReason.trim() : undefined
     );
 
     const updated = civicStore.getIssueById(issue.id);
@@ -158,23 +194,23 @@ export default function AdminCivicIssueDetailPage() {
       <Navbar />
       <AdminCivicNav />
 
-      {/* Top Breadcrumb */}
-      <div className="bg-white border-b border-[#E8DCBF] py-3">
+      {/* Top Breadcrumb Bar */}
+      <div className="bg-white border-b border-[#EDE6D8] py-3.5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           <Link
             href="/admin/civic/issues"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#194B35] hover:text-[#8C5B0F] transition"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#194B35] hover:text-[#C39A5B] transition"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>പരാതികളുടെ ലിസ്റ്റിലേക്ക് മടങ്ങുക</span>
+            <span>Back to Complaint Queue</span>
           </Link>
 
           <Link
             href={`/civic/issues/${issue.id}`}
             target="_blank"
-            className="text-xs font-bold text-[#8C5B0F] hover:underline flex items-center gap-1"
+            className="text-xs font-bold text-[#C39A5B] hover:underline flex items-center gap-1"
           >
-            <span>പബ്ലിക് വ്യൂ കാണുക</span>
+            <span>View Public Tracking Page</span>
             <ExternalLink className="w-3.5 h-3.5" />
           </Link>
         </div>
@@ -186,86 +222,102 @@ export default function AdminCivicIssueDetailPage() {
           {/* Left 2 Cols: Issue Details & Evidence */}
           <div className="lg:col-span-2 space-y-6">
 
-            {/* Resident Submission Overview */}
-            <div className="bg-white rounded-3xl border border-[#E8DCBF] p-6 shadow-xs">
-              <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-neutral-100 mb-4">
-                <span className="font-mono text-sm font-extrabold text-[#194B35] bg-[#E0F1E7] px-3 py-1 rounded-xl border border-[#BDE3CE]">
+            {/* Resident Submission Card */}
+            <div className="bg-white rounded-3xl border border-[#EDE6D8] p-6 sm:p-8 space-y-5 shadow-2xs">
+              <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[#EDE6D8]">
+                <span className="font-mono text-xs sm:text-sm font-extrabold text-[#194B35] bg-[#E0F1E7] px-3 py-1 rounded-xl border border-[#BDE3CE]">
                   {issue.tracking_id}
                 </span>
-                <span className="text-xs text-neutral-500">
-                  സമർപ്പിച്ചത്: {new Date(issue.created_at).toLocaleDateString("en-IN", { month: "short", day: "numeric", year: "numeric" })}
+                <span className="text-xs text-[#7A8880]">
+                  Reported: {new Date(issue.created_at).toLocaleDateString("en-IN", { month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" })}
                 </span>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2">
                 <div className="flex items-center gap-2 text-xs">
-                  <span className="font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
-                    {category?.name_ml || issue.subcategory}
+                  <span className="font-bold text-[#194B35] bg-[#FAF7F0] px-2.5 py-0.5 rounded border border-[#EDE6D8]">
+                    {category?.name || issue.subcategory}
                   </span>
                   <span>•</span>
-                  <span className="text-neutral-500 font-medium">{issue.subcategory}</span>
+                  <span className="text-[#5C6A64] font-medium">{issue.subcategory}</span>
+                  <span>•</span>
+                  <span className="text-[#8C5B0F] font-bold">Priority: {issue.priority.toUpperCase()}</span>
                 </div>
 
-                <h1 className="text-xl font-bold text-[#194B35] font-serif">
-                  {issue.title_ml || issue.title}
+                <h1 className="text-xl sm:text-2xl font-extrabold text-[#194B35]">
+                  {issue.title}
                 </h1>
-                <p className="text-xs text-neutral-500 italic">{issue.title}</p>
 
-                <p className="text-xs sm:text-sm text-[#252A25] whitespace-pre-line leading-relaxed pt-2">
+                <p className="text-xs sm:text-sm text-[#33413B] whitespace-pre-line leading-relaxed pt-1 bg-[#FAF7F0] p-4 rounded-2xl border border-[#EDE6D8]">
                   {issue.description}
                 </p>
               </div>
 
-              {/* Resident details */}
-              <div className="mt-5 pt-4 border-t border-neutral-100 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-neutral-600">
-                <div className="flex items-center gap-2">
-                  <User className="w-4 h-4 text-neutral-400" />
-                  <span>റിപ്പോർട്ടർ: <strong>{issue.is_anonymous ? "അജ്ഞാതൻ (Anonymous)" : issue.reporter_name}</strong></span>
+              {/* Resident info & location */}
+              <div className="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                <div className="p-3.5 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] space-y-1">
+                  <span className="text-[10px] uppercase font-bold text-[#7A8880] block">Ward Details</span>
+                  <p className="font-bold text-[#194B35]">
+                    Ward {issue.ward_number || 12}: {wardName}
+                  </p>
+                  <p className="text-[#5C6A64]">{issue.address_landmark}</p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-[#8C5B0F]" />
-                  <span>സ്ഥലം: <strong>{issue.address_landmark}, {issue.locality}</strong></span>
+
+                <div className="p-3.5 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] space-y-1">
+                  <span className="text-[10px] uppercase font-bold text-[#7A8880] block">Citizen Contact Details</span>
+                  <p className="font-semibold text-[#1A2420]">
+                    {issue.is_anonymous ? "Anonymous Resident (Identity Masked)" : issue.reporter_name}
+                  </p>
+                  <p className="text-[#5C6A64]">
+                    Preference: <strong>{issue.contact_preference || "In-App"}</strong>
+                    {issue.reporter_contact && ` • (${issue.reporter_contact})`}
+                  </p>
                 </div>
               </div>
+
+              {/* Photo Evidence */}
+              {issue.images && issue.images.length > 0 && (
+                <div className="space-y-2 pt-2 border-t border-[#EDE6D8]">
+                  <span className="text-xs font-bold text-[#194B35] uppercase tracking-wider block">
+                    Citizen Photo Attachments ({issue.images.length})
+                  </span>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {issue.images.map((img, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => setActiveImagePreview(img)}
+                        className="rounded-2xl overflow-hidden border border-[#EDE6D8] aspect-4/3 cursor-zoom-in"
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={img} alt={`Evidence ${i + 1}`} className="w-full h-full object-cover" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Submitted Photo Evidence */}
-            {issue.images && issue.images.length > 0 && (
-              <div className="bg-white rounded-3xl border border-[#E8DCBF] p-6 shadow-xs">
-                <h3 className="text-sm font-bold text-[#194B35] mb-3 flex items-center gap-2 font-serif">
-                  <Camera className="w-4 h-4 text-[#8C5B0F]" />
-                  <span>സമർപ്പിച്ച ഫോട്ടോ തെളിവുകൾ ({issue.images.length})</span>
-                </h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {issue.images.map((img, idx) => (
-                    <div key={idx} className="aspect-4/3 rounded-xl overflow-hidden border border-[#DDD5C5] bg-neutral-100">
-                      <img src={img} alt={`Evidence ${idx + 1}`} className="w-full h-full object-cover" />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Complete Timeline History */}
-            <div className="bg-white rounded-3xl border border-[#E8DCBF] p-6 shadow-xs">
-              <h3 className="text-sm font-bold text-[#194B35] mb-4 flex items-center gap-2 font-serif border-b border-neutral-100 pb-3">
-                <Clock className="w-4 h-4 text-[#8C5B0F]" />
-                <span>ഓഡിറ്റ് ടൈംലൈൻ ചരിത്രം ({issue.timeline.length})</span>
+            {/* Audit Timeline */}
+            <div className="bg-white rounded-3xl border border-[#EDE6D8] p-6 space-y-4 shadow-2xs">
+              <h3 className="font-bold text-sm text-[#194B35] flex items-center gap-2">
+                <Clock className="w-4 h-4 text-[#C39A5B]" />
+                <span>Audit History & State Transitions</span>
               </h3>
-
-              <div className="space-y-3">
-                {issue.timeline.map((event) => (
-                  <div key={event.id} className="p-3 rounded-xl bg-[#FAF7F0] border border-[#DDD5C5] text-xs">
-                    <div className="flex items-center justify-between font-bold text-[#194B35] mb-1">
-                      <span>{event.title}</span>
-                      <span className="text-[10px] text-neutral-400">
-                        {new Date(event.date).toLocaleDateString("en-IN", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
+              <div className="relative pl-6 space-y-4 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#EDE6D8]">
+                {issue.timeline.map((evt, idx) => (
+                  <div key={evt.id || idx} className="relative text-xs space-y-0.5">
+                    <div className="absolute -left-6 top-1 w-4 h-4 rounded-full bg-[#194B35] text-white flex items-center justify-center text-[8px]">
+                      ✓
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-[#194B35]">{evt.title}</span>
+                      <span className="text-[10px] text-[#7A8880]">
+                        {new Date(evt.date).toLocaleDateString("en-IN", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
                       </span>
                     </div>
-                    <p className="text-[#5C6A64]">{event.description}</p>
-                    <div className="text-[10px] text-neutral-400 mt-1">
-                      നടപടി സ്വീകരിച്ചത്: <span className="font-semibold">{event.actor}</span> ({event.actor_role})
-                    </div>
+                    <p className="text-[#5C6A64]">{evt.description}</p>
+                    <p className="text-[10px] text-[#7A8880]">Actor: {evt.actor} ({evt.actor_role})</p>
                   </div>
                 ))}
               </div>
@@ -273,157 +325,223 @@ export default function AdminCivicIssueDetailPage() {
 
           </div>
 
-          {/* Right Col: Moderation & Administrative Action Form */}
+          {/* Right Column: Administrative Mutation Desk */}
           <div className="space-y-6">
-
-            <form onSubmit={handleSaveChanges} className="bg-white rounded-3xl border border-[#E8DCBF] p-6 shadow-xs space-y-5">
-              <div className="flex items-center justify-between pb-3 border-b border-neutral-100">
-                <h3 className="text-sm font-bold text-[#194B35] font-serif flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-[#8C5B0F]" />
-                  <span>മോഡറേഷൻ നടപടികൾ</span>
-                </h3>
-                {savedSuccess && (
-                  <span className="text-xs text-emerald-700 font-bold flex items-center gap-1 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                    <Check className="w-3.5 h-3.5" /> മാറ്റങ്ങൾ സേവ് ചെയ്തു
-                  </span>
-                )}
-              </div>
-
-              {/* Status Selector */}
-              <div>
-                <label className="block text-xs font-bold text-[#194B35] mb-1.5">
-                  നിലവിലെ സ്റ്റാറ്റസ് മാറ്റുക:
-                </label>
-                <select
-                  value={selectedStatus}
-                  onChange={(e) => setSelectedStatus(e.target.value as any)}
-                  className="w-full p-2.5 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0] text-xs font-bold text-[#1A2420] focus:outline-hidden focus:border-[#194B35]"
-                >
-                  <option value="submitted">സമർപ്പിച്ചു (Submitted)</option>
-                  <option value="under_review">അവലോകനത്തിൽ (Under Review)</option>
-                  <option value="verified">സ്ഥിരീകരിച്ചു (Verified by Moderator)</option>
-                  <option value="forwarded">അധികൃതർക്ക് കൈമാറി (Forwarded to Authority)</option>
-                  <option value="in_progress">നടപടി പുരോഗമിക്കുന്നു (In Progress)</option>
-                  <option value="resolved">പ്രശ്നം പരിഹരിച്ചു (Resolved)</option>
-                  <option value="rejected">പരാതി തള്ളി (Rejected)</option>
-                </select>
-              </div>
-
-              {/* Moderator Note */}
-              <div>
-                <label className="block text-xs font-semibold text-neutral-600 mb-1">
-                  മോഡറേറ്റർ കുറിപ്പ് (പൊതുവായി കാണാം):
-                </label>
-                <textarea
-                  rows={2}
-                  value={moderatorNote}
-                  onChange={(e) => setModeratorNote(e.target.value)}
-                  placeholder="പരിശോധനാ വിവരങ്ങൾ രേഖപ്പെടുത്തുക..."
-                  className="w-full p-2.5 rounded-xl border border-[#DDD5C5] text-xs focus:outline-hidden focus:border-[#194B35]"
-                />
-              </div>
-
-              {/* Authority Forwarding Form Section */}
-              <div className="pt-3 border-t border-neutral-100 space-y-3">
-                <span className="text-xs font-bold text-[#8C5B0F] block flex items-center gap-1.5">
-                  <Building2 className="w-3.5 h-3.5" />
-                  <span>വകുപ്പിലേക്ക് കൈമാറൽ (Authority Forwarding)</span>
+            <div className="bg-white rounded-3xl border border-[#EDE6D8] p-6 shadow-xs space-y-5">
+              
+              <div className="pb-3 border-b border-[#EDE6D8] flex items-center justify-between">
+                <div>
+                  <h3 className="font-bold text-sm text-[#194B35]">
+                    Administrative Action Desk
+                  </h3>
+                  <p className="text-[11px] text-[#5C6A64]">
+                    Update status, assign wings, and record resolution proof.
+                  </p>
+                </div>
+                <span className="w-6 h-6 rounded-lg bg-[#194B35] text-amber-300 flex items-center justify-center font-bold text-[10px]">
+                  ADM
                 </span>
-
-                <div>
-                  <label className="block text-[11px] text-neutral-500 mb-1">ബന്ധപ്പെട്ട സ്ഥാപനം:</label>
-                  <select
-                    value={selectedAuthorityId}
-                    onChange={(e) => setSelectedAuthorityId(e.target.value)}
-                    className="w-full p-2 rounded-lg border border-[#DDD5C5] text-xs"
-                  >
-                    {CIVIC_AUTHORITIES.map((auth) => (
-                      <option key={auth.id} value={auth.id}>
-                        {auth.name_ml} ({auth.name})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-[11px] text-neutral-500 mb-1">ഡിപ്പാർട്ട്മെന്റ് / സെക്ഷൻ:</label>
-                  <input
-                    type="text"
-                    value={forwardingDepartment}
-                    onChange={(e) => setForwardingDepartment(e.target.value)}
-                    className="w-full p-2 rounded-lg border border-[#DDD5C5] text-xs"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] text-neutral-500 mb-1">റഫറൻസ് നമ്പർ (Official Ref No):</label>
-                  <input
-                    type="text"
-                    value={forwardingRefNo}
-                    onChange={(e) => setForwardingRefNo(e.target.value)}
-                    className="w-full p-2 rounded-lg border border-[#DDD5C5] text-xs font-mono"
-                  />
-                </div>
               </div>
 
-              {/* Resolution Evidence Form Section (Active when status is resolved) */}
-              {selectedStatus === "resolved" && (
-                <div className="pt-3 border-t border-neutral-100 space-y-3 bg-emerald-50/60 p-3 rounded-xl border border-emerald-200">
-                  <span className="text-xs font-bold text-emerald-800 block flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>പരിഹാര സ്ഥിരീകരണം (Resolution Proof)</span>
-                  </span>
-
-                  <div>
-                    <label className="block text-[11px] text-emerald-900 mb-1">പരിഹാര വിവരണം:</label>
-                    <textarea
-                      rows={2}
-                      value={resolutionNotes}
-                      onChange={(e) => setResolutionNotes(e.target.value)}
-                      placeholder="നടത്തിയ പ്രവർത്തനങ്ങൾ..."
-                      className="w-full p-2 rounded-lg border border-emerald-300 text-xs bg-white"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] text-emerald-900 mb-1">പൂർത്തീകരിച്ച ഫോട്ടോ ലിങ്ക് (Optional):</label>
-                    <input
-                      type="text"
-                      value={resolutionImage}
-                      onChange={(e) => setResolutionImage(e.target.value)}
-                      placeholder="https://images.unsplash.com/..."
-                      className="w-full p-2 rounded-lg border border-emerald-300 text-xs bg-white"
-                    />
-                  </div>
-
-                  <label className="flex items-center gap-2 text-xs text-emerald-900 cursor-pointer pt-1">
-                    <input
-                      type="checkbox"
-                      checked={isResolutionVerified}
-                      onChange={(e) => setIsResolutionVerified(e.target.checked)}
-                      className="rounded text-emerald-700"
-                    />
-                    <span>മോഡറേറ്റർ നേരിട്ട് സന്ദർശിച്ചു സ്ഥിരീകരിച്ചു</span>
-                  </label>
+              {savedSuccess && (
+                <div className="p-3 bg-emerald-50 border border-emerald-300 rounded-xl text-emerald-800 text-xs font-bold flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-600" />
+                  <span>Complaint status saved successfully!</span>
                 </div>
               )}
 
-              {/* Submit Save Button */}
-              <div className="pt-3">
+              <form onSubmit={handleSaveChanges} className="space-y-4 text-xs">
+                
+                {/* 8 Status Selector */}
+                <div className="space-y-1.5">
+                  <label className="font-bold text-[#194B35] block">
+                    Statutory Status *
+                  </label>
+                  <select
+                    value={selectedStatus}
+                    onChange={(e) => setSelectedStatus(e.target.value as CivicStatus)}
+                    className="w-full px-3 py-2.5 rounded-xl bg-[#FAF7F0] border border-[#DDD5C5] text-xs font-bold text-[#194B35]"
+                  >
+                    <option value="submitted">1. Submitted (Awaiting verification)</option>
+                    <option value="under_review">2. Under Review (Inspection pending)</option>
+                    <option value="verified">3. Verified (Field validated)</option>
+                    <option value="assigned">4. Assigned (Transferred to Wing)</option>
+                    <option value="in_progress">5. In Progress (Works active)</option>
+                    <option value="resolved">6. Resolved (Work completed)</option>
+                    <option value="closed">7. Closed & Confirmed</option>
+                    <option value="rejected">8. Rejected (Out of jurisdiction / Invalid)</option>
+                  </select>
+                </div>
+
+                {/* Rejection Reason (Mandatory when Rejected) */}
+                {selectedStatus === "rejected" && (
+                  <div className="space-y-1.5 p-3 rounded-2xl bg-rose-50 border border-rose-200">
+                    <label className="font-bold text-rose-800 block">
+                      Statutory Rejection Reason (Mandatory) *
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={rejectionReason}
+                      onChange={(e) => setRejectionReason(e.target.value)}
+                      placeholder="e.g. Private property boundary dispute outside municipal public road jurisdiction..."
+                      className="w-full px-3 py-2 rounded-xl bg-white border border-rose-300 text-xs text-rose-900"
+                    />
+                  </div>
+                )}
+
+                {/* Assignment Controls */}
+                {(selectedStatus === "assigned" || selectedStatus === "in_progress" || selectedStatus === "verified") && (
+                  <div className="space-y-3 p-3.5 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8]">
+                    <span className="font-bold text-[#194B35] block text-xs">
+                      Department Assignment
+                    </span>
+
+                    <div>
+                      <label className="text-[10px] font-bold text-[#7A8880] block mb-1">
+                        Responsible Municipal Department
+                      </label>
+                      <select
+                        value={selectedDepartment}
+                        onChange={(e) => setSelectedDepartment(e.target.value)}
+                        className="w-full px-3 py-2 rounded-xl bg-white border border-[#DDD5C5] text-xs font-medium"
+                      >
+                        <option value="Municipal Engineering Wing">Municipal Engineering Wing (Roads & Bridges)</option>
+                        <option value="Municipal Health & Sanitation Wing">Municipal Health & Sanitation Wing</option>
+                        <option value="KSEB Electrical Section, Tanur">KSEB Electrical Section, Tanur</option>
+                        <option value="Kerala Water Authority (KWA Tanur)">Kerala Water Authority (KWA Tanur)</option>
+                        <option value="Municipal Revenue Wing">Municipal Revenue Wing</option>
+                        <option value="General Administration Desk">General Administration Desk</option>
+                      </select>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <label className="text-[10px] font-bold text-[#7A8880] block mb-1">Officer / Section</label>
+                        <input
+                          type="text"
+                          value={assignedStaff}
+                          onChange={(e) => setAssignedStaff(e.target.value)}
+                          placeholder="Assistant Engineer Desk"
+                          className="w-full px-2.5 py-1.5 rounded-xl bg-white border border-[#DDD5C5] text-xs"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] font-bold text-[#7A8880] block mb-1">Ref Number</label>
+                        <input
+                          type="text"
+                          value={assignmentRefNo}
+                          onChange={(e) => setAssignmentRefNo(e.target.value)}
+                          className="w-full px-2.5 py-1.5 rounded-xl bg-white border border-[#DDD5C5] text-xs font-mono"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="text-[10px] font-bold text-[#7A8880] block mb-1">Assignment Notes</label>
+                      <textarea
+                        rows={2}
+                        value={assignmentNotes}
+                        onChange={(e) => setAssignmentNotes(e.target.value)}
+                        placeholder="Instructions for field team..."
+                        className="w-full px-2.5 py-1.5 rounded-xl bg-white border border-[#DDD5C5] text-xs"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {/* Resolution Controls */}
+                {(selectedStatus === "resolved" || selectedStatus === "closed") && (
+                  <div className="space-y-3 p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200">
+                    <span className="font-bold text-emerald-900 block text-xs">
+                      Resolution Evidence Recording
+                    </span>
+
+                    <div>
+                      <label className="text-[10px] font-bold text-emerald-800 block mb-1">
+                        Resolution Notes *
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={resolutionNotes}
+                        onChange={(e) => setResolutionNotes(e.target.value)}
+                        placeholder="Describe completed works..."
+                        className="w-full px-2.5 py-1.5 rounded-xl bg-white border border-emerald-300 text-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-[10px] font-bold text-emerald-800 block mb-1">
+                        Proof Photograph URL
+                      </label>
+                      <input
+                        type="url"
+                        value={resolutionImage}
+                        onChange={(e) => setResolutionImage(e.target.value)}
+                        placeholder="https://..."
+                        className="w-full px-2.5 py-1.5 rounded-xl bg-white border border-emerald-300 text-xs"
+                      />
+                    </div>
+
+                    <label className="flex items-center gap-2 pt-1 text-emerald-900 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={isResolutionVerified}
+                        onChange={(e) => setIsResolutionVerified(e.target.checked)}
+                        className="rounded text-[#194B35]"
+                      />
+                      <span className="text-[11px] font-medium">Ground work verified by Municipal Moderator</span>
+                    </label>
+                  </div>
+                )}
+
+                {/* Moderator Remarks */}
+                <div className="space-y-1">
+                  <label className="font-bold text-[#194B35] block">
+                    Moderator Note for Timeline
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={moderatorNote}
+                    onChange={(e) => setModeratorNote(e.target.value)}
+                    placeholder="Brief description of the action taken..."
+                    className="w-full px-3 py-2 rounded-xl bg-[#FAF7F0] border border-[#DDD5C5] text-xs"
+                  />
+                </div>
+
                 <button
                   type="submit"
-                  className="w-full py-2.5 rounded-xl bg-[#194B35] text-white text-xs font-bold hover:bg-[#143E2C] transition flex items-center justify-center gap-2 shadow-sm"
+                  className="w-full py-3 rounded-xl bg-[#194B35] text-white text-xs font-bold hover:bg-[#143E2C] transition flex items-center justify-center gap-2 shadow-xs"
                 >
                   <Save className="w-4 h-4 text-amber-300" />
-                  <span>നടപടികൾ സേവ് ചെയ്യുക</span>
+                  <span>Save Status & Notify Citizen</span>
                 </button>
-              </div>
-            </form>
 
+              </form>
+            </div>
           </div>
 
         </div>
       </main>
+
+      {/* Image Preview Modal */}
+      {activeImagePreview && (
+        <div 
+          onClick={() => setActiveImagePreview(null)}
+          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 backdrop-blur-xs animate-in fade-in"
+        >
+          <div className="relative max-w-3xl max-h-[90vh] overflow-hidden rounded-2xl">
+            <button
+              type="button"
+              onClick={() => setActiveImagePreview(null)}
+              className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/70 text-white flex items-center justify-center hover:bg-rose-600 transition"
+            >
+              <X className="w-4 h-4" />
+            </button>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={activeImagePreview} alt="Enlarged evidence" className="max-w-full max-h-[85vh] object-contain rounded-2xl" />
+          </div>
+        </div>
+      )}
 
       <Footer />
       <BottomNav />

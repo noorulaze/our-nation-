@@ -6,7 +6,6 @@ import { Navbar } from "@/components/layout/Navbar";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Footer } from "@/components/layout/Footer";
 import { CivicNav } from "@/components/civic/CivicNav";
-import { useLanguage } from "@/lib/i18n/context";
 import { useAuth } from "@/lib/auth/context";
 import { 
   civicStore, 
@@ -31,23 +30,28 @@ import {
 } from "lucide-react";
 
 export default function CivicMyReportsPage() {
-  const { language } = useLanguage();
   const { user } = useAuth();
 
-  // Status tabs: all, under_review, verified, in_progress, resolved, rejected
+  // Status tabs: all, pending, in_progress, resolved, rejected
   const [activeTab, setActiveTab] = useState<string>("all");
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  // In demo mode or user mode, get issues reported by current user or mock demo reporter
+  // Strictly enforce citizen data isolation
   const allIssues = civicStore.getIssues();
-  // We can include issues reported by current user OR sample issues attributed to local resident
-  const myReports = allIssues.filter(
-    (i) => i.reporter_id === user?.id || i.reporter_id === "user-tanur-resident" || i.reporter_name.includes("നിവാസി") || true
-  );
+  const myReports = allIssues.filter((i) => {
+    if (user?.id && i.reporter_id === user.id) return true;
+    if (user?.username === "fathima_tanur" || user?.id === "u0000000-0000-0000-0000-000000000003") {
+      if (i.reporter_id === "usr-fathima" || i.reporter_name.toLowerCase().includes("fathima")) {
+        return true;
+      }
+    }
+    return false;
+  });
 
   const filteredReports = myReports.filter((issue) => {
     if (activeTab === "all") return true;
     if (activeTab === "pending") return issue.status === "submitted" || issue.status === "under_review";
+    if (activeTab === "in_progress") return issue.status === "in_progress" || issue.status === "forwarded" || issue.status === "verified";
     return issue.status === activeTab;
   });
 
@@ -62,25 +66,25 @@ export default function CivicMyReportsPage() {
   const getStatusBadge = (status: CivicIssue['status']) => {
     switch (status) {
       case "resolved":
-        return { label: language === "ml" ? "പരിഹരിച്ചു" : "Resolved", bg: "bg-emerald-100 text-emerald-800 border-emerald-300", icon: CheckCircle2 };
+        return { label: "Resolved", bg: "bg-emerald-100 text-emerald-800 border-emerald-300", icon: CheckCircle2 };
       case "in_progress":
-        return { label: language === "ml" ? "നടപടിയിൽ" : "In Progress", bg: "bg-blue-100 text-blue-800 border-blue-300", icon: Clock };
+        return { label: "In Progress", bg: "bg-blue-100 text-blue-800 border-blue-300", icon: Clock };
       case "forwarded":
-        return { label: language === "ml" ? "കൈമാറി" : "Forwarded", bg: "bg-amber-100 text-amber-800 border-amber-300", icon: Send };
+        return { label: "Forwarded", bg: "bg-amber-100 text-amber-800 border-amber-300", icon: Send };
       case "verified":
-        return { label: language === "ml" ? "സ്ഥിരീകരിച്ചു" : "Verified", bg: "bg-purple-100 text-purple-800 border-purple-300", icon: ShieldCheck };
+        return { label: "Verified", bg: "bg-purple-100 text-purple-800 border-purple-300", icon: ShieldCheck };
       case "under_review":
-        return { label: language === "ml" ? "അവലോകനത്തിൽ" : "Under Review", bg: "bg-sky-100 text-sky-800 border-sky-300", icon: Clock };
+        return { label: "Under Review", bg: "bg-sky-100 text-sky-800 border-sky-300", icon: Clock };
       case "rejected":
-        return { label: language === "ml" ? "തള്ളി" : "Rejected", bg: "bg-rose-100 text-rose-800 border-rose-300", icon: AlertTriangle };
+        return { label: "Rejected", bg: "bg-rose-100 text-rose-800 border-rose-300", icon: AlertTriangle };
       default:
-        return { label: language === "ml" ? "സമർപ്പിച്ചു" : "Submitted", bg: "bg-neutral-100 text-neutral-800 border-neutral-300", icon: Clock };
+        return { label: "Submitted", bg: "bg-neutral-100 text-neutral-800 border-neutral-300", icon: Clock };
     }
   };
 
   const stats = {
     total: myReports.length,
-    inProgress: myReports.filter(i => i.status === "in_progress" || i.status === "forwarded").length,
+    inProgress: myReports.filter(i => i.status === "in_progress" || i.status === "forwarded" || i.status === "verified").length,
     resolved: myReports.filter(i => i.status === "resolved").length,
     pending: myReports.filter(i => i.status === "submitted" || i.status === "under_review").length,
   };
@@ -100,44 +104,42 @@ export default function CivicMyReportsPage() {
                   <FileText className="w-3.5 h-3.5" />
                 </span>
                 <span className="text-xs font-bold text-[#194B35] uppercase tracking-wider">
-                  റെസിഡന്റ് ഡാഷ്‌ബോർഡ്
+                  Citizen Dashboard
                 </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-[#194B35] font-serif">
-                {language === "ml" ? "ഞാൻ നൽകിയ പരാതികൾ" : "My Reported Issues"}
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-[#194B35] font-sans">
+                My Civic Reports
               </h1>
               <p className="text-xs sm:text-sm text-[#5C6A64] mt-1">
-                {language === "ml"
-                  ? "നിങ്ങൾ സമർപ്പിച്ച പരാതികളുടെ തത്സമയ സ്റ്റാറ്റസ്, അധികൃതരുടെ നടപടികൾ, പരിഹാര തെളിവുകൾ എന്നിവ ഇവിടെ പരിശോധിക്കാം."
-                  : "Track the real-time status, authority forwarding, and resolution proof for issues you reported."}
+                Track the real-time status, authority forwarding, and resolution proof for issues you reported.
               </p>
             </div>
 
             <Link
-              href="/civic/report"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#194B35] text-white text-xs font-bold shadow-sm hover:bg-[#143E2C] transition active:scale-95 shrink-0"
+              href="/civic-connect"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#194B35] text-white text-xs font-bold shadow-2xs hover:bg-[#143E2C] transition active:scale-95 shrink-0"
             >
               <PlusCircle className="w-4 h-4 text-amber-300" />
-              <span>{language === "ml" ? "പുതിയ പരാതി നൽകുക" : "Report New Issue"}</span>
+              <span>Report New Issue</span>
             </Link>
           </div>
 
           {/* Quick Metrics KPI cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            <div className="bg-white p-3.5 rounded-2xl border border-[#E8DCBF] shadow-xs">
-              <span className="text-[11px] text-[#5C6A64] block font-medium">ആകെ പരാതികൾ</span>
+            <div className="bg-white p-3.5 rounded-2xl border border-[#E8DCBF] shadow-2xs">
+              <span className="text-[11px] text-[#5C6A64] block font-medium">Total Submitted</span>
               <span className="text-xl font-extrabold text-[#194B35] mt-1 block">{stats.total}</span>
             </div>
-            <div className="bg-white p-3.5 rounded-2xl border border-[#E8DCBF] shadow-xs">
-              <span className="text-[11px] text-[#5C6A64] block font-medium">അവലോകനത്തിൽ</span>
+            <div className="bg-white p-3.5 rounded-2xl border border-[#E8DCBF] shadow-2xs">
+              <span className="text-[11px] text-[#5C6A64] block font-medium">Under Review</span>
               <span className="text-xl font-extrabold text-sky-700 mt-1 block">{stats.pending}</span>
             </div>
-            <div className="bg-white p-3.5 rounded-2xl border border-[#E8DCBF] shadow-xs">
-              <span className="text-[11px] text-[#5C6A64] block font-medium">നടപടി പുരോഗമിക്കുന്നു</span>
+            <div className="bg-white p-3.5 rounded-2xl border border-[#E8DCBF] shadow-2xs">
+              <span className="text-[11px] text-[#5C6A64] block font-medium">In Progress</span>
               <span className="text-xl font-extrabold text-blue-700 mt-1 block">{stats.inProgress}</span>
             </div>
-            <div className="bg-white p-3.5 rounded-2xl border border-[#E8DCBF] shadow-xs">
-              <span className="text-[11px] text-[#5C6A64] block font-medium">പരിഹരിച്ചവ</span>
+            <div className="bg-white p-3.5 rounded-2xl border border-[#E8DCBF] shadow-2xs">
+              <span className="text-[11px] text-[#5C6A64] block font-medium">Resolved</span>
               <span className="text-xl font-extrabold text-emerald-700 mt-1 block">{stats.resolved}</span>
             </div>
           </div>
@@ -149,12 +151,11 @@ export default function CivicMyReportsPage() {
         {/* Status Filter Tabs */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-4 mb-6 border-b border-[#E8DCBF] scrollbar-none text-xs">
           {[
-            { id: "all", label: "എല്ലാം (All)", count: stats.total },
-            { id: "pending", label: "അവലോകനത്തിൽ (Pending)", count: stats.pending },
-            { id: "verified", label: "സ്ഥിരീകരിച്ചവ (Verified)", count: myReports.filter(i => i.status === "verified").length },
-            { id: "in_progress", label: "നടപടിയിൽ (In Progress)", count: myReports.filter(i => i.status === "in_progress").length },
-            { id: "resolved", label: "പരിഹരിച്ചവ (Resolved)", count: stats.resolved },
-            { id: "rejected", label: "തള്ളിയവ (Rejected)", count: myReports.filter(i => i.status === "rejected").length },
+            { id: "all", label: "All Reports", count: stats.total },
+            { id: "pending", label: "Under Review", count: stats.pending },
+            { id: "in_progress", label: "In Progress", count: stats.inProgress },
+            { id: "resolved", label: "Resolved", count: stats.resolved },
+            { id: "rejected", label: "Rejected", count: myReports.filter(i => i.status === "rejected").length },
           ].map((tab) => {
             const isActive = activeTab === tab.id;
             return (
@@ -163,7 +164,7 @@ export default function CivicMyReportsPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition active:scale-95 flex items-center gap-1.5 ${
                   isActive
-                    ? "bg-[#194B35] text-white shadow-xs"
+                    ? "bg-[#194B35] text-white shadow-2xs"
                     : "bg-white text-[#5C6A64] border border-[#DDD5C5] hover:bg-[#FAF4E6]"
                 }`}
               >
@@ -178,24 +179,22 @@ export default function CivicMyReportsPage() {
 
         {/* Reports Content */}
         {filteredReports.length === 0 ? (
-          <div className="bg-white rounded-3xl border border-[#E8DCBF] p-10 text-center max-w-lg mx-auto shadow-xs my-6">
+          <div className="bg-white rounded-3xl border border-[#E8DCBF] p-10 text-center max-w-lg mx-auto shadow-2xs my-6">
             <div className="w-16 h-16 rounded-2xl bg-[#E0F1E7] border border-[#BDE3CE] flex items-center justify-center mx-auto mb-4 text-[#194B35]">
               <FileText className="w-8 h-8" />
             </div>
-            <h3 className="text-lg font-bold text-[#194B35] mb-2 font-serif">
-              {language === "ml" ? "ഈ വിഭാഗത്തിൽ പരാതികളൊന്നുമില്ല" : "No Reports Found in this Category"}
+            <h3 className="text-lg font-bold text-[#194B35] mb-2 font-sans">
+              No Reports Found in this Category
             </h3>
             <p className="text-xs sm:text-sm text-[#5C6A64] mb-6">
-              {language === "ml"
-                ? "നിങ്ങളുടെ വാർഡിലെ റോഡ്, കുടിവെള്ളം, മാലിന്യം തുടങ്ങിയ പൊതു പ്രശ്നങ്ങൾ ഓൺലൈനായി റിപ്പോർട്ട് ചെയ്യാം."
-                : "Report civic issues in your ward easily to receive official tracking numbers and automated updates."}
+              Report civic issues in your ward easily to receive official tracking numbers and automated updates from municipal engineers.
             </p>
             <Link
-              href="/civic/report"
-              className="px-5 py-2.5 rounded-xl bg-[#194B35] text-white text-xs font-bold hover:bg-[#143E2C] transition inline-flex items-center gap-2"
+              href="/civic-connect"
+              className="px-5 py-2.5 rounded-xl bg-[#194B35] text-white text-xs font-bold hover:bg-[#143E2C] transition inline-flex items-center gap-2 shadow-2xs"
             >
               <PlusCircle className="w-4 h-4 text-amber-300" />
-              <span>{language === "ml" ? "പുതിയ പരാതി നൽകുക" : "Submit a Report"}</span>
+              <span>Submit a Report</span>
             </Link>
           </div>
         ) : (
@@ -209,7 +208,7 @@ export default function CivicMyReportsPage() {
               return (
                 <div
                   key={issue.id}
-                  className="bg-white rounded-2xl border border-[#E8DCBF] p-5 hover:border-[#194B35]/40 transition shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4"
+                  className="bg-white rounded-2xl border border-[#E8DCBF] p-5 hover:border-[#194B35]/40 transition shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4"
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-2 mb-2 text-xs">
@@ -220,7 +219,7 @@ export default function CivicMyReportsPage() {
                         <button
                           onClick={(e) => handleCopyId(e, issue.tracking_id)}
                           className="p-1 text-neutral-400 hover:text-[#194B35] rounded"
-                          title="ട്രാക്കിംഗ് ഐഡി കോപ്പി ചെയ്യുക"
+                          title="Copy Tracking ID"
                         >
                           {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
                         </button>
@@ -235,31 +234,31 @@ export default function CivicMyReportsPage() {
                         className="text-[10px] font-bold px-2 py-0.5 rounded"
                         style={{ backgroundColor: `${cat?.color || '#194B35'}15`, color: cat?.color || '#194B35' }}
                       >
-                        {issue.subcategory}
+                        {cat?.name || issue.subcategory}
                       </span>
                     </div>
 
                     <Link href={`/civic/issues/${issue.id}`} className="hover:text-[#194B35] transition">
                       <h3 className="font-bold text-base text-[#1A2420] mb-1">
-                        {language === "ml" ? issue.title_ml : issue.title}
+                        {issue.title}
                       </h3>
                     </Link>
 
                     <div className="flex flex-wrap items-center gap-3 text-xs text-neutral-500 mt-2">
                       <span className="flex items-center gap-1">
                         <MapPin className="w-3.5 h-3.5 text-[#8C5B0F]" />
-                        {issue.address_landmark}, {issue.locality}
+                        {issue.address_landmark || issue.locality}
                       </span>
                       <span>•</span>
-                      <span>സമർപ്പിച്ച തീയതി: {new Date(issue.created_at).toLocaleDateString("en-IN", { month: "short", day: "numeric" })}</span>
+                      <span>Date: {new Date(issue.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
                       <span>•</span>
-                      <span>👍 {issue.support_count} പിന്തുണ</span>
+                      <span>👍 {issue.support_count} supporters</span>
                     </div>
 
                     {/* Forwarding tag if exists */}
                     {issue.authority_forwarding && (
                       <div className="mt-2 text-[11px] text-amber-900 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200 inline-block">
-                        🏛️ കൈമാറിയത്: <strong>{issue.authority_forwarding.authority_name}</strong> (റഫറൻസ്: {issue.authority_forwarding.reference_no})
+                        Forwarded to: <strong>{issue.authority_forwarding.authority_name}</strong> (Ref: {issue.authority_forwarding.reference_no})
                       </div>
                     )}
                   </div>
@@ -267,9 +266,9 @@ export default function CivicMyReportsPage() {
                   <div className="flex items-center justify-between md:justify-end gap-3 shrink-0 pt-3 md:pt-0 border-t md:border-t-0 border-neutral-100">
                     <Link
                       href={`/civic/issues/${issue.id}`}
-                      className="px-4 py-2 rounded-xl bg-[#194B35] text-white text-xs font-bold hover:bg-[#143E2C] transition inline-flex items-center gap-1.5"
+                      className="px-4 py-2 rounded-xl bg-[#194B35] text-white text-xs font-bold hover:bg-[#143E2C] transition inline-flex items-center gap-1.5 shadow-2xs"
                     >
-                      <span>{language === "ml" ? "വിശദാംശങ്ങൾ കാണുക" : "View Full Report"}</span>
+                      <span>View Full Report</span>
                       <ChevronRight className="w-4 h-4" />
                     </Link>
                   </div>

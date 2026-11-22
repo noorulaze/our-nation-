@@ -5,6 +5,7 @@ import { LanguageProvider } from "@/lib/i18n/context";
 import { CommunityProvider } from "@/lib/community/context";
 import { AuthProvider } from "@/lib/auth/context";
 import { initialCommunities } from "@/lib/data/initialData";
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 // Configure Manrope for English UI
 const manrope = Manrope({
@@ -57,6 +58,7 @@ export default function RootLayout({
             </CommunityProvider>
           </AuthProvider>
         </LanguageProvider>
+        <SpeedInsights />
       </body>
     </html>
   );

@@ -81,7 +81,9 @@ export const moderationActionSchema = z.object({
 });
 
 export const naaduAiQuerySchema = z.object({
-  query: z.string().min(2, "Query too short").max(400, "Query cannot exceed 400 characters"),
-  communityId: z.string().uuid("Invalid community ID").optional().nullable(),
-  language: z.enum(["ml", "en"]).default("ml"),
+  query: z.string().min(1, "Query cannot be empty").max(1000, "Query cannot exceed 1000 characters"),
+  communityId: z.string().optional().nullable(),
+  language: z.enum(["ml", "en"]).default("en"),
+  userId: z.string().optional().nullable(),
+  userName: z.string().optional().nullable(),
 });

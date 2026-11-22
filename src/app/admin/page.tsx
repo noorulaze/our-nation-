@@ -928,6 +928,13 @@ export default function AdminPage() {
 
               <div className="flex flex-wrap items-center gap-3 shrink-0">
                 <Link
+                  href="/admin/public-services"
+                  className="px-4 py-2.5 rounded-xl bg-emerald-300 hover:bg-emerald-200 text-[#143E2C] text-xs font-bold transition shadow-sm inline-flex items-center gap-1.5"
+                >
+                  <Building className="w-4 h-4" />
+                  <span>Public Services Desk</span>
+                </Link>
+                <Link
                   href="/admin/civic"
                   className="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-[#143E2C] text-xs font-bold transition shadow-sm inline-flex items-center gap-1.5"
                 >

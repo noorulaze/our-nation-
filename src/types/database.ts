@@ -555,6 +555,7 @@ export interface SavedProfessional {
 
 export type NotificationType = 
   | 'civic_issue_status'
+  | 'public_service_status'
   | 'comment_reply'
   | 'idea_update'
   | 'development_update'

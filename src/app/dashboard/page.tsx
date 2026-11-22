@@ -10,6 +10,7 @@ import { useAuth } from "@/lib/auth/context";
 import { store } from "@/lib/data/store";
 import { civicStore, CIVIC_CATEGORIES, CivicIssue } from "@/lib/data/civicConnectData";
 import { digitalMunicipalityStore } from "@/lib/data/digitalMunicipalityData";
+import { publicServiceStore, PublicServiceApplication } from "@/lib/data/publicServicesData";
 import { UserRole } from "@/types/database";
 import {
   User,
@@ -29,6 +30,7 @@ import {
   Send,
   Sparkles,
   FileText,
+  FileCheck2,
   Activity,
   Layers,
   BarChart3,
@@ -97,6 +99,11 @@ export default function CitizenDashboardPage() {
   const [modalComment, setModalComment] = useState("");
   const [commentSubmitting, setCommentSubmitting] = useState(false);
 
+  // State & Filters for My Public Service Applications
+  const [appSearch, setAppSearch] = useState("");
+  const [appStatusFilter, setAppStatusFilter] = useState<string>("all");
+  const [selectedServiceApp, setSelectedServiceApp] = useState<PublicServiceApplication | null>(null);
+
   // Synchronize activePersona with authenticated role
   useEffect(() => {
     if (role) {
@@ -159,6 +166,38 @@ export default function CitizenDashboardPage() {
     });
   }, [myCivicIssues, reportSearch, reportStatusFilter, reportCategoryFilter]);
 
+  // Authenticated citizen service applications data isolation
+  const myServiceApplications = useMemo(() => {
+    const all = publicServiceStore.getApplications();
+    const currentId = user?.id;
+    const currentUsername = user?.username?.toLowerCase();
+
+    return all.filter(app => {
+      if (currentId && app.applicant_id === currentId) return true;
+      if (currentUsername === "fathima_tanur" || currentId === "u0000000-0000-0000-0000-000000000003") {
+        if (app.applicant_id === "u0000000-0000-0000-0000-000000000003" || app.applicant_name.toLowerCase().includes("fathima")) {
+          return true;
+        }
+      }
+      return false;
+    });
+  }, [user]);
+
+  // Filtered applications
+  const filteredApplications = useMemo(() => {
+    return myServiceApplications.filter(app => {
+      if (appStatusFilter !== "all" && app.status !== appStatusFilter) return false;
+      if (appSearch.trim()) {
+        const q = appSearch.toLowerCase().trim();
+        const matchesRef = app.reference_no.toLowerCase().includes(q);
+        const matchesTitle = app.service_title.toLowerCase().includes(q);
+        const matchesNotes = app.notes.toLowerCase().includes(q);
+        return matchesRef || matchesTitle || matchesNotes;
+      }
+      return true;
+    });
+  }, [myServiceApplications, appStatusFilter, appSearch]);
+
   // Profile Completion Indicator
   const profileCompletion = useMemo(() => {
     let score = 0;
@@ -207,7 +246,32 @@ export default function CitizenDashboardPage() {
       }
     });
 
-    // 2. Citizen's in-app notifications
+    // 2. Citizen's service applications
+    myServiceApplications.forEach(app => {
+      list.push({
+        id: `act-ps-${app.id}`,
+        title: `Service Request: ${app.service_title}`,
+        description: `Ref: ${app.reference_no} • Status: ${app.status.replace('_', ' ').toUpperCase()}`,
+        date: app.created_at,
+        type: "submitted",
+        link: `#service-applications`,
+      });
+
+      if (app.timeline && app.timeline.length > 1) {
+        app.timeline.slice(1).forEach((tl, idx) => {
+          list.push({
+            id: `act-ps-tl-${app.id}-${idx}`,
+            title: `Service Update: ${app.reference_no}`,
+            description: `${tl.note} (${tl.actor})`,
+            date: tl.date,
+            type: "status",
+            link: `#service-applications`,
+          });
+        });
+      }
+    });
+
+    // 3. Citizen's in-app notifications
     if (user?.id) {
       const notifs = store.getNotifications(user.id);
       notifs.forEach(n => {
@@ -224,7 +288,7 @@ export default function CitizenDashboardPage() {
 
     // Sort newest first
     return list.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 8);
-  }, [myCivicIssues, user]);
+  }, [myCivicIssues, myServiceApplications, user]);
 
   // Citizen's community ideas (People's Voice)
   const myIdeas = useMemo(() => {
@@ -240,6 +304,12 @@ export default function CitizenDashboardPage() {
     i => i.status === "in_progress" || i.status === "forwarded" || i.status === "verified"
   ).length;
   const resolvedCount = myCivicIssues.filter(i => i.status === "resolved").length;
+
+  // Service Applications Summary Metrics (Real database records)
+  const totalServiceApplicationsCount = myServiceApplications.length;
+  const pendingServiceApplicationsCount = myServiceApplications.filter(
+    a => a.status === "submitted" || a.status === "under_review"
+  ).length;
 
   // Administrative / Moderator Data (For privileged preview mode)
   const isPrivilegedUser = role === "admin" || role === "super_admin" || role === "moderator";
@@ -472,8 +542,8 @@ export default function CitizenDashboardPage() {
               </div>
             )}
 
-            {/* 2. DASHBOARD OVERVIEW — 4 KPI CARDS (Real Database Records) */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {/* 2. DASHBOARD OVERVIEW — 5 KPI CARDS (Real Database Records) */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
               {/* Total Reports */}
               <div className="bg-white rounded-2xl border border-[#EDE6D8] p-4 shadow-2xs hover:border-[#194B35] transition">
                 <div className="flex items-center justify-between">
@@ -521,6 +591,23 @@ export default function CitizenDashboardPage() {
                 <p className="text-3xl font-black text-emerald-700 mt-2">{resolvedCount}</p>
                 <span className="text-[11px] text-emerald-700 font-bold block mt-0.5">Completed</span>
               </div>
+
+              {/* Public Service Applications */}
+              <a
+                href="#service-applications"
+                className="bg-white rounded-2xl border border-[#EDE6D8] p-4 shadow-2xs hover:border-[#194B35] transition block"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                    Public Services
+                  </span>
+                  <FileCheck2 className="w-4 h-4 text-[#194B35]" />
+                </div>
+                <p className="text-3xl font-black text-[#194B35] mt-2">{totalServiceApplicationsCount}</p>
+                <span className="text-[11px] text-emerald-700 font-bold block mt-0.5">
+                  {pendingServiceApplicationsCount > 0 ? `${pendingServiceApplicationsCount} In Guidance` : "All Verified"}
+                </span>
+              </a>
             </div>
 
             {/* 3. QUICK ACTIONS HUB */}
@@ -918,6 +1005,183 @@ export default function CitizenDashboardPage() {
                         Reset Filters
                       </button>
                     )}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* 4.5 MY PUBLIC SERVICE APPLICATIONS SECTION */}
+            <div id="service-applications" className="bg-white rounded-3xl border border-[#EDE6D8] p-6 shadow-2xs space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#EDE6D8]">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <FileCheck2 className="w-5 h-5 text-[#194B35]" />
+                    <h2 className="text-base sm:text-lg font-bold text-[#194B35]">
+                      My Public Service Applications ({myServiceApplications.length})
+                    </h2>
+                  </div>
+                  <p className="text-xs text-[#5C6A64] mt-0.5">
+                    Track municipal guidance requests, document readiness verifications, and statutory portal steps.
+                  </p>
+                </div>
+
+                <Link
+                  href="/public-services"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#194B35] hover:bg-[#143E2C] text-white font-bold text-xs rounded-xl transition shadow-2xs shrink-0"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Apply for Guidance</span>
+                </Link>
+              </div>
+
+              {/* Search & Status Filters */}
+              <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+                <div className="relative flex-1">
+                  <Search className="w-3.5 h-3.5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={appSearch}
+                    onChange={(e) => setAppSearch(e.target.value)}
+                    placeholder="Search by reference (PS-TNR-2026-XXXX) or service..."
+                    className="w-full pl-9 pr-3 py-1.5 bg-[#FAF7F0] border border-[#EDE6D8] rounded-xl text-xs text-[#1A2420] focus:outline-hidden focus:ring-1 focus:ring-[#194B35]"
+                  />
+                  {appSearch && (
+                    <button
+                      onClick={() => setAppSearch("")}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-xs"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
+
+                {/* Status filter tabs */}
+                <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+                  {[
+                    { key: "all", label: "All", count: myServiceApplications.length },
+                    { key: "submitted", label: "Submitted", count: myServiceApplications.filter(a => a.status === "submitted").length },
+                    { key: "under_review", label: "Under Review", count: myServiceApplications.filter(a => a.status === "under_review").length },
+                    { key: "documents_verified", label: "Verified", count: myServiceApplications.filter(a => a.status === "documents_verified").length },
+                    { key: "completed", label: "Completed", count: myServiceApplications.filter(a => a.status === "completed").length },
+                  ].map(tab => (
+                    <button
+                      key={tab.key}
+                      onClick={() => setAppStatusFilter(tab.key)}
+                      className={`px-3 py-1.5 rounded-xl font-bold transition whitespace-nowrap text-xs flex items-center gap-1.5 ${
+                        appStatusFilter === tab.key
+                          ? "bg-[#194B35] text-white shadow-2xs"
+                          : "bg-[#FAF7F0] text-[#5C6A64] hover:bg-[#EDE6D8]"
+                      }`}
+                    >
+                      <span>{tab.label}</span>
+                      <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                        appStatusFilter === tab.key ? "bg-white/20 text-white" : "bg-white text-gray-600 border border-[#EDE6D8]"
+                      }`}>
+                        {tab.count}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Applications List */}
+              <div className="space-y-3">
+                {filteredApplications.map((app) => {
+                  const getStatusBadge = (status: string) => {
+                    switch (status) {
+                      case "submitted":
+                        return { label: "Submitted", bg: "bg-amber-100 text-amber-800 border-amber-200" };
+                      case "under_review":
+                        return { label: "Under Review", bg: "bg-blue-100 text-blue-800 border-blue-200" };
+                      case "documents_verified":
+                        return { label: "Documents Verified", bg: "bg-indigo-100 text-indigo-800 border-indigo-200" };
+                      case "forwarded_guidance":
+                        return { label: "Guidance Forwarded", bg: "bg-purple-100 text-purple-800 border-purple-200" };
+                      case "completed":
+                        return { label: "Completed", bg: "bg-emerald-100 text-emerald-800 border-emerald-200" };
+                      case "rejected":
+                        return { label: "Needs Correction", bg: "bg-red-100 text-red-800 border-red-200" };
+                      default:
+                        return { label: status, bg: "bg-gray-100 text-gray-800 border-gray-200" };
+                    }
+                  };
+                  const badge = getStatusBadge(app.status);
+
+                  return (
+                    <div
+                      key={app.id}
+                      className="p-4 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] hover:border-[#194B35] transition flex flex-col md:flex-row md:items-center justify-between gap-4"
+                    >
+                      <div className="space-y-2">
+                        <div className="flex flex-wrap items-center gap-2">
+                          {/* Reference Number Pill */}
+                          <button
+                            onClick={(e) => handleCopyId(e, app.reference_no)}
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-[#EDE6D8] text-xs font-mono font-bold text-[#194B35] hover:bg-[#EDE6D8] transition"
+                            title="Click to copy reference number"
+                          >
+                            <span>{app.reference_no}</span>
+                            <span className="text-[10px] text-gray-400">
+                              {copiedId === app.reference_no ? "✓ Copied" : "Copy"}
+                            </span>
+                          </button>
+
+                          {/* Status Badge */}
+                          <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${badge.bg}`}>
+                            {badge.label}
+                          </span>
+
+                          <span className="text-[11px] text-[#5C6A64]">
+                            Ward {app.ward_number}
+                          </span>
+                        </div>
+
+                        <h3 className="font-bold text-sm text-[#1A2420]">
+                          {app.service_title}
+                        </h3>
+
+                        {app.status_notes && (
+                          <p className="text-xs text-[#5C6A64] line-clamp-2">
+                            <strong className="text-gray-700">Official Note:</strong> {app.status_notes}
+                          </p>
+                        )}
+
+                        <div className="text-[10px] text-gray-400 flex items-center gap-3">
+                          <span>Submitted: {new Date(app.created_at).toLocaleDateString("en-IN", { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                          <span>•</span>
+                          <span>Last Update: {new Date(app.updated_at).toLocaleDateString("en-IN", { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0 self-end md:self-center">
+                        <button
+                          onClick={() => setSelectedServiceApp(app)}
+                          className="px-3.5 py-2 rounded-xl bg-white hover:bg-gray-50 text-[#194B35] text-xs font-bold border border-[#EDE6D8] transition flex items-center gap-1.5 shadow-2xs"
+                        >
+                          <Eye className="w-3.5 h-3.5" />
+                          <span>View Details</span>
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {filteredApplications.length === 0 && (
+                  <div className="text-center py-8 bg-[#FAF7F0] rounded-2xl border border-dashed border-[#EDE6D8] space-y-2">
+                    <FileCheck2 className="w-8 h-8 text-gray-300 mx-auto" />
+                    <p className="text-xs font-bold text-[#194B35]">No Service Applications Found</p>
+                    <p className="text-[11px] text-[#5C6A64]">
+                      {myServiceApplications.length === 0
+                        ? "You have not submitted any service guidance applications yet. Explore the Public Services Directory to request document assistance."
+                        : "No service applications match your current search and filter criteria."}
+                    </p>
+                    <Link
+                      href="/public-services"
+                      className="inline-flex items-center gap-1 text-xs font-bold text-[#194B35] hover:underline pt-1"
+                    >
+                      <span>Explore Public Services</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </Link>
                   </div>
                 )}
               </div>
@@ -1502,6 +1766,123 @@ export default function CitizenDashboardPage() {
               >
                 <span>Open Dedicated Page</span>
                 <ExternalLink className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* SERVICE APPLICATION DETAILS MODAL                                        */}
+      {/* ========================================================================= */}
+      {selectedServiceApp && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
+          <div className="bg-white rounded-3xl border border-[#EDE6D8] max-w-xl w-full p-6 sm:p-8 space-y-5 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={() => setSelectedServiceApp(null)}
+              className="absolute right-5 top-5 text-gray-400 hover:text-gray-700"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="space-y-1">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800">
+                OUR NATION Public Service Guidance Request
+              </span>
+              <h3 className="text-xl font-bold text-[#194B35]">
+                {selectedServiceApp.service_title}
+              </h3>
+              <div className="flex items-center gap-2 pt-1">
+                <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded-md bg-[#FAF7F0] border border-[#EDE6D8] text-[#194B35]">
+                  {selectedServiceApp.reference_no}
+                </span>
+                <span className="text-xs text-gray-500">
+                  Ward {selectedServiceApp.ward_number}
+                </span>
+              </div>
+            </div>
+
+            {/* Status & Helpdesk Notes */}
+            <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-[#1A2420]">Current Status:</span>
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#194B35] text-white">
+                  {selectedServiceApp.status.replace('_', ' ').toUpperCase()}
+                </span>
+              </div>
+              {selectedServiceApp.status_notes && (
+                <p className="text-xs text-[#5C6A64] leading-relaxed">
+                  <strong className="text-gray-700">Official Guidance:</strong> {selectedServiceApp.status_notes}
+                </p>
+              )}
+            </div>
+
+            {/* Applicant Details */}
+            <div className="text-xs text-[#5C6A64] space-y-1 bg-[#FAF7F0] p-3 rounded-xl border border-[#EDE6D8]">
+              <p><strong>Applicant:</strong> {selectedServiceApp.applicant_name}</p>
+              <p><strong>Email:</strong> {selectedServiceApp.applicant_email}</p>
+              <p><strong>Phone:</strong> {selectedServiceApp.applicant_phone}</p>
+              {selectedServiceApp.notes && (
+                <p className="pt-1"><strong>Applicant Notes:</strong> {selectedServiceApp.notes}</p>
+              )}
+            </div>
+
+            {/* Verified Documents */}
+            {selectedServiceApp.documents && selectedServiceApp.documents.length > 0 && (
+              <div className="space-y-2">
+                <span className="text-xs font-bold text-[#194B35] block">
+                  Documents Verified / Uploaded:
+                </span>
+                <div className="space-y-1.5 text-xs">
+                  {selectedServiceApp.documents.map((doc: any, idx: number) => (
+                    <div key={idx} className="p-2.5 rounded-xl bg-[#FAF7F0] border border-[#EDE6D8] flex items-center justify-between">
+                      <span className="text-gray-800 font-medium">{doc.name}</span>
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                        {doc.status || "Verified"}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Audit Timeline */}
+            <div className="space-y-2 pt-2 border-t border-[#EDE6D8]">
+              <span className="text-xs font-bold text-[#194B35] block">
+                Application Timeline:
+              </span>
+              <div className="space-y-2 max-h-40 overflow-y-auto">
+                {selectedServiceApp.timeline.map((event: any, idx: number) => (
+                  <div key={idx} className="p-2.5 rounded-xl bg-[#FAF7F0] border border-[#EDE6D8] text-xs space-y-0.5">
+                    <div className="flex items-center justify-between text-[11px]">
+                      <span className="font-bold text-gray-800">{event.actor}</span>
+                      <span className="text-gray-400">{timeAgo(event.date)}</span>
+                    </div>
+                    <p className="text-[11px] text-[#5C6A64]">{event.note}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Statutory Disclaimer */}
+            <div className="text-[11px] text-[#4A3D2A] bg-[#FAF4E6] p-3 rounded-xl border border-[#E8DCBF]">
+              <strong>Notice:</strong> This is a guidance application managed by OUR NATION civic assistance desk. Final statutory processing and certificate downloads are completed on official Kerala Government portals.
+            </div>
+
+            <div className="pt-3 border-t border-[#EDE6D8] flex items-center justify-between">
+              <button
+                type="button"
+                onClick={() => setSelectedServiceApp(null)}
+                className="px-4 py-2 bg-gray-100 text-gray-700 font-bold text-xs rounded-xl hover:bg-gray-200 transition"
+              >
+                Close
+              </button>
+              <Link
+                href="/public-services"
+                className="px-4 py-2 bg-[#194B35] text-white font-bold text-xs rounded-xl hover:bg-[#143E2C] transition inline-flex items-center gap-1.5"
+              >
+                <span>Services Directory</span>
+                <ChevronRight className="w-3.5 h-3.5" />
               </Link>
             </div>
           </div>

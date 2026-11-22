@@ -323,6 +323,15 @@ export interface LocalityItem {
 // FEATURE 04: PUBLIC SERVICES DATA MODEL
 // -------------------------------------------------------------
 export type ServiceCategoryKey = 
+  | 'cat-certificates'
+  | 'cat-property-tax'
+  | 'cat-building'
+  | 'cat-water-sanitation'
+  | 'cat-public-health'
+  | 'cat-business'
+  | 'cat-social-welfare'
+  | 'cat-other'
+  // Backward compatibility with legacy categories:
   | 'civil_registration'
   | 'permits_licensing'
   | 'taxes_revenue'
@@ -334,43 +343,88 @@ export type ServiceCategoryKey =
 export interface PublicServiceProcedureStep {
   step_number: number;
   title: string;
-  title_ml: string;
+  title_ml?: string;
   description: string;
-  description_ml: string;
+  description_ml?: string;
 }
 
 export interface PublicServiceDetail {
   id: string;
+  slug: string;
   title: string;
-  title_ml: string;
+  title_ml?: string;
   category: ServiceCategoryKey;
   category_name: string;
-  category_name_ml: string;
+  category_name_ml?: string;
   department: string;
-  department_ml: string;
+  department_ml?: string;
   summary: string;
-  summary_ml: string;
+  summary_ml?: string;
+  eligibility: string[];
+  eligibility_ml?: string[];
   required_documents: string[];
-  required_documents_ml: string[];
+  required_documents_ml?: string[];
   procedure_steps: PublicServiceProcedureStep[];
   official_portal_url?: string;
   official_portal_name?: string;
   processing_time_days?: number;
   processing_time_text: string;
-  processing_time_text_ml: string;
+  processing_time_text_ml?: string;
   fee_structure: string;
-  fee_structure_ml: string;
+  fee_structure_ml?: string;
   office_location: string;
-  office_location_ml: string;
+  office_location_ml?: string;
   contact_phone: string;
   contact_email?: string;
   working_hours: string;
-  working_hours_ml: string;
+  working_hours_ml?: string;
   is_online_available: boolean;
-  online_system_name?: string; // e.g. "K-Smart Kerala", "Sevana Civil Registrations", "e-District Kerala", "Sanchitha"
+  online_system_name?: string;
   last_verified_date: string;
   source_reference: string;
-  faqs?: Array<{ question: string; question_ml: string; answer: string; answer_ml: string }>;
+  faqs?: Array<{ question: string; question_ml?: string; answer: string; answer_ml?: string }>;
+  views_count?: number;
+  supports_internal_application?: boolean;
+  published?: boolean;
+  audit_history?: Array<{ date: string; actor: string; action: string; note?: string }>;
+}
+
+export type ServiceApplicationStatus = 
+  | 'submitted'
+  | 'under_review'
+  | 'documents_verified'
+  | 'forwarded_guidance'
+  | 'completed'
+  | 'rejected';
+
+export interface PublicServiceApplication {
+  id: string;
+  reference_no: string; // Format: PS-TNR-2026-XXXX
+  service_id: string;
+  service_title: string;
+  service_category: string;
+  applicant_id: string;
+  applicant_name: string;
+  applicant_email: string;
+  applicant_phone: string;
+  ward_number: number; // 1 to 45
+  documents: Array<{
+    name: string;
+    url?: string;
+    status: 'uploaded' | 'verified' | 'action_required';
+    note?: string;
+  }>;
+  notes: string;
+  status: ServiceApplicationStatus;
+  status_notes?: string;
+  created_at: string;
+  updated_at: string;
+  timeline: Array<{
+    date: string;
+    status: ServiceApplicationStatus;
+    actor: string;
+    note: string;
+  }>;
 }
 
 // -------------------------------------------------------------

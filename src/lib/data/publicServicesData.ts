@@ -1,102 +1,423 @@
-import { PublicServiceDetail, ServiceCategoryKey } from "@/types/digitalMunicipality";
+import { 
+  PublicServiceDetail, 
+  ServiceCategoryKey, 
+  PublicServiceApplication,
+  ServiceApplicationStatus 
+} from "@/types/digitalMunicipality";
+import { store } from "@/lib/data/store";
 
-export const SERVICE_CATEGORIES = [
-  { key: "civil_registration", label: "Civil Registration", label_ml: "സിവിൽ രജിസ്ട്രേഷൻ", icon: "FileText", color: "#194B35" },
-  { key: "permits_licensing", label: "Permits & Licensing", label_ml: "പെർമിറ്റുകളും ലൈസൻസുകളും", icon: "Building2", color: "#C39A5B" },
-  { key: "taxes_revenue", label: "Taxes & Revenue", label_ml: "നികുതികളും റവന്യൂവും", icon: "Receipt", color: "#1E3A8A" },
-  { key: "welfare_pensions", label: "Welfare Pensions", label_ml: "ക്ഷേമ പെൻഷനുകൾ", icon: "Users", color: "#7C3AED" },
-  { key: "sanitation_health", label: "Sanitation & Waste", label_ml: "മാലിന്യ സംസ്കരണവും ശുചിത്വവും", icon: "Trash2", color: "#059669" },
-  { key: "utilities_infrastructure", label: "Utilities & Streetlights", label_ml: "പൊതു സൗകര്യങ്ങളും തെരുവ് വിളക്കും", icon: "Zap", color: "#EA580C" },
-  { key: "certificates_land", label: "Certificates & Land", label_ml: "സർട്ടിഫിക്കറ്റുകളും ഭൂമിയും", icon: "FileCheck", color: "#DC2626" },
-] as const;
+export type { PublicServiceApplication, ServiceApplicationStatus };
+
+export const ALL_SERVICE_APPLICATION_STATUSES: ServiceApplicationStatus[] = [
+  "submitted",
+  "under_review",
+  "documents_verified",
+  "forwarded_guidance",
+  "completed",
+  "rejected"
+];
+
+export interface ServiceCategoryMeta {
+  key: ServiceCategoryKey;
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  color: string;
+}
+
+export const SERVICE_CATEGORIES: ServiceCategoryMeta[] = [
+  {
+    key: "cat-certificates",
+    id: "cat-certificates",
+    name: "Certificates and Civil Records",
+    description: "Birth, death, and marriage registration, legal heir and vital records verification via K-Smart.",
+    icon: "FileText",
+    color: "#194B35",
+  },
+  {
+    key: "cat-property-tax",
+    id: "cat-property-tax",
+    name: "Property and Tax Services",
+    description: "Annual building property tax assessment, cashless tax payment, ownership records, and mutation.",
+    icon: "Receipt",
+    color: "#1E3A8A",
+  },
+  {
+    key: "cat-building",
+    id: "cat-building",
+    name: "Building and Construction",
+    description: "Statutory building permits, regularization, architectural plan sanctions, and occupancy certificates under KMBR 2019.",
+    icon: "Building2",
+    color: "#C39A5B",
+  },
+  {
+    key: "cat-water-sanitation",
+    id: "cat-water-sanitation",
+    name: "Water and Sanitation",
+    description: "Doorstep Haritha Karma Sena waste collection, drinking water pipeline connections, and sanitation clearances.",
+    icon: "Droplets",
+    color: "#059669",
+  },
+  {
+    key: "cat-public-health",
+    id: "cat-public-health",
+    name: "Public Health",
+    description: "Sanitary inspection certificates, food establishment hygiene clearances, and vector disease control.",
+    icon: "ShieldCheck",
+    color: "#DC2626",
+  },
+  {
+    key: "cat-business",
+    id: "cat-business",
+    name: "Trade and Business Licences",
+    description: "Dangerous & Offensive (D&O) trade licenses, commercial establishment permits, and signboard sanctions via K-Smart.",
+    icon: "Briefcase",
+    color: "#D97706",
+  },
+  {
+    key: "cat-social-welfare",
+    id: "cat-social-welfare",
+    name: "Social Welfare",
+    description: "Sevana social security pensions (Old Age, Widow, Disability, Agricultural Worker) and direct benefit transfer (DBT).",
+    icon: "Users",
+    color: "#7C3AED",
+  },
+  {
+    key: "cat-other",
+    id: "cat-other",
+    name: "Other Municipal Services",
+    description: "Tanur Municipal Town Hall booking, community amenity access, and public streetlight repair requests.",
+    icon: "Sparkles",
+    color: "#4B5563",
+  },
+];
 
 export const TANUR_MUNICIPAL_SERVICES: PublicServiceDetail[] = [
   // 1. Birth Registration
   {
     id: "srv-birth-reg",
-    title: "Birth Registration & Certificate Issuance",
-    title_ml: "ജനന രജിസ്ട്രേഷനും സർട്ടിഫിക്കറ്റ് വിതരണവും",
-    category: "civil_registration",
-    category_name: "Civil Registration",
-    category_name_ml: "സിവിൽ രജിസ്ട്രേഷൻ",
+    slug: "birth-registration-certificate",
+    title: "Birth Registration & Digital Certificate Issuance",
+    category: "cat-certificates",
+    category_name: "Certificates and Civil Records",
     department: "Health & Sanitation Wing, Tanur Municipality",
-    department_ml: "ആരോഗ്യ വിഭാഗം, താനൂർ നഗരസഭ",
-    summary: "Registration of births occurring within Tanur municipal limits and download of official birth certificates with QR code verification via K-Smart.",
-    summary_ml: "താനൂർ നഗരസഭാ പരിധിയിൽ നടക്കുന്ന ജനനങ്ങളുടെ രജിസ്ട്രേഷനും കെ-സ്മാർട്ട് വഴി ഡിജിറ്റൽ ജനന സർട്ടിഫിക്കറ്റ് ലഭ്യമാക്കലും.",
-    required_documents: [
-      "Form 1 (Birth Reporting Form signed by hospital authority/parent)",
-      "Hospital Discharge Summary / Delivery Intimation slip",
-      "Aadhaar Card copy of Father and Mother",
-      "Marriage Certificate copy of parents (if available)",
+    summary: "Registration of births occurring within Tanur municipal limits and direct download of official birth certificates with QR code verification via K-Smart.",
+    eligibility: [
+      "Child born within Tanur Municipality geographical boundaries (hospital or home birth)",
+      "Parents or legal guardians holding valid identity documentation (Aadhaar / Voter ID)",
+      "Institutional births reported directly by accredited Tanur maternity hospitals",
     ],
-    required_documents_ml: [
-      "ഫോറം 1 (ആശുപത്രി അധികൃതർ / രക്ഷിതാക്കൾ ഒപ്പിട്ട റിപ്പോർട്ടിംഗ് ഫോം)",
-      "ആശുപത്രി ഡിസ്ചാർജ് രേഖ അല്ലെങ്കിൽ പ്രസവ വിവര സാക്ഷ്യപത്രം",
-      "മാതാപിതാക്കളുടെ ആധാർ കാർഡ് പകർപ്പുകൾ",
-      "വിവാഹ സർട്ടിഫിക്കറ്റ് പകർപ്പ് (ലഭ്യമാണെങ്കിൽ)",
+    required_documents: [
+      "Form 1 (Birth Reporting Form verified and signed by hospital authority or parent)",
+      "Hospital Discharge Summary or Institutional Delivery Intimation slip",
+      "Copy of Aadhaar Card of both Father and Mother",
+      "Parents Marriage Certificate copy (optional, for record linkage)",
     ],
     procedure_steps: [
       {
         step_number: 1,
-        title: "Institutional Intimation",
-        title_ml: "ആശുപത്രി അറിയിപ്പ്",
-        description: "Hospitals in Tanur electronically transmit birth records directly to the Tanur Municipality K-Smart registrar database.",
-        description_ml: "താനൂരിലെ അംഗീകൃത ആശുപത്രികൾ പ്രസവ വിവരം കെ-സ്മാർട്ട് സോഫ്റ്റ്‌വെയർ വഴി നഗരസഭയിലേക്ക് കൈമാറുന്നു.",
+        title: "Hospital Electronic Intimation",
+        description: "Accredited hospitals in Tanur electronically transmit birth event records directly to the Tanur Municipality registrar database via K-Smart.",
       },
       {
         step_number: 2,
-        title: "Parent Verification & Naming",
-        title_ml: "വിവര പരിശോധനയും പേര് ചേർക്കലും",
-        description: "Parents verify details, enter the child's legal name, and submit within 21 days without fee.",
-        description_ml: "രക്ഷിതാക്കൾ വിവരങ്ങൾ പരിശോധിച്ച് കുട്ടിയുടെ പേര് ചേർത്ത് 21 ദിവസത്തിനകം ഫീസ് ഇല്ലാതെ അപേക്ഷ സമർപ്പിക്കുന്നു.",
+        title: "Parent Name Verification & Submission",
+        description: "Parents verify child details, enter the official legal name, and submit online within 21 days without any fee.",
       },
       {
         step_number: 3,
         title: "Digital Certificate Download",
-        title_ml: "ഡിജിറ്റൽ സർട്ടിഫിക്കറ്റ് ഡൗൺലോഡ്",
-        description: "Registrar approves the entry; digitally signed certificate is available for download with instant QR verification.",
-        description_ml: "രജിസ്ട്രാർ അംഗീകാരം നൽകുന്നതോടെ ഡിജിറ്റൽ ഒപ്പുള്ള ജനന സർട്ടിഫിക്കറ്റ് ക്യു.ആർ കോഡോടെ ഡൗൺലോഡ് ചെയ്യാം.",
+        description: "The Municipal Registrar approves the record; the digitally signed certificate is immediately available for download with QR code verification.",
       },
     ],
     official_portal_url: "https://ksmart.lsgkerala.gov.in/",
     official_portal_name: "K-Smart Kerala Civil Registration Portal",
     processing_time_days: 3,
-    processing_time_text: "1 to 3 working days (Within 21 days of birth is free)",
-    processing_time_text_ml: "1 മുതൽ 3 പ്രവൃത്തി ദിവസങ്ങൾ (ജനനം നടന്ന് 21 ദിവസത്തിനകം സൗജന്യം)",
+    processing_time_text: "1 to 3 working days (Free within 21 days of birth)",
     fee_structure: "Free within 21 days. Late registration (22–30 days: ₹100, 31 days to 1 year: ₹200 with Secretary sanction).",
-    fee_structure_ml: "21 ദിവസത്തിനകം സൗജന്യം. 22 മുതൽ 30 ദിവസം വരെ ₹100 ലേറ്റ് ഫീ. 1 വർഷം വരെ ₹200 (സെക്രട്ടറിയുടെ അനുമതിയോടെ).",
-    office_location: "Tanur Municipality Office, Ground Floor Health Section, Main Road, Tanur",
-    office_location_ml: "താനൂർ നഗരസഭാ കാര്യാലയം, ഗ്രൗണ്ട് ഫ്ലോർ ആരോഗ്യ വിഭാഗം, മെയിൻ റോഡ്, താനൂർ",
-    contact_phone: "0494 2440232",
+    office_location: "Tanur Municipality Office, Ground Floor Health Section, Main Road, Tanur - 676302",
+    contact_phone: "0494 2440228",
     contact_email: "tanurmunicipality@gmail.com",
-    working_hours: "Monday to Saturday: 10:00 AM – 5:00 PM (2nd Sat & Sun Holiday)",
-    working_hours_ml: "തിങ്കൾ മുതൽ ശനി വരെ: രാവിലെ 10:00 – വൈകിട്ട് 5:00 (രണ്ടാം ശനി, ഞായർ അവധി)",
+    working_hours: "Monday to Saturday: 10:00 AM – 5:00 PM (2nd Saturday & Sunday Holiday)",
     is_online_available: true,
     online_system_name: "K-Smart Kerala",
     last_verified_date: "2026-11-15",
-    source_reference: "Kerala Registration of Births and Deaths Rules & K-Smart Guidelines",
+    source_reference: "Kerala Registration of Births and Deaths Rules 1999 & LSGD K-Smart Guidelines",
     faqs: [
       {
-        question: "Can I add the child's name later after registration?",
-        question_ml: "രജിസ്ട്രേഷന് ശേഷം പിന്നീട് കുട്ടിയുടെ പേര് ചേർക്കാൻ സാധിക്കുമോ?",
-        answer: "Yes, parents can add the child's name online through K-Smart within 12 months without any penalty fee.",
-        answer_ml: "അതെ, കെ-സ്മാർട്ട് പോർട്ടൽ വഴി 12 മാസത്തിനകം യാതൊരു ഫീസും കൂടാതെ പേര് ചേർക്കാവുന്നതാണ്.",
+        question: "Can I add the child's name after the initial registration?",
+        answer: "Yes, parents can add or update the child's legal name online through the K-Smart portal within 12 months without penalty.",
+      },
+      {
+        question: "Can I get an English certificate for passport applications?",
+        answer: "Yes, all K-Smart certificates are bilingual (English and Malayalam) and universally recognized by the Ministry of External Affairs for passport applications.",
       },
     ],
+    views_count: 1420,
+    supports_internal_application: true,
+    published: true,
+    audit_history: [
+      { date: "2026-11-15", actor: "Municipal Registrar", action: "Annual fee and portal verification confirmed" }
+    ]
   },
 
-  // 2. Building Permit
+  // 2. Death Registration
+  {
+    id: "srv-death-reg",
+    slug: "death-registration-certificate",
+    title: "Death Registration & Official Certificate",
+    category: "cat-certificates",
+    category_name: "Certificates and Civil Records",
+    department: "Health & Sanitation Wing, Tanur Municipality",
+    summary: "Registration of deaths occurring within Tanur municipal jurisdiction and issuance of certified digital death certificates.",
+    eligibility: [
+      "Death occurred within Tanur Municipality limits (institutional or residence)",
+      "Immediate blood relative, legal heir, or institution representative",
+      "Medical certification of cause of death from an authorized medical practitioner",
+    ],
+    required_documents: [
+      "Form 2 (Death Reporting Form) signed by relative or hospital authority",
+      "Medical Certificate of Cause of Death (Form 4 or 4A) from doctor/hospital",
+      "Aadhaar Card copy of the deceased",
+      "Aadhaar Card copy of the applicant/informant",
+      "Burial/Cremation receipt from cemetery or crematorium",
+    ],
+    procedure_steps: [
+      {
+        step_number: 1,
+        title: "Intimation & Medical Certification",
+        description: "Submit death intimation and medical cause certificate through K-Smart within 21 days of occurrence.",
+      },
+      {
+        step_number: 2,
+        title: "Registrar Scrutiny",
+        description: "Municipal health inspector verifies hospital or crematorium records and validates claimant details.",
+      },
+      {
+        step_number: 3,
+        title: "Certificate Issuance",
+        description: "Registrar sanctions the entry and issues the digitally signed QR-coded certificate for download.",
+      },
+    ],
+    official_portal_url: "https://ksmart.lsgkerala.gov.in/",
+    official_portal_name: "K-Smart Kerala Civil Registration Portal",
+    processing_time_days: 2,
+    processing_time_text: "1 to 2 working days (Within 21 days is free)",
+    fee_structure: "Free within 21 days. Late fees apply beyond 21 days as per Kerala statutory rules.",
+    office_location: "Tanur Municipality Office, Ground Floor Health Section, Main Road, Tanur",
+    contact_phone: "0494 2440228",
+    contact_email: "tanurmunicipality@gmail.com",
+    working_hours: "Monday to Saturday: 10:00 AM – 5:00 PM",
+    is_online_available: true,
+    online_system_name: "K-Smart Kerala",
+    last_verified_date: "2026-11-15",
+    source_reference: "Kerala Registration of Births and Deaths Rules 1999",
+    faqs: [
+      {
+        question: "How long after death can registration be completed online?",
+        answer: "Deaths within 21 days can be registered directly online. Beyond 21 days and up to 1 year requires Municipal Secretary sanction.",
+      },
+    ],
+    views_count: 890,
+    supports_internal_application: true,
+    published: true,
+  },
+
+  // 3. Marriage Registration
+  {
+    id: "srv-marriage-reg",
+    slug: "marriage-registration-certificate",
+    title: "Marriage Registration & Certificate (Common Rules)",
+    category: "cat-certificates",
+    category_name: "Certificates and Civil Records",
+    department: "Civil Registration Section, Tanur Municipality",
+    summary: "Statutory marriage registration under Kerala Municipality Common Marriage Rules 2008 with online pre-application and fast-track in-person appearance.",
+    eligibility: [
+      "Solemnization of marriage within Tanur Municipality geographical jurisdiction, or bride/groom resident in Tanur",
+      "Groom aged 21 or older, bride aged 18 or older on marriage date",
+      "Two witnesses with valid photo identity proofs",
+    ],
+    required_documents: [
+      "Form 1 (Memorandum for Registration of Marriage)",
+      "Age proof of bride and groom (SSLC certificate / Passport / Birth certificate)",
+      "Religious institution solemnization certificate (Temple, Church, Mosque, or Registrar solemnization slip)",
+      "Passport-size joint photograph and single photographs",
+      "Aadhaar card copies of bride, groom, and two witnesses",
+    ],
+    procedure_steps: [
+      {
+        step_number: 1,
+        title: "Online Application & Slot Booking",
+        description: "Complete marriage memorandum on K-Smart, upload certificates and photos, and choose preferred appointment date.",
+      },
+      {
+        step_number: 2,
+        title: "Physical Verification at Municipal Office",
+        description: "Bride, groom, and two witnesses appear before the Local Registrar at Tanur Municipality for verification and signatures.",
+      },
+      {
+        step_number: 3,
+        title: "Certificate Generation",
+        description: "Digital certificate with legal verification QR code is generated instantly upon verification.",
+      },
+    ],
+    official_portal_url: "https://ksmart.lsgkerala.gov.in/",
+    official_portal_name: "K-Smart Kerala Marriage Registration Portal",
+    processing_time_days: 1,
+    processing_time_text: "Same-day issuance upon scheduled physical verification",
+    fee_structure: "₹100 government fee within 45 days. Late fee applies beyond 45 days.",
+    office_location: "Tanur Municipality Office, Civil Registration Desk, Ground Floor",
+    contact_phone: "0494 2440228",
+    contact_email: "tanurmunicipality@gmail.com",
+    working_hours: "Monday to Saturday: 10:00 AM – 5:00 PM",
+    is_online_available: true,
+    online_system_name: "K-Smart Kerala",
+    last_verified_date: "2026-11-15",
+    source_reference: "Kerala Municipality (Registration of Marriages - Common) Rules 2008",
+    faqs: [
+      {
+        question: "Can Non-Resident Indians (NRIs) register marriages via this portal?",
+        answer: "Yes, video-conferencing KYC verification is available under K-Smart NRI guidelines for eligible couples.",
+      },
+    ],
+    views_count: 1120,
+    supports_internal_application: true,
+    published: true,
+  },
+
+  // 4. Property Tax Payment
+  {
+    id: "srv-property-tax",
+    slug: "property-tax-assessment",
+    title: "Property Tax Assessment & Online Payment",
+    category: "cat-property-tax",
+    category_name: "Property and Tax Services",
+    department: "Revenue Wing, Tanur Municipality",
+    summary: "Annual building property tax self-assessment and cashless payment with instant digital receipt generation via Sanchitha / K-Smart portal.",
+    eligibility: [
+      "Owners of residential, commercial, industrial, or vacant building properties within Tanur Municipality Wards 1 to 45",
+      "Authorized tenants or representatives with valid property assessment number",
+    ],
+    required_documents: [
+      "Building Door Number (e.g. Ward Number / House Number: 12/452A)",
+      "Previous Year Tax Receipt or Assessment Notice (Tandapper / Assessment No)",
+      "Owner's Registered Mobile Number for OTP Verification",
+    ],
+    procedure_steps: [
+      {
+        step_number: 1,
+        title: "Search by Ward & Door Number",
+        description: "Open the online payment link, select Malappuram district, Tanur Municipality, and enter ward and door number.",
+      },
+      {
+        step_number: 2,
+        title: "Verify Demand & Net Payable",
+        description: "Review annual tax demand, service cess, library cess, and early payment rebate (if applicable).",
+      },
+      {
+        step_number: 3,
+        title: "Secure Payment & Instant Receipt",
+        description: "Pay via UPI, Net Banking, or Debit Card and download the digitally signed receipt immediately.",
+      },
+    ],
+    official_portal_url: "https://tax.lsgkerala.gov.in/",
+    official_portal_name: "Kerala LSGD Sanchitha Property Tax Portal",
+    processing_time_days: 0,
+    processing_time_text: "Instant online receipt generation 24/7",
+    fee_structure: "As per statutory assessment rate fixed by Tanur Municipal Council based on plinth area and building type.",
+    office_location: "Tanur Municipality Office, Revenue Section Counters, Ground Floor",
+    contact_phone: "0494 2440228",
+    contact_email: "tanurmunicipality@gmail.com",
+    working_hours: "Online: 24/7 | Office Cash Counter: 10:00 AM – 3:30 PM",
+    is_online_available: true,
+    online_system_name: "Sanchitha / K-Smart",
+    last_verified_date: "2026-11-15",
+    source_reference: "Kerala Municipality Act 1994 (Property Tax Rules) & LSGD Notification",
+    faqs: [
+      {
+        question: "How do I find my building door number?",
+        answer: "Check the metallic door number plate affixed on your entrance or refer to your previous year's physical tax receipt.",
+      },
+    ],
+    views_count: 2450,
+    supports_internal_application: true,
+    published: true,
+  },
+
+  // 5. Ownership Certificate & Mutation
+  {
+    id: "srv-ownership-cert",
+    slug: "ownership-certificate-mutation",
+    title: "Ownership Certificate & Property Mutation (Pokkuvaravu)",
+    category: "cat-property-tax",
+    category_name: "Property and Tax Services",
+    department: "Revenue Wing, Tanur Municipality",
+    summary: "Transfer of property ownership records in municipal tax registers and issuance of official ownership certificates for loans and utility connections.",
+    eligibility: [
+      "Registered property owners who have purchased or inherited property in Tanur Municipality",
+      "Holders of valid registered title deed and mutation receipt from Village Office",
+    ],
+    required_documents: [
+      "Copy of Registered Sale Deed, Settlement Deed, or Partition Deed",
+      "Latest Land Tax Paid Receipt (Pokkuvaravu) from Tanur Village Office",
+      "Building Door Number and latest Municipal Property Tax Receipt",
+      "Legal Heirship Certificate (in case of inheritance / succession)",
+    ],
+    procedure_steps: [
+      {
+        step_number: 1,
+        title: "Online Application & Document Upload",
+        description: "Submit transfer of ownership application through K-Smart with deeds and village revenue records.",
+      },
+      {
+        step_number: 2,
+        title: "Revenue Inspector Field Verification",
+        description: "Revenue Inspector inspects municipal tax registers, checks for tax arrears, and verifies physical occupancy.",
+      },
+      {
+        step_number: 3,
+        title: "Council Committee Sanction & Certificate Issuance",
+        description: "Municipal Secretary approves name transfer; updated ownership certificate is generated.",
+      },
+    ],
+    official_portal_url: "https://ksmart.lsgkerala.gov.in/",
+    official_portal_name: "K-Smart Kerala Revenue Module",
+    processing_time_days: 7,
+    processing_time_text: "5 to 7 working days",
+    fee_structure: "₹50 application fee plus statutory certificate fee as per municipal schedule.",
+    office_location: "Tanur Municipality Office, Revenue Section, Ground Floor",
+    contact_phone: "0494 2440228",
+    contact_email: "tanurmunicipality@gmail.com",
+    working_hours: "Monday to Saturday: 10:00 AM – 5:00 PM",
+    is_online_available: true,
+    online_system_name: "K-Smart Kerala",
+    last_verified_date: "2026-11-15",
+    source_reference: "Kerala Municipality Act 1994 & Tax Assessment Rules",
+    faqs: [
+      {
+        question: "Is Village Office Pokkuvaravu required before Municipal Mutation?",
+        answer: "Yes, land tax mutation at the Village Office must be completed before applying for building ownership name transfer at the Municipality.",
+      },
+    ],
+    views_count: 1320,
+    supports_internal_application: true,
+    published: true,
+  },
+
+  // 6. Building Permit
   {
     id: "srv-building-permit",
+    slug: "building-construction-permit",
     title: "Building Permit & Regularization (KMBR / K-Smart)",
-    title_ml: "കെട്ടിട നിർമ്മാണ പെർമിറ്റ് (KMBR / K-Smart)",
-    category: "permits_licensing",
-    category_name: "Permits & Licensing",
-    category_name_ml: "പെർമിറ്റുകളും ലൈസൻസുകളും",
+    category: "cat-building",
+    category_name: "Building and Construction",
     department: "Engineering Wing, Tanur Municipality",
-    department_ml: "എഞ്ചിനീയറിംഗ് വിഭാഗം, താനൂർ നഗരസഭ",
     summary: "Application and statutory sanction for residential and commercial building construction under Kerala Municipality Building Rules (KMBR) 2019.",
-    summary_ml: "കേരള മുനിസിപ്പാലിറ്റി ബിൽഡിംഗ് റൂൾസ് (KMBR 2019) പ്രകാരം പാർപ്പിട-വാണിജ്യ കെട്ടിട നിർമ്മാണങ്ങൾക്കുള്ള അനുമതിയും പ്ലാൻ അംഗീകാരവും.",
+    eligibility: [
+      "Landowners holding registered freehold land within Tanur Municipality limits",
+      "Proposals prepared by architects or engineers registered with Kerala LSGD",
+    ],
     required_documents: [
       "Registered Land Title Deed (Aadheeram / Sale Deed)",
       "Latest Land Tax Paid Receipt (Pokkuvaravu / Tandapper)",
@@ -104,131 +425,481 @@ export const TANUR_MUNICIPAL_SERVICES: PublicServiceDetail[] = [
       "Site Plan, Service Plan and Architectural Drawing drawn by licensed engineer",
       "CRZ Clearance Certificate (strictly required for Coastal Regulation Zone wards 3, 4, 11, 12, 13)",
     ],
-    required_documents_ml: [
-      "ഭൂമിയുടെ ആധാരം പകർപ്പ്",
-      "താനൂർ വില്ലേജ് ഓഫീസിൽ നിന്നുള്ള നടപ്പു സാമ്പത്തിക വർഷത്തെ കരം രസീത്",
-      "കൈവശാവകാശ സർട്ടിഫിക്കറ്റ് (Possession Certificate)",
-      "ലൈസൻസുള്ള എഞ്ചിനീയർ തയ്യാറാക്കിയ സൈറ്റ് പ്ലാനും കെട്ടിട രൂപരേഖയും",
-      "തീരദേശ നിയന്ത്രണ പരിധിയിലുള്ള (CRZ) വാർഡുകൾക്ക് തീരദേശ പരിപാലന അതോറിറ്റി അനുമതി (CRZ Clearance)",
-    ],
     procedure_steps: [
       {
         step_number: 1,
         title: "Architectural Drawing & Online Upload",
-        title_ml: "പ്ലാൻ തയ്യാറാക്കലും ഓൺലൈൻ സമർപ്പണവും",
         description: "Registered licensee drafts drawing conforming to KMBR and submits via K-Smart portal.",
-        description_ml: "ലൈസൻസുള്ള എഞ്ചിനീയർ പ്ലാൻ തയ്യാറാക്കി കെ-സ്മാർട്ട് പോർട്ടൽ വഴി ഓൺലൈനായി സമർപ്പിക്കുന്നു.",
       },
       {
         step_number: 2,
         title: "Site Inspection by Municipal Engineer",
-        title_ml: "മുനിസിപ്പൽ ഓവർസിയറുടെ സ്ഥലപരിശോധന",
         description: "Assistant Engineer / Overseer inspects the plot boundaries, setback distances, and road access.",
-        description_ml: "നഗരസഭാ അസിസ്റ്റന്റ് എഞ്ചിനീയർ/ഓവർസിയർ സ്ഥലം സന്ദർശിച്ച് അതിരുകൾ, റോഡ് വീതി, സെറ്റ് ബാക്ക് എന്നിവ പരിശോധിക്കുന്നു.",
       },
       {
         step_number: 3,
         title: "Fee Remittance & Permit Issuance",
-        title_ml: "ഫീസ് അടയ്ക്കലും പെർമിറ്റ് ലഭിക്കലും",
         description: "Fee calculated as per built-up area; upon digital payment, digitally signed building permit is issued.",
-        description_ml: "നിശ്ചിത ഫീസ് ഓൺലൈനായി അടച്ചയുടൻ ഡിജിറ്റൽ ഒപ്പുള്ള ബിൽഡിംഗ് പെർമിറ്റ് ഡൗൺലോഡ് ചെയ്യാം.",
       },
     ],
     official_portal_url: "https://ksmart.lsgkerala.gov.in/",
     official_portal_name: "K-Smart Kerala Building Permission System",
     processing_time_days: 15,
     processing_time_text: "Low risk (up to 300 sq.m): Self-certified instant permit. Others: 15 working days.",
-    processing_time_text_ml: "ലോ റിസ്ക് കെട്ടിടങ്ങൾ (300 ചതുരശ്ര മീറ്റർ വരെ): തൽക്ഷണം. മറ്റുള്ളവ: 15 പ്രവൃത്തി ദിവസങ്ങൾ.",
     fee_structure: "Calculated based on square meters plinth area as per statutory KMBR 2019 schedule.",
-    fee_structure_ml: "കെ.എം.ബി.ആർ നിരക്കനുസരിച്ച് തറ വിസ്തീർണ്ണത്തിന്റെ അടിസ്ഥാനത്തിൽ കണക്കാക്കുന്നു.",
     office_location: "Tanur Municipality Office, 1st Floor Engineering Section",
-    office_location_ml: "താനൂർ നഗരസഭാ കാര്യാലയം, ഒന്നാം നില എഞ്ചിനീയറിംഗ് വിഭാഗം",
-    contact_phone: "0494 2440232",
+    contact_phone: "0494 2440228",
     contact_email: "tanurmunicipality@gmail.com",
     working_hours: "Monday to Saturday: 10:00 AM – 5:00 PM",
-    working_hours_ml: "തിങ്കൾ മുതൽ ശനി വരെ: രാവിലെ 10:00 – വൈകിട്ട് 5:00",
     is_online_available: true,
     online_system_name: "K-Smart KMBR Module",
     last_verified_date: "2026-11-15",
     source_reference: "Kerala Municipality Building Rules (KMBR) 2019 & LSGD Orders",
+    faqs: [
+      {
+        question: "Is instant building permit available for small houses in Tanur?",
+        answer: "Yes, residential buildings up to 300 square meters with low-risk category qualify for self-certified instant permits on K-Smart.",
+      },
+    ],
+    views_count: 1890,
+    supports_internal_application: true,
+    published: true,
   },
 
-  // 3. Property Tax Payment
+  // 7. Occupancy Certificate
   {
-    id: "srv-property-tax",
-    title: "Property Tax Assessment & Online Payment",
-    title_ml: "വസ്തുനികുതി നിർണ്ണയവും ഓൺലൈൻ പേയ്‌മെന്റും",
-    category: "taxes_revenue",
-    category_name: "Taxes & Revenue",
-    category_name_ml: "നികുതികളും റവന്യൂവും",
-    department: "Revenue Wing, Tanur Municipality",
-    department_ml: "റവന്യൂ വിഭാഗം, താനൂർ നഗരസഭ",
-    summary: "Annual building property tax assessment and cashless payment with instant digital receipt generation via K-Smart / Sanchitha portal.",
-    summary_ml: "താനൂർ നഗരസഭാ പരിധിയിലെ കെട്ടിടങ്ങളുടെ വസ്തുനികുതി പരിശോധന, വാർഷിക അടവ്, ഇൻസ്റ്റന്റ് രസീത് ലഭ്യത.",
-    required_documents: [
-      "Building Door Number (e.g. Ward Number / House Number: 10/452A)",
-      "Previous Year Tax Receipt or Assessment Notice (Tandapper / Assessment No)",
-      "Owner's Registered Mobile Number for OTP Verification",
+    id: "srv-occupancy-cert",
+    slug: "occupancy-certificate",
+    title: "Building Completion & Occupancy Certificate",
+    category: "cat-building",
+    category_name: "Building and Construction",
+    department: "Engineering Wing, Tanur Municipality",
+    summary: "Formal inspection, completion certification, door number allocation, and occupancy clearance for constructed buildings.",
+    eligibility: [
+      "Holders of valid Tanur Municipal Building Permit whose construction is fully completed as per approved plan",
+      "No unauthorized deviations beyond permissible KMBR tolerances",
     ],
-    required_documents_ml: [
-      "കെട്ടിട നമ്പർ (വാർഡ് നമ്പർ / ഡോർ നമ്പർ)",
-      "മുൻ വർഷത്തെ നികുതി രസീത് അല്ലെങ്കിൽ അസസ്സ്മെന്റ് നമ്പർ",
-      "ഉടമയുടെ മൊബൈൽ നമ്പർ (ഒ.ടി.പി ലഭിക്കുന്നതിന്)",
+    required_documents: [
+      "Copy of approved Building Permit and approved drawings",
+      "Completion Certificate signed by the supervising registered engineer / licensee",
+      "Photographs of completed building showing setbacks and rainwater harvesting tank",
+      "Fire NOC and Pollution NOC (for commercial / public buildings)",
     ],
     procedure_steps: [
       {
         step_number: 1,
-        title: "Search by Ward & Door Number",
-        title_ml: "വാർഡും കെട്ടിട നമ്പറും തിരയുക",
-        description: "Open the online payment link, select Malappuram district, Tanur Municipality, enter ward & door number.",
-        description_ml: "പോർട്ടലിൽ മലപ്പുറം ജില്ല, താനൂർ നഗരസഭ തിരഞ്ഞെടുത്ത് വാർഡും ഡോർ നമ്പറും നൽകി സെർച്ച് ചെയ്യുക.",
+        title: "Completion Notice Submission",
+        description: "Licensee submits completion plan and photos through K-Smart within 1 month of physical completion.",
       },
       {
         step_number: 2,
-        title: "Verify Demand & Net Payable",
-        title_ml: "തുക പരിശോധിക്കുക",
-        description: "Review annual tax demand, service cess, library cess, and early payment rebate (if applicable).",
-        description_ml: "വാർഷിക നികുതിയും സെസ്സുകളും റിബേറ്റും പരിശോധിച്ച് തുക ഉറപ്പുവരുത്തുക.",
+        title: "Physical Site Verification",
+        description: "Municipal Assistant Engineer inspects building, measures setbacks, and validates rainwater harvesting setup.",
       },
       {
         step_number: 3,
-        title: "Secure Payment & Instant Receipt",
-        title_ml: "ഓൺലൈൻ പേയ്‌മെന്റും രസീതും",
-        description: "Pay via UPI, Net Banking, Debit/Credit Card; download digitally signed receipt immediately.",
-        description_ml: "യു.പി.ഐ / നെറ്റ് ബാങ്കിംഗ് വഴി പണമടച്ച് നിമിഷങ്ങൾക്കകം ഔദ്യോഗിക രസീത് ഡൗൺലോഡ് ചെയ്യുക.",
+        title: "Door Number Allotment & Certificate",
+        description: "Municipality assigns permanent door number plate and issues digitally signed Occupancy Certificate.",
       },
     ],
-    official_portal_url: "https://tax.lsgkerala.gov.in/",
-    official_portal_name: "Kerala LSGD Sanchitha Property Tax Portal",
-    processing_time_days: 0,
-    processing_time_text: "Instant online receipt generation 24/7",
-    processing_time_text_ml: "ഓൺലൈനായി തത്സമയം രസീത് ലഭ്യമാകുന്നു (24 മണിക്കൂറും)",
-    fee_structure: "As per statutory assessment rate fixed by Tanur Municipal Council based on plinth area and building type.",
-    fee_structure_ml: "കെട്ടിടത്തിന്റെ തറ വിസ്തീർണ്ണവും ഉപയോഗവും അനുസരിച്ച് കൗൺസിൽ നിശ്ചയിച്ച നിരക്കിൽ.",
-    office_location: "Tanur Municipality Office, Revenue Section Counters, Ground Floor",
-    office_location_ml: "താനൂർ നഗരസഭാ കാര്യാലയം, ഗ്രൗണ്ട് ഫ്ലോർ റവന്യൂ കൗണ്ടറുകൾ",
-    contact_phone: "0494 2440232",
+    official_portal_url: "https://ksmart.lsgkerala.gov.in/",
+    official_portal_name: "K-Smart Kerala Building Permission System",
+    processing_time_days: 10,
+    processing_time_text: "7 to 10 working days",
+    fee_structure: "Statutory inspection fee as per KMBR schedule.",
+    office_location: "Tanur Municipality Office, 1st Floor Engineering Section",
+    contact_phone: "0494 2440228",
     contact_email: "tanurmunicipality@gmail.com",
-    working_hours: "Online: 24/7 | Office Cash Counter: 10:00 AM – 3:30 PM",
-    working_hours_ml: "ഓൺലൈൻ: 24 മണിക്കൂറും | ഓഫീസ് ക്യാഷ് കൗണ്ടർ: 10:00 AM – 3:30 PM",
+    working_hours: "Monday to Saturday: 10:00 AM – 5:00 PM",
     is_online_available: true,
-    online_system_name: "Sanchitha / K-Smart",
+    online_system_name: "K-Smart KMBR Module",
     last_verified_date: "2026-11-15",
-    source_reference: "Kerala Municipality Act 1994 (Property Tax Rules) & LSGD Notification",
+    source_reference: "Kerala Municipality Building Rules (KMBR) 2019",
+    faqs: [
+      {
+        question: "Can I get electricity and water connections without an Occupancy Certificate?",
+        answer: "No, KSEB and KWA mandate an official Municipal Occupancy Certificate / Door Number receipt for permanent utility connections.",
+      },
+    ],
+    views_count: 940,
+    supports_internal_application: true,
+    published: true,
   },
 
-  // 4. Social Security Welfare Pensions
+  // 8. Waste Management
+  {
+    id: "srv-waste-management",
+    slug: "haritha-karma-sena-waste-management",
+    title: "Haritha Karma Sena Non-Biodegradable Waste Collection",
+    category: "cat-water-sanitation",
+    category_name: "Water and Sanitation",
+    department: "Clean Kerala & Health Wing, Tanur Municipality",
+    summary: "Doorstep segregated non-biodegradable waste (plastics, glass, electronic waste) collection service covering all 45 wards of Tanur Municipality.",
+    eligibility: [
+      "All households, residential complexes, and commercial establishments in Tanur Municipality Wards 1 to 45",
+      "Compliance with source-level segregation of non-biodegradable materials",
+    ],
+    required_documents: [
+      "Municipality Door Number Tag or QR Code",
+      "Segregated clean dry plastics and non-biodegradable materials",
+    ],
+    procedure_steps: [
+      {
+        step_number: 1,
+        title: "Clean & Segregate at Source",
+        description: "Wash and dry household dry waste; segregate soft plastic covers, rigid bottles, glass, and electronic scrap.",
+      },
+      {
+        step_number: 2,
+        title: "Monthly Doorstep Collection",
+        description: "Trained Haritha Karma Sena members visit each house in the assigned ward as per the monthly ward calendar.",
+      },
+      {
+        step_number: 3,
+        title: "User Fee Receipt & RRF Transfer",
+        description: "Pay authorized ₹50 user fee and receive digital receipt; collected waste is transferred to Tanur Material Collection Facility (MCF).",
+      },
+    ],
+    official_portal_url: "https://cleankeralacompany.com/",
+    official_portal_name: "Clean Kerala Company & Suchitwa Mission Kerala",
+    processing_time_days: 30,
+    processing_time_text: "Monthly recurring ward collection cycle",
+    fee_structure: "₹50 per month for households; ₹100–₹500 for commercial shops as per council schedule.",
+    office_location: "Tanur Municipality Health Wing / Ward Level Haritha Karma Sena Clusters",
+    contact_phone: "0494 2440228",
+    contact_email: "tanurmunicipality@gmail.com",
+    working_hours: "Collection hours: 8:30 AM – 2:00 PM on designated ward days",
+    is_online_available: false,
+    online_system_name: "K-Smart Sanitation Tracking",
+    last_verified_date: "2026-11-15",
+    source_reference: "Solid Waste Management Rules 2016 & Kerala Government Order on User Fee",
+    faqs: [
+      {
+        question: "Is payment of Haritha Karma Sena user fee mandatory in Tanur?",
+        answer: "Yes, as per Kerala Government Orders and High Court directives, paying the monthly user fee is mandatory for all citizens.",
+      },
+    ],
+    views_count: 1780,
+    supports_internal_application: true,
+    published: true,
+  },
+
+  // 9. Drinking Water Connection
+  {
+    id: "srv-water-connection",
+    slug: "drinking-water-pipeline-connection",
+    title: "Kerala Water Authority (KWA) Drinking Water Connection",
+    category: "cat-water-sanitation",
+    category_name: "Water and Sanitation",
+    department: "Kerala Water Authority & Tanur Municipal Public Health Section",
+    summary: "Application for fresh domestic or commercial potable piped water supply connection under Jal Jeevan Mission and KWA Urban Water schemes.",
+    eligibility: [
+      "Residents and property owners in Tanur Municipality with property within accessible distance of existing KWA distribution pipeline",
+      "Clear title deed and municipal building tax receipt",
+    ],
+    required_documents: [
+      "Latest Tanur Municipal Property Tax Paid Receipt or Building Door Number Certificate",
+      "Copy of Registered Land Title Deed and Land Tax Receipt",
+      "Aadhaar Card copy of the property owner",
+      "Plumbing layout estimate by licensed KWA plumber",
+      "Road Cutting Permission from Tanur Municipality Public Works Wing (if pipeline crosses public road)",
+    ],
+    procedure_steps: [
+      {
+        step_number: 1,
+        title: "Online e-Tap Application",
+        description: "Submit connection request through KWA e-Tap portal with door number and plumbing estimate.",
+      },
+      {
+        step_number: 2,
+        title: "Assistant Engineer Feasibility Inspection",
+        description: "KWA Overseer inspects distribution main pressure, pipeline distance, and road cutting requirement.",
+      },
+      {
+        step_number: 3,
+        title: "Fee Remittance & Meter Installation",
+        description: "Pay connection charges online; licensed plumber installs meter and activates potable water supply.",
+      },
+    ],
+    official_portal_url: "https://kwa.kerala.gov.in/",
+    official_portal_name: "Kerala Water Authority e-Tap Portal",
+    processing_time_days: 14,
+    processing_time_text: "10 to 14 working days (subject to road cutting sanctions)",
+    fee_structure: "Statutory connection deposit and meter charges as per KWA tariff plus municipal road restoration fee.",
+    office_location: "KWA Sub-Division Office, Tirur Road, Tanur / Tanur Municipal Engineering Counter",
+    contact_phone: "0494 2440228",
+    contact_email: "tanurmunicipality@gmail.com",
+    working_hours: "Monday to Saturday: 10:00 AM – 5:00 PM",
+    is_online_available: true,
+    online_system_name: "KWA e-Tap Portal",
+    last_verified_date: "2026-11-15",
+    source_reference: "Kerala Water Authority Water Supply Regulations",
+    faqs: [
+      {
+        question: "Do I need Municipality approval before applying for water connection?",
+        answer: "Yes, an authorized building door number certificate from Tanur Municipality is required.",
+      },
+    ],
+    views_count: 1210,
+    supports_internal_application: true,
+    published: true,
+  },
+
+  // 10. Sanitary Inspection & NOC
+  {
+    id: "srv-sanitary-noc",
+    slug: "sanitary-inspection-noc",
+    title: "Sanitary Inspection & Public Health NOC",
+    category: "cat-public-health",
+    category_name: "Public Health",
+    department: "Health & Sanitation Wing, Tanur Municipality",
+    summary: "Health inspection and No Objection Certificate (NOC) for educational institutions, hostels, auditoriums, and community amenities.",
+    eligibility: [
+      "Managers or trustees of schools, colleges, daycare centers, hostels, and banquet halls located in Tanur Municipality",
+      "Premises having adequate potable water, waste disposal, and ventilation systems",
+    ],
+    required_documents: [
+      "Water Quality Testing Certificate from an accredited public health laboratory",
+      "Building Door Number and latest Property Tax Receipt",
+      "Layout plan showing toilet facilities and septic tank soak-pit distance",
+      "Valid Fire Safety NOC (for institutions)",
+    ],
+    procedure_steps: [
+      {
+        step_number: 1,
+        title: "Application Submission",
+        description: "Submit request through K-Smart or Health Section counter with laboratory water test results.",
+      },
+      {
+        step_number: 2,
+        title: "Health Inspector On-Site Inspection",
+        description: "Municipal Health Inspector visits the premises, inspects sanitation, drinking water storage, and kitchen hygiene.",
+      },
+      {
+        step_number: 3,
+        title: "NOC Issuance",
+        description: "Upon satisfying statutory norms, Health Supervisor issues digitally signed Sanitary Certificate.",
+      },
+    ],
+    official_portal_url: "https://ksmart.lsgkerala.gov.in/",
+    official_portal_name: "K-Smart Kerala Health Module",
+    processing_time_days: 7,
+    processing_time_text: "5 to 7 working days",
+    fee_structure: "₹250 to ₹1,000 based on institution category as per council schedule.",
+    office_location: "Tanur Municipality Office, Health Section, Ground Floor",
+    contact_phone: "0494 2440228",
+    contact_email: "tanurmunicipality@gmail.com",
+    working_hours: "Monday to Saturday: 10:00 AM – 5:00 PM",
+    is_online_available: true,
+    online_system_name: "K-Smart Kerala",
+    last_verified_date: "2026-11-15",
+    source_reference: "Kerala Public Health Act 2023",
+    faqs: [
+      {
+        question: "How long is the Sanitary NOC valid?",
+        answer: "The sanitary inspection certificate is valid for one financial year and must be renewed annually.",
+      },
+    ],
+    views_count: 670,
+    supports_internal_application: true,
+    published: true,
+  },
+
+  // 11. Food Business Hygiene Compliance
+  {
+    id: "srv-food-safety-hygiene",
+    slug: "food-business-hygiene-compliance",
+    title: "Food Business Hygiene & Vector Control Verification",
+    category: "cat-public-health",
+    category_name: "Public Health",
+    department: "Health Wing, Tanur Municipality & Food Safety Kerala",
+    summary: "Periodic hygienic verification, vector control inspection, and municipal health clearance for restaurants, catering units, and fish stalls.",
+    eligibility: [
+      "Commercial food handlers, bakery operators, restaurants, fish vendors, and cold storage units in Tanur",
+      "Holders of valid FSSAI registration or license",
+    ],
+    required_documents: [
+      "FSSAI Food License / Registration Certificate",
+      "Medical Fitness Certificates of all food handlers / staff",
+      "Waste water management and grease trap compliance declaration",
+      "Pest control certificate from accredited vendor",
+    ],
+    procedure_steps: [
+      {
+        step_number: 1,
+        title: "Application & Schedule",
+        description: "Apply online via K-Smart health portal with staff medical clearances.",
+      },
+      {
+        step_number: 2,
+        title: "Joint Health Squad Inspection",
+        description: "Municipal food safety squad checks kitchen cleanliness, food storage temperature, and grease disposal.",
+      },
+      {
+        step_number: 3,
+        title: "Compliance Clearance",
+        description: "Clean certificate issued and linked to commercial trade license renewal.",
+      },
+    ],
+    official_portal_url: "https://foscos.fssai.gov.in/",
+    official_portal_name: "FSSAI FoSCoS & K-Smart Kerala",
+    processing_time_days: 7,
+    processing_time_text: "4 to 7 working days",
+    fee_structure: "Statutory health inspection fee as per municipal schedule.",
+    office_location: "Tanur Municipality Office, Health Section, Ground Floor",
+    contact_phone: "0494 2440228",
+    contact_email: "tanurmunicipality@gmail.com",
+    working_hours: "Monday to Saturday: 10:00 AM – 5:00 PM",
+    is_online_available: true,
+    online_system_name: "FSSAI & K-Smart",
+    last_verified_date: "2026-11-15",
+    source_reference: "Food Safety and Standards Act 2006 & Kerala Public Health Act 2023",
+    faqs: [
+      {
+        question: "Do small tea stalls need this clearance?",
+        answer: "Yes, all commercial food preparation units must maintain basic health clearance and food handler fitness certificates.",
+      },
+    ],
+    views_count: 530,
+    supports_internal_application: true,
+    published: true,
+  },
+
+  // 12. Trade License Issuance
+  {
+    id: "srv-trade-license",
+    slug: "trade-license-issuance",
+    title: "Dangerous & Offensive (D&O) Trade Licence",
+    category: "cat-business",
+    category_name: "Trade and Business Licences",
+    department: "Health Wing, Tanur Municipality",
+    summary: "Grant and annual renewal of Dangerous and Offensive (D&O) trade licenses for commercial shops, workshops, industries, and retail enterprises.",
+    eligibility: [
+      "Business owners, entrepreneurs, or commercial tenants operating within Tanur Municipality Wards 1 to 45",
+      "Premises located in conforming building with valid door number and rent agreement",
+    ],
+    required_documents: [
+      "Building Door Number and latest Municipal Property Tax Receipt",
+      "Rent Agreement with property owner (if running in rented premises) or ownership proof",
+      "Consent letter from landowner",
+      "Pollution Control Board (PCB) consent (for designated industrial/manufacturing categories)",
+      "Fire NOC (for high-occupancy or inflammable trade categories)",
+    ],
+    procedure_steps: [
+      {
+        step_number: 1,
+        title: "Online K-Smart Filing",
+        description: "Submit trade details, horsepower requirement, and worker strength on K-Smart trade license portal.",
+      },
+      {
+        step_number: 2,
+        title: "Inspection & Classification",
+        description: "Health Inspector verifies commercial nature and assigns statutory D&O schedule tier.",
+      },
+      {
+        step_number: 3,
+        title: "Payment & Instant License Download",
+        description: "Pay license fee online; QR-coded digital trade license is generated immediately.",
+      },
+    ],
+    official_portal_url: "https://ksmart.lsgkerala.gov.in/",
+    official_portal_name: "K-Smart Kerala Trade Licence Portal",
+    processing_time_days: 7,
+    processing_time_text: "Instant self-certification for non-hazardous shops; 7 days for D&O trades",
+    fee_structure: "Statutory schedule based on trade category and motive power (₹250 to ₹5,000).",
+    office_location: "Tanur Municipality Office, Health Section, Ground Floor",
+    contact_phone: "0494 2440228",
+    contact_email: "tanurmunicipality@gmail.com",
+    working_hours: "Monday to Saturday: 10:00 AM – 5:00 PM",
+    is_online_available: true,
+    online_system_name: "K-Smart Kerala",
+    last_verified_date: "2026-11-15",
+    source_reference: "Kerala Municipality (Execution of Public Works & Trade Licensing) Rules",
+    faqs: [
+      {
+        question: "When is the annual trade license renewal deadline?",
+        answer: "Trade licenses must be renewed between January 1 and February 28 each year for the upcoming financial year.",
+      },
+    ],
+    views_count: 1650,
+    supports_internal_application: true,
+    published: true,
+  },
+
+  // 13. Commercial Shop & Signboard Registration
+  {
+    id: "srv-commercial-signboard",
+    slug: "commercial-shop-registration",
+    title: "Commercial Establishment & Signboard Permission",
+    category: "cat-business",
+    category_name: "Trade and Business Licences",
+    department: "Revenue & Engineering Wing, Tanur Municipality",
+    summary: "Statutory permission for external business nameboards, LED signages, and advertisement hoardings in commercial corridors of Tanur.",
+    eligibility: [
+      "Commercial establishments and retail shops operating in Tanur Municipality",
+      "Signage complying with visual safety and pedestrian clearance regulations",
+    ],
+    required_documents: [
+      "Copy of valid Tanur Trade Licence",
+      "Photograph and dimensional layout drawing of the proposed signboard",
+      "Structural stability certificate (for large cantilever or rooftop hoardings)",
+    ],
+    procedure_steps: [
+      {
+        step_number: 1,
+        title: "Online Submission",
+        description: "Submit board dimensions (sq.ft) and installation photos via K-Smart advertisement portal.",
+      },
+      {
+        step_number: 2,
+        title: "Engineering Review",
+        description: "Municipal overseer reviews road setback, non-obstruction to traffic, and electrical safety.",
+      },
+      {
+        step_number: 3,
+        title: "Advertisement Tax Remittance",
+        description: "Pay statutory advertisement tax per sq.ft and receive digital permit.",
+      },
+    ],
+    official_portal_url: "https://ksmart.lsgkerala.gov.in/",
+    official_portal_name: "K-Smart Kerala Advertisement Portal",
+    processing_time_days: 5,
+    processing_time_text: "3 to 5 working days",
+    fee_structure: "Calculated based on display square footage as per municipal advertisement bylaw.",
+    office_location: "Tanur Municipality Office, Revenue Section, Ground Floor",
+    contact_phone: "0494 2440228",
+    contact_email: "tanurmunicipality@gmail.com",
+    working_hours: "Monday to Saturday: 10:00 AM – 5:00 PM",
+    is_online_available: true,
+    online_system_name: "K-Smart Kerala",
+    last_verified_date: "2026-11-15",
+    source_reference: "Kerala Municipality (Control of Advertisements) Rules",
+    faqs: [
+      {
+        question: "Do simple shop nameboards need advertisement tax?",
+        answer: "Standard non-illuminated nameboards up to authorized statutory size are exempted; illuminated and oversized boards require tax.",
+      },
+    ],
+    views_count: 480,
+    supports_internal_application: true,
+    published: true,
+  },
+
+  // 14. Social Welfare Pension
   {
     id: "srv-welfare-pension",
-    title: "Social Security Welfare Pensions (Indira Gandhi / Sevana)",
-    title_ml: "സാമൂഹിക സുരക്ഷാ ക്ഷേമ പെൻഷനുകൾ (സേവന)",
-    category: "welfare_pensions",
-    category_name: "Welfare Pensions",
-    category_name_ml: "ക്ഷേമ പെൻഷനുകൾ",
+    slug: "social-security-welfare-pension",
+    title: "Social Security Welfare Pensions (Sevana DBT)",
+    category: "cat-social-welfare",
+    category_name: "Social Welfare",
     department: "Welfare & Social Justice Wing, Tanur Municipality",
-    department_ml: "ക്ഷേമ വിഭാഗം, താനൂർ നഗരസഭ",
-    summary: "Application and direct benefit transfer (DBT) for Indira Gandhi National Old Age Pension, Widow Pension, Disability Pension, Agricultural Worker Pension, and 50+ Unmarried Women Pension.",
-    summary_ml: "വാർദ്ധക്യകാല പെൻഷൻ, വിധവാ പെൻഷൻ, ഭിന്നശേഷി പെൻഷൻ, കർഷകത്തൊഴിലാളി പെൻഷൻ, 50 വയസ്സ് കഴിഞ്ഞ അവിവാഹിത പെൻഷൻ എന്നിവയ്ക്കുള്ള അപേക്ഷ സമർപ്പണം.",
+    summary: "Application and direct benefit transfer (DBT) for Old Age Pension, Widow Pension, Disability Pension, Agricultural Worker Pension, and 50+ Unmarried Women Pension.",
+    eligibility: [
+      "Permanent resident of Tanur Municipality Wards 1 to 45",
+      "Family annual income below ₹1,00,000 (from Village Office Income Certificate) or valid BPL Ration Card",
+      "Age criteria: 60+ for Old Age, 50+ for Unmarried Women, or certified disability/widow status",
+      "Not in receipt of other statutory service pensions or EPF pensions exceeding statutory limits",
+    ],
     required_documents: [
       "Aadhaar Card copy of the applicant",
       "Ration Card copy (BPL category or family annual income certificate below ₹1,00,000 from Village Office)",
@@ -237,179 +908,558 @@ export const TANUR_MUNICIPAL_SERVICES: PublicServiceDetail[] = [
       "Disability Medical Board Certificate (minimum 40% disability for Disability Pension)",
       "Death Certificate of husband (for Widow Pension)",
     ],
-    required_documents_ml: [
-      "അപേക്ഷകന്റെ ആധാർ കാർഡ് പകർപ്പ്",
-      "റേഷൻ കാർഡ് പകർപ്പ് (വാർഷിക കുടുംബ വരുമാനം ₹1,00,000 ൽ താഴെയാണെന്ന വില്ലേജ് വരുമാന സർട്ടിഫിക്കറ്റ്)",
-      "ആധാറുമായി ബന്ധിപ്പിച്ച ബാങ്ക് പാസ്സ്ബുക്ക് പകർപ്പ്",
-      "പ്രായം തെളിയിക്കുന്ന രേഖ (60 വയസ്സ് തികഞ്ഞതിന്)",
-      "മെഡിക്കൽ ബോർഡ് സർട്ടിഫിക്കറ്റ് (ഭിന്നശേഷി പെൻഷന് 40% ന് മുകളിൽ അംഗവൈകല്യം)",
-      "ഭർത്താവിന്റെ മരണ സർട്ടിഫിക്കറ്റ് (വിധവാ പെൻഷന്)",
-    ],
     procedure_steps: [
       {
         step_number: 1,
         title: "Application Submission",
-        title_ml: "അപേക്ഷ സമർപ്പണം",
         description: "Submit online through Sevana Pension portal or at the Tanur Municipality Welfare Counter / Akshaya Centre.",
-        description_ml: "അക്ഷയ കേന്ദ്രം വഴിയോ താനൂർ നഗരസഭാ ക്ഷേമ കൗണ്ടർ വഴിയോ സേവന പോർട്ടലിൽ അപേക്ഷിക്കുക.",
       },
       {
         step_number: 2,
         title: "Ward Enquiry & Field Verification",
-        title_ml: "വാർഡ് തല ഫീൽഡ് ഇൻസ്പെക്ഷൻ",
         description: "Municipal enquiry officer conducts field verification at the applicant's residence in the respective ward.",
-        description_ml: "വാർഡ് തലത്തിൽ ഉദ്യോഗസ്ഥൻ നേരിട്ടെത്തി കുടുംബ സാഹചര്യം പരിശോധിച്ച് ശുപാർശ നൽകുന്നു.",
       },
       {
         step_number: 3,
         title: "Council Approval & DBT Disbursement",
-        title_ml: "കൗൺസിൽ അംഗീകാരവും പെൻഷൻ വിതരണവും",
         description: "Municipal Council approves eligible beneficiaries; monthly pension of ₹1,600 disbursed directly to bank account.",
-        description_ml: "നഗരസഭാ കൗൺസിൽ അംഗീകാരം നൽകുന്നതോടെ പ്രതിമാസം ₹1,600 നേരിട്ട് ബാങ്ക് അക്കൗണ്ടിലേക്ക് ലഭിക്കുന്നു.",
       },
     ],
     official_portal_url: "https://welfarepension.lsgkerala.gov.in/",
     official_portal_name: "Sevana Social Security Pension Portal (Government of Kerala)",
     processing_time_days: 30,
     processing_time_text: "20 to 30 working days (subject to monthly council meeting approval)",
-    processing_time_text_ml: "20 മുതൽ 30 പ്രവൃത്തി ദിവസങ്ങൾ (പ്രതിമാസ കൗൺസിൽ അംഗീകാരത്തിന് വിധേയം)",
     fee_structure: "Completely Free. Zero government fee.",
-    fee_structure_ml: "പൂർണ്ണമായും സൗജന്യം. യാതൊരു ഫീസും നൽകേണ്ടതില്ല.",
     office_location: "Tanur Municipality Office, Welfare Section, First Floor",
-    office_location_ml: "താനൂർ നഗരസഭാ കാര്യാലയം, ക്ഷേമ വിഭാഗം, ഒന്നാം നില",
-    contact_phone: "0494 2440232",
+    contact_phone: "0494 2440228",
     contact_email: "tanurmunicipality@gmail.com",
     working_hours: "Monday to Saturday: 10:00 AM – 5:00 PM",
-    working_hours_ml: "തിങ്കൾ മുതൽ ശനി വരെ: രാവിലെ 10:00 – വൈകിട്ട് 5:00",
     is_online_available: true,
     online_system_name: "Sevana Pension Portal",
     last_verified_date: "2026-11-15",
     source_reference: "Kerala Social Security Pension Rules & LSGD Circulars",
+    faqs: [
+      {
+        question: "What is the monthly pension amount?",
+        answer: "The statutory social security welfare pension is ₹1,600 per month, directly credited to the beneficiary's Aadhaar-linked bank account.",
+      },
+      {
+        question: "Is annual mustering (biometric KYC) required?",
+        answer: "Yes, beneficiaries must complete annual biometric mustering at any Akshaya Centre to continue uninterrupted disbursement.",
+      },
+    ],
+    views_count: 2190,
+    supports_internal_application: true,
+    published: true,
   },
 
-  // 5. Haritha Karma Sena Waste Management
+  // 15. Differently-Abled Financial & Assistive Aid
   {
-    id: "srv-waste-management",
-    title: "Haritha Karma Sena Non-Biodegradable Waste Collection",
-    title_ml: "ഹരിത കർമ്മസേന അജൈവ മാലിന്യ ശേഖരണം",
-    category: "sanitation_health",
-    category_name: "Sanitation & Waste",
-    category_name_ml: "മാലിന്യ സംസ്കരണവും ശുചിത്വവും",
-    department: "Clean Kerala & Health Wing, Tanur Municipality",
-    department_ml: "ആരോഗ്യ വിഭാഗം & ക്ലീൻ കേരള കമ്പനി, താനൂർ നഗരസഭ",
-    summary: "Doorstep segregated non-biodegradable waste (plastics, glass, electronic waste) collection service covering all 44 wards of Tanur Municipality.",
-    summary_ml: "താനൂർ നഗരസഭയിലെ 44 വാർഡുകളിലും വീടുകളിൽ നിന്നും സ്ഥാപനങ്ങളിൽ നിന്നും തരംതിരിച്ച അജൈവ മാലിന്യങ്ങൾ (പ്ലാസ്റ്റിക്, ചില്ല്, ഇ-മാലിന്യം) ശേഖരിക്കുന്ന സേവനം.",
-    required_documents: [
-      "Municipality Door Number Tag / QR Code",
-      "Segregated clean dry plastics and non-biodegradable materials",
+    id: "srv-disability-aid",
+    slug: "differently-abled-welfare-support",
+    title: "Differently-Abled Financial & Assistive Aid",
+    category: "cat-social-welfare",
+    category_name: "Social Welfare",
+    department: "Welfare & Social Justice Wing, Tanur Municipality",
+    summary: "Municipal developmental plan schemes providing motorized wheelchairs, hearing aids, educational scholarships, and self-employment subsidies.",
+    eligibility: [
+      "Permanent residents of Tanur Municipality with certified benchmark disability of 40% or above",
+      "Annual household income within statutory limits specified in Tanur Municipal annual plan project guidelines",
     ],
-    required_documents_ml: [
-      "നഗരസഭാ ഡോർ നമ്പർ ടാഗ് / ക്യു.ആർ കോഡ്",
-      "കഴുകി ഉണക്കി തരംതിരിച്ച പ്ലാസ്റ്റിക് മാലിന്യങ്ങൾ",
+    required_documents: [
+      "Unique Disability ID (UDID) Card or District Medical Board Certificate",
+      "Aadhaar Card and Ration Card copy",
+      "Bank Account Passbook copy linked to Aadhaar",
+      "Doctor's prescription for specific assistive device (wheelchair/hearing aid)",
     ],
     procedure_steps: [
       {
         step_number: 1,
-        title: "Clean & Segregate at Source",
-        title_ml: "വീടുകളിൽ തരംതിരിക്കുക",
-        description: "Wash and dry household dry waste; segregate soft plastic covers, rigid bottles, glass, and electronic scrap.",
-        description_ml: "പ്ലാസ്റ്റിക് കവറുകൾ, കുപ്പികൾ, ഗ്ലാസ് എന്നിവ വൃത്തിയാക്കി പ്രത്യേകം ബാഗുകളിൽ സൂക്ഷിക്കുക.",
+        title: "Application during Plan Call",
+        description: "Submit application during Tanur Municipality's annual plan project notification cycle.",
       },
       {
         step_number: 2,
-        title: "Monthly Doorstep Collection",
-        title_ml: "മാസ തോറുമുള്ള വീട്ടുപടിക്കൽ ശേഖരണം",
-        description: "Trained Haritha Karma Sena members visit each house in the assigned ward as per the monthly ward calendar.",
-        description_ml: "വാർഡ് കലണ്ടർ പ്രകാരം പരിശീലനം ലഭിച്ച ഹരിത കർമ്മസേനാംഗങ്ങൾ വീടുകളിലെത്തി മാലിന്യം ഏറ്റുവാങ്ങുന്നു.",
+        title: "Medical & Welfare Committee Scrutiny",
+        description: "Standing Committee for Welfare scrutinizes applications with medical team recommendations.",
       },
       {
         step_number: 3,
-        title: "User Fee Receipt & RRF Transfer",
-        title_ml: "യൂസർ ഫീ രസീതും ആർ.ആർ.എഫ് കൈമാറ്റവും",
-        description: "Pay authorized ₹50 user fee and receive digital receipt; collected waste is transferred to Tanur Material Collection Facility (MCF).",
-        description_ml: "സർക്കാർ നിശ്ചയിച്ച ₹50 യൂസർ ഫീ അടച്ച് രസീത് വാങ്ങുക; മാലിന്യം നഗരസഭാ എം.സി.എഫിലേക്ക് മാറ്റുന്നു.",
+        title: "Distribution Camp & Benefit Handover",
+        description: "Approved aids, appliances, or financial grants are handed over at municipal distribution camps.",
       },
     ],
-    official_portal_url: "https://cleankeralacompany.com/",
-    official_portal_name: "Clean Kerala Company & Suchitwa Mission Kerala",
-    processing_time_days: 30,
-    processing_time_text: "Monthly recurring ward collection cycle",
-    processing_time_text_ml: "മാസം തോറുമുള്ള വാർഡ് കളക്ഷൻ കലണ്ടർ അനുസരിച്ച്",
-    fee_structure: "₹50 per month for households; ₹100–₹500 for commercial shops as per council schedule.",
-    fee_structure_ml: "വീടുകൾക്ക് പ്രതിമാസം ₹50; വാണിജ്യ സ്ഥാപനങ്ങൾക്ക് വലിപ്പത്തിനനുസരിച്ച് ₹100 മുതൽ ₹500 വരെ.",
-    office_location: "Tanur Municipality Health Wing / Ward Level Haritha Karma Sena Clusters",
-    office_location_ml: "താനൂർ നഗരസഭാ ആരോഗ്യ വിഭാഗം / വാർഡ് തല ഹരിത കർമ്മസേന ക്ലസ്റ്ററുകൾ",
-    contact_phone: "0494 2440232",
+    official_portal_url: "https://services.lsgkerala.gov.in/",
+    official_portal_name: "Kerala LSGD ILGMS Portal",
+    processing_time_days: 45,
+    processing_time_text: "Allocated according to Annual Municipal Plan Scheme schedule",
+    fee_structure: "Completely Free municipal welfare service.",
+    office_location: "Tanur Municipality Office, Welfare Section, First Floor",
+    contact_phone: "0494 2440228",
     contact_email: "tanurmunicipality@gmail.com",
-    working_hours: "Collection hours: 8:30 AM – 2:00 PM on designated ward days",
-    working_hours_ml: "ശേഖരണ സമയം: രാവിലെ 8:30 മുതൽ ഉച്ചയ്ക്ക് 2:00 വരെ",
-    is_online_available: false,
-    online_system_name: "K-Smart Sanitation Tracking",
+    working_hours: "Monday to Saturday: 10:00 AM – 5:00 PM",
+    is_online_available: true,
+    online_system_name: "ILGMS Kerala",
     last_verified_date: "2026-11-15",
-    source_reference: "Solid Waste Management Rules 2016 & Kerala Government Order (G.O.) on User Fee",
+    source_reference: "Kerala Rights of Persons with Disabilities Rules & Municipal Plan Scheme",
+    faqs: [
+      {
+        question: "Can children under 18 apply for scholarship assistance?",
+        answer: "Yes, students with disabilities enrolled in recognized schools in Tanur qualify for annual municipal educational scholarships.",
+      },
+    ],
+    views_count: 760,
+    supports_internal_application: true,
+    published: true,
   },
 
-  // 6. KSEB & Streetlight Maintenance Request
+  // 16. Town Hall Booking
+  {
+    id: "srv-hall-booking",
+    slug: "community-town-hall-booking",
+    title: "Tanur Municipal Town Hall & Community Center Booking",
+    category: "cat-other",
+    category_name: "Other Municipal Services",
+    department: "General Administration Wing, Tanur Municipality",
+    summary: "Reservation and booking of Tanur Municipal Town Hall, mini-auditorium, and community centers for weddings, seminars, and cultural events.",
+    eligibility: [
+      "Citizens, educational institutions, registered trusts, and socio-cultural organizations in Tanur and surrounding areas",
+      "Events strictly adhering to public decorum and municipal hall guidelines",
+    ],
+    required_documents: [
+      "Photo Identity Proof of applicant (Aadhaar / Voter ID / PAN)",
+      "Program Notice or Wedding Invitation Card (if applicable)",
+      "Organization Registration Certificate (for non-profits and institutions)",
+    ],
+    procedure_steps: [
+      {
+        step_number: 1,
+        title: "Check Date Availability",
+        description: "Check the calendar at Tanur Municipality office or online portal for open booking slots.",
+      },
+      {
+        step_number: 2,
+        title: "Application & Security Deposit",
+        description: "Submit reservation form with event details and pay required statutory caution deposit.",
+      },
+      {
+        step_number: 3,
+        title: "Allotment Confirmation",
+        description: "Municipal Secretary confirms allotment slip with sound license and waste management conditions.",
+      },
+    ],
+    official_portal_url: "https://ksmart.lsgkerala.gov.in/",
+    official_portal_name: "K-Smart Kerala Facilities Booking",
+    processing_time_days: 2,
+    processing_time_text: "1 to 2 working days",
+    fee_structure: "₹5,000 to ₹25,000 per slot depending on AC/Non-AC hall and event nature, plus refundable caution deposit.",
+    office_location: "Tanur Municipality Office, General Administration Section, Ground Floor",
+    contact_phone: "0494 2440228",
+    contact_email: "tanurmunicipality@gmail.com",
+    working_hours: "Monday to Saturday: 10:00 AM – 5:00 PM",
+    is_online_available: true,
+    online_system_name: "K-Smart Kerala",
+    last_verified_date: "2026-11-15",
+    source_reference: "Tanur Municipal Council Hall Rental Bylaw",
+    faqs: [
+      {
+        question: "Is the security deposit refundable?",
+        answer: "Yes, the caution deposit is fully refunded within 7 days post-event upon clearance of zero property damage.",
+      },
+    ],
+    views_count: 1050,
+    supports_internal_application: true,
+    published: true,
+  },
+
+  // 17. Streetlight Repair Request
   {
     id: "srv-streetlight-repair",
-    title: "Streetlight Maintenance & Repair Request",
-    title_ml: "തെരുവ് വിളക്ക് അറ്റകുറ്റപ്പണി അപേക്ഷ",
-    category: "utilities_infrastructure",
-    category_name: "Utilities & Streetlights",
-    category_name_ml: "പൊതു സൗകര്യങ്ങളും തെരുവ് വിളക്കും",
+    slug: "streetlight-maintenance-request",
+    title: "Streetlight Maintenance & Public Works Repair",
+    category: "cat-other",
+    category_name: "Other Municipal Services",
     department: "Electrical & Public Works Wing, Tanur Municipality & KSEB",
-    department_ml: "ഇലക്ട്രിക്കൽ വിഭാഗം, താനൂർ നഗരസഭ & കെ.എസ്.ഇ.ബി",
-    summary: "Lodging complaints regarding non-functioning LED streetlights, broken electric poles, or dark spots across all 44 wards of Tanur Municipality.",
-    summary_ml: "താനൂർ നഗരസഭാ പരിധിയിലെ തെരുവ് വിളക്കുകളുടെ തകരാർ പരിഹരിക്കാനും പുതിയ ലൈറ്റുകൾ സ്ഥാപിക്കാനുമുള്ള അപേക്ഷ.",
+    summary: "Reporting non-functioning LED streetlights, broken electric poles, or dark spots across all 45 wards of Tanur Municipality.",
+    eligibility: [
+      "Any resident, pedestrian, or shopkeeper in Tanur Municipality",
+      "Public streetlight installed under municipal scheme",
+    ],
     required_documents: [
       "Electric Pole Number (marked in yellow on pole, e.g. TNR-18-042)",
-      "Ward Number and Locality Landmark",
+      "Ward Number (1 to 45) and Locality Landmark",
       "Complainant Contact Mobile Number",
-    ],
-    required_documents_ml: [
-      "ഇലക്ട്രിക് പോസ്റ്റ് നമ്പർ (പോസ്റ്റിൽ മഞ്ഞ പെയിന്റിൽ രേഖപ്പെടുത്തിയത്)",
-      "വാർഡ് നമ്പറും പ്രധാന ലാൻഡ്‌മാർക്കും",
-      "പരാതിക്കാരന്റെ മൊബൈൽ നമ്പർ",
     ],
     procedure_steps: [
       {
         step_number: 1,
         title: "Report via Civic Connect / Toll-free",
-        title_ml: "പരാതി രജിസ്റ്റർ ചെയ്യുക",
-        description: "Submit request through OUR NATION Civic Connect or call Tanur Municipality Electrical Helpdesk.",
-        description_ml: "ഔർ നേഷൻ സിവിക് കണക്ട് വഴിയോ നഗരസഭാ ഹെൽപ്പ്‌ഡെസ്ക് വഴിയോ പോസ്റ്റ് നമ്പർ നൽകി പരാതി നൽകുക.",
+        description: "Submit request through OUR NATION Civic Issue Reporting or call Tanur Municipality Electrical Helpdesk.",
       },
       {
         step_number: 2,
         title: "Work Order to Maintenance Contractor",
-        title_ml: "വർക്ക് ഓർഡർ കൈമാറൽ",
-        description: "Municipal overseer batches complaints and assigns maintenance team with spare LED fittings.",
-        description_ml: "ഓവർസിയർ പരാതികൾ പരിശോധിച്ച് അറ്റകുറ്റപ്പണി നടത്തുന്ന കോൺട്രാക്ടർക്ക് കൈമാറുന്നു.",
+        description: "Municipal electrical overseer batches complaints and assigns maintenance team with spare LED fittings.",
       },
       {
         step_number: 3,
         title: "On-site Rectification & Verification",
-        title_ml: "ലൈറ്റ് നന്നാക്കലും പരിശോധനയും",
         description: "Maintenance vehicle visits pole, replaces driver/fittings, and marks issue resolved.",
-        description_ml: "മെയിന്റനൻസ് സംഘം സ്ഥലത്തെത്തി ലൈറ്റ് ശരിയാക്കി സ്റ്റാറ്റസ് അപ്‌ഡേറ്റ് ചെയ്യുന്നു.",
       },
     ],
-    official_portal_url: "/civic-connect",
-    official_portal_name: "OUR NATION Civic Connect & KSEB Portal",
+    official_portal_url: "/civic/report",
+    official_portal_name: "OUR NATION Civic Issue Reporting & KSEB Helpdesk",
     processing_time_days: 3,
     processing_time_text: "2 to 4 working days",
-    processing_time_text_ml: "2 മുതൽ 4 പ്രവൃത്തി ദിവസങ്ങൾ",
     fee_structure: "Completely Free public maintenance service.",
-    fee_structure_ml: "പൂർണ്ണമായും സൗജന്യം.",
-    office_location: "Tanur Municipality Office, Public Works Section",
-    office_location_ml: "താനൂർ നഗരസഭാ കാര്യാലയം, പൊതുമരാമത്ത് വിഭാഗം",
-    contact_phone: "0494 2440232",
+    office_location: "Tanur Municipality Office, Public Works Section, Ground Floor",
+    contact_phone: "0494 2440228",
     contact_email: "tanurmunicipality@gmail.com",
     working_hours: "Monday to Saturday: 10:00 AM – 5:00 PM (Emergency KSEB: 1912)",
-    working_hours_ml: "തിങ്കൾ മുതൽ ശനി വരെ: രാവിലെ 10:00 – വൈകിട്ട് 5:00 (കെ.എസ്.ഇ.ബി എമർജൻസി: 1912)",
     is_online_available: true,
     online_system_name: "OUR NATION Civic Connect / K-Smart",
     last_verified_date: "2026-11-15",
     source_reference: "Tanur Municipal Council Resolution on Streetlight Maintenance",
+    faqs: [
+      {
+        question: "Can new streetlights be requested for dark lanes?",
+        answer: "Yes, proposals for new streetlights are vetted during ward committee meetings and implemented through municipal development funds.",
+      },
+    ],
+    views_count: 1540,
+    supports_internal_application: true,
+    published: true,
   },
 ];
+
+// Helper to look up category by key or ID
+export function getServiceCategoryByKey(key: string): ServiceCategoryMeta | undefined {
+  return SERVICE_CATEGORIES.find(c => c.key === key || c.id === key);
+}
+
+// ---------------------------------------------------------------------------
+// IN-MEMORY / PERSISTED PUBLIC SERVICE APPLICATION STORE
+// ---------------------------------------------------------------------------
+
+class PublicServiceStore {
+  private services: PublicServiceDetail[] = [...TANUR_MUNICIPAL_SERVICES];
+  private applications: PublicServiceApplication[] = [
+    // Seed initial application for Fathima Tanur (usr-fathima / u0000000-0000-0000-0000-000000000003)
+    {
+      id: "app-tnr-2026-001",
+      reference_no: "PS-TNR-2026-1001",
+      service_id: "srv-birth-reg",
+      service_title: "Birth Registration & Digital Certificate Issuance",
+      service_category: "cat-certificates",
+      applicant_id: "u0000000-0000-0000-0000-000000000003",
+      applicant_name: "Fathima Tanur",
+      applicant_email: "fathima@tanur.gov.in",
+      applicant_phone: "0494 2440228",
+      ward_number: 12,
+      documents: [
+        { name: "Hospital Discharge Summary", status: "verified", note: "Verified against Tanur Taluk Hospital records" },
+        { name: "Father & Mother Aadhaar Cards", status: "verified", note: "UIDAI biometric match confirmed" },
+        { name: "Form 1 Reporting Form", status: "verified", note: "Signed by parent" },
+      ],
+      notes: "Requesting assistance for digital birth certificate verification before statutory K-Smart submission.",
+      status: "documents_verified",
+      status_notes: "Hospital discharge slip and parent Aadhaar cards verified against Tanur Registrar records. Ready for portal download.",
+      created_at: "2026-11-20T10:30:00.000Z",
+      updated_at: "2026-11-21T14:15:00.000Z",
+      timeline: [
+        {
+          date: "2026-11-20T10:30:00.000Z",
+          status: "submitted",
+          actor: "Fathima Tanur (Applicant)",
+          note: "Guidance application submitted through OUR NATION platform.",
+        },
+        {
+          date: "2026-11-20T15:00:00.000Z",
+          status: "under_review",
+          actor: "Tanur Helpdesk Officer",
+          note: "Application taken up for document scrutiny.",
+        },
+        {
+          date: "2026-11-21T14:15:00.000Z",
+          status: "documents_verified",
+          actor: "Municipal Registrar Section",
+          note: "Document verification complete. Guidance notes issued for online K-Smart download.",
+        },
+      ],
+    },
+    // Seed sample property tax assistance
+    {
+      id: "app-tnr-2026-002",
+      reference_no: "PS-TNR-2026-1002",
+      service_id: "srv-property-tax",
+      service_title: "Property Tax Assessment & Online Payment",
+      service_category: "cat-property-tax",
+      applicant_id: "u0000000-0000-0000-0000-000000000003",
+      applicant_name: "Fathima Tanur",
+      applicant_email: "fathima@tanur.gov.in",
+      applicant_phone: "0494 2440228",
+      ward_number: 12,
+      documents: [
+        { name: "Previous Year Tax Receipt", status: "verified", note: "Ward 12 / Door 452A" },
+        { name: "Ownership Deed Copy", status: "verified", note: "Registered title deed verified" },
+      ],
+      notes: "Need calculation confirmation for plinth area rebate before online Sanchitha payment.",
+      status: "completed",
+      status_notes: "Demand verified as ₹840 with early bird rebate. Sanchitha direct link provided.",
+      created_at: "2026-11-18T09:00:00.000Z",
+      updated_at: "2026-11-19T11:30:00.000Z",
+      timeline: [
+        {
+          date: "2026-11-18T09:00:00.000Z",
+          status: "submitted",
+          actor: "Fathima Tanur (Applicant)",
+          note: "Guidance application submitted.",
+        },
+        {
+          date: "2026-11-18T14:00:00.000Z",
+          status: "under_review",
+          actor: "Revenue Helpdesk Officer",
+          note: "Checking tax demand in Sanchitha municipal register.",
+        },
+        {
+          date: "2026-11-19T11:30:00.000Z",
+          status: "completed",
+          actor: "Revenue Inspector",
+          note: "Tax demand breakdown calculated and sent to citizen. Guidance completed.",
+        },
+      ],
+    },
+  ];
+
+  // SERVICES CRUD
+  public getServices(category?: string, query?: string, sort: 'popular' | 'recent' | 'name' = 'popular'): PublicServiceDetail[] {
+    let list = this.services.filter(s => s.published !== false);
+
+    if (category && category !== 'all') {
+      list = list.filter(s => s.category === category || s.category_name.toLowerCase() === category.toLowerCase());
+    }
+
+    if (query && query.trim()) {
+      const q = query.toLowerCase().trim();
+      list = list.filter(s => 
+        s.title.toLowerCase().includes(q) ||
+        s.summary.toLowerCase().includes(q) ||
+        s.department.toLowerCase().includes(q) ||
+        s.category_name.toLowerCase().includes(q)
+      );
+    }
+
+    if (sort === 'popular') {
+      list.sort((a, b) => (b.views_count || 0) - (a.views_count || 0));
+    } else if (sort === 'recent') {
+      list.sort((a, b) => new Date(b.last_verified_date).getTime() - new Date(a.last_verified_date).getTime());
+    } else if (sort === 'name') {
+      list.sort((a, b) => a.title.localeCompare(b.title));
+    }
+
+    return list;
+  }
+
+  public getServiceBySlug(slug: string): PublicServiceDetail | undefined {
+    return this.services.find(s => s.slug === slug || s.id === slug);
+  }
+
+  public getServiceById(id: string): PublicServiceDetail | undefined {
+    return this.services.find(s => s.id === id);
+  }
+
+  public createService(data: Omit<PublicServiceDetail, "id" | "views_count">): PublicServiceDetail {
+    const id = `srv-${Date.now()}`;
+    const newService: PublicServiceDetail = {
+      ...data,
+      id,
+      views_count: 0,
+      published: true,
+      last_verified_date: new Date().toISOString().split("T")[0],
+      audit_history: [
+        {
+          date: new Date().toISOString().split("T")[0],
+          actor: "Admin",
+          action: "Service created",
+        }
+      ]
+    };
+    this.services.push(newService);
+    return newService;
+  }
+
+  public updateService(id: string, updates: Partial<PublicServiceDetail>, actor: string = "Admin"): PublicServiceDetail | undefined {
+    const idx = this.services.findIndex(s => s.id === id);
+    if (idx === -1) return undefined;
+
+    const existing = this.services[idx];
+    const audit_history = existing.audit_history ? [...existing.audit_history] : [];
+    audit_history.push({
+      date: new Date().toISOString().split("T")[0],
+      actor,
+      action: "Service updated",
+      note: updates.title ? `Title updated to ${updates.title}` : undefined
+    });
+
+    const updated: PublicServiceDetail = {
+      ...existing,
+      ...updates,
+      audit_history,
+      last_verified_date: new Date().toISOString().split("T")[0],
+    };
+
+    this.services[idx] = updated;
+    return updated;
+  }
+
+  public archiveService(id: string, actor: string = "Admin"): boolean {
+    const service = this.services.find(s => s.id === id);
+    if (!service) return false;
+    service.published = false;
+    if (!service.audit_history) service.audit_history = [];
+    service.audit_history.push({
+      date: new Date().toISOString().split("T")[0],
+      actor,
+      action: "Service archived / unpublished",
+    });
+    return true;
+  }
+
+  // APPLICATIONS CRUD
+  public getApplications(applicantId?: string, status?: string): PublicServiceApplication[] {
+    let list = [...this.applications];
+    if (applicantId) {
+      list = list.filter(a => a.applicant_id === applicantId);
+    }
+    if (status && status !== 'all') {
+      list = list.filter(a => a.status === status);
+    }
+    return list.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  }
+
+  public getApplicationById(id: string): PublicServiceApplication | undefined {
+    return this.applications.find(a => a.id === id);
+  }
+
+  public getApplicationByReference(ref: string): PublicServiceApplication | undefined {
+    return this.applications.find(a => a.reference_no.toUpperCase() === ref.trim().toUpperCase());
+  }
+
+  public submitApplication(input: {
+    service_id: string;
+    applicant_id: string;
+    applicant_name: string;
+    applicant_email: string;
+    applicant_phone: string;
+    ward_number: number;
+    documents?: Array<{ name: string; url?: string }>;
+    notes?: string;
+  }): PublicServiceApplication {
+    const service = this.getServiceById(input.service_id) || this.getServiceBySlug(input.service_id);
+    const serviceTitle = service ? service.title : "Municipal Guidance Service";
+    const serviceCategory = service ? service.category : "cat-other";
+
+    // Generate reference number strictly: PS-TNR-2026-XXXX
+    const randomDigits = Math.floor(1000 + Math.random() * 9000);
+    const reference_no = `PS-TNR-2026-${randomDigits}`;
+    const id = `app-${Date.now()}`;
+    const now = new Date().toISOString();
+
+    const formattedDocs = (input.documents || []).map(d => ({
+      name: d.name,
+      url: d.url,
+      status: "uploaded" as const,
+    }));
+
+    const newApp: PublicServiceApplication = {
+      id,
+      reference_no,
+      service_id: input.service_id,
+      service_title: serviceTitle,
+      service_category: serviceCategory,
+      applicant_id: input.applicant_id,
+      applicant_name: input.applicant_name,
+      applicant_email: input.applicant_email,
+      applicant_phone: input.applicant_phone,
+      ward_number: input.ward_number,
+      documents: formattedDocs,
+      notes: input.notes || "",
+      status: "submitted",
+      created_at: now,
+      updated_at: now,
+      timeline: [
+        {
+          date: now,
+          status: "submitted",
+          actor: `${input.applicant_name} (Applicant)`,
+          note: "Municipal guidance and document verification request submitted.",
+        }
+      ]
+    };
+
+    this.applications.unshift(newApp);
+
+    // Dispatch notification to user
+    try {
+      store.addNotification({
+        user_id: input.applicant_id,
+        title: "Service Guidance Request Submitted",
+        title_ml: "Service Guidance Request Submitted",
+        message: `Your guidance application for "${serviceTitle}" has been received. Reference: ${reference_no}.`,
+        message_ml: `Your guidance application for "${serviceTitle}" has been received. Reference: ${reference_no}.`,
+        type: "public_service_status",
+        category: "system",
+        link: `/dashboard?tab=applications&ref=${reference_no}`,
+      });
+    } catch {
+      // Ignore notification error if store not initialized
+    }
+
+    return newApp;
+  }
+
+  public updateApplicationStatus(
+    id: string, 
+    status: ServiceApplicationStatus, 
+    note?: string, 
+    actor: string = "Municipal Helpdesk Officer"
+  ): PublicServiceApplication | undefined {
+    const app = this.applications.find(a => a.id === id || a.reference_no === id);
+    if (!app) return undefined;
+
+    const now = new Date().toISOString();
+    app.status = status;
+    app.updated_at = now;
+    if (note) {
+      app.status_notes = note;
+    }
+
+    app.timeline.unshift({
+      date: now,
+      status,
+      actor,
+      note: note || `Application status changed to ${status.replace('_', ' ')}.`,
+    });
+
+    // Notify citizen
+    try {
+      const readableStatus = status.replace('_', ' ').toUpperCase();
+      store.addNotification({
+        user_id: app.applicant_id,
+        title: `Service Application: ${readableStatus}`,
+        title_ml: `Service Application: ${readableStatus}`,
+        message: `Your guidance request (${app.reference_no}) is now ${readableStatus}. ${note || ''}`.trim(),
+        message_ml: `Your guidance request (${app.reference_no}) is now ${readableStatus}. ${note || ''}`.trim(),
+        type: "public_service_status",
+        category: "system",
+        link: `/dashboard?tab=applications&ref=${app.reference_no}`,
+      });
+    } catch {
+      // Ignore notification error
+    }
+
+    return app;
+  }
+}
+
+export const publicServiceStore = new PublicServiceStore();

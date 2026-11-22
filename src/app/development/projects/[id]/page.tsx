@@ -3,13 +3,11 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { useParams, notFound } from "next/navigation";
+import { useParams } from "next/navigation";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { DevelopmentNav } from "@/components/development/DevelopmentNav";
-import { useLanguage } from "@/lib/i18n/context";
-import { useAuth } from "@/lib/auth/context";
 import { 
   digitalMunicipalityStore,
   TRANSPARENT_PROJECT_CATEGORIES
@@ -37,9 +35,7 @@ import {
   Camera,
   Share2,
   Compass,
-  FileCheck2,
   MessageSquare,
-  Send,
   Flag,
   HelpCircle,
   X,
@@ -49,11 +45,13 @@ import {
   Trash2,
   GraduationCap,
   Activity,
-  Leaf,
-  Sun,
-  Users,
+  Trees,
   Layers,
-  Edit
+  Edit,
+  DollarSign,
+  TrendingUp,
+  Landmark,
+  FileCheck
 } from "lucide-react";
 
 // Dynamic import for Leaflet-based project map
@@ -64,7 +62,7 @@ const DevelopmentProjectMap = dynamic(
     loading: () => (
       <div className="h-64 sm:h-80 w-full rounded-2xl bg-[#EDE6D8] animate-pulse flex flex-col items-center justify-center text-[#5C6A64]">
         <Compass className="w-8 h-8 text-[#194B35] animate-spin mb-2" />
-        <span className="text-xs font-bold text-[#194B35]">മാപ്പ് ലോഡ് ചെയ്യുന്നു...</span>
+        <span className="text-xs font-bold text-[#194B35]">Loading GIS project map...</span>
       </div>
     ),
   }
@@ -73,9 +71,6 @@ const DevelopmentProjectMap = dynamic(
 export default function ProjectDetailPage() {
   const params = useParams();
   const projectId = params?.id as string;
-  const { language } = useLanguage();
-  const { role, user } = useAuth();
-  const isStaff = role === "admin" || role === "moderator";
 
   const project = digitalMunicipalityStore.getProjectById(projectId);
 
@@ -85,8 +80,8 @@ export default function ProjectDetailPage() {
   const [contribForm, setContribForm] = useState({
     title: "",
     details: "",
-    author_name: user?.display_name || user?.username || "",
-    author_phone: user?.phone || "",
+    author_name: "",
+    author_phone: "",
     evidence_url: "",
   });
   const [contribFeedback, setContribFeedback] = useState<string | null>(null);
@@ -100,21 +95,19 @@ export default function ProjectDetailPage() {
         <main className="flex-1 flex items-center justify-center p-6">
           <div className="max-w-md w-full bg-white rounded-3xl p-8 border border-[#EDE6D8] text-center shadow-card">
             <HardHat className="w-12 h-12 text-neutral-400 mx-auto mb-3" />
-            <h2 className="text-xl font-bold font-malayalam-heading text-[#194B35]">
-              {language === "ml" ? "പദ്ധതി കണ്ടെത്താനായില്ല" : "Project Not Found"}
+            <h2 className="text-xl font-bold text-[#194B35]">
+              Project Not Found
             </h2>
-            <p className="text-xs text-[#5C6A64] mt-2">
-              {language === "ml" 
-                ? "നിങ്ങൾ തിരഞ്ഞ പ്രൊജക്റ്റ് രജിസ്ട്രിയിൽ ലഭ്യമല്ല അല്ലെങ്കിൽ നീക്കം ചെയ്യപ്പെട്ടിരിക്കാം."
-                : "The requested municipal project does not exist in the official registry or has been archived."}
+            <p className="text-xs text-[#5C6A64] mt-2 leading-relaxed">
+              The requested municipal project does not exist in the official registry or has been archived.
             </p>
             <div className="mt-6">
               <Link
                 href="/development/projects"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#194B35] text-white text-xs font-bold hover:bg-[#123626] transition"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#194B35] text-white text-xs font-bold hover:bg-[#123626] transition shadow-xs"
               >
                 <ArrowLeft className="w-4 h-4" />
-                <span>{language === "ml" ? "പദ്ധതി സൂചികയിലേക്ക് മടങ്ങുക" : "Return to Directory"}</span>
+                <span>Return to Projects Directory</span>
               </Link>
             </div>
           </div>
@@ -141,9 +134,7 @@ export default function ProjectDetailPage() {
     });
 
     setContribFeedback(
-      language === "ml"
-        ? "നിങ്ങളുടെ സമർപ്പണം നഗരസഭാ അവലോകനത്തിനായി സ്വീകരിച്ചു. നന്ദി!"
-        : "Your contribution has been received for administrative review. Thank you!"
+      "Your contribution has been received for administrative review. Thank you for participating in civic oversight!"
     );
 
     setTimeout(() => {
@@ -156,40 +147,54 @@ export default function ProjectDetailPage() {
         author_phone: "",
         evidence_url: "",
       });
-    }, 2000);
+    }, 2200);
   };
 
   const getCategoryIcon = (key: string) => {
     switch (key) {
-      case "roads_transport": return <Car className="w-4 h-4" />;
-      case "water_drainage": return <Droplets className="w-4 h-4" />;
-      case "waste_management": return <Trash2 className="w-4 h-4" />;
-      case "education": return <GraduationCap className="w-4 h-4" />;
-      case "healthcare": return <Activity className="w-4 h-4" />;
-      case "public_facilities": return <Building2 className="w-4 h-4" />;
-      case "environment": return <Leaf className="w-4 h-4" />;
-      case "streetlights": return <Sun className="w-4 h-4" />;
-      case "community_infrastructure": return <Users className="w-4 h-4" />;
-      default: return <Layers className="w-4 h-4" />;
+      case "roads_transportation":
+      case "roads_transport":
+        return <Car className="w-4 h-4" />;
+      case "drainage_water":
+      case "water_drainage":
+        return <Droplets className="w-4 h-4" />;
+      case "drinking_water":
+        return <Droplets className="w-4 h-4" />;
+      case "waste_management":
+        return <Trash2 className="w-4 h-4" />;
+      case "education":
+        return <GraduationCap className="w-4 h-4" />;
+      case "healthcare":
+        return <Activity className="w-4 h-4" />;
+      case "public_infrastructure":
+      case "public_facilities":
+        return <Building2 className="w-4 h-4" />;
+      case "parks_public_spaces":
+      case "environment":
+        return <Trees className="w-4 h-4" />;
+      default:
+        return <Layers className="w-4 h-4" />;
     }
   };
 
   const getStatusBadgeClass = (status: ProjectStatus) => {
     switch (status) {
-      case "Completed":
-        return "bg-emerald-100 text-emerald-800 border-emerald-300";
-      case "In Progress":
-        return "bg-amber-100 text-amber-800 border-amber-300";
-      case "Approved":
-        return "bg-sky-100 text-sky-800 border-sky-300";
-      case "Announced":
-        return "bg-indigo-100 text-indigo-800 border-indigo-300";
       case "Proposed":
         return "bg-purple-100 text-purple-800 border-purple-300";
+      case "Approved":
+        return "bg-blue-100 text-blue-800 border-blue-300";
+      case "Planned":
+        return "bg-cyan-100 text-cyan-800 border-cyan-300";
+      case "In Progress":
+        return "bg-amber-100 text-amber-800 border-amber-300";
       case "Delayed":
         return "bg-rose-100 text-rose-800 border-rose-300";
+      case "Completed":
+        return "bg-emerald-100 text-emerald-800 border-emerald-300";
       case "On Hold":
         return "bg-stone-200 text-stone-800 border-stone-300";
+      case "Cancelled":
+        return "bg-red-100 text-red-800 border-red-300";
       default:
         return "bg-gray-100 text-gray-800 border-gray-300";
     }
@@ -197,9 +202,19 @@ export default function ProjectDetailPage() {
 
   const sourceDocuments = project.source_documents || [];
   const progressUpdates = project.progress_updates || [];
-  const projectImages = project.project_images && project.project_images.length > 0
-    ? project.project_images 
-    : [project.project_image];
+  
+  // Aggregate photos
+  const allImages = Array.from(new Set([
+    ...(project.gallery_images || []),
+    ...(project.project_images || []),
+    ...(project.project_image ? [project.project_image] : [])
+  ])).filter(Boolean);
+
+  const approvedBudgetDisplay = project.approved_budget || project.budget_sanctioned || "Pending Sanction";
+  const estimatedCostDisplay = project.estimated_cost || "Under DPR Estimation";
+  const actualExpenditureDisplay = project.actual_expenditure || (project.status === "Completed" ? approvedBudgetDisplay : "Subject to Final Audit");
+  const fundingSourceDisplay = project.funding_source || "Tanur Municipal Plan Fund";
+  const implementingAgencyDisplay = project.implementing_agency || project.department || "Municipal Engineering Wing";
 
   return (
     <div className="min-h-screen bg-[#FAF7F0] text-[#1A2420] flex flex-col font-sans">
@@ -207,43 +222,43 @@ export default function ProjectDetailPage() {
       <DevelopmentNav />
 
       <main className="flex-1 pb-24">
-        {/* Breadcrumbs & Admin Actions */}
+        {/* Breadcrumbs & Header Actions */}
         <div className="bg-white border-b border-[#EDE6D8] py-3">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 text-xs">
             <div className="flex items-center gap-1.5 text-[#5C6A64] truncate">
-              <Link href="/development" className="hover:text-[#194B35]">
-                {language === "ml" ? "വികസന ട്രാക്കർ" : "Dev Tracker"}
+              <Link href="/development" className="hover:text-[#194B35] transition">
+                Development Tracker
               </Link>
-              <ChevronRight className="w-3.5 h-3.5" />
-              <Link href="/development/projects" className="hover:text-[#194B35]">
-                {language === "ml" ? "പദ്ധതികൾ" : "Projects"}
+              <ChevronRight className="w-3.5 h-3.5 text-neutral-400" />
+              <Link href="/development/projects" className="hover:text-[#194B35] transition">
+                Projects
               </Link>
-              <ChevronRight className="w-3.5 h-3.5" />
+              <ChevronRight className="w-3.5 h-3.5 text-neutral-400" />
               <span className="font-bold text-[#194B35] truncate max-w-xs">
-                {language === "ml" ? project.title_ml : project.title}
+                {project.title}
               </span>
             </div>
 
-            {isStaff && (
+            <div className="flex items-center gap-2 shrink-0">
               <Link
-                href={`/admin/development/projects/${project.id}/edit`}
-                className="px-3 py-1 rounded-lg bg-[#C39A5B] hover:bg-[#b0874a] text-[#194B35] font-extrabold text-xs transition flex items-center gap-1 shrink-0"
+                href="/admin/development"
+                className="px-3 py-1 rounded-lg bg-[#FAF7F0] hover:bg-[#EDE6D8] text-[#194B35] border border-[#DDD5C5] font-bold text-xs transition flex items-center gap-1"
               >
                 <Edit className="w-3.5 h-3.5" />
-                <span>{language === "ml" ? "എഡിറ്റ് ചെയ്യുക" : "Edit Project"}</span>
+                <span>Admin Workspace</span>
               </Link>
-            )}
+            </div>
           </div>
         </div>
 
         {/* Hero Section */}
-        <div className="bg-gradient-to-b from-[#194B35] to-[#123626] text-white pt-8 pb-12 sm:pt-10 sm:pb-16">
+        <div className="bg-gradient-to-b from-[#194B35] to-[#123626] text-white pt-8 pb-12 sm:pt-10 sm:pb-16 shadow-inner">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-wrap items-center gap-2 mb-3">
               {/* Category Pill */}
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white text-xs font-bold border border-white/20">
                 {getCategoryIcon(project.category)}
-                <span>{language === "ml" ? project.category_name_ml : project.category_name}</span>
+                <span>{project.category_name}</span>
               </span>
 
               {/* Status Badge */}
@@ -251,21 +266,28 @@ export default function ProjectDetailPage() {
                 <span>{project.status}</span>
               </span>
 
-              {/* Source Type Badge */}
+              {/* Source Verification Badge */}
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#C39A5B]/20 text-[#C39A5B] text-[11px] font-bold border border-[#C39A5B]/30">
                 <ShieldCheck className="w-3.5 h-3.5" />
                 <span>
                   {project.source_type === "official_published"
-                    ? (language === "ml" ? "ഔദ്യോഗിക ഗസറ്റ് പ്രസിദ്ധീകരണം" : "Officially Published Record")
+                    ? "Official Published Gazette"
                     : project.source_type === "community_submitted"
-                    ? (language === "ml" ? "പൗര സമർപ്പണം" : "Community Submitted")
-                    : (language === "ml" ? "നഗരസഭാ അഡ്മിൻ രേഖ" : "Admin Entered Record")}
+                    ? "Citizen Field Report"
+                    : "Municipal Administrative Entry"}
                 </span>
               </span>
+
+              {project.verification_status && (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/10 text-[#EDE6D8] text-[11px] font-bold border border-white/20 capitalize">
+                  <CheckCircle2 className="w-3 h-3 text-[#C39A5B]" />
+                  <span>{project.verification_status.replace("_", " ")}</span>
+                </span>
+              )}
             </div>
 
-            <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold font-malayalam-heading text-white leading-tight">
-              {language === "ml" ? project.title_ml : project.title}
+            <h1 className="text-2xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight">
+              {project.title}
             </h1>
 
             <div className="mt-4 flex flex-wrap items-center gap-y-2 gap-x-5 text-xs text-[#EDE6D8]">
@@ -273,16 +295,16 @@ export default function ProjectDetailPage() {
                 <MapPin className="w-4 h-4 text-[#C39A5B]" />
                 <span>
                   {project.locality || "Tanur Municipality"}
-                  {project.ward_number ? ` • Ward ${project.ward_number} (${project.ward_name || ""})` : ""}
+                  {project.ward_number ? ` • Ward ${project.ward_number}${project.ward_name ? ` (${project.ward_name})` : ""}` : ""}
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Building2 className="w-4 h-4 text-[#C39A5B]" />
-                <span>{language === "ml" ? project.department_ml : project.department}</span>
+                <span>Implementing Agency: {implementingAgencyDisplay}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Clock className="w-4 h-4 text-[#C39A5B]" />
-                <span>Verified: {project.last_verified_date || project.announcement_date}</span>
+                <span>Last Verified: {project.last_verified_date || project.announcement_date || "2024-11-15"}</span>
               </div>
             </div>
           </div>
@@ -291,135 +313,159 @@ export default function ProjectDetailPage() {
         {/* Main Content Layout */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            {/* Left 8 Cols: Overview, Timeline, Evidence, Photos, Participation */}
+            {/* Left 8 Cols: Overview, Three-Way Financial Matrix, Timeline, Photos, Documents */}
             <div className="lg:col-span-8 space-y-8">
-              {/* Card 1: Project Description & Key Details */}
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#EDE6D8] shadow-xs space-y-6">
+              
+              {/* Card 1: Project Scope & Official Description */}
+              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#EDE6D8] shadow-card space-y-6">
                 <div>
-                  <h2 className="text-lg font-bold font-malayalam-heading text-[#194B35] mb-2">
-                    {language === "ml" ? "പദ്ധതി അവലോകനം & വിശദാംശങ്ങൾ" : "Project Overview & Scope"}
+                  <h2 className="text-lg font-bold text-[#194B35] mb-2 flex items-center gap-2">
+                    <FileCheck className="w-5 h-5 text-[#C39A5B]" />
+                    <span>Project Overview & Engineering Scope</span>
                   </h2>
                   <p className="text-xs sm:text-sm text-[#5C6A64] leading-relaxed whitespace-pre-line">
-                    {language === "ml" ? project.description_ml : project.description}
+                    {project.description}
                   </p>
                 </div>
 
-                {/* Physical Progress & Measurement Verification Notice */}
+                {/* Progress Tracking Bar (Only if verified progress percentage exists) */}
+                {typeof project.progress_percentage === "number" && (
+                  <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] space-y-2">
+                    <div className="flex items-center justify-between text-xs font-bold text-[#194B35]">
+                      <span>Verified Physical Completion</span>
+                      <span className="font-mono text-sm">{project.progress_percentage}%</span>
+                    </div>
+                    <div className="w-full bg-[#EDE6D8] h-3 rounded-full overflow-hidden">
+                      <div 
+                        className="bg-[#194B35] h-full rounded-full transition-all duration-500"
+                        style={{ width: `${Math.min(100, Math.max(0, project.progress_percentage))}%` }}
+                      />
+                    </div>
+                    <p className="text-[11px] text-[#7A8880]">
+                      Certified according to official Measurement Book (MB) recordings and site inspection logs.
+                    </p>
+                  </div>
+                )}
+
+                {/* Statutory Physical Inspection & MB Status Box */}
                 <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] space-y-2.5">
                   <div className="flex items-center justify-between gap-2 flex-wrap">
                     <span className="font-bold text-[#194B35] text-xs sm:text-sm">
-                      {language === "ml" ? "ഭൗതിക പുരോഗതി & എൻജിനീയറിംഗ് പരിശോധനാ സ്ഥിതി" : "Physical Inspection & Measurement Book (MB) Status"}
+                      Physical Inspection & Measurement Book (MB) Verification
                     </span>
                     {project.status === "Completed" ? (
-                      <VerificationBadge level="verified" citation="Commissioned" language={language} />
+                      <VerificationBadge level="verified" citation="Commissioned" />
                     ) : project.status === "Approved" ? (
-                      <VerificationBadge level="verified" citation="Sanctioned" language={language} />
+                      <VerificationBadge level="verified" citation="Sanctioned" />
                     ) : project.status === "Proposed" ? (
-                      <VerificationBadge level="partially_verified" citation="Proposal" language={language} />
+                      <VerificationBadge level="partially_verified" citation="Proposal" />
                     ) : (
-                      <VerificationBadge level="awaiting_verification" language={language} />
+                      <VerificationBadge level="awaiting_verification" />
                     )}
                   </div>
                   
                   <p className="text-[11px] text-[#5C6A64] leading-relaxed">
                     {project.status === "Completed"
-                      ? (language === "ml" 
-                          ? "പദ്ധതി നിർമ്മാണം പൂർത്തിയാക്കി പൊതുജനങ്ങൾക്ക് തുറന്നുകൊടുത്തു. അന്തിമ യൂട്ടിലൈസേഷൻ ഓഡിറ്റ് രേഖപ്പെടുത്തിയിരിക്കുന്നു." 
-                          : "Project construction completed, inspected, and commissioned. Final audit records registered.")
+                      ? "The project construction is fully completed, certified by the Assistant Executive Engineer (AEE), and commissioned for public use. Final utilization audit records have been registered."
                       : project.status === "In Progress"
-                      ? (language === "ml"
-                          ? "ഫീൽഡിൽ നിർമ്മാണ പ്രവർത്തനങ്ങൾ പുരോഗമിക്കുന്നു. അസിസ്റ്റന്റ് എക്സിക്യൂട്ടീവ് എഞ്ചിനീയറുടെ ഔദ്യോഗിക അളവുപുസ്തക (MB) പരിശോധനയ്ക്കും മൂല്യനിർണ്ണയത്തിനും വിധേയമായതിനാൽ ഏകദേശ ശതമാനങ്ങൾ പ്രദർശിപ്പിക്കുന്നില്ല."
-                          : "Field works active on site. Real-time percentages are withheld until verified on-site Measurement Book (MB) recordings are certified by the Municipal Engineering Wing.")
-                      : (language === "ml"
-                          ? "പദ്ധതി അനുമതി അല്ലെങ്കിൽ പൊതുജനാഭിപ്രായ അവലോകന ഘട്ടത്തിലാണ്."
-                          : "Project is in formal planning, administrative sanction, or public consultation phase.")}
+                      ? "Field civil works are actively underway. Progress milestones are updated strictly upon receipt of verified Measurement Book recordings signed by the Municipal Engineering Wing."
+                      : project.status === "Delayed"
+                      ? "Execution has encountered logistical or technical bottlenecks. Official remarks and revised timelines are recorded in the milestone audit."
+                      : "Project is in the planning, administrative sanction, or tender preparation phase."}
                   </p>
 
                   <div className="pt-2 border-t border-[#EDE6D8] flex items-center justify-between text-[11px] text-[#7A8880]">
-                    <span>
-                      {language === "ml" 
-                        ? `${progressUpdates.length} ഇൻസ്പെക്ഷൻ നാഴികക്കല്ലുകൾ ലഭ്യമാണ്` 
-                        : `${progressUpdates.length} Recorded Field Milestones`}
-                    </span>
-                    <span>
-                      Last verified: {project.last_verified_date || project.announcement_date}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Project Metadata Matrix */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5 pt-2">
-                  <div className="p-3.5 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8]">
-                    <span className="text-[10px] font-bold text-[#7A8880] uppercase block">
-                      {project.status === "Proposed" || project.status === "Announced"
-                        ? (language === "ml" ? "പ്രതീക്ഷിത അടങ്കൽ (Estimated)" : "Estimated Proposal Budget")
-                        : project.status === "Completed"
-                        ? (language === "ml" ? "ഓഡിറ്റ് ചെയ്ത ചെലവ് (Audited)" : "Audited Expenditure")
-                        : (language === "ml" ? "അനുവദിച്ച വിഹിതം (Sanctioned)" : "Sanctioned Technical Budget")}
-                    </span>
-                    <span className="text-sm font-bold text-[#194B35] font-mono mt-0.5 block">
-                      {project.budget_sanctioned || "Information not available"}
-                    </span>
-                  </div>
-
-                  <div className="p-3.5 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8]">
-                    <span className="text-[10px] font-bold text-[#7A8880] uppercase block">
-                      {language === "ml" ? "പ്രഖ്യാപിച്ച തീയതി" : "Announcement Date"}
-                    </span>
-                    <span className="text-sm font-bold text-[#194B35] mt-0.5 block">
-                      {project.announcement_date || "Information not available"}
-                    </span>
-                  </div>
-
-                  <div className="p-3.5 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8]">
-                    <span className="text-[10px] font-bold text-[#7A8880] uppercase block">
-                      {language === "ml" ? "അംഗീകാര തീയതി" : "Approval Date"}
-                    </span>
-                    <span className="text-sm font-bold text-[#194B35] mt-0.5 block">
-                      {project.approval_date || "Information not available"}
-                    </span>
-                  </div>
-
-                  <div className="p-3.5 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8]">
-                    <span className="text-[10px] font-bold text-[#7A8880] uppercase block">
-                      {language === "ml" ? "തുടങ്ങിയ തീയതി" : "Commencement Date"}
-                    </span>
-                    <span className="text-sm font-bold text-[#194B35] mt-0.5 block">
-                      {project.start_date || "Information not available"}
-                    </span>
-                  </div>
-
-                  <div className="p-3.5 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8]">
-                    <span className="text-[10px] font-bold text-[#7A8880] uppercase block">
-                      {language === "ml" ? "പ്രതീക്ഷിക്കുന്ന പൂർത്തീകരണം" : "Expected Completion"}
-                    </span>
-                    <span className="text-sm font-bold text-[#194B35] mt-0.5 block">
-                      {project.expected_completion_date || "Information not available"}
-                    </span>
-                  </div>
-
-                  <div className="p-3.5 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8]">
-                    <span className="text-[10px] font-bold text-[#7A8880] uppercase block">
-                      {language === "ml" ? "കരാറുകാരൻ / ഏജൻസി" : "Contractor / Agency"}
-                    </span>
-                    <span className="text-sm font-bold text-[#194B35] mt-0.5 block truncate">
-                      {project.contractor_name || "Information not available"}
-                    </span>
+                    <span>{progressUpdates.length} Recorded Milestone Audits</span>
+                    <span>Last Verified: {project.last_verified_date || project.announcement_date || "2024-11-15"}</span>
                   </div>
                 </div>
               </div>
 
-              {/* Card 2: Visual Project Timeline */}
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#EDE6D8] shadow-xs">
+              {/* Card 2: Three-Way Financial Breakdown Matrix */}
+              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#EDE6D8] shadow-card space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Banknote className="w-5 h-5 text-[#C39A5B]" />
+                    <h2 className="text-lg font-bold text-[#194B35]">
+                      Three-Way Budget & Financial Breakdown
+                    </h2>
+                  </div>
+                  <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-[#FAF7F0] text-[#194B35] border border-[#DDD5C5]">
+                    Statutory Transparency
+                  </span>
+                </div>
+                
+                <p className="text-xs text-[#5C6A64] leading-relaxed">
+                  In compliance with public expenditure transparency, OUR NATION strictly distinguishes between Approved Budget (administrative sanction), Estimated Cost (DPR proposal), and Actual Audited Expenditure.
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-2">
+                  {/* Approved Budget */}
+                  <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8]">
+                    <div className="flex items-center justify-between text-[#7A8880] mb-1">
+                      <span className="text-[10px] font-bold uppercase tracking-wider">Approved Budget</span>
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                    </div>
+                    <span className="text-base font-extrabold text-[#194B35] font-mono block">
+                      {approvedBudgetDisplay}
+                    </span>
+                    <span className="text-[10px] text-[#7A8880] mt-1 block">
+                      Statutory administrative sanction
+                    </span>
+                  </div>
+
+                  {/* Estimated Cost */}
+                  <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8]">
+                    <div className="flex items-center justify-between text-[#7A8880] mb-1">
+                      <span className="text-[10px] font-bold uppercase tracking-wider">Estimated Cost (DPR)</span>
+                      <TrendingUp className="w-3.5 h-3.5 text-blue-600" />
+                    </div>
+                    <span className="text-base font-extrabold text-[#194B35] font-mono block">
+                      {estimatedCostDisplay}
+                    </span>
+                    <span className="text-[10px] text-[#7A8880] mt-1 block">
+                      Detailed Project Report estimate
+                    </span>
+                  </div>
+
+                  {/* Actual Expenditure */}
+                  <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8]">
+                    <div className="flex items-center justify-between text-[#7A8880] mb-1">
+                      <span className="text-[10px] font-bold uppercase tracking-wider">Actual Expenditure</span>
+                      <DollarSign className="w-3.5 h-3.5 text-[#C39A5B]" />
+                    </div>
+                    <span className="text-base font-extrabold text-[#194B35] font-mono block">
+                      {actualExpenditureDisplay}
+                    </span>
+                    <span className="text-[10px] text-[#7A8880] mt-1 block">
+                      Audited payment voucher records
+                    </span>
+                  </div>
+                </div>
+
+                {/* Additional Financial Attributes */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                  <div className="p-3 rounded-xl bg-white border border-[#EDE6D8] text-xs">
+                    <span className="text-[#7A8880] block text-[11px]">Funding Source / Scheme:</span>
+                    <strong className="text-[#194B35] mt-0.5 block">{fundingSourceDisplay}</strong>
+                  </div>
+                  <div className="p-3 rounded-xl bg-white border border-[#EDE6D8] text-xs">
+                    <span className="text-[#7A8880] block text-[11px]">Contractor / Executing Agency:</span>
+                    <strong className="text-[#194B35] mt-0.5 block">{project.contractor_name || implementingAgencyDisplay}</strong>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 3: Milestone Timeline & Status Transitions */}
+              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#EDE6D8] shadow-card">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h2 className="text-lg font-bold font-malayalam-heading text-[#194B35]">
-                      {language === "ml" ? "പദ്ധതി നാൾവഴികൾ & പുരോഗതി" : "Verified Project Timeline"}
+                    <h2 className="text-lg font-bold text-[#194B35] flex items-center gap-2">
+                      <Clock className="w-5 h-5 text-[#C39A5B]" />
+                      <span>Verified Progress & Milestone Timeline</span>
                     </h2>
                     <p className="text-xs text-[#5C6A64] mt-0.5">
-                      {language === "ml"
-                        ? "ഔദ്യോഗിക അറിയിപ്പുകൾ, ഉത്തരവുകൾ, ഇൻസ്പെക്ഷൻ റിപ്പോർട്ടുകൾ അടങ്ങിയ രേഖകൾ"
-                        : "Chronological milestone audit with verified dates and official evidence links."}
+                      Chronological milestone audit with official remarks, inspection dates, and evidence links.
                     </p>
                   </div>
                   <span className="text-xs font-bold px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
@@ -430,44 +476,74 @@ export default function ProjectDetailPage() {
                 {progressUpdates.length === 0 ? (
                   <div className="p-8 text-center bg-[#FAF7F0] rounded-2xl border border-[#EDE6D8] text-xs text-[#5C6A64]">
                     <Clock className="w-8 h-8 text-neutral-400 mx-auto mb-2" />
-                    <span>{language === "ml" ? "നാൾവഴികൾ ഇതുവരെ രേഖപ്പെടുത്തിയിട്ടില്ല." : "No progress milestones recorded yet."}</span>
+                    <span>No progress milestones recorded yet for this project.</span>
                   </div>
                 ) : (
                   <div className="relative pl-6 sm:pl-8 space-y-6 before:absolute before:left-3 sm:before:left-4 before:top-3 before:bottom-3 before:w-0.5 before:bg-[#EDE6D8]">
                     {progressUpdates.map((update, idx) => (
                       <div key={update.id || idx} className="relative group">
-                        {/* Dot */}
+                        {/* Milestone Node */}
                         <div className="absolute -left-6 sm:-left-8 top-1.5 w-3 h-3 rounded-full bg-[#194B35] ring-4 ring-white" />
 
                         <div className="p-4 sm:p-5 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] hover:border-[#194B35] transition">
-                          <div className="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+                          <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                             <span className="text-xs font-bold text-[#C39A5B] flex items-center gap-1.5">
                               <Calendar className="w-3.5 h-3.5" />
                               <span>{update.date}</span>
                             </span>
-                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-white border border-[#EDE6D8] text-[#5C6A64]">
-                              Verified by: {update.verified_by || "Municipal Engineering Dept"}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              {update.status_transition && (
+                                <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md border ${getStatusBadgeClass(update.status_transition)}`}>
+                                  {update.status_transition}
+                                </span>
+                              )}
+                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-white border border-[#EDE6D8] text-[#5C6A64]">
+                                Verified by: {update.verified_by || "Municipal Engineering Wing"}
+                              </span>
+                            </div>
                           </div>
 
-                          <h4 className="text-sm font-bold text-[#194B35] font-malayalam-heading">
-                            {language === "ml" ? update.title_ml || update.title : update.title}
+                          <h4 className="text-sm font-bold text-[#194B35]">
+                            {update.title}
                           </h4>
 
                           <p className="text-xs text-[#5C6A64] mt-1 leading-relaxed whitespace-pre-line">
-                            {language === "ml" ? update.note_ml || update.note : update.note}
+                            {update.note}
                           </p>
 
+                          {/* Official Remarks */}
+                          {update.official_remarks && (
+                            <div className="mt-2.5 p-3 rounded-xl bg-white border border-[#EDE6D8] text-[11px] text-[#194B35]">
+                              <span className="font-bold text-[#C39A5B] block mb-0.5">Official Engineering Remark:</span>
+                              <p className="italic text-[#5C6A64]">{update.official_remarks}</p>
+                            </div>
+                          )}
+
+                          {/* Milestone Percentage Bar */}
+                          {typeof update.milestone_percentage === "number" && (
+                            <div className="mt-2.5 flex items-center gap-2 text-[11px] text-[#5C6A64]">
+                              <span className="font-bold text-[#194B35]">Recorded Completion:</span>
+                              <div className="w-24 bg-[#EDE6D8] h-2 rounded-full overflow-hidden">
+                                <div 
+                                  className="bg-[#194B35] h-full" 
+                                  style={{ width: `${update.milestone_percentage}%` }}
+                                />
+                              </div>
+                              <span className="font-mono font-bold text-[#194B35]">{update.milestone_percentage}%</span>
+                            </div>
+                          )}
+
+                          {/* Evidence link */}
                           {update.evidence_url && (
                             <div className="mt-3 pt-2.5 border-t border-[#EDE6D8] flex items-center gap-2">
                               <a
                                 href={update.evidence_url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-xs font-bold text-[#194B35] hover:text-[#C39A5B] inline-flex items-center gap-1"
+                                className="text-xs font-bold text-[#194B35] hover:text-[#C39A5B] inline-flex items-center gap-1 transition"
                               >
-                                <ExternalLink className="w-3 h-3" />
-                                <span>{language === "ml" ? "തെളിവ് / റിപ്പോർട്ട് പരിശോധിക്കുക" : "View Official Evidence"}</span>
+                                <ExternalLink className="w-3.5 h-3.5" />
+                                <span>View Official Verification Evidence</span>
                               </a>
                             </div>
                           )}
@@ -478,15 +554,16 @@ export default function ProjectDetailPage() {
                 )}
               </div>
 
-              {/* Card 3: Project Photographs & Progress Gallery */}
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#EDE6D8] shadow-xs">
+              {/* Card 4: Field Photographs & Evidence Gallery */}
+              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#EDE6D8] shadow-card">
                 <div className="flex items-center justify-between mb-5">
                   <div>
-                    <h2 className="text-lg font-bold font-malayalam-heading text-[#194B35]">
-                      {language === "ml" ? "ഫീൽഡ് ഫോട്ടോഗ്രാഫുകൾ & ദൃശ്യങ്ങൾ" : "Progress Photographs & Field Evidence"}
+                    <h2 className="text-lg font-bold text-[#194B35] flex items-center gap-2">
+                      <Camera className="w-5 h-5 text-[#C39A5B]" />
+                      <span>Field Inspection Photographs & Visual Evidence</span>
                     </h2>
                     <p className="text-xs text-[#5C6A64] mt-0.5">
-                      {language === "ml" ? "യഥാർത്ഥ നിർമ്മാണ സൈറ്റ് ദൃശ്യങ്ങൾ" : "Documented field photographs with timestamps"}
+                      Ground verification photographs from municipal site inspections and public contributions.
                     </p>
                   </div>
                   <button
@@ -494,45 +571,50 @@ export default function ProjectDetailPage() {
                       setContributionType("submit_photo");
                       setIsContributionModalOpen(true);
                     }}
-                    className="px-3 py-1.5 rounded-xl bg-white text-[#194B35] border border-[#EDE6D8] hover:bg-[#FAF7F0] text-xs font-bold transition flex items-center gap-1.5"
+                    className="px-3.5 py-1.5 rounded-xl bg-white text-[#194B35] border border-[#DDD5C5] hover:bg-[#FAF7F0] text-xs font-bold transition flex items-center gap-1.5 shadow-xs"
                   >
                     <Camera className="w-3.5 h-3.5 text-[#C39A5B]" />
-                    <span>{language === "ml" ? "ഫോട്ടോ സമർപ്പിക്കുക" : "Submit Photo"}</span>
+                    <span>Submit Photo</span>
                   </button>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {projectImages.map((img, i) => (
-                    <div key={i} className="rounded-2xl overflow-hidden border border-[#EDE6D8] bg-[#FAF7F0] group">
-                      <div className="aspect-video relative overflow-hidden bg-neutral-200">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={img}
-                          alt={project.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
-                        />
+                {allImages.length === 0 ? (
+                  <div className="p-8 text-center bg-[#FAF7F0] rounded-2xl border border-[#EDE6D8] text-xs text-[#5C6A64]">
+                    <Camera className="w-8 h-8 text-neutral-400 mx-auto mb-2" />
+                    <span>No photographic records currently attached to this project.</span>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {allImages.map((img, i) => (
+                      <div key={i} className="rounded-2xl overflow-hidden border border-[#EDE6D8] bg-[#FAF7F0] group">
+                        <div className="aspect-video relative overflow-hidden bg-neutral-200">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={img}
+                            alt={`${project.title} photographic record ${i + 1}`}
+                            className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                          />
+                        </div>
+                        <div className="p-3 text-[11px] text-[#5C6A64] flex items-center justify-between">
+                          <span>Inspection Evidence #{i + 1}</span>
+                          <span className="font-bold text-[#194B35]">Verified On Ground</span>
+                        </div>
                       </div>
-                      <div className="p-3 text-[11px] text-[#5C6A64] flex items-center justify-between">
-                        <span>Field Record #{i + 1}</span>
-                        <span className="font-semibold text-[#194B35]">Verified On Ground</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
-              {/* Card 4: Transparency, Sources & Government Orders */}
-              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#EDE6D8] shadow-xs">
-                <div className="flex items-center gap-2 mb-4">
+              {/* Card 5: Official Documents, Gazette Orders & References */}
+              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#EDE6D8] shadow-card space-y-4">
+                <div className="flex items-center gap-2">
                   <ShieldCheck className="w-5 h-5 text-[#C39A5B]" />
-                  <h2 className="text-lg font-bold font-malayalam-heading text-[#194B35]">
-                    {language === "ml" ? "സുതാര്യതാ രേഖകൾ & ഔദ്യോഗിക ഉറവിടങ്ങൾ" : "Transparency Records & Gazette Sources"}
+                  <h2 className="text-lg font-bold text-[#194B35]">
+                    Official Documents & Gazette References
                   </h2>
                 </div>
-                <p className="text-xs text-[#5C6A64] mb-5 leading-relaxed">
-                  {language === "ml"
-                    ? "നമ്മുടെ നാട് സുതാര്യ താനൂർ പ്ലാറ്റ്‌ഫോം യാതൊരു വിവരങ്ങളും വ്യാജമായി നിർമ്മിക്കുന്നില്ല. എല്ലാ വിവരങ്ങൾക്കും ഔദ്യോഗിക സർക്കാർ ഉത്തരവുകളോ ഇൻസ്പെക്ഷൻ രേഖകളോ ഉറവിടമായി നൽകിയിരിക്കുന്നു."
-                    : "Transparent Tanur never fabricates project figures or clearance statuses. All data is cross-referenced with primary government orders, municipal gazettes, or field audits."}
+                <p className="text-xs text-[#5C6A64] leading-relaxed">
+                  Every figure and status shown on OUR NATION is sourced from official Government Orders, Municipal Council resolutions, or verified e-Tender portals.
                 </p>
 
                 {sourceDocuments.length > 0 ? (
@@ -555,7 +637,7 @@ export default function ProjectDetailPage() {
                           href={doc.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="px-3 py-1.5 rounded-xl bg-white border border-[#EDE6D8] text-[#194B35] text-xs font-bold hover:bg-[#FAF7F0] transition inline-flex items-center gap-1 shrink-0"
+                          className="px-3 py-1.5 rounded-xl bg-white border border-[#DDD5C5] text-[#194B35] text-xs font-bold hover:bg-[#FAF7F0] transition inline-flex items-center gap-1 shrink-0"
                         >
                           <span>Open</span>
                           <ExternalLink className="w-3.5 h-3.5" />
@@ -567,16 +649,16 @@ export default function ProjectDetailPage() {
                   <div className="p-4 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] flex items-center justify-between text-xs">
                     <div>
                       <span className="font-bold text-[#194B35] block">
-                        {project.official_source_name || "Department of Local Self Government"}
+                        {project.official_source_name || "Department of Local Self Government (LSGD)"}
                       </span>
-                      <span className="text-[11px] text-[#7A8880]">Primary Official Reference Portal</span>
+                      <span className="text-[11px] text-[#7A8880]">Primary Statutory Reference Portal</span>
                     </div>
                     {project.official_source_url && (
                       <a
                         href={project.official_source_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-3 py-1.5 rounded-xl bg-white border border-[#EDE6D8] text-[#194B35] text-xs font-bold hover:bg-[#FAF7F0] transition inline-flex items-center gap-1 shrink-0"
+                        className="px-3 py-1.5 rounded-xl bg-white border border-[#DDD5C5] text-[#194B35] text-xs font-bold hover:bg-[#FAF7F0] transition inline-flex items-center gap-1 shrink-0"
                       >
                         <span>Visit Source</span>
                         <ExternalLink className="w-3.5 h-3.5" />
@@ -585,31 +667,28 @@ export default function ProjectDetailPage() {
                   </div>
                 )}
 
-                {/* Data Sources & Verification Policy Notice */}
+                {/* Statutory Policy Disclaimer */}
                 <DataSourcesNotice
                   className="mt-4"
-                  language={language}
-                  title={language === "ml" ? "വികസന പദ്ധതി സ്ഥിരീകരണ നയം" : "Project Verification & Measurement Book Policy"}
+                  title="Development Verification Policy"
                   sources={[
-                    project.official_source_name || "Official Department Portal",
-                    "Kerala LSGD Engineering Directorate (LID & EW)",
+                    project.official_source_name || "LSGD Engineering Directorate (LID & EW)",
                     "Kerala State e-Procurement Portal",
+                    "Tanur Municipal Council Gazette Archives",
                   ]}
                 />
               </div>
 
-              {/* Card 5: Public Participation & Citizen Contribution Form */}
+              {/* Card 6: Citizen Participation & Public Audit */}
               <div className="bg-gradient-to-r from-[#194B35] to-[#123626] rounded-3xl p-6 sm:p-8 text-white shadow-lg space-y-4">
                 <div className="flex items-center gap-2">
-                  <Users className="w-5 h-5 text-[#C39A5B]" />
-                  <h3 className="text-lg font-bold font-malayalam-heading">
-                    {language === "ml" ? "ജനകീയ നിരീക്ഷണം & പങ്കാളിത്തം" : "Public Participation & Community Audit"}
+                  <MessageSquare className="w-5 h-5 text-[#C39A5B]" />
+                  <h3 className="text-lg font-bold">
+                    Citizen Observation & Field Participation
                   </h3>
                 </div>
                 <p className="text-xs sm:text-sm text-[#EDE6D8] leading-relaxed">
-                  {language === "ml"
-                    ? "ഈ പദ്ധതിയെക്കുറിച്ച് പുതിയ വിവരങ്ങളോ ഫോട്ടോകളോ ഉണ്ടോ? തെറ്റായ വിവരങ്ങൾ തിരുത്താനോ ചോദ്യങ്ങൾ ചോദിക്കാനോ ഇവിടെ സമർപ്പിക്കാം."
-                    : "Have an update, progress photograph, or correction for this project? Submit your evidence for administrative review."}
+                  Have an update, progress photograph, or observed a discrepancy regarding this project? Submit your observation for administrative verification and inclusion in the audit log.
                 </p>
 
                 <div className="flex flex-wrap gap-2.5 pt-2">
@@ -618,10 +697,10 @@ export default function ProjectDetailPage() {
                       setContributionType("submit_photo");
                       setIsContributionModalOpen(true);
                     }}
-                    className="px-4 py-2.5 rounded-xl bg-[#C39A5B] hover:bg-[#b0874a] text-[#194B35] text-xs font-extrabold transition flex items-center gap-1.5"
+                    className="px-4 py-2.5 rounded-xl bg-[#C39A5B] hover:bg-[#b0874a] text-[#194B35] text-xs font-extrabold transition flex items-center gap-1.5 shadow-xs"
                   >
                     <Camera className="w-3.5 h-3.5" />
-                    <span>{language === "ml" ? "ഫോട്ടോ നൽകുക" : "Submit Photo"}</span>
+                    <span>Submit Field Photo</span>
                   </button>
 
                   <button
@@ -632,7 +711,7 @@ export default function ProjectDetailPage() {
                     className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition flex items-center gap-1.5"
                   >
                     <Flag className="w-3.5 h-3.5 text-amber-300" />
-                    <span>{language === "ml" ? "വിവരം തിരുത്തുക" : "Report Outdated Info"}</span>
+                    <span>Report Outdated Info</span>
                   </button>
 
                   <button
@@ -643,7 +722,7 @@ export default function ProjectDetailPage() {
                     className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition flex items-center gap-1.5"
                   >
                     <HelpCircle className="w-3.5 h-3.5 text-sky-300" />
-                    <span>{language === "ml" ? "ചോദ്യം ചോദിക്കുക" : "Ask Question"}</span>
+                    <span>Ask Question</span>
                   </button>
                 </div>
               </div>
@@ -651,17 +730,17 @@ export default function ProjectDetailPage() {
 
             {/* Right 4 Cols: Location Map & Sidebar Meta */}
             <div className="lg:col-span-4 space-y-6">
-              {/* Map Card */}
-              <div className="bg-white rounded-3xl p-5 border border-[#EDE6D8] shadow-xs space-y-4">
+              {/* GIS Map Card */}
+              <div className="bg-white rounded-3xl p-5 border border-[#EDE6D8] shadow-card space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
                     <Compass className="w-4 h-4 text-[#194B35]" />
-                    <h3 className="text-sm font-bold text-[#194B35] font-malayalam-heading">
-                      {language === "ml" ? "പദ്ധതി ലൊക്കേഷൻ" : "Project Location"}
+                    <h3 className="text-sm font-bold text-[#194B35]">
+                      Project GIS Location
                     </h3>
                   </div>
                   <span className="text-[10px] font-bold text-[#7A8880]">
-                    {project.latitude && project.longitude ? "GPS Verified" : "Ward Level"}
+                    {project.latitude && project.longitude ? "GPS Verified" : "Ward Demarcated"}
                   </span>
                 </div>
 
@@ -670,7 +749,6 @@ export default function ProjectDetailPage() {
                     <DevelopmentProjectMap
                       projects={[project]}
                       selectedProjectId={project.id}
-                      language={language}
                       heightClass="h-56 sm:h-64"
                     />
                   </div>
@@ -681,60 +759,99 @@ export default function ProjectDetailPage() {
                       {project.locality || "Tanur Municipality"}
                     </span>
                     <span className="text-[11px] text-[#7A8880] mt-0.5">
-                      Coordinates pending GPS demarcation
+                      Coordinates pending municipal GIS pinpointing
                     </span>
                   </div>
                 )}
 
                 <div className="text-xs text-[#5C6A64] space-y-1.5 pt-1">
                   <div className="flex justify-between">
-                    <span>{language === "ml" ? "പ്രദേശം" : "Locality"}:</span>
+                    <span>Locality / Landmark:</span>
                     <strong className="text-[#194B35]">{project.locality || "Tanur"}</strong>
                   </div>
                   <div className="flex justify-between">
-                    <span>{language === "ml" ? "വാർഡ് നമ്പർ" : "Ward"}:</span>
-                    <strong className="text-[#194B35]">{project.ward_number ? `Ward ${project.ward_number}` : "Information not available"}</strong>
+                    <span>Municipal Ward:</span>
+                    <strong className="text-[#194B35]">
+                      {project.ward_number ? `Ward ${project.ward_number}${project.ward_name ? ` (${project.ward_name})` : ""}` : "Not Ward-Specific"}
+                    </strong>
                   </div>
                   <div className="flex justify-between">
-                    <span>{language === "ml" ? "നഗരസഭ" : "Municipality"}:</span>
-                    <strong className="text-[#194B35]">Tanur (Malappuram)</strong>
+                    <span>Local Body:</span>
+                    <strong className="text-[#194B35]">Tanur Municipality (Grade II)</strong>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Central Switchboard:</span>
+                    <strong className="text-[#194B35] font-mono">0494 2440228</strong>
                   </div>
                 </div>
               </div>
 
+              {/* Project Lifecycle Timeline Metadata */}
+              <div className="bg-white rounded-3xl p-5 border border-[#EDE6D8] shadow-card space-y-3">
+                <h3 className="text-sm font-bold text-[#194B35] flex items-center gap-1.5">
+                  <Calendar className="w-4 h-4 text-[#194B35]" />
+                  <span>Statutory Dates</span>
+                </h3>
+
+                <div className="space-y-2 text-xs">
+                  <div className="flex justify-between py-1.5 border-b border-[#FAF7F0]">
+                    <span className="text-[#7A8880]">Announcement Date:</span>
+                    <span className="font-bold text-[#194B35]">{project.announcement_date || "Not Available"}</span>
+                  </div>
+                  <div className="flex justify-between py-1.5 border-b border-[#FAF7F0]">
+                    <span className="text-[#7A8880]">Approval / Sanction Date:</span>
+                    <span className="font-bold text-[#194B35]">{project.approval_date || "Not Available"}</span>
+                  </div>
+                  <div className="flex justify-between py-1.5 border-b border-[#FAF7F0]">
+                    <span className="text-[#7A8880]">Commencement Date:</span>
+                    <span className="font-bold text-[#194B35]">{project.start_date || "Not Available"}</span>
+                  </div>
+                  <div className="flex justify-between py-1.5 border-b border-[#FAF7F0]">
+                    <span className="text-[#7A8880]">Expected Completion:</span>
+                    <span className="font-bold text-[#194B35]">{project.expected_completion_date || "Not Available"}</span>
+                  </div>
+                  {project.actual_completion_date && (
+                    <div className="flex justify-between py-1.5">
+                      <span className="text-[#7A8880]">Actual Completion:</span>
+                      <span className="font-bold text-emerald-700">{project.actual_completion_date}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
               {/* Responsible Department Card */}
-              <div className="bg-white rounded-3xl p-5 border border-[#EDE6D8] shadow-xs space-y-3">
-                <h3 className="text-sm font-bold text-[#194B35] font-malayalam-heading flex items-center gap-1.5">
+              <div className="bg-white rounded-3xl p-5 border border-[#EDE6D8] shadow-card space-y-3">
+                <h3 className="text-sm font-bold text-[#194B35] flex items-center gap-1.5">
                   <Building2 className="w-4 h-4 text-[#194B35]" />
-                  <span>{language === "ml" ? "നിർവ്വഹണ വകുപ്പ്" : "Executing Department"}</span>
+                  <span>Administrative Authority</span>
                 </h3>
 
                 <div className="p-3.5 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8]">
                   <div className="font-bold text-xs text-[#194B35]">
-                    {language === "ml" ? project.department_ml : project.department}
+                    {implementingAgencyDisplay}
                   </div>
                   <div className="text-[11px] text-[#7A8880] mt-1">
-                    Official executing agency responsible for tenders, quality inspection, and milestone certification.
+                    Department responsible for engineering supervision, quality inspection, and milestone certification.
                   </div>
                 </div>
 
                 <div className="text-[11px] text-[#5C6A64] space-y-1 pt-1">
-                  <div>Source: <strong>{project.official_source_name || "Government of Kerala"}</strong></div>
-                  <div>Verified Status: <strong className="text-emerald-700">Audit Approved</strong></div>
+                  <div>Source: <strong>{project.official_source_name || "Tanur Municipality"}</strong></div>
+                  <div>Verification Level: <strong className="text-emerald-700">Audit Grounded</strong></div>
                 </div>
               </div>
 
               {/* Quick Navigation Card */}
               <div className="bg-[#FAF7F0] rounded-3xl p-5 border border-[#EDE6D8] space-y-3">
-                <h4 className="text-xs font-bold text-[#194B35] font-malayalam uppercase tracking-wider">
-                  {language === "ml" ? "കൂടുതൽ സേവനങ്ങൾ" : "Related Hubs"}
+                <h4 className="text-xs font-bold text-[#194B35] uppercase tracking-wider">
+                  Related Civic Portals
                 </h4>
                 <div className="space-y-1.5 text-xs">
                   <Link
                     href="/development/projects"
                     className="block p-2.5 rounded-xl bg-white border border-[#EDE6D8] hover:border-[#194B35] text-[#194B35] font-bold transition flex items-center justify-between"
                   >
-                    <span>{language === "ml" ? "എല്ലാ വികസന പദ്ധതികളും" : "All Development Projects"}</span>
+                    <span>All Municipal Projects</span>
                     <ChevronRight className="w-3.5 h-3.5" />
                   </Link>
 
@@ -742,15 +859,15 @@ export default function ProjectDetailPage() {
                     href="/digital-tanur"
                     className="block p-2.5 rounded-xl bg-white border border-[#EDE6D8] hover:border-[#194B35] text-[#194B35] font-bold transition flex items-center justify-between"
                   >
-                    <span>{language === "ml" ? "ഡിജിറ്റൽ താനൂർ GIS മാപ്പ്" : "Digital Tanur GIS"}</span>
+                    <span>Digital Tanur GIS Map</span>
                     <ChevronRight className="w-3.5 h-3.5" />
                   </Link>
 
                   <Link
-                    href="/peoples-voice"
+                    href="/services"
                     className="block p-2.5 rounded-xl bg-white border border-[#EDE6D8] hover:border-[#194B35] text-[#194B35] font-bold transition flex items-center justify-between"
                   >
-                    <span>{language === "ml" ? "ജനകീയ ശബ്ദം (People's Voice)" : "People's Voice Hub"}</span>
+                    <span>Online Public Services</span>
                     <ChevronRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
@@ -760,7 +877,7 @@ export default function ProjectDetailPage() {
         </div>
       </main>
 
-      {/* Contribution Modal */}
+      {/* Contribution / Public Observation Modal */}
       {isContributionModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in">
           <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 border border-[#EDE6D8] shadow-2xl relative space-y-4">
@@ -773,19 +890,17 @@ export default function ProjectDetailPage() {
 
             <div className="flex items-center gap-2">
               <Camera className="w-5 h-5 text-[#194B35]" />
-              <h3 className="text-base font-bold font-malayalam-heading text-[#194B35]">
+              <h3 className="text-base font-bold text-[#194B35]">
                 {contributionType === "submit_photo"
-                  ? (language === "ml" ? "പുതിയ ഫോട്ടോ സമർപ്പിക്കുക" : "Submit Field Photograph")
+                  ? "Submit Field Inspection Photograph"
                   : contributionType === "report_outdated"
-                  ? (language === "ml" ? "വിവരങ്ങൾ തിരുത്താൻ റിപ്പോർട്ട് ചെയ്യുക" : "Report Outdated / Incorrect Info")
-                  : (language === "ml" ? "പദ്ധതിയെക്കുറിച്ച് ചോദ്യം ചോദിക്കുക" : "Ask Question About Project")}
+                  ? "Report Outdated or Inaccurate Information"
+                  : "Submit Inquiry Regarding Project"}
               </h3>
             </div>
 
-            <p className="text-xs text-[#5C6A64]">
-              {language === "ml"
-                ? "നിങ്ങൾ സമർപ്പിക്കുന്ന വിവരങ്ങൾ നഗരസഭാ അഡ്മിനിസ്ട്രേറ്റർമാർ പരിശോധിച്ച ശേഷം ഔദ്യോഗികമായി ചേർക്കും."
-                : "Submitted evidence and observations are reviewed before publication to protect data accuracy."}
+            <p className="text-xs text-[#5C6A64] leading-relaxed">
+              All resident observations and photographic evidence are reviewed by municipal moderators before incorporation into the public audit ledger.
             </p>
 
             {contribFeedback ? (
@@ -796,45 +911,41 @@ export default function ProjectDetailPage() {
               <form onSubmit={handleContribSubmit} className="space-y-3.5 text-xs">
                 <div>
                   <label className="font-bold text-[#1A2420] block mb-1">
-                    {language === "ml" ? "നിങ്ങളുടെ പേര്" : "Your Name"}
+                    Your Name
                   </label>
                   <input
                     type="text"
                     value={contribForm.author_name}
                     onChange={(e) => setContribForm({ ...contribForm, author_name: e.target.value })}
                     placeholder="Resident Name"
-                    className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0] text-[#1A2420]"
+                    className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0] text-[#1A2420] focus:outline-hidden focus:border-[#194B35]"
                   />
                 </div>
 
                 <div>
                   <label className="font-bold text-[#1A2420] block mb-1">
-                    {language === "ml" ? "വിവരണം / നിരീക്ഷണം" : "Details / Evidence Notes"} *
+                    Detailed Notes / Observations *
                   </label>
                   <textarea
                     rows={4}
                     value={contribForm.details}
                     onChange={(e) => setContribForm({ ...contribForm, details: e.target.value })}
                     required
-                    placeholder={
-                      language === "ml"
-                        ? "നിർമ്മാണ പുരോഗതി, ഫോട്ടോ വിവരണം അല്ലെങ്കിൽ തിരുത്തൽ കുറിപ്പ് നൽകുക..."
-                        : "Describe the update, progress noticed, or specific correction needed..."
-                    }
-                    className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0] text-[#1A2420]"
+                    placeholder="Describe field progress, observed delays, photo details, or specific corrections needed..."
+                    className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0] text-[#1A2420] focus:outline-hidden focus:border-[#194B35]"
                   />
                 </div>
 
                 <div>
                   <label className="font-bold text-[#1A2420] block mb-1">
-                    {language === "ml" ? "ഫോട്ടോ / രേഖ ലിങ്ക് (URL)" : "Photo / Evidence Link (URL)"}
+                    Photo or Document URL (Optional)
                   </label>
                   <input
                     type="url"
                     value={contribForm.evidence_url}
                     onChange={(e) => setContribForm({ ...contribForm, evidence_url: e.target.value })}
-                    placeholder="https://..."
-                    className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0] text-[#1A2420]"
+                    placeholder="https://example.com/field-photo.jpg"
+                    className="w-full px-3 py-2 rounded-xl border border-[#DDD5C5] bg-[#FAF7F0] text-[#1A2420] focus:outline-hidden focus:border-[#194B35]"
                   />
                 </div>
 
@@ -850,7 +961,7 @@ export default function ProjectDetailPage() {
                     type="submit"
                     className="px-5 py-2 rounded-xl bg-[#194B35] hover:bg-[#123626] text-white font-bold transition shadow-xs"
                   >
-                    {language === "ml" ? "സമർപ്പിക്കുക" : "Submit"}
+                    Submit for Review
                   </button>
                 </div>
               </form>

@@ -132,10 +132,12 @@ export function DevelopmentProjectMap({
       case "Completed": return { bg: "#047857", text: "#FFFFFF", pin: "#047857" };
       case "In Progress": return { bg: "#194B35", text: "#FFFFFF", pin: "#C39A5B" };
       case "Approved": return { bg: "#0284C7", text: "#FFFFFF", pin: "#0284C7" };
+      case "Planned": return { bg: "#4F46E5", text: "#FFFFFF", pin: "#4F46E5" };
       case "Announced": return { bg: "#6366F1", text: "#FFFFFF", pin: "#6366F1" };
       case "Proposed": return { bg: "#D97706", text: "#FFFFFF", pin: "#D97706" };
       case "Delayed": return { bg: "#DC2626", text: "#FFFFFF", pin: "#DC2626" };
       case "On Hold": return { bg: "#6B7280", text: "#FFFFFF", pin: "#6B7280" };
+      case "Cancelled": return { bg: "#BE123C", text: "#FFFFFF", pin: "#BE123C" };
       default: return { bg: "#194B35", text: "#FFFFFF", pin: "#194B35" };
     }
   };
@@ -181,6 +183,7 @@ export function DevelopmentProjectMap({
 
       const marker = L.marker([proj.latitude, proj.longitude], { icon: customIcon });
 
+      const budgetDisplay = proj.approved_budget || proj.budget_sanctioned;
       const popupHtml = `
         <div style="font-family: inherit; font-size: 12px; max-width: 260px; padding: 2px;">
           <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 4px;">
@@ -190,13 +193,13 @@ export function DevelopmentProjectMap({
             ${proj.progress_percentage !== undefined ? `<span style="font-weight: 700; color: #194B35;">${proj.progress_percentage}% Done</span>` : ''}
           </div>
           <strong style="font-size: 13px; color: #194B35; display: block; margin-bottom: 2px;">
-            ${language === "ml" ? proj.title_ml : proj.title}
+            ${proj.title}
           </strong>
           <div style="color: #5C6A64; font-size: 11px; margin-bottom: 4px;">
             📍 ${proj.locality ? proj.locality : 'Tanur'} ${proj.ward_number ? `(Ward ${proj.ward_number})` : ''}
           </div>
           <div style="color: #194B35; font-size: 11px; font-weight: 600; margin-bottom: 6px;">
-            💰 ${proj.budget_sanctioned}
+            💰 Budget: ${budgetDisplay}
           </div>
           <a href="/development/projects/${proj.id}" style="
             display: block;
@@ -210,7 +213,7 @@ export function DevelopmentProjectMap({
             text-decoration: none;
             margin-top: 6px;
           ">
-            ${language === "ml" ? "പൂർണ്ണ വിവരങ്ങളും ടൈംലൈനും കാണുക →" : "View Details & Timeline →"}
+            View Details & Timeline →
           </a>
         </div>
       `;
@@ -236,12 +239,13 @@ export function DevelopmentProjectMap({
 
   const statuses: ProjectStatus[] = [
     "Proposed",
-    "Announced",
     "Approved",
+    "Planned",
     "In Progress",
     "Completed",
     "Delayed",
     "On Hold",
+    "Cancelled",
   ];
 
   return (
@@ -250,8 +254,8 @@ export function DevelopmentProjectMap({
       <div className="p-3 sm:p-4 bg-[#FAF7F0] border-b border-[#EDE6D8] flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <HardHat className="w-4 h-4 text-[#C39A5B]" />
-          <span className="font-bold text-xs sm:text-sm text-[#194B35] font-malayalam-heading">
-            {language === "ml" ? "പദ്ധതി ഭൂപടം (Project Map)" : "Development Projects GIS"}
+          <span className="font-bold text-xs sm:text-sm text-[#194B35]">
+            Development Projects GIS Map
           </span>
           <span className="text-xs text-[#5C6A64]">
             ({filteredProjects.filter(p => p.latitude && p.longitude).length} mapped)
@@ -267,7 +271,7 @@ export function DevelopmentProjectMap({
                 : "bg-white text-[#5C6A64] border border-[#EDE6D8] hover:bg-neutral-100"
             }`}
           >
-            {language === "ml" ? "എല്ലാം" : "All"} ({projects.length})
+            All ({projects.length})
           </button>
           {statuses.map((st) => {
             const count = projects.filter((p) => p.status === st).length;
@@ -316,13 +320,13 @@ export function DevelopmentProjectMap({
               </button>
             </div>
 
-            <h4 className="font-bold text-sm text-[#194B35] mt-1.5 font-malayalam-heading">
-              {language === "ml" ? activeProject.title_ml : activeProject.title}
+            <h4 className="font-bold text-sm text-[#194B35] mt-1.5">
+              {activeProject.title}
             </h4>
 
             <div className="mt-2 space-y-1 text-xs text-[#5C6A64]">
               <div>📍 {activeProject.locality || 'Tanur'} {activeProject.ward_number ? `(Ward ${activeProject.ward_number})` : ''}</div>
-              <div>💰 Budget: <strong className="text-[#194B35]">{activeProject.budget_sanctioned}</strong></div>
+              <div>💰 Budget: <strong className="text-[#194B35]">{activeProject.approved_budget || activeProject.budget_sanctioned}</strong></div>
               {activeProject.progress_percentage !== undefined && (
                 <div className="mt-1">
                   <div className="flex justify-between text-[11px] mb-0.5">
@@ -341,7 +345,7 @@ export function DevelopmentProjectMap({
                 href={`/development/projects/${activeProject.id}`}
                 className="text-xs font-bold text-[#194B35] hover:text-[#C39A5B] flex items-center gap-1"
               >
-                <span>{language === "ml" ? "വിശദാംശങ്ങൾ കാണുക" : "View Project Page"}</span>
+                <span>View Details & Timeline</span>
                 <ChevronRight className="w-4 h-4" />
               </Link>
               {activeProject.latitude && activeProject.longitude && (

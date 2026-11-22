@@ -4,17 +4,24 @@
  */
 
 export type ProjectCategory = 
-  | 'roads_transport'
-  | 'water_drainage'
+  // 9 Statutory Categories
+  | 'roads_transportation'
+  | 'drainage_water'
+  | 'drinking_water'
   | 'waste_management'
   | 'education'
   | 'healthcare'
+  | 'public_infrastructure'
+  | 'parks_public_spaces'
+  | 'other_development'
+  // Backward compatibility keys
+  | 'roads_transport'
+  | 'water_drainage'
   | 'public_facilities'
   | 'environment'
   | 'streetlights'
   | 'community_infrastructure'
   | 'other'
-  // Backward compatibility keys
   | 'infrastructure'
   | 'fisheries_harbour'
   | 'water_sanitation'
@@ -24,13 +31,17 @@ export type ProjectCategory =
   | 'facilities';
 
 export type ProjectStatus = 
+  // 8 Statutory Statuses
   | 'Proposed' 
-  | 'Announced' 
   | 'Approved' 
+  | 'Planned' 
   | 'In Progress' 
-  | 'Completed' 
   | 'Delayed' 
-  | 'On Hold';
+  | 'Completed' 
+  | 'On Hold' 
+  | 'Cancelled'
+  // Backward compatibility status
+  | 'Announced';
 
 export type InformationSourceType = 
   | 'official_published' 
@@ -50,9 +61,12 @@ export interface DevelopmentProgressUpdate {
   project_id: string;
   date: string;
   title: string;
-  title_ml: string;
+  title_ml?: string;
   note: string;
-  note_ml: string;
+  note_ml?: string;
+  official_remarks?: string;
+  status_transition?: ProjectStatus;
+  milestone_percentage?: number;
   update_type?: MilestoneType;
   evidence_url?: string;
   source_name?: string;
@@ -77,7 +91,7 @@ export interface DevelopmentProject {
   municipality_id: string;
   municipality_name: string;
   municipality_name_ml: string;
-  ward_number?: number;
+  ward_number?: number; // 1 to 45 (Tanur Municipality 45 confirmed wards)
   ward_name?: string;
   ward_name_ml?: string;
   locality?: string;
@@ -91,23 +105,37 @@ export interface DevelopmentProject {
   category_name_ml: string;
   department: string;
   department_ml: string;
+  implementing_agency?: string;
   official_source_name: string;
   official_source_url: string;
   source_type?: InformationSourceType;
-  budget_sanctioned: string; // e.g. "₹42.50 Cr" or "Information not available"
+  
+  // Financial breakdown & transparency
+  budget_sanctioned: string; // Display string, e.g. "₹42.50 Cr"
+  approved_budget?: string; // e.g. "₹42.50 Cr"
+  estimated_cost?: string; // e.g. "₹45.00 Cr"
+  actual_expenditure?: string; // Audited expenditure or "Not published"
+  funding_source?: string; // e.g. "Kerala Municipal Development Fund (KUDP) / Plan Grant"
+
+  // Lifecycle dates
   announcement_date: string;
   approval_date?: string;
   start_date?: string;
   expected_completion_date?: string;
+  actual_completion_date?: string;
+
   status: ProjectStatus;
   progress_percentage?: number; // Strictly when verified/supported by recorded data
   completion_percentage?: number; // Compatibility alias
   project_image: string;
   project_images?: string[];
+  gallery_images?: string[];
   latitude?: number;
   longitude?: number;
   contractor_name?: string;
   is_verified: boolean;
+  verification_status?: 'verified' | 'pending_verification' | 'unverified';
+  verified_by?: string;
   last_verified_date: string;
   source_documents?: ProjectSourceDocument[];
   progress_updates: DevelopmentProgressUpdate[];

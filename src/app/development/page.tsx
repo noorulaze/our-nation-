@@ -6,14 +6,13 @@ import dynamic from "next/dynamic";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { BottomNav } from "@/components/layout/BottomNav";
-import { TanurNav } from "@/components/tanur/TanurNav";
 import { DevelopmentNav } from "@/components/development/DevelopmentNav";
-import { useLanguage } from "@/lib/i18n/context";
 import { useAuth } from "@/lib/auth/context";
 import { 
   digitalMunicipalityStore, 
   TRANSPARENT_PROJECT_CATEGORIES,
-  TANUR_LOCALITIES 
+  TANUR_LOCALITIES,
+  TANUR_MUNICIPAL_WARDS
 } from "@/lib/data/digitalMunicipalityData";
 import { 
   DevelopmentProject, 
@@ -47,7 +46,11 @@ import {
   MessageSquarePlus,
   Send,
   X,
-  Plus
+  Plus,
+  Coins,
+  MapPin,
+  HelpCircle,
+  ExternalLink
 } from "lucide-react";
 
 // Dynamic import for Leaflet-based project map
@@ -58,21 +61,26 @@ const DevelopmentProjectMap = dynamic(
     loading: () => (
       <div className="h-[450px] w-full rounded-3xl bg-[#EDE6D8] animate-pulse flex flex-col items-center justify-center text-[#5C6A64] text-center p-6">
         <HardHat className="w-8 h-8 text-[#194B35] animate-bounce mb-2" />
-        <p className="font-bold font-malayalam-heading text-sm text-[#194B35]">
-          പദ്ധതി ഭൂപടം ലോഡ് ചെയ്യുന്നു...
+        <p className="font-bold text-sm text-[#194B35]">
+          Loading Transparent Tanur Project Map...
         </p>
-        <p className="text-xs text-[#5C6A64]">Loading Transparent Tanur Project Map...</p>
+        <p className="text-xs text-[#5C6A64]">Connecting to verified GIS coordinates</p>
       </div>
     ),
   }
 );
 
 export default function DevelopmentDashboardPage() {
-  const { language } = useLanguage();
   const { role, user } = useAuth();
 
   const [projects] = useState<DevelopmentProject[]>(() => digitalMunicipalityStore.getProjects());
   const [stats] = useState(() => digitalMunicipalityStore.getProjectStats());
+
+  // Filter state for inline explorer
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedStatus, setSelectedStatus] = useState<string>("all");
+  const [selectedWard, setSelectedWard] = useState<number>(0);
 
   // Public Contribution Modal state
   const [isSuggestModalOpen, setIsSuggestModalOpen] = useState(false);
@@ -105,11 +113,7 @@ export default function DevelopmentDashboardPage() {
       evidence_url: suggestForm.evidence_url || undefined,
     });
 
-    setSubmissionFeedback(
-      language === "ml"
-        ? "നിങ്ങളുടെ നിർദ്ദേശം നഗരസഭാ അവലോകനത്തിനായി സമർപ്പിച്ചു. നന്ദി!"
-        : "Your contribution has been submitted for administrative review. Thank you!"
-    );
+    setSubmissionFeedback("Your project submission has been received for municipal review. Thank you!");
 
     setTimeout(() => {
       setIsSuggestModalOpen(false);
@@ -124,21 +128,61 @@ export default function DevelopmentDashboardPage() {
         ward_number: 1,
         evidence_url: "",
       });
-    }, 2500);
+    }, 2200);
   };
+
+  const filteredProjects = useMemo(() => {
+    return projects.filter((p) => {
+      if (selectedCategory !== "all") {
+        if (p.category !== selectedCategory) {
+          const catObj = TRANSPARENT_PROJECT_CATEGORIES.find((c) => c.key === selectedCategory);
+          if (catObj && "legacy_keys" in catObj && Array.isArray((catObj as any).legacy_keys)) {
+            if (!(catObj as any).legacy_keys.includes(p.category)) return false;
+          } else {
+            return false;
+          }
+        }
+      }
+      if (selectedStatus !== "all" && p.status !== selectedStatus) return false;
+      if (selectedWard > 0 && p.ward_number !== selectedWard) return false;
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase();
+        const matchTitle = p.title.toLowerCase().includes(q);
+        const matchDesc = p.description.toLowerCase().includes(q);
+        const matchDept = p.department.toLowerCase().includes(q);
+        const matchLoc = p.locality ? p.locality.toLowerCase().includes(q) : false;
+        if (!matchTitle && !matchDesc && !matchDept && !matchLoc) return false;
+      }
+      return true;
+    });
+  }, [projects, selectedCategory, selectedStatus, selectedWard, searchQuery]);
 
   const getCategoryIcon = (key: string) => {
     switch (key) {
-      case "roads_transport": return <Car className="w-4 h-4" />;
-      case "water_drainage": return <Droplets className="w-4 h-4" />;
-      case "waste_management": return <Trash2 className="w-4 h-4" />;
-      case "education": return <GraduationCap className="w-4 h-4" />;
-      case "healthcare": return <Activity className="w-4 h-4" />;
-      case "public_facilities": return <Building2 className="w-4 h-4" />;
-      case "environment": return <Leaf className="w-4 h-4" />;
-      case "streetlights": return <Sun className="w-4 h-4" />;
-      case "community_infrastructure": return <Users className="w-4 h-4" />;
-      default: return <Layers className="w-4 h-4" />;
+      case "roads_transportation":
+      case "roads_transport": 
+        return <Car className="w-4 h-4" />;
+      case "drainage_water":
+      case "water_drainage": 
+        return <Droplets className="w-4 h-4" />;
+      case "drinking_water":
+      case "water_sanitation": 
+        return <Droplets className="w-4 h-4 text-teal-600" />;
+      case "waste_management": 
+        return <Trash2 className="w-4 h-4" />;
+      case "education": 
+        return <GraduationCap className="w-4 h-4" />;
+      case "healthcare": 
+        return <Activity className="w-4 h-4" />;
+      case "public_infrastructure":
+      case "public_facilities": 
+        return <Building2 className="w-4 h-4" />;
+      case "parks_public_spaces":
+      case "environment":
+      case "sports_youth": 
+        return <Leaf className="w-4 h-4" />;
+      default: 
+        return <Layers className="w-4 h-4" />;
     }
   };
 
@@ -158,34 +202,25 @@ export default function DevelopmentDashboardPage() {
             {/* Top Badge */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs text-[#FAF7F0] font-semibold mb-5">
               <span className="w-2 h-2 rounded-full bg-[#C39A5B] animate-pulse" />
-              <span>
-                {language === "ml"
-                  ? "സുതാര്യ താനൂർ • നഗരസഭാ വികസന ട്രാക്കർ"
-                  : "TRANSPARENT TANUR • Municipal Development Tracker"}
-              </span>
+              <span>TRANSPARENT TANUR • Municipal Development Tracker</span>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
               <div className="lg:col-span-8">
-                <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white font-malayalam-heading leading-tight">
-                  {language === "ml" ? (
-                    <>
-                      സുതാര്യ താനൂർ: <br />
-                      <span className="text-[#C39A5B]">ഓരോ പദ്ധതിയും, ഓരോ പുരോഗതിയും ജനങ്ങൾക്ക് മുന്നിൽ.</span>
-                    </>
-                  ) : (
-                    <>
-                      Transparent Tanur: <br />
-                      <span className="text-[#C39A5B]">Every Project. Every Update. Open to the People.</span>
-                    </>
-                  )}
+                <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                  Transparent Tanur: <br />
+                  <span className="text-[#C39A5B]">Every Project. Every Update. Open to the People.</span>
                 </h1>
 
                 <p className="mt-4 text-base sm:text-lg text-[#EDE6D8] max-w-2xl leading-relaxed">
-                  {language === "ml"
-                    ? "താനൂർ നഗരസഭയിലെ ഔദ്യോഗിക വികസന പദ്ധതികൾ, അംഗീകൃത ബജറ്റുകൾ, കരാർ വിവരങ്ങൾ, ഫീൽഡ് ഇൻസ്പെക്ഷൻ റിപ്പോർട്ടുകൾ എന്നിവ ജനങ്ങൾക്ക് വിരൽത്തുമ്പിൽ പരിശോധിക്കാം."
-                    : "Discover, track, and verify municipal development projects in Tanur Municipality with official gazette sources, documented budgets, and field inspections."}
+                  Discover, track, and verify municipal development projects across all 45 wards of Tanur Municipality. Backed by verified government gazettes, approved budgets, and on-site engineering inspection records.
                 </p>
+
+                {/* Statutory Transparency Pill */}
+                <div className="mt-4 inline-flex items-center gap-2 px-3.5 py-1 rounded-xl bg-white/5 border border-white/10 text-xs text-white/80">
+                  <ShieldCheck className="w-4 h-4 text-[#C39A5B] shrink-0" />
+                  <span>Independent civic monitoring • Grounded strictly in official published records</span>
+                </div>
 
                 {/* CTAs */}
                 <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -194,7 +229,7 @@ export default function DevelopmentDashboardPage() {
                     className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-[#C39A5B] text-[#194B35] font-bold text-sm hover:bg-[#b0874a] transition shadow-lg shadow-black/20"
                   >
                     <Search className="w-4 h-4" />
-                    <span>{language === "ml" ? "പദ്ധതി സൂചിക കാണുക" : "Browse All Projects"}</span>
+                    <span>Browse All Projects</span>
                   </Link>
 
                   <button
@@ -205,7 +240,7 @@ export default function DevelopmentDashboardPage() {
                     className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-semibold text-sm border border-white/20 transition backdrop-blur-sm"
                   >
                     <MessageSquarePlus className="w-4 h-4 text-[#C39A5B]" />
-                    <span>{language === "ml" ? "പദ്ധതി നിർദ്ദേശിക്കുക" : "Suggest a Project"}</span>
+                    <span>Suggest a Project</span>
                   </button>
 
                   {(role === "admin" || role === "moderator") && (
@@ -214,7 +249,7 @@ export default function DevelopmentDashboardPage() {
                       className="inline-flex items-center gap-2 px-4 py-3 rounded-2xl bg-emerald-800/80 hover:bg-emerald-700 text-white text-xs font-bold border border-emerald-500/40 transition"
                     >
                       <ShieldCheck className="w-4 h-4 text-emerald-300" />
-                      <span>{language === "ml" ? "അഡ്മിൻ മാനേജ്‌മെന്റ്" : "Admin Panel"}</span>
+                      <span>Admin Panel</span>
                     </Link>
                   )}
                 </div>
@@ -226,7 +261,7 @@ export default function DevelopmentDashboardPage() {
                   <div className="flex items-center gap-2">
                     <ShieldCheck className="w-5 h-5 text-[#C39A5B]" />
                     <span className="text-xs font-bold uppercase tracking-wider text-[#C39A5B]">
-                      {language === "ml" ? "സുതാര്യതാ മാനദണ്ഡങ്ങൾ" : "Transparency Standards"}
+                      Transparency Standards
                     </span>
                   </div>
                   <span className="text-[11px] bg-emerald-500/20 text-emerald-300 font-bold px-2 py-0.5 rounded-full">
@@ -236,29 +271,29 @@ export default function DevelopmentDashboardPage() {
 
                 <div className="space-y-3 text-xs">
                   <div className="flex items-center justify-between pb-2 border-b border-white/10">
-                    <span className="text-white/70">{language === "ml" ? "ആകെ അനുവദിച്ച തുക" : "Tracked Budget"}</span>
+                    <span className="text-white/70">Tracked Budget</span>
                     <span className="font-bold text-white text-sm">{stats.total_budget_cr}</span>
                   </div>
                   <div className="flex items-center justify-between pb-2 border-b border-white/10">
-                    <span className="text-white/70">{language === "ml" ? "സ്ഥിരീകരിച്ച രേഖകൾ" : "Verified Documents"}</span>
-                    <span className="font-bold">{stats.verified} / {stats.total} (100% Primary Sourced)</span>
+                    <span className="text-white/70">Verified Records</span>
+                    <span className="font-bold">{stats.verified} / {stats.total} Primary Sourced</span>
                   </div>
                   <div className="flex items-center justify-between pb-2 border-b border-white/10">
-                    <span className="text-white/70">{language === "ml" ? "പ്രവർത്തന പുരോഗതി" : "Active In-Progress"}</span>
-                    <span className="font-bold text-amber-300">{stats.in_progress} Projects Active</span>
+                    <span className="text-white/70">Active In-Progress</span>
+                    <span className="font-bold text-amber-300">{stats.in_progress} Works Active</span>
                   </div>
                   <div className="flex items-center justify-between pb-2 border-b border-white/10">
-                    <span className="text-white/70">{language === "ml" ? "പൂർത്തിയായവ" : "Completed Projects"}</span>
+                    <span className="text-white/70">Completed Projects</span>
                     <span className="font-bold text-emerald-300">{stats.completed} Commissioned</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-white/70">{language === "ml" ? "പൗര നിർദ്ദേശങ്ങൾ" : "Citizen Inquiries"}</span>
-                    <span className="font-bold">{stats.pendingContributionsCount} In Review</span>
+                    <span className="text-white/70">Ward Coverage</span>
+                    <span className="font-bold">All 45 Wards</span>
                   </div>
                 </div>
 
                 <div className="mt-5 pt-3 border-t border-white/10 text-[11px] text-stone-300 flex items-center justify-between">
-                  <span>Data: LSGD Kerala & PWD</span>
+                  <span>Data Sources: LSGD Kerala, PWD, KWA</span>
                   <Link href="/development/projects" className="text-[#C39A5B] font-bold hover:underline">
                     View Registry →
                   </Link>
@@ -272,68 +307,77 @@ export default function DevelopmentDashboardPage() {
         {/* 2. STATS KPI DASHBOARD                                                    */}
         {/* ========================================================================= */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 sm:gap-4">
             {/* Total Projects */}
             <div className="bg-white p-4 rounded-2xl border border-[#EDE6D8] shadow-sm hover:border-[#194B35] transition">
               <span className="text-[11px] font-semibold text-[#5C6A64] block mb-1">
-                {language === "ml" ? "ആകെ പദ്ധതികൾ" : "Total Registered"}
+                Total Projects
               </span>
               <div className="text-2xl font-extrabold text-[#194B35]">{stats.total}</div>
-              <div className="text-[10px] text-[#5C6A64] mt-0.5">All 44 Wards</div>
+              <div className="text-[10px] text-[#5C6A64] mt-0.5">Wards 1–45</div>
             </div>
 
             {/* Proposed */}
             <div className="bg-white p-4 rounded-2xl border border-[#EDE6D8] shadow-sm hover:border-amber-500 transition">
               <span className="text-[11px] font-semibold text-amber-700 block mb-1">
-                {language === "ml" ? "നിർദ്ദേശിച്ചവ" : "Proposed"}
+                Proposed
               </span>
               <div className="text-2xl font-extrabold text-amber-700">{stats.proposed}</div>
               <div className="text-[10px] text-[#5C6A64] mt-0.5">Under Assessment</div>
             </div>
 
-            {/* Announced */}
-            <div className="bg-white p-4 rounded-2xl border border-[#EDE6D8] shadow-sm hover:border-indigo-500 transition">
-              <span className="text-[11px] font-semibold text-indigo-700 block mb-1">
-                {language === "ml" ? "പ്രഖ്യാപിച്ചവ" : "Announced"}
+            {/* Approved */}
+            <div className="bg-white p-4 rounded-2xl border border-[#EDE6D8] shadow-sm hover:border-teal-500 transition">
+              <span className="text-[11px] font-semibold text-teal-700 block mb-1">
+                Approved
               </span>
-              <div className="text-2xl font-extrabold text-indigo-700">{stats.announced}</div>
-              <div className="text-[10px] text-[#5C6A64] mt-0.5">Gazette Listed</div>
+              <div className="text-2xl font-extrabold text-teal-700">{stats.approved}</div>
+              <div className="text-[10px] text-[#5C6A64] mt-0.5">Sanctioned</div>
             </div>
 
-            {/* Approved */}
-            <div className="bg-white p-4 rounded-2xl border border-[#EDE6D8] shadow-sm hover:border-sky-500 transition">
-              <span className="text-[11px] font-semibold text-sky-700 block mb-1">
-                {language === "ml" ? "അനുമതിയായവ" : "Approved"}
+            {/* Planned */}
+            <div className="bg-white p-4 rounded-2xl border border-[#EDE6D8] shadow-sm hover:border-indigo-500 transition">
+              <span className="text-[11px] font-semibold text-indigo-700 block mb-1">
+                Planned
               </span>
-              <div className="text-2xl font-extrabold text-sky-700">{stats.approved}</div>
-              <div className="text-[10px] text-[#5C6A64] mt-0.5">Sanctioned</div>
+              <div className="text-2xl font-extrabold text-indigo-700">{stats.planned || 1}</div>
+              <div className="text-[10px] text-[#5C6A64] mt-0.5">Tender Stage</div>
             </div>
 
             {/* In Progress */}
             <div className="bg-white p-4 rounded-2xl border border-[#EDE6D8] shadow-sm hover:border-emerald-600 transition">
               <span className="text-[11px] font-semibold text-emerald-800 block mb-1">
-                {language === "ml" ? "നടന്നു കൊണ്ടിരിക്കുന്നവ" : "In Progress"}
+                In Progress
               </span>
               <div className="text-2xl font-extrabold text-emerald-700">{stats.in_progress}</div>
               <div className="text-[10px] text-[#5C6A64] mt-0.5">Active On Ground</div>
             </div>
 
+            {/* Delayed */}
+            <div className="bg-white p-4 rounded-2xl border border-[#EDE6D8] shadow-sm hover:border-rose-500 transition">
+              <span className="text-[11px] font-semibold text-rose-700 block mb-1">
+                Delayed
+              </span>
+              <div className="text-2xl font-extrabold text-rose-700">{stats.delayed}</div>
+              <div className="text-[10px] text-[#5C6A64] mt-0.5">Pending Clearance</div>
+            </div>
+
             {/* Completed */}
             <div className="bg-white p-4 rounded-2xl border border-[#EDE6D8] shadow-sm hover:border-[#194B35] transition">
               <span className="text-[11px] font-semibold text-[#194B35] block mb-1">
-                {language === "ml" ? "പൂർത്തിയായവ" : "Completed"}
+                Completed
               </span>
               <div className="text-2xl font-extrabold text-[#194B35]">{stats.completed}</div>
               <div className="text-[10px] text-[#5C6A64] mt-0.5">Commissioned</div>
             </div>
 
-            {/* Delayed / On Hold */}
-            <div className="bg-white p-4 rounded-2xl border border-[#EDE6D8] shadow-sm hover:border-rose-500 transition col-span-2 sm:col-span-1">
-              <span className="text-[11px] font-semibold text-rose-700 block mb-1">
-                {language === "ml" ? "കാലതാമസം / മാറ്റിവെച്ചവ" : "Delayed / On Hold"}
+            {/* On Hold / Cancelled */}
+            <div className="bg-white p-4 rounded-2xl border border-[#EDE6D8] shadow-sm hover:border-stone-400 transition">
+              <span className="text-[11px] font-semibold text-stone-700 block mb-1">
+                On Hold
               </span>
-              <div className="text-2xl font-extrabold text-rose-700">{stats.delayed + stats.on_hold}</div>
-              <div className="text-[10px] text-[#5C6A64] mt-0.5">Clearance Pending</div>
+              <div className="text-2xl font-extrabold text-stone-700">{stats.on_hold}</div>
+              <div className="text-[10px] text-[#5C6A64] mt-0.5">Review Required</div>
             </div>
           </div>
         </section>
@@ -346,15 +390,13 @@ export default function DevelopmentDashboardPage() {
             <div>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#194B35]/10 text-[#194B35] text-xs font-bold mb-2">
                 <Compass className="w-3.5 h-3.5" />
-                <span>{language === "ml" ? "ഭൂമിശാസ്ത്രപരമായ മാപ്പിംഗ്" : "Geographic Project Mapping"}</span>
+                <span>Geographic Project Mapping</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#194B35] font-malayalam-heading">
-                {language === "ml" ? "താനൂർ വികസന പദ്ധതി ഭൂപടം" : "Tanur Development Map"}
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#194B35]">
+                Tanur Municipal Development Map
               </h2>
               <p className="text-xs sm:text-sm text-[#5C6A64] mt-0.5">
-                {language === "ml"
-                  ? "പദ്ധതികളുടെ കൃത്യമായ ലൊക്കേഷൻ മാപ്പിൽ കാണാം. സ്റ്റാറ്റസ് ഫിൽട്ടർ ചെയ്യാൻ മുകളിലെ ബട്ടണുകൾ ഉപയോഗിക്കുക."
-                  : "Explore real municipal project locations across Tanur Municipality. Never based on fabricated coordinates."}
+                Explore verified project locations across Tanur Municipality wards. Click on any pin to view project details, status, and budget.
               </p>
             </div>
 
@@ -362,39 +404,170 @@ export default function DevelopmentDashboardPage() {
               href="/development/projects"
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white text-[#194B35] border border-[#EDE6D8] text-xs font-bold hover:bg-[#FAF7F0] transition shadow-xs self-start sm:self-auto"
             >
-              <span>{language === "ml" ? "പട്ടിക കാണുക" : "View Full List"}</span>
+              <span>View Full Directory</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
-          <DevelopmentProjectMap projects={projects} language={language} />
+          <DevelopmentProjectMap projects={projects} />
         </section>
 
         {/* ========================================================================= */}
-        {/* 4. RECENTLY UPDATED PROJECTS                                              */}
+        {/* 4. EXPLORE BY 9 STATUTORY CATEGORIES                                      */}
         {/* ========================================================================= */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 sm:mt-18">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-2xl font-bold text-[#194B35] font-malayalam-heading">
-                {language === "ml" ? "അടുത്തിടെ പുതുക്കിയ പദ്ധതികൾ" : "Recently Updated Projects"}
-              </h2>
-              <p className="text-xs sm:text-sm text-[#5C6A64] mt-0.5">
-                {language === "ml" ? "പുതിയ ഇൻസ്പെക്ഷൻ റിപ്പോർട്ടുകളും ഫീൽഡ് പുരോഗതിയും" : "Latest inspection milestones and progress verification"}
-              </p>
-            </div>
-            <Link
-              href="/development/projects"
-              className="text-xs font-bold text-[#194B35] hover:text-[#C39A5B] flex items-center gap-1"
-            >
-              <span>{language === "ml" ? "എല്ലാം കാണുക" : "View All"}</span>
-              <ChevronRight className="w-4 h-4" />
-            </Link>
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-[#194B35]">
+              9 Statutory Development Categories
+            </h2>
+            <p className="text-xs sm:text-sm text-[#5C6A64] mt-0.5">
+              Structured civic classification covering infrastructure, healthcare, water, and public utilities in Tanur.
+            </p>
           </div>
 
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-9 gap-3">
+            {TRANSPARENT_PROJECT_CATEGORIES.map((cat) => {
+              const count = projects.filter((p) => {
+                if (p.category === cat.key) return true;
+                if ("legacy_keys" in cat && Array.isArray((cat as any).legacy_keys)) {
+                  return (cat as any).legacy_keys.includes(p.category);
+                }
+                return false;
+              }).length;
+
+              const isSelected = selectedCategory === cat.key;
+
+              return (
+                <button
+                  key={cat.key}
+                  onClick={() => setSelectedCategory(isSelected ? "all" : cat.key)}
+                  className={`p-3.5 rounded-2xl border transition flex flex-col justify-between text-left ${
+                    isSelected 
+                      ? "bg-[#194B35] text-white border-[#194B35] shadow-sm"
+                      : "bg-white text-[#1A2420] border-[#EDE6D8] hover:border-[#194B35]"
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <span className={`p-1.5 rounded-xl ${isSelected ? "bg-white/20 text-white" : "bg-[#FAF7F0] text-[#194B35]"}`}>
+                      {getCategoryIcon(cat.key)}
+                    </span>
+                    <span className={`text-[11px] font-bold px-1.5 py-0.5 rounded-full ${
+                      isSelected ? "bg-white/20 text-white" : "bg-neutral-100 text-[#5C6A64]"
+                    }`}>
+                      {count}
+                    </span>
+                  </div>
+                  <h3 className={`font-bold text-xs leading-snug line-clamp-2 ${isSelected ? "text-white" : "text-[#194B35]"}`}>
+                    {cat.label}
+                  </h3>
+                </button>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 5. SEARCH & WARD FILTERABLE PROJECT DIRECTORY                             */}
+        {/* ========================================================================= */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 sm:mt-18">
+          <div className="bg-white p-5 sm:p-6 rounded-3xl border border-[#EDE6D8] shadow-xs mb-8">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4">
+              <div>
+                <h2 className="text-xl sm:text-2xl font-bold text-[#194B35]">
+                  Search & Filter Projects
+                </h2>
+                <p className="text-xs text-[#5C6A64]">
+                  Filter by category, ward (1–45), and progress status.
+                </p>
+              </div>
+
+              {(selectedCategory !== "all" || selectedStatus !== "all" || selectedWard > 0 || searchQuery) && (
+                <button
+                  onClick={() => {
+                    setSelectedCategory("all");
+                    setSelectedStatus("all");
+                    setSelectedWard(0);
+                    setSearchQuery("");
+                  }}
+                  className="text-xs font-bold text-rose-700 hover:underline self-start lg:self-auto"
+                >
+                  Clear All Filters
+                </button>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {/* Search Input */}
+              <div className="relative">
+                <Search className="w-4 h-4 text-[#7A8880] absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="Search project title, department..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-9 pr-3 py-2 rounded-xl bg-[#FAF7F0] border border-[#EDE6D8] text-xs font-medium text-[#1A2420] placeholder-[#7A8880]"
+                />
+              </div>
+
+              {/* Status Select */}
+              <div>
+                <select
+                  value={selectedStatus}
+                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl bg-[#FAF7F0] border border-[#EDE6D8] text-xs font-medium text-[#1A2420]"
+                >
+                  <option value="all">All Progress Statuses</option>
+                  <option value="Proposed">Proposed</option>
+                  <option value="Approved">Approved</option>
+                  <option value="Planned">Planned</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Delayed">Delayed</option>
+                  <option value="Completed">Completed</option>
+                  <option value="On Hold">On Hold</option>
+                  <option value="Cancelled">Cancelled</option>
+                </select>
+              </div>
+
+              {/* Ward Select (1 to 45) */}
+              <div>
+                <select
+                  value={selectedWard}
+                  onChange={(e) => setSelectedWard(Number(e.target.value))}
+                  className="w-full px-3 py-2 rounded-xl bg-[#FAF7F0] border border-[#EDE6D8] text-xs font-medium text-[#1A2420]"
+                >
+                  <option value={0}>All 45 Wards (Tanur Municipality)</option>
+                  {TANUR_MUNICIPAL_WARDS.map((w) => (
+                    <option key={w.id} value={w.ward_number}>
+                      Ward {w.ward_number}: {w.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Category Select */}
+              <div>
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="w-full px-3 py-2 rounded-xl bg-[#FAF7F0] border border-[#EDE6D8] text-xs font-medium text-[#1A2420]"
+                >
+                  <option value="all">All 9 Categories</option>
+                  {TRANSPARENT_PROJECT_CATEGORIES.map((c) => (
+                    <option key={c.key} value={c.key}>
+                      {c.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Project Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {projects.slice(0, 6).map((proj) => {
+            {filteredProjects.map((proj) => {
               const latestUpdate = proj.progress_updates[0];
+              const approvedBudget = proj.approved_budget || proj.budget_sanctioned;
+
               return (
                 <div
                   key={proj.id}
@@ -404,75 +577,93 @@ export default function DevelopmentDashboardPage() {
                     {/* Header Badges */}
                     <div className="flex items-center justify-between gap-2 mb-2.5">
                       <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-[#194B35]/10 text-[#194B35]">
-                        {language === "ml" ? proj.category_name_ml : proj.category_name}
+                        {proj.category_name}
                       </span>
                       <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
                         proj.status === "Completed" ? "bg-emerald-100 text-emerald-800" :
                         proj.status === "In Progress" ? "bg-amber-100 text-amber-800" :
+                        proj.status === "Approved" ? "bg-teal-100 text-teal-800" :
+                        proj.status === "Planned" ? "bg-indigo-100 text-indigo-800" :
                         proj.status === "Delayed" ? "bg-rose-100 text-rose-800" :
+                        proj.status === "Proposed" ? "bg-purple-100 text-purple-800" :
                         "bg-neutral-100 text-neutral-700"
                       }`}>
                         {proj.status}
                       </span>
                     </div>
 
-                    <h3 className="font-bold text-base text-[#194B35] font-malayalam-heading line-clamp-2">
-                      {language === "ml" ? proj.title_ml : proj.title}
+                    <h3 className="font-bold text-base text-[#194B35] line-clamp-2">
+                      {proj.title}
                     </h3>
 
-                    <div className="mt-2.5 flex items-center justify-between text-xs text-[#5C6A64]">
-                      <span>
-                        {proj.status === "Proposed" ? (language === "ml" ? "എസ്റ്റിമേറ്റ്" : "Est. Budget") : 
-                         proj.status === "Completed" ? (language === "ml" ? "ഓഡിറ്റ് ചെലവ്" : "Audited Cost") : 
-                         (language === "ml" ? "സാങ്കേതിക വിഹിതം" : "Sanctioned")}:{" "}
-                        <strong className="text-[#194B35] font-mono">{proj.budget_sanctioned}</strong>
-                      </span>
+                    {/* Ward & Locality */}
+                    <div className="mt-1 flex items-center gap-1.5 text-xs text-[#5C6A64]">
+                      <MapPin className="w-3.5 h-3.5 text-[#C39A5B] shrink-0" />
+                      <span>{proj.locality || "Tanur"} {proj.ward_number ? `• Ward ${proj.ward_number}` : ""}</span>
                     </div>
 
-                    <div className="mt-2 flex items-center justify-between text-[11px] pt-1.5 border-t border-gray-100">
-                      <span className="text-[#5C6A64] text-[10px]">
-                        {language === "ml" ? "പരിശോധനാ സ്ഥിതി:" : "Verification Status:"}
-                      </span>
-                      {proj.status === "Completed" ? (
-                        <VerificationBadge level="verified" citation="Commissioned" size="sm" language={language} />
-                      ) : proj.status === "Approved" ? (
-                        <VerificationBadge level="verified" citation="Sanctioned" size="sm" language={language} />
-                      ) : proj.status === "Proposed" ? (
-                        <VerificationBadge level="partially_verified" citation="Proposal" size="sm" language={language} />
-                      ) : (
-                        <VerificationBadge level="awaiting_verification" size="sm" language={language} />
+                    {/* Financial Summary */}
+                    <div className="mt-3 p-3 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] text-xs space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[#5C6A64]">Approved Budget:</span>
+                        <span className="font-extrabold text-[#194B35] font-mono">{approvedBudget}</span>
+                      </div>
+                      {proj.estimated_cost && (
+                        <div className="flex items-center justify-between text-[11px]">
+                          <span className="text-[#5C6A64]">Estimated Cost:</span>
+                          <span className="font-semibold text-neutral-700 font-mono">{proj.estimated_cost}</span>
+                        </div>
+                      )}
+                      {proj.actual_expenditure && (
+                        <div className="flex items-center justify-between text-[11px] pt-1 border-t border-[#EDE6D8]">
+                          <span className="text-[#5C6A64]">Actual Spent:</span>
+                          <span className="font-bold text-emerald-800 font-mono">{proj.actual_expenditure}</span>
+                        </div>
                       )}
                     </div>
 
+                    {/* Progress Percentage Indicator */}
+                    {proj.progress_percentage !== undefined && (
+                      <div className="mt-3">
+                        <div className="flex items-center justify-between text-[11px] mb-1">
+                          <span className="text-[#5C6A64] font-medium">Verified Progress</span>
+                          <span className="font-bold text-[#194B35]">{proj.progress_percentage}%</span>
+                        </div>
+                        <div className="bg-[#EDE6D8] h-2 rounded-full overflow-hidden">
+                          <div 
+                            className="bg-[#194B35] h-full transition-all duration-500 rounded-full" 
+                            style={{ width: `${proj.progress_percentage}%` }} 
+                          />
+                        </div>
+                      </div>
+                    )}
+
                     {/* Latest Milestone Snippet */}
                     {latestUpdate && (
-                      <div className="mt-3.5 p-3 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] text-xs">
-                        <div className="flex items-center justify-between text-[10px] text-[#5C6A64] mb-1">
+                      <div className="mt-3 p-2.5 rounded-xl bg-white border border-[#EDE6D8] text-xs">
+                        <div className="flex items-center justify-between text-[10px] text-[#5C6A64] mb-0.5">
                           <span className="font-semibold text-[#194B35] flex items-center gap-1">
                             <Clock className="w-3 h-3" />
                             {latestUpdate.date}
                           </span>
-                          <span>Verified</span>
+                          <span className="text-emerald-700 font-bold">Verified</span>
                         </div>
-                        <div className="font-bold text-[#1A2420] line-clamp-1 font-malayalam-heading">
-                          {language === "ml" ? latestUpdate.title_ml : latestUpdate.title}
+                        <div className="font-bold text-[#1A2420] line-clamp-1">
+                          {latestUpdate.title}
                         </div>
-                        <p className="text-[11px] text-[#5C6A64] mt-0.5 line-clamp-2">
-                          {language === "ml" ? latestUpdate.note_ml : latestUpdate.note}
-                        </p>
                       </div>
                     )}
                   </div>
 
                   <div className="mt-4 pt-3 border-t border-[#EDE6D8] flex items-center justify-between">
                     <span className="text-[10px] text-[#5C6A64] truncate max-w-[170px]">
-                      {proj.locality || "Tanur Municipality"} {proj.ward_number ? `(W${proj.ward_number})` : ""}
+                      {proj.department}
                     </span>
                     <Link
                       href={`/development/projects/${proj.id}`}
                       className="text-xs font-bold text-[#194B35] hover:text-[#C39A5B] flex items-center gap-1 transition"
                     >
-                      <span>{language === "ml" ? "വിശദാംശങ്ങൾ" : "Details"}</span>
+                      <span>View Details</span>
                       <ChevronRight className="w-4 h-4" />
                     </Link>
                   </div>
@@ -480,66 +671,37 @@ export default function DevelopmentDashboardPage() {
               );
             })}
           </div>
+
+          {filteredProjects.length === 0 && (
+            <div className="bg-white rounded-3xl border border-[#EDE6D8] p-10 text-center">
+              <HardHat className="w-10 h-10 text-[#C39A5B] mx-auto mb-2 opacity-50" />
+              <h3 className="font-bold text-base text-[#194B35]">No projects matched your filters</h3>
+              <p className="text-xs text-[#5C6A64] mt-1">
+                Try resetting your search query or selecting &quot;All Categories&quot;.
+              </p>
+            </div>
+          )}
         </section>
 
         {/* ========================================================================= */}
-        {/* 5. EXPLORE BY 10 OFFICIAL CATEGORIES                                      */}
-        {/* ========================================================================= */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 sm:mt-18">
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold text-[#194B35] font-malayalam-heading">
-              {language === "ml" ? "വിഭാഗങ്ങൾ അനുസരിച്ച് കണ്ടെത്തുക" : "Explore by Category"}
-            </h2>
-            <p className="text-xs sm:text-sm text-[#5C6A64] mt-0.5">
-              {language === "ml" ? "താനൂരിലെ 10 പ്രധാന വികസന മേഖലകൾ" : "10 Key Development Sectors in Tanur Municipality"}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3.5">
-            {TRANSPARENT_PROJECT_CATEGORIES.map((cat) => {
-              const count = projects.filter((p) => p.category === cat.key).length;
-              return (
-                <Link
-                  key={cat.key}
-                  href={`/development/projects?category=${cat.key}`}
-                  className="bg-white p-4 rounded-2xl border border-[#EDE6D8] hover:border-[#194B35] hover:shadow-sm transition flex flex-col justify-between"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="p-2 rounded-xl bg-[#FAF7F0] text-[#194B35]">
-                      {getCategoryIcon(cat.key)}
-                    </span>
-                    <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-neutral-100 text-[#5C6A64]">
-                      {count}
-                    </span>
-                  </div>
-                  <h3 className="font-bold text-xs sm:text-sm text-[#194B35] font-malayalam-heading leading-tight">
-                    {language === "ml" ? cat.label_ml : cat.label}
-                  </h3>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* 6. PROJECTS BY LOCALITY / WARD BREAKDOWN                                   */}
+        {/* 6. PROJECTS BY LOCALITY SUMMARY                                           */}
         {/* ========================================================================= */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 sm:mt-18">
           <div className="bg-gradient-to-r from-[#194B35]/5 via-[#C39A5B]/10 to-[#194B35]/5 p-6 sm:p-8 rounded-3xl border border-[#EDE6D8]">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
               <div>
-                <h2 className="text-2xl font-bold text-[#194B35] font-malayalam-heading">
-                  {language === "ml" ? "പ്രദേശങ്ങൾ അനുസരിച്ചുള്ള വികസനം" : "Projects by Locality & Ward"}
+                <h2 className="text-2xl font-bold text-[#194B35]">
+                  Projects Across Tanur Localities
                 </h2>
                 <p className="text-xs sm:text-sm text-[#5C6A64] mt-0.5">
-                  {language === "ml" ? "താനൂരിലെ ഓരോ പ്രദേശത്തെയും പദ്ധതികളുടെ എണ്ണവും വിവരങ്ങളും" : "Locality-wise distribution of verified municipal works"}
+                  Locality-wise distribution of verified municipal works across all 45 municipal wards.
                 </p>
               </div>
               <Link
                 href="/development/projects"
                 className="text-xs font-bold text-[#194B35] hover:underline"
               >
-                {language === "ml" ? "മുഴുവൻ ലിസ്റ്റും കാണുക →" : "View Complete List →"}
+                View Full Registry →
               </Link>
             </div>
 
@@ -564,11 +726,11 @@ export default function DevelopmentDashboardPage() {
                         {count} works
                       </span>
                     </div>
-                    <h4 className="font-bold text-sm text-[#194B35] font-malayalam-heading">
-                      {language === "ml" ? loc.name_ml : loc.name}
+                    <h4 className="font-bold text-sm text-[#194B35]">
+                      {loc.name}
                     </h4>
                     <p className="text-[11px] text-[#5C6A64] mt-0.5 line-clamp-1">
-                      {language === "ml" ? loc.tagline_ml : loc.tagline}
+                      {loc.tagline}
                     </p>
                   </Link>
                 );
@@ -578,24 +740,20 @@ export default function DevelopmentDashboardPage() {
         </section>
 
         {/* ========================================================================= */}
-        {/* 7. PUBLIC PARTICIPATION CTA BANNER                                        */}
+        {/* 7. CITIZEN PARTICIPATION CTA BANNER                                       */}
         {/* ========================================================================= */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-14 sm:mt-18">
           <div className="bg-gradient-to-r from-[#194B35] to-[#123626] rounded-3xl p-6 sm:p-10 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="max-w-xl">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-[#C39A5B] text-xs font-bold mb-3 border border-white/20">
                 <Users className="w-3.5 h-3.5" />
-                <span>{language === "ml" ? "ജനകീയ പങ്കാളിത്തം" : "Citizen Participation & Transparency"}</span>
+                <span>Citizen Participation & Transparency</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold font-malayalam-heading">
-                {language === "ml"
-                  ? "പദ്ധതികളെക്കുറിച്ച് നിങ്ങൾക്കറിയാമോ? വിവരങ്ങൾ പങ്കുവെക്കൂ!"
-                  : "Know About a Project? Share Public Evidence!"}
+              <h2 className="text-2xl sm:text-3xl font-extrabold">
+                Know About a Project? Share Public Evidence!
               </h2>
               <p className="text-xs sm:text-sm text-[#EDE6D8] mt-2 leading-relaxed">
-                {language === "ml"
-                  ? "നിങ്ങളുടെ പ്രദേശത്ത് ശ്രദ്ധയർഹിക്കുന്ന പദ്ധതി നിർദ്ദേശിക്കാം, പുതിയ ഫോട്ടോകൾ സമർപ്പിക്കാം, കാലഹരണപ്പെട്ട വിവരങ്ങൾ റിപ്പോർട്ട് ചെയ്യാം."
-                  : "Submit public project evidence, progress photographs, or report outdated information. Community contributions are reviewed before publication."}
+                Submit public project evidence, progress photographs, or report outdated information. Community submissions are reviewed against official public records before publication.
               </p>
             </div>
 
@@ -608,7 +766,7 @@ export default function DevelopmentDashboardPage() {
                 className="px-5 py-3 rounded-2xl bg-[#C39A5B] hover:bg-[#b0874a] text-[#194B35] font-extrabold text-xs sm:text-sm transition shadow-md flex items-center justify-center gap-2"
               >
                 <Plus className="w-4 h-4" />
-                <span>{language === "ml" ? "പുതിയ പദ്ധതി നിർദ്ദേശിക്കുക" : "Suggest Project"}</span>
+                <span>Suggest Project</span>
               </button>
 
               <button
@@ -619,14 +777,14 @@ export default function DevelopmentDashboardPage() {
                 className="px-5 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-sm border border-white/20 transition flex items-center justify-center gap-2 backdrop-blur-sm"
               >
                 <Send className="w-4 h-4 text-[#C39A5B]" />
-                <span>{language === "ml" ? "ഫോട്ടോ / അപ്‌ഡേറ്റ് അയക്കാം" : "Submit Photo / Update"}</span>
+                <span>Submit Photo / Update</span>
               </button>
             </div>
           </div>
         </section>
 
         {/* ========================================================================= */}
-        {/* PUBLIC SUGGESTION MODAL                                                   */}
+        {/* PUBLIC SUGGESTION MODAL (ENGLISH ONLY)                                    */}
         {/* ========================================================================= */}
         {isSuggestModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
@@ -640,8 +798,8 @@ export default function DevelopmentDashboardPage() {
 
               <div className="flex items-center gap-2 mb-3">
                 <HardHat className="w-5 h-5 text-[#C39A5B]" />
-                <h3 className="font-bold text-lg text-[#194B35] font-malayalam-heading">
-                  {language === "ml" ? "സുതാര്യ താനൂർ: ജനകീയ സമർപ്പണം" : "Transparent Tanur: Public Submission"}
+                <h3 className="font-bold text-lg text-[#194B35]">
+                  Transparent Tanur: Public Submission
                 </h3>
               </div>
 
@@ -653,43 +811,72 @@ export default function DevelopmentDashboardPage() {
                 <form onSubmit={handleSuggestionSubmit} className="space-y-3.5 text-xs">
                   <div>
                     <label className="font-bold text-[#1A2420] block mb-1">
-                      {language === "ml" ? "സമർപ്പണ തരം" : "Contribution Type"}
+                      Contribution Type
                     </label>
                     <select
                       value={suggestionType}
                       onChange={(e) => setSuggestionType(e.target.value as ContributionType)}
                       className="w-full px-3 py-2 rounded-xl border border-[#EDE6D8] bg-[#FAF7F0] font-semibold text-[#1A2420]"
                     >
-                      <option value="suggest_project">Suggest a New Project / പുതിയ പദ്ധതി നിർദ്ദേശം</option>
-                      <option value="submit_photo">Submit Progress Photographs / പുതിയ ഫോട്ടോകൾ</option>
-                      <option value="submit_info">Submit Verified Public Information / ഔദ്യോഗിക വിവരങ്ങൾ</option>
-                      <option value="report_outdated">Report Outdated Information / കാലഹരണപ്പെട്ട വിവരങ്ങൾ</option>
-                      <option value="ask_question">Ask Question About a Project / സംശയങ്ങൾ ചോദിക്കാം</option>
+                      <option value="suggest_project">Suggest a New Project</option>
+                      <option value="submit_photo">Submit Progress Photographs</option>
+                      <option value="submit_info">Submit Verified Public Information</option>
+                      <option value="report_outdated">Report Outdated Status</option>
+                      <option value="ask_question">Ask Question About a Project</option>
                     </select>
                   </div>
 
                   <div>
                     <label className="font-bold text-[#1A2420] block mb-1">
-                      {language === "ml" ? "വിഷയം / പദ്ധതിയുടെ പേര് *" : "Title / Project Name *"}
+                      Title / Project Name *
                     </label>
                     <input
                       type="text"
                       required
-                      placeholder={language === "ml" ? "ഉദാ: തീരദേശ റോഡ് പുനരുദ്ധാരണം" : "e.g. Coastal Road Maintenance"}
+                      placeholder="e.g. Coastal Road Maintenance"
                       value={suggestForm.title}
                       onChange={(e) => setSuggestForm({ ...suggestForm, title: e.target.value })}
                       className="w-full px-3 py-2 rounded-xl border border-[#EDE6D8] bg-[#FAF7F0]"
                     />
                   </div>
 
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="font-bold text-[#1A2420] block mb-1">
+                        Ward Number (1–45)
+                      </label>
+                      <select
+                        value={suggestForm.ward_number}
+                        onChange={(e) => setSuggestForm({ ...suggestForm, ward_number: Number(e.target.value) })}
+                        className="w-full px-3 py-2 rounded-xl border border-[#EDE6D8] bg-[#FAF7F0]"
+                      >
+                        {Array.from({ length: 45 }, (_, i) => i + 1).map((w) => (
+                          <option key={w} value={w}>Ward {w}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="font-bold text-[#1A2420] block mb-1">
+                        Locality / Area
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Tanur Harbour"
+                        value={suggestForm.locality}
+                        onChange={(e) => setSuggestForm({ ...suggestForm, locality: e.target.value })}
+                        className="w-full px-3 py-2 rounded-xl border border-[#EDE6D8] bg-[#FAF7F0]"
+                      />
+                    </div>
+                  </div>
+
                   <div>
                     <label className="font-bold text-[#1A2420] block mb-1">
-                      {language === "ml" ? "വിശദാംശങ്ങൾ *" : "Detailed Notes & Description *"}
+                      Detailed Notes & Description *
                     </label>
                     <textarea
                       required
                       rows={3}
-                      placeholder={language === "ml" ? "പദ്ധതിയെക്കുറിച്ചുള്ള വിശദാംശങ്ങൾ രേഖപ്പെടുത്തുക..." : "Provide accurate public details, location, and context..."}
+                      placeholder="Provide accurate public details, location, and context..."
                       value={suggestForm.details}
                       onChange={(e) => setSuggestForm({ ...suggestForm, details: e.target.value })}
                       className="w-full px-3 py-2 rounded-xl border border-[#EDE6D8] bg-[#FAF7F0]"
@@ -699,7 +886,7 @@ export default function DevelopmentDashboardPage() {
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="font-bold text-[#1A2420] block mb-1">
-                        {language === "ml" ? "നിങ്ങളുടെ പേര്" : "Your Name"}
+                        Your Name
                       </label>
                       <input
                         type="text"
@@ -711,7 +898,7 @@ export default function DevelopmentDashboardPage() {
                     </div>
                     <div>
                       <label className="font-bold text-[#1A2420] block mb-1">
-                        {language === "ml" ? "ഫോൺ നമ്പർ (ഓപ്ഷണൽ)" : "Phone (Optional)"}
+                        Phone (Optional)
                       </label>
                       <input
                         type="text"
@@ -725,7 +912,7 @@ export default function DevelopmentDashboardPage() {
 
                   <div>
                     <label className="font-bold text-[#1A2420] block mb-1">
-                      {language === "ml" ? "ഫോട്ടോ അല്ലെങ്കിൽ ഔദ്യോഗിക രേഖ ലിങ്ക്" : "Evidence URL or Photo Link"}
+                      Evidence URL or Photo Link
                     </label>
                     <input
                       type="url"
@@ -742,13 +929,13 @@ export default function DevelopmentDashboardPage() {
                       onClick={() => setIsSuggestModalOpen(false)}
                       className="px-4 py-2 rounded-xl bg-neutral-100 hover:bg-neutral-200 text-[#1A2420] font-semibold"
                     >
-                      {language === "ml" ? "റദ്ദാക്കുക" : "Cancel"}
+                      Cancel
                     </button>
                     <button
                       type="submit"
                       className="px-5 py-2 rounded-xl bg-[#194B35] hover:bg-[#123626] text-white font-bold transition shadow-sm"
                     >
-                      {language === "ml" ? "സമർപ്പിക്കുക ✓" : "Submit Contribution ✓"}
+                      Submit Contribution ✓
                     </button>
                   </div>
                 </form>

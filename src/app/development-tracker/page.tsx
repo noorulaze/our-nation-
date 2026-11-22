@@ -6,7 +6,6 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { BottomNav } from "@/components/layout/BottomNav";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
-import { useLanguage } from "@/lib/i18n/context";
 import { 
   digitalMunicipalityStore, 
   TRANSPARENT_PROJECT_CATEGORIES
@@ -37,8 +36,6 @@ import {
 } from "lucide-react";
 
 export default function DevelopmentTrackerPage() {
-  const { language } = useLanguage();
-
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
@@ -50,13 +47,22 @@ export default function DevelopmentTrackerPage() {
   // Filtered projects
   const filteredProjects = useMemo(() => {
     return projects.filter(p => {
-      if (selectedCategory !== "all" && p.category !== selectedCategory) return false;
+      if (selectedCategory !== "all") {
+        if (p.category !== selectedCategory) {
+          const catObj = TRANSPARENT_PROJECT_CATEGORIES.find((c) => c.key === selectedCategory);
+          if (catObj && "legacy_keys" in catObj && Array.isArray((catObj as any).legacy_keys)) {
+            if (!(catObj as any).legacy_keys.includes(p.category)) return false;
+          } else {
+            return false;
+          }
+        }
+      }
       if (selectedStatus !== "all" && p.status !== selectedStatus) return false;
       if (selectedLocality !== "all" && p.locality !== selectedLocality) return false;
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
-        const matchesTitle = p.title.toLowerCase().includes(q) || p.title_ml.toLowerCase().includes(q);
-        const matchesDesc = p.description.toLowerCase().includes(q) || p.description_ml.toLowerCase().includes(q);
+        const matchesTitle = p.title.toLowerCase().includes(q);
+        const matchesDesc = p.description.toLowerCase().includes(q);
         const matchesLoc = p.locality?.toLowerCase().includes(q) || p.department.toLowerCase().includes(q);
         return matchesTitle || matchesDesc || matchesLoc;
       }
@@ -69,6 +75,7 @@ export default function DevelopmentTrackerPage() {
     return {
       total: projects.length,
       approved: projects.filter(p => p.status === "Approved").length,
+      planned: projects.filter(p => p.status === "Planned").length,
       inProgress: projects.filter(p => p.status === "In Progress").length,
       completed: projects.filter(p => p.status === "Completed").length,
       delayed: projects.filter(p => p.status === "Delayed" || p.status === "On Hold").length,
@@ -80,10 +87,12 @@ export default function DevelopmentTrackerPage() {
     Proposed: { bg: "bg-purple-50", text: "text-purple-800", border: "border-purple-200" },
     Announced: { bg: "bg-blue-50", text: "text-blue-800", border: "border-blue-200" },
     Approved: { bg: "bg-teal-50", text: "text-teal-800", border: "border-teal-200" },
+    Planned: { bg: "bg-indigo-50", text: "text-indigo-800", border: "border-indigo-200" },
     "In Progress": { bg: "bg-amber-50", text: "text-amber-800", border: "border-amber-200" },
     Completed: { bg: "bg-emerald-50", text: "text-emerald-800", border: "border-emerald-200" },
     Delayed: { bg: "bg-red-50", text: "text-red-800", border: "border-red-200" },
     "On Hold": { bg: "bg-gray-100", text: "text-gray-800", border: "border-gray-300" },
+    Cancelled: { bg: "bg-rose-50", text: "text-rose-800", border: "border-rose-200" },
   };
 
   return (
@@ -94,13 +103,13 @@ export default function DevelopmentTrackerPage() {
         {/* Breadcrumbs */}
         <Breadcrumbs
           items={[
-            { label: language === "ml" ? "ഹോം" : "Home", href: "/" },
-            { label: language === "ml" ? "വികസന പദ്ധതി ട്രാക്കർ" : "Development Tracker" },
+            { label: "Home", href: "/" },
+            { label: "Development Tracker" },
           ]}
         />
 
         {/* ========================================================================= */}
-        {/* 1. HERO SECTION (Kerala Municipal Waterfront Style)                       */}
+        {/* 1. HERO SECTION                                                          */}
         {/* ========================================================================= */}
         <div className="relative rounded-3xl sm:rounded-[36px] bg-gradient-to-br from-[#FAF7F0] via-[#F5F1E7] to-[#EDE6D8] border border-[#EDE6D8] p-6 sm:p-10 shadow-xs overflow-hidden">
           <div className="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(#194B35_1px,transparent_1px)] [background-size:16px_16px]" />
@@ -109,35 +118,33 @@ export default function DevelopmentTrackerPage() {
             <div className="md:col-span-7 space-y-4 text-left">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#194B35]/10 text-[#194B35] text-xs font-bold border border-[#194B35]/20">
                 <HardHat className="w-4 h-4 text-[#194B35]" />
-                <span>{language === "ml" ? "സുതാര്യമായ താനൂർ വികസന നിരീക്ഷണം" : "Development Project Monitoring • Feature 03"}</span>
+                <span>Development Project Monitoring • Tanur Municipality</span>
               </div>
 
-              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-[#194B35] tracking-tight font-malayalam-heading leading-tight">
-                {language === "ml" ? "വികസന പദ്ധതി ട്രാക്കർ" : "Development Tracker"}
+              <h1 className="text-2xl sm:text-4xl md:text-5xl font-black text-[#194B35] tracking-tight leading-tight">
+                Development Tracker
               </h1>
 
               <p className="text-xs sm:text-sm text-[#5C6A64] leading-relaxed max-w-xl">
-                {language === "ml"
-                  ? "താനൂർ നഗരസഭയിലെ ഔദ്യോഗിക വികസന പദ്ധതികൾ, അനുവദിച്ച ബജറ്റ്, സമയക്രമം, നിർമ്മാണ പുരോഗതി, ഗസറ്റ് രേഖകൾ എന്നിവ സുതാര്യമായി പരിശോധിക്കുക. അനുമാനങ്ങളില്ലാതെ അളവുപുസ്തകം (MB) അടിസ്ഥാനമാക്കിയുള്ള വിവരങ്ങൾ."
-                  : "A transparent public monitoring directory for Tanur Municipality development projects. Follow sanctioned budgets, milestones, contractors, verified progress updates, and completion evidence."}
+                A transparent public monitoring directory for Tanur Municipality development projects. Follow sanctioned budgets, milestones, contractors, verified progress updates, and completion evidence.
               </p>
 
               {/* Action CTAs */}
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <Link
-                  href="/documents"
+                  href="/development/projects"
                   className="px-5 py-3 rounded-2xl bg-[#194B35] hover:bg-[#123626] text-white text-xs sm:text-sm font-bold shadow-sm hover:shadow transition flex items-center gap-2 min-h-[44px]"
                 >
-                  <FileText className="w-4 h-4 text-amber-300" />
-                  <span>{language === "ml" ? "ടെൻഡർ & ബജറ്റ് രേഖകൾ" : "Tender & Budget Records"}</span>
+                  <Search className="w-4 h-4 text-amber-300" />
+                  <span>Browse Projects Registry</span>
                 </Link>
 
                 <Link
-                  href="/digital-municipality"
+                  href="/development"
                   className="px-5 py-3 rounded-2xl bg-white hover:bg-[#FAF7F0] text-[#194B35] border border-[#EDE6D8] text-xs sm:text-sm font-bold shadow-2xs transition flex items-center gap-2 min-h-[44px]"
                 >
                   <Building2 className="w-4 h-4 text-[#C39A5B]" />
-                  <span>{language === "ml" ? "നഗരസഭാ ഭൂപടത്തിൽ കാണുക" : "View on GIS Map"}</span>
+                  <span>View on GIS Map</span>
                 </Link>
               </div>
             </div>
@@ -171,7 +178,7 @@ export default function DevelopmentTrackerPage() {
         </div>
 
         {/* ========================================================================= */}
-        {/* 2. CATEGORY PILLS BAR (Visual Reference Quick Access Strip)                */}
+        {/* 2. CATEGORY PILLS BAR                                                     */}
         {/* ========================================================================= */}
         <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none border-b border-[#EDE6D8]">
           <button
@@ -182,12 +189,19 @@ export default function DevelopmentTrackerPage() {
                 : "bg-white text-[#5C6A64] hover:bg-[#FAF7F0] border border-[#EDE6D8]"
             }`}
           >
-            {language === "ml" ? "എല്ലാ പദ്ധതികളും" : "All Projects"} ({projects.length})
+            All Projects ({projects.length})
           </button>
 
           {TRANSPARENT_PROJECT_CATEGORIES.map(c => {
             const isActive = selectedCategory === c.key;
-            const count = projects.filter(p => p.category === c.key).length;
+            const count = projects.filter(p => {
+              if (p.category === c.key) return true;
+              if ("legacy_keys" in c && Array.isArray((c as any).legacy_keys)) {
+                return (c as any).legacy_keys.includes(p.category);
+              }
+              return false;
+            }).length;
+
             return (
               <button
                 key={c.key}
@@ -198,7 +212,7 @@ export default function DevelopmentTrackerPage() {
                     : "bg-white text-[#5C6A64] hover:bg-[#FAF7F0] border border-[#EDE6D8]"
                 }`}
               >
-                <span>{language === "ml" ? c.label_ml : c.label}</span>
+                <span>{c.label}</span>
                 <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
                   isActive ? "bg-white/20 text-white" : "bg-[#FAF7F0] text-[#194B35]"
                 }`}>
@@ -210,7 +224,7 @@ export default function DevelopmentTrackerPage() {
         </div>
 
         {/* ========================================================================= */}
-        {/* 3. SEARCH & SECONDARY FILTERS BAR                                         */}
+        {/* 3. SEARCH & FILTERS BAR                                                   */}
         {/* ========================================================================= */}
         <div className="bg-white rounded-3xl border border-[#EDE6D8] p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row items-center gap-3">
           {/* Search */}
@@ -221,8 +235,8 @@ export default function DevelopmentTrackerPage() {
               aria-label="Search development projects"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={language === "ml" ? "പദ്ധതി പേര്, സ്ഥലം, വകുപ്പ് തിരയുക..." : "Search project by title, locality, department..."}
-              className="w-full pl-10 pr-4 py-2.5 bg-[#FAF7F0] text-xs border border-[#EDE6D8] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#194B35] text-[#1A2420]"
+              placeholder="Search project by title, locality, department..."
+              className="w-full pl-10 pr-4 py-2.5 bg-[#FAF7F0] text-xs border border-[#EDE6D8] rounded-2xl focus:outline-hidden focus:ring-2 focus:ring-[#194B35] text-[#1A2420]"
             />
           </div>
 
@@ -231,16 +245,17 @@ export default function DevelopmentTrackerPage() {
             aria-label="Filter by project status"
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="w-full sm:w-auto px-3.5 py-2.5 bg-[#FAF7F0] border border-[#EDE6D8] rounded-2xl text-xs text-[#1A2420] focus:outline-none focus:ring-2 focus:ring-[#194B35]"
+            className="w-full sm:w-auto px-3.5 py-2.5 bg-[#FAF7F0] border border-[#EDE6D8] rounded-2xl text-xs text-[#1A2420] focus:outline-hidden focus:ring-2 focus:ring-[#194B35]"
           >
-            <option value="all">{language === "ml" ? "എല്ലാ സ്റ്റാറ്റസും" : "All Statuses"}</option>
+            <option value="all">All Statuses</option>
             <option value="Proposed">Proposed</option>
-            <option value="Announced">Announced</option>
             <option value="Approved">Approved</option>
+            <option value="Planned">Planned</option>
             <option value="In Progress">In Progress</option>
             <option value="Completed">Completed</option>
             <option value="Delayed">Delayed</option>
             <option value="On Hold">On Hold</option>
+            <option value="Cancelled">Cancelled</option>
           </select>
 
           {/* Locality Filter */}
@@ -248,12 +263,12 @@ export default function DevelopmentTrackerPage() {
             aria-label="Filter by locality"
             value={selectedLocality}
             onChange={(e) => setSelectedLocality(e.target.value)}
-            className="w-full sm:w-auto px-3.5 py-2.5 bg-[#FAF7F0] border border-[#EDE6D8] rounded-2xl text-xs text-[#1A2420] focus:outline-none focus:ring-2 focus:ring-[#194B35]"
+            className="w-full sm:w-auto px-3.5 py-2.5 bg-[#FAF7F0] border border-[#EDE6D8] rounded-2xl text-xs text-[#1A2420] focus:outline-hidden focus:ring-2 focus:ring-[#194B35]"
           >
-            <option value="all">{language === "ml" ? "എല്ലാ പ്രദേശങ്ങളും" : "All Localities"}</option>
+            <option value="all">All Localities</option>
             {localities.map(l => (
               <option key={l.id} value={l.name}>
-                {language === "ml" ? l.name_ml : l.name}
+                {l.name}
               </option>
             ))}
           </select>
@@ -266,55 +281,38 @@ export default function DevelopmentTrackerPage() {
           <div className="flex items-center gap-2 font-bold text-amber-900">
             <ShieldCheck className="w-5 h-5 text-amber-800 shrink-0" />
             <span className="text-sm">
-              {language === "ml"
-                ? "വികസന പദ്ധതി സുതാര്യതാ നയം (Development Data Transparency Standard)"
-                : "Development Tracker Data Presentation & Verification Policy"}
+              Development Tracker Data Presentation & Verification Policy
             </span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-[11px] text-amber-900/90 leading-relaxed">
             <div className="p-3 rounded-2xl bg-white/80 border border-amber-200/60 shadow-2xs">
               <span className="font-bold block text-[#194B35] mb-1">
-                1. {language === "ml" ? "പുരോഗതി ശതമാന നിയന്ത്രണം" : "Evidence-Based Progress"}
+                1. Evidence-Based Progress
               </span>
-              {language === "ml"
-                ? "അസിസ്റ്റന്റ് എക്സിക്യൂട്ടീവ് എഞ്ചിനീയറുടെ ഔദ്യോഗിക അളവുപുസ്തകം (MB) ഇല്ലാതെ അനുമാന ശതമാനങ്ങൾ ഇവിടെ കാണിക്കുന്നില്ല. ഫീൽഡ് ഇൻസ്പെക്ഷൻ റിപ്പോർട്ടുകൾ മാത്രം രേഖപ്പെടുത്തുന്നു."
-                : "Unsupported progress percentages are hidden. Only inspected physical milestones verified by Municipal Engineers are displayed."}
+              Unsupported progress percentages are strictly prohibited. Only inspected physical milestones verified by Municipal and PWD Engineers are displayed.
             </div>
             <div className="p-3 rounded-2xl bg-white/80 border border-amber-200/60 shadow-2xs">
               <span className="font-bold block text-[#194B35] mb-1">
-                2. {language === "ml" ? "ബജറ്റ് വർഗ്ഗീകരണം" : "Budget Stage Classification"}
+                2. Three-Way Budget Classification
               </span>
-              {language === "ml"
-                ? "നിർദ്ദേശിക്കപ്പെട്ട എസ്റ്റിമേറ്റുകളും, സാങ്കേതിക അനുമതി ലഭിച്ച തുകയും, നിർമ്മാണം പൂർത്തിയായ ശേഷമുള്ള ഓഡിറ്റ് ചെലവും പരസ്പരം വേർതിരിച്ചിരിക്കുന്നു."
-                : "Strictly distinguishes between Project Proposals, Sanctioned Technical Allocations, and Post-Completion Audited Expenditures."}
+              Strictly distinguishes between Approved Municipal Budgets, Initial Estimated Costs, and Post-Completion Audited Expenditures.
             </div>
             <div className="p-3 rounded-2xl bg-white/80 border border-amber-200/60 shadow-2xs">
               <span className="font-bold block text-[#194B35] mb-1">
-                3. {language === "ml" ? "ഔദ്യോഗിക സ്ഥിരീകരണം" : "Awaiting Verification"}
+                3. Primary Source Verification
               </span>
-              {language === "ml"
-                ? "തദ്ദേശ വകുപ്പ് അല്ലെങ്കിൽ കിഫ്ബി (KIIFB) പോർട്ടലുകളിൽ നിന്ന് ലഭിച്ച പ്രാഥമിക രേഖകൾ കൃത്യമായ പരിശോധന സ്റ്റാറ്റസോടെ പ്രദർശിപ്പിച്ചിരിക്കുന്നു."
-                : "Projects under execution display 'Awaiting Official Measurement Verification' until completion certificates are registered."}
+              All records are grounded in official public sources from LSGD Kerala, KIIFB, and municipal gazettes. Unverified estimates are clearly flagged.
             </div>
           </div>
         </div>
 
         {/* ========================================================================= */}
-        {/* 5. PROJECTS GRID (White Cards, Sand Borders, Circular Action Buttons)       */}
+        {/* 5. PROJECTS GRID                                                          */}
         {/* ========================================================================= */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredProjects.map((project) => {
             const statusCfg = statusColorMap[project.status] || statusColorMap["In Progress"];
-
-            const getBudgetLabel = () => {
-              if (project.status === "Proposed" || project.status === "Announced") {
-                return language === "ml" ? "പ്രതീക്ഷിത അടങ്കൽ (Estimated)" : "Estimated Proposal Budget";
-              }
-              if (project.status === "Completed") {
-                return language === "ml" ? "ഓഡിറ്റ് ചെയ്ത ചെലവ് (Audited Expenditure)" : "Audited Expenditure";
-              }
-              return language === "ml" ? "അനുവദിച്ച വിഹിതം (Sanctioned)" : "Sanctioned Allocation";
-            };
+            const approvedBudget = project.approved_budget || project.budget_sanctioned;
 
             return (
               <div
@@ -325,7 +323,7 @@ export default function DevelopmentTrackerPage() {
                   {/* Top Meta Bar */}
                   <div className="flex items-center justify-between gap-2 flex-wrap">
                     <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FAF7F0] text-[#194B35] border border-[#EDE6D8]">
-                      {language === "ml" ? project.category_name_ml : project.category_name}
+                      {project.category_name}
                     </span>
 
                     <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${statusCfg.bg} ${statusCfg.text} ${statusCfg.border}`}>
@@ -334,12 +332,12 @@ export default function DevelopmentTrackerPage() {
                   </div>
 
                   {/* Title */}
-                  <h3 className="font-bold text-lg text-[#194B35] font-malayalam-heading group-hover:text-[#123626] transition">
-                    {language === "ml" ? project.title_ml : project.title}
+                  <h3 className="font-bold text-lg text-[#194B35] group-hover:text-[#123626] transition">
+                    {project.title}
                   </h3>
 
                   <p className="text-xs text-[#5C6A64] line-clamp-3 leading-relaxed">
-                    {language === "ml" ? project.description_ml : project.description}
+                    {project.description}
                   </p>
 
                   {/* Locality & Department */}
@@ -359,46 +357,42 @@ export default function DevelopmentTrackerPage() {
                     <div className="flex items-center justify-between text-xs">
                       <span className="font-bold text-[#194B35] flex items-center gap-1">
                         <Coins className="w-3.5 h-3.5 text-[#C39A5B]" />
-                        <span>{getBudgetLabel()}:</span>
+                        <span>Approved Budget:</span>
                       </span>
                       <span className="font-mono font-bold text-[#194B35] bg-[#FAF7F0] px-2.5 py-0.5 rounded-lg border border-[#EDE6D8]">
-                        {project.budget_sanctioned}
+                        {approvedBudget}
                       </span>
                     </div>
 
-                    {/* Official Physical Milestone & MB Verification Status */}
+                    {/* Physical Milestone & Verification Status */}
                     <div className="p-3 rounded-2xl bg-[#FAF7F0] border border-[#EDE6D8] space-y-1.5 text-[11px]">
                       <div className="flex items-center justify-between gap-1 flex-wrap">
                         <span className="font-bold text-[#5C6A64]">
-                          {language === "ml" ? "നിർവ്വഹണ സ്ഥിതി:" : "Execution Status:"}
+                          Execution Status:
                         </span>
                         {project.status === "Completed" ? (
-                          <VerificationBadge level="verified" citation="Commissioned" language={language} />
+                          <span className="font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">Commissioned</span>
                         ) : project.status === "Approved" ? (
-                          <VerificationBadge level="verified" citation="Admin Sanction" language={language} />
+                          <span className="font-bold text-teal-800 bg-teal-100 px-2 py-0.5 rounded-full">Admin Sanction</span>
                         ) : project.status === "Proposed" ? (
-                          <VerificationBadge level="partially_verified" citation="Public Proposal" language={language} />
+                          <span className="font-bold text-purple-800 bg-purple-100 px-2 py-0.5 rounded-full">Public Proposal</span>
                         ) : (
-                          <VerificationBadge level="awaiting_verification" language={language} />
+                          <span className="font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full">Active In Progress</span>
                         )}
                       </div>
                       <div className="flex items-center justify-between text-[10px] text-[#7A8880] pt-0.5">
                         <span>
-                          {language === "ml" 
-                            ? `${project.progress_updates?.length || 0} ഫീൽഡ് പരിശോധന രേഖകൾ` 
-                            : `${project.progress_updates?.length || 0} Inspected Milestones`}
+                          {project.progress_updates?.length || 0} Inspected Milestones
                         </span>
                         <span>
-                          {project.status === "Completed" 
-                            ? (language === "ml" ? "പൂർത്തിയായി കൈമാറി" : "Commissioned")
-                            : (language === "ml" ? "അളവുപുസ്തകം (MB) പരിശോധനയിൽ" : "MB Verification in Progress")}
+                          {project.status === "Completed" ? "Commissioned" : "Verified By Municipal Engineers"}
                         </span>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Footer with circular action arrow */}
+                {/* Footer with action button */}
                 <div className="pt-3 border-t border-gray-100 flex items-center justify-between text-xs">
                   <div className="flex items-center gap-1 text-[11px] text-gray-400">
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
@@ -422,18 +416,17 @@ export default function DevelopmentTrackerPage() {
           <div className="p-8 text-center bg-white rounded-3xl border border-[#EDE6D8] text-[#5C6A64] space-y-2">
             <HardHat className="w-8 h-8 text-[#C39A5B] mx-auto" />
             <p className="font-bold text-sm">
-              {language === "ml" ? "പദ്ധതികൾ ഒന്നും കണ്ടെത്താനായില്ല" : "No development projects found"}
+              No development projects found
             </p>
             <p className="text-xs text-[#7A8880]">
-              {language === "ml" ? "തിരയൽ പദങ്ങളോ വിഭാഗമോ മാറ്റി വീണ്ടും ശ്രമിക്കുക." : "Try adjusting your search criteria or category filter."}
+              Try adjusting your search criteria or category filter.
             </p>
           </div>
         )}
 
         {/* Source and Verification Disclaimer */}
         <DataSourcesNotice 
-          language={language}
-          title={language === "ml" ? "വികസന പദ്ധതി വിവര സ്രോതസ്സുകളും സുതാര്യതാ മാനദണ്ഡവും" : "Development Tracker — Official Verification Sources"}
+          title="Development Tracker — Official Verification Sources"
           sources={[
             "Kerala State e-Procurement Portal (etenders.kerala.gov.in)",
             "Local Self Government Department Plan Monitoring System",
